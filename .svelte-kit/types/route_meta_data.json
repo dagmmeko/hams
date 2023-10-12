@@ -21,6 +21,11 @@
 		"src/routes/+layout.server.ts"
 	],
 	"/roles": [
+		"src/routes/roles/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/roles/add-role": [
+		"src/routes/roles/add-role/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	]
 }

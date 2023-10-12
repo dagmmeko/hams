@@ -153,15 +153,14 @@ model Fired {
 }
 
 model Role {
-  id               Int        @id @default(autoincrement())
-  name             String     @unique
-  description      String     @db.VarChar(500)
-  createdAt        DateTime   @default(now())
-  updateAt         DateTime   @updatedAt
-  deletedAt        DateTime?
-  isWarehouseAdmin Boolean    @default(false)
-  Employees        Employee[]
-  Scopes           Scope[]
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String     @db.VarChar(500)
+  createdAt   DateTime   @default(now())
+  updateAt    DateTime   @updatedAt
+  deletedAt   DateTime?
+  Employees   Employee[]
+  Scopes      Scope[]
 }
 
 model Scope {

@@ -13,13 +13,59 @@
 <div class="h-screen bg-black w-60 px-4">
 	<Logo class="h-16 w-16" />
 	<div class="grid gap-3">
-		<div class="text-white flex gap-2 m-2 bg-primary rounded-md p-1">
-			<ChartPie /> OverView
-		</div>
-		<div class="text-white flex gap-2 m-2"><Tenant /> Tenant</div>
-		<div class="text-white flex gap-2 m-2"><Employees /> Employees</div>
-		<div class="text-white flex gap-2 m-2"><Cash /> Accounting</div>
-		<div class="text-white flex gap-2 m-2"><Store /> Vendor & Task</div>
-		<div class="text-white flex gap-2 m-2"><Webhook /> Role</div>
+		<a href="/">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<ChartPie /> OverView
+			</div>
+		</a>
+		<a href="/tenant">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tenant'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Tenant /> Tenant
+			</div>
+		</a>
+		<a href="/employees">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/employees'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Employees /> Employees
+			</div>
+		</a>
+		<a href="/accounting">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/accounting'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Cash /> Accounting
+			</div>
+		</a>
+		<a href="/vendor-task">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/vendor-task'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Store /> Vendor & Task
+			</div>
+		</a>
+		<a href="/roles">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/roles'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Webhook /> Role
+			</div>
+		</a>
 	</div>
 </div>
