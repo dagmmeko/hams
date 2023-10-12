@@ -1,0 +1,188 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum BuildingType {
+  COM //commercial buildings
+  RES // residential buildings 
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  userName      String?
+  phoneNumber   String?   @unique
+  email         String    @unique
+  isEmployee    Boolean
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime  @updatedAt
+  deletedAt     DateTime?
+  jwtPassword   String?
+  twoFAPassword String?
+  twoFARequired Boolean   @default(false)
+  Employee      Employee?
+
+  @@fulltext([userName, phoneNumber, email])
+}
+
+model RentalUnits {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+
+  floor       String
+  tower       String @default("A")
+  storeNumber String @default("0")
+  kareMeter   Float  @default(0)
+  price       Float  @default(0)
+
+  buildingId Int?
+
+  Tenants Tenants[]
+
+  @@index([buildingId])
+}
+
+model Tenants {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+
+  companyName     String  @default("name")
+  fullName        String  @default("name")
+  license         String?
+  vat             String?
+  tin             String?
+  phoneNumber     String
+  purposeOfRent   String  @default("")
+  paymentSchedule Int     @default(6)
+
+  contractStartDate DateTime?
+  contractEndDate   DateTime?
+  active            Boolean
+
+  RentalUnits   RentalUnits? @relation(fields: [rentalUnitsId], references: [id])
+  rentalUnitsId Int
+
+  Receipts Receipts[]
+
+  @@index([rentalUnitsId])
+}
+
+model Receipts {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+
+  startDate DateTime
+  endDate   DateTime
+
+  receiptReceived   Boolean   @default(false)
+  receiptReceivedOn DateTime?
+  paymentConfirmed  Boolean   @default(false)
+
+  amount   Float
+  bankName String
+
+  Tenants   Tenants? @relation(fields: [tenantsId], references: [id])
+  tenantsId Int?
+
+  @@index([tenantsId])
+}
+
+model Employee {
+  id                  Int            @id @default(autoincrement())
+  hiredDate           DateTime
+  isSuspended         Boolean
+  userId              Int            @unique
+  roleId              Int
+  warehouseId         Int?
+  createdAt           DateTime       @default(now())
+  updateAt            DateTime       @updatedAt
+  deletedAt           DateTime?
+  stationId           Int?
+  isFired             Boolean        @default(false)
+  isDriver            Boolean        @default(false)
+  address             String
+  dateOfBirth         DateTime?
+  department          String
+  employmentStartDate DateTime?
+  jobTitle            String
+  staffIdNumber       String
+  employeeStatus      EmployeeStatus @default(Full_Time)
+  User                User           @relation(fields: [userId], references: [id])
+  Role                Role           @relation(fields: [roleId], references: [id])
+  Suspensions         Suspended[]
+  fired               Fired[]
+
+  @@index([roleId])
+  @@index([userId])
+  @@index([warehouseId])
+  @@index([stationId])
+}
+
+model Suspended {
+  id           Int       @id @default(autoincrement())
+  employeeId   Int
+  startingDate DateTime
+  endDate      DateTime
+  description  String
+  createdAt    DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  deletedAt    DateTime?
+  Employee     Employee  @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
+}
+
+model Fired {
+  id          Int       @id @default(autoincrement())
+  employeeId  Int
+  firedDate   DateTime
+  description String
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
+}
+
+model Role {
+  id               Int        @id @default(autoincrement())
+  name             String     @unique
+  description      String     @db.VarChar(500)
+  createdAt        DateTime   @default(now())
+  updateAt         DateTime   @updatedAt
+  deletedAt        DateTime?
+  isWarehouseAdmin Boolean    @default(false)
+  Employees        Employee[]
+  Scopes           Scope[]
+}
+
+model Scope {
+  id     Int    @id @default(autoincrement())
+  name   String
+  roleId Int
+  Role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([roleId])
+}
+
+enum EmployeeStatus {
+  Full_Time
+  Part_Time
+  Temporary
+}

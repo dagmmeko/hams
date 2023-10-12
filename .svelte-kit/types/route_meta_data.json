@@ -1,0 +1,25 @@
+{
+	"/": [
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/auth": [
+		"src/routes/auth/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/auth/signup-error": [
+		"src/routes/auth/signup-error/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/employees": [
+		"src/routes/employees/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/employees/add-employee": [
+		"src/routes/employees/add-employee/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/roles": [
+		"src/routes/+layout.server.ts"
+	]
+}
