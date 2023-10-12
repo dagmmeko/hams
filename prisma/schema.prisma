@@ -18,18 +18,15 @@ enum BuildingType {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  userName      String?
-  phoneNumber   String?   @unique
-  email         String    @unique
-  isEmployee    Boolean
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime  @updatedAt
-  deletedAt     DateTime?
-  jwtPassword   String?
-  twoFAPassword String?
-  twoFARequired Boolean   @default(false)
-  Employee      Employee?
+  id          Int       @id @default(autoincrement())
+  userName    String?
+  phoneNumber String?   @unique
+  email       String    @unique
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  jwtPassword String?
+  Employee    Employee?
 
   @@fulltext([userName, phoneNumber, email])
 }
@@ -103,33 +100,28 @@ model Receipts {
 }
 
 model Employee {
-  id                  Int            @id @default(autoincrement())
-  hiredDate           DateTime
-  isSuspended         Boolean
-  userId              Int            @unique
-  roleId              Int
-  warehouseId         Int?
-  createdAt           DateTime       @default(now())
-  updateAt            DateTime       @updatedAt
-  deletedAt           DateTime?
-  stationId           Int?
-  isFired             Boolean        @default(false)
-  isDriver            Boolean        @default(false)
-  address             String
-  dateOfBirth         DateTime?
-  department          String
-  employmentStartDate DateTime?
-  jobTitle            String
-  staffIdNumber       String
-  employeeStatus      EmployeeStatus @default(Full_Time)
-  User                User           @relation(fields: [userId], references: [id])
-  Role                Role           @relation(fields: [roleId], references: [id])
-  Suspensions         Suspended[]
-  fired               Fired[]
+  id             Int            @id @default(autoincrement())
+  hiredDate      DateTime
+  isSuspended    Boolean
+  userId         Int            @unique
+  roleId         Int
+  createdAt      DateTime       @default(now())
+  updateAt       DateTime       @updatedAt
+  deletedAt      DateTime?
+  stationId      Int?
+  isFired        Boolean        @default(false)
+  isDriver       Boolean        @default(false)
+  address        String
+  dateOfBirth    DateTime?
+  staffIdNumber  String
+  EmployeeStatus EmployeeStatus @default(Full_Time)
+  User           User           @relation(fields: [userId], references: [id])
+  Role           Role           @relation(fields: [roleId], references: [id])
+  Suspensions    Suspended[]
+  Fired          Fired[]
 
   @@index([roleId])
   @@index([userId])
-  @@index([warehouseId])
   @@index([stationId])
 }
 

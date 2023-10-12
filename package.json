@@ -12,7 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"prisma": {
-		"seed": "ts-node prisma/seed.ts"
+		"seed": "node --loader ts-node/esm --experimental-specifier-resolution=node prisma/seed.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",

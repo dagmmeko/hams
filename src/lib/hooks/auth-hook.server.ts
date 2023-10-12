@@ -38,7 +38,8 @@ export const authHook = SvelteKitAuth({
 				}
 				return {
 					id: user.id.toString(),
-					user: user.email
+					name: user.userName,
+					email: user.email
 				};
 			}
 		})
@@ -49,7 +50,35 @@ export const authHook = SvelteKitAuth({
 	secret: AUTH_SECRET,
 	callbacks: {
 		signIn: async (params) => {
-			return true;
+			if (params.account?.provider === 'credentials') {
+				return true;
+			}
+			throw new Error('Account provider not known.');
+		},
+		jwt: async (params) => {
+			if (!params.token?.email) {
+				throw new Error('JWT email not found.');
+			}
+
+			const authUser = await prisma.user.findFirst({
+				where: {
+					email: params.token.email
+				},
+				select: {
+					email: true,
+					Employee: true,
+					phoneNumber: true,
+					userName: true,
+					id: true
+				}
+			});
+			return { ...params.token, authUser };
+		},
+		session: async (params) => {
+			return {
+				...params.session,
+				authUser: params.token.authUser
+			};
 		}
 	}
 });

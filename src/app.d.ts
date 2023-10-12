@@ -7,9 +7,7 @@ import type { inherits } from 'util';
 
 declare global {
 	type EnhancedSessionType = Session & {
-		userData: User;
-		employeeData: Employee;
-		userScopes: Scope[];
+		authUser: User;
 	};
 
 	namespace App {
