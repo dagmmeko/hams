@@ -66,6 +66,7 @@ declare module '$env/static/private' {
 	export const USER: string;
 	export const NVM_DIR: string;
 	export const npm_package_devDependencies__auth_core: string;
+	export const LS_COLORS: string;
 	export const npm_package_scripts_check_watch: string;
 	export const COMMAND_MODE: string;
 	export const npm_package_devDependencies_zod: string;
@@ -213,6 +214,7 @@ declare module '$env/dynamic/private' {
 		USER: string;
 		NVM_DIR: string;
 		npm_package_devDependencies__auth_core: string;
+		LS_COLORS: string;
 		npm_package_scripts_check_watch: string;
 		COMMAND_MODE: string;
 		npm_package_devDependencies_zod: string;

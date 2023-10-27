@@ -6,7 +6,8 @@ export default {
 			colors: {
 				primary: '#0B666A',
 				ghost: '#E2E8F0',
-				subtitle: '#64748B'
+				subtitle: '#64748B',
+				danger: '#DC2626'
 			}
 		}
 	},

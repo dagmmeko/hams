@@ -20,12 +20,24 @@
 		"src/routes/employees/add-employee/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/employees/[employeeId]": [
+		"src/routes/employees/[employeeId]/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
 	"/roles": [
 		"src/routes/roles/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
 	"/roles/add-role": [
 		"src/routes/roles/add-role/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/roles/[roleId]": [
+		"src/routes/roles/[roleId]/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/tenants": [
+		"src/routes/tenants/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	]
 }

@@ -22,9 +22,9 @@
 				<ChartPie /> OverView
 			</div>
 		</a>
-		<a href="/tenant">
+		<a href="/tenants">
 			<div
-				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tenant'
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tenants'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
