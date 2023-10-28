@@ -31,7 +31,7 @@
 			title: 'Reason',
 			value: (v: typeof rows[number]) => v?.description ?? '',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 w-1/3 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -40,7 +40,7 @@
 			value: (v: typeof rows[number]) =>
 				dayjs(v?.startingDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 w-1/3 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -48,7 +48,7 @@
 			title: 'End Date',
 			value: (v: typeof rows[number]) => dayjs(v?.endDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 w-1/3 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -56,7 +56,7 @@
 			title: 'Approved By',
 			value: (v: typeof rows[number]) => v?.AprrovedBy.User.userName ?? '',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 w-1/3 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		hasDeleteLeavesScope

@@ -93,7 +93,7 @@
 	<SvelteTable
 		classNameTable="rolesTable"
 		on:clickCell={(event) => {
-			goto(`/employees/${event.detail.row.id}}`);
+			goto(`/employees/${event.detail.row.id}`);
 		}}
 		{columns}
 		{rows}

@@ -29,7 +29,7 @@
 				name="userName"
 				bind:value={$editEmployeeForm.userName}
 				{...$constraints.userName}
-				class=""
+				class="border-2 border-black/50"
 			/>
 		</label>
 		<label class="grid flex-1">
@@ -57,7 +57,7 @@
 			<input />
 		</label>
 		<label class="grid flex-1">
-			<span class="text-primary font-semibold py-1"> Hired Date</span>
+			<span class="text-primary font-semibold py-1"> Date of Employment </span>
 			<input type="date" name="hiredDate" bind:value={$hireDate} />
 		</label>
 		<label class="grid flex-1">
