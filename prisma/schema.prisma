@@ -255,11 +255,11 @@ model Employee {
   address       String
   dateOfBirth   DateTime?
   staffIdNumber String
-  bloodType     String
-  height        Float
-  jobTitle      String
-  department    String
-  image         String
+  bloodType     String    @default("O+")
+  height        Float     @default(0)
+  jobTitle      String    @default("employee")
+  department    String    @default("employee")
+  image         String?
 
   EmployeeStatus  EmployeeStatus @default(FULL_TIME)
   User            User           @relation(fields: [userId], references: [id])

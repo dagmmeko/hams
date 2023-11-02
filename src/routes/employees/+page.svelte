@@ -72,9 +72,9 @@
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
 	<div class="flex justify-between p-6">
-		<div class="flex space-x-4">
+		<div class="flex items-center space-x-4 h-fit">
 			<p class="text-lg">Employees</p>
-			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Employees</p>
+			<p class="bg-[#F9F5FF] text-xs py-1 px-2 rounded-xl">{data.employees.length} Employees</p>
 		</div>
 		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
 			Add Employee</button
@@ -116,38 +116,45 @@
 				</div>
 				<label class="grid">
 					<span class="text-primary font-medium"> Full Name </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						name="userName"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Phone Number </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						name="phoneNumber"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Email </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input name="email" class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2" />
 				</label>
 				<label>
 					<span class="text-primary font-medium"> Role </span>
-					<select class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2">
-						<option selected disabled> Pick a role </option>
-						<option> Manager </option>
-						<option> Finance </option>
-						<option> Reception </option>
+					<select name="roleId" class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2">
+						<option class="" selected disabled> Select Role </option>
+						{#each data.roles as role}
+							<option value={role.id}> {role.name} </option>
+						{/each}
 					</select>
 				</label>
 				<label>
 					<span class="text-primary font-medium"> Manager </span>
 					<select class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2">
 						<option selected disabled> Select Manager </option>
-						<option> Thomas John </option>
-						<option> Belay Kilo </option>
-						<option> Bruh Sew </option>
+						{#each data.employees as employee}
+							<option> {employee.User.userName} </option>
+						{/each}
 					</select>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Start Date </span>
 					<input
 						type="date"
+						name="hiredDate"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput}
 						on:click={() => {

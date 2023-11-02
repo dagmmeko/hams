@@ -67,12 +67,13 @@
 				New Role</a
 			>
 		</div>
-		<div class="bg-ghost/60 p-6 flex justify-between">
-			<button
+		<div class="bg-ghost/60 p-6 flex justify-between border-b-2 border-ghost">
+			<!-- <button
+				on:click|stopPropagation
 				class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
 			>
 				<FiltersLines class="h-4 w-4" /> Add filters
-			</button>
+			</button> -->
 			<label class="grid">
 				<input
 					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
@@ -80,7 +81,7 @@
 					id="search"
 					name="search"
 					placeholder="Search"
-					on:input={async (e) => {
+					on:change={async (e) => {
 						const newSearchParams = new URLSearchParams($page.url.search);
 						newSearchParams.set('search', e.currentTarget.value);
 						await goto(`?${newSearchParams.toString()}`);
