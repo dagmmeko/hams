@@ -57,8 +57,9 @@ export const actions = {
 				return fail(400, { addEmployeeForm, e });
 			});
 		console.log({ user });
+		let employee;
 		if ('id' in user) {
-			const employee = await prisma.employee
+			employee = await prisma.employee
 				.create({
 					data: {
 						userId: user?.id,
@@ -77,6 +78,6 @@ export const actions = {
 			console.log({ employee });
 		}
 
-		return { addEmployeeForm, user };
+		return { addEmployeeForm, user, employee };
 	}
 };

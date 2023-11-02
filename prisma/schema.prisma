@@ -252,6 +252,8 @@ model Employee {
   hiredDate     DateTime
   isSuspended   Boolean
   isFired       Boolean   @default(false)
+  onLeave       Boolean   @default(false)
+  isAbsent      Boolean   @default(false)
   address       String
   dateOfBirth   DateTime?
   staffIdNumber String
@@ -456,7 +458,7 @@ model PaymentFile {
 
 enum EmployeeStatus {
   FULL_TIME
-  PART_TYME
+  PART_TIME
   TEMPORARY
 }
 

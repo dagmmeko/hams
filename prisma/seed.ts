@@ -17,7 +17,7 @@ async function main() {
 					hiredDate: new Date(),
 					isSuspended: false,
 					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/2',
+					staffIdNumber: 'HAMS/1/7',
 					roleId: 1
 				}
 			}
@@ -34,13 +34,12 @@ async function main() {
 					hiredDate: new Date(),
 					isSuspended: false,
 					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/2',
+					staffIdNumber: 'HAMS/1/8',
 					roleId: 1
 				}
 			}
 		}
 	});
-	console.log({ data });
 }
 main()
 	.then(async () => {

@@ -6,6 +6,7 @@
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
+	import StatusComponent from './status-component.svelte';
 	export let data;
 
 	let modal = false;
@@ -28,7 +29,12 @@
 		{
 			key: 'status',
 			title: 'Status',
-			value: (v: typeof rows[number]) => v.EmployeeStatus,
+			renderComponent: {
+				component: StatusComponent,
+				props: {
+					data: data
+				}
+			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -45,6 +51,14 @@
 			key: 'email',
 			title: 'Email',
 			value: (v: typeof rows[number]) => v.User.email,
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'jobTitle',
+			title: 'Job Title',
+			value: (v: typeof rows[number]) => v.jobTitle,
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
