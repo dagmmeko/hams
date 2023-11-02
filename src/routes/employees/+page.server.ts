@@ -13,12 +13,23 @@ const addEmployeeSchema = z.object({
 });
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 
-export const load = async () => {
+export const load = async (event) => {
 	const addEmployeeForm = await superValidate(addEmployeeSchema);
+	const search = event.url.searchParams.get('search');
+
 	const employees = await prisma.employee.findMany({
 		where: {
 			isFired: false,
-			isSuspended: false
+			isSuspended: false,
+			...(search && {
+				User: {
+					OR: [
+						{ userName: { contains: search } },
+						{ phoneNumber: { contains: search } },
+						{ email: { contains: search } }
+					]
+				}
+			})
 		},
 		include: {
 			User: true,

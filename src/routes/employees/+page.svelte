@@ -7,6 +7,8 @@
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
 	import StatusComponent from './status-component.svelte';
+	import { page } from '$app/stores';
+
 	export let data;
 
 	let modal = false;
@@ -101,7 +103,18 @@
 			<FiltersLines class="h-4 w-4" /> Add filters
 		</button>
 		<label class="grid">
-			<input placeholder="Search" class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+			<input
+				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				type="search"
+				id="search"
+				name="search"
+				placeholder="Search"
+				on:change={async (e) => {
+					const newSearchParams = new URLSearchParams($page.url.search);
+					newSearchParams.set('search', e.currentTarget.value);
+					await goto(`?${newSearchParams.toString()}`);
+				}}
+			/>
 		</label>
 	</div>
 	<SvelteTable

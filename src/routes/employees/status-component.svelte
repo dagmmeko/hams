@@ -4,8 +4,6 @@
 
 	export let row: any;
 	export let data: PageData;
-
-	$: console.log({ row });
 </script>
 
 <div
