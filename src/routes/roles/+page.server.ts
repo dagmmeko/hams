@@ -9,3 +9,5 @@ export const load = async (event) => {
 
 	return { roles };
 };
+
+export const actions =

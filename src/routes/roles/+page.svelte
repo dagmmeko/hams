@@ -3,6 +3,7 @@
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import dayjs from 'dayjs';
+	import { page } from '$app/stores';
 	import DeleteRoleTableComponent from './delete-role-table-component.svelte';
 
 	let dateInput: any;
@@ -73,7 +74,18 @@
 				<FiltersLines class="h-4 w-4" /> Add filters
 			</button>
 			<label class="grid">
-				<input placeholder="Search" class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+				<input
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					type="search"
+					id="search"
+					name="search"
+					placeholder="Search"
+					on:input={async (e) => {
+						const newSearchParams = new URLSearchParams($page.url.search);
+						newSearchParams.set('search', e.currentTarget.value);
+						await goto(`?${newSearchParams.toString()}`);
+					}}
+				/>
 			</label>
 		</div>
 		<SvelteTable
