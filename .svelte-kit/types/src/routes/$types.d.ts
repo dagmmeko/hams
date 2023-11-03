@@ -11,7 +11,7 @@ type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends 
 export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageServerParentData = EnsureDefined<LayoutServerData>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/auth" | "/auth/signup-error" | "/employees" | "/employees/add-employee" | "/roles" | "/roles/add-role" | null
+type LayoutRouteId = RouteId | "/" | "/auth" | "/auth/signup-error" | "/employees" | "/employees/add-employee" | "/roles" | "/roles/add-role" | "/vendor-task" | null
 type LayoutParams = RouteParams & {  }
 type LayoutServerParentData = EnsureDefined<{}>;
 type LayoutParentData = EnsureDefined<{}>;
