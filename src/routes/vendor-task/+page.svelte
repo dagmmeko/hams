@@ -10,6 +10,7 @@
 	import Remove from '$lib/assets/remove.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import Preview from '$lib/assets/preview.svg.svelte';
+	import Search from  '$lib/assets/search.svg.svelte';
     let modal = false;
 	let dateInput: any;
     
@@ -146,7 +147,11 @@
 </div>
 <div class="ml-auto">
             <label class="grid">
-                <input placeholder="Search" class="w-[320px] border-[1px] border-black/60 rounded-md p-2" />
+				<div class="  text-[#64748B] flex items-center border-[1px] w-[320px] h-[44px] border-[#E2E8F0] rounded-md px-2 py-3 bg-white">
+
+				<div ><Search/></div>
+                <input placeholder="Search" class=" border-none focus:outline-none  w-full  pl-2 " />
+			</div>
             </label>
 		</div>
             
