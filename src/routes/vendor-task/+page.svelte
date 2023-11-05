@@ -1,11 +1,15 @@
 <script lang="ts">
+
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import { clickOutside } from '$lib/utils/click-outside';
     import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
     import Name from './name.svelte';
-    import selector from './selector.svelte';
 	import Selector from './selector.svelte';
-
+	import Trash from './trash.svelte';
+	import Edit from './edit.svelte';
+	import Remove from '$lib/assets/remove.svg.svelte';
+	import FileUpload from '$lib/assets/file-upload.svg.svelte';
+	import Preview from '$lib/assets/preview.svg.svelte';
     let modal = false;
 	let dateInput: any;
     
@@ -74,7 +78,10 @@
         {
 			key: 'Delete',
 			title: '',
-			value: (v: typeof rows[number]) => '',
+			renderComponent:
+			{
+				component:Trash
+			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#1] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
@@ -82,12 +89,18 @@
         {
 			key: 'Edit',
 			title: '',
-			value: (v: typeof rows[number]) => '',
+			renderComponent:
+			{
+				component:Edit
+			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
+
+
+
 </script>
 <div class='mx-10 my-5' >
     <div class=" text-[#64748B]">
@@ -110,30 +123,32 @@
             >
         </div>
 
-        <div class="bg-ghost/60 p-6 flex justify-between">
-            
+        	<div class="bg-ghost/60 p-6 flex ">
+            <div class=" flex mr-auto">
             <button
-                class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 font-bold text-sm shadow-md bg-[#E2E8F0]"
+                class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 font-bold text-sm shadow-md bg-[#E2E8F0]"
             >
                 All time 
-				
+				<div><Remove/></div>
             </button>
             <button
-            class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 font-bold text-sm shadow-md bg-[#E2E8F0]"
+            class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 font-bold text-sm shadow-md bg-[#E2E8F0]"
         >
             US,AU,+4 
-        </button>
+			<div><Remove/></div>
+       		 </button>
 		
         <button
-        class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+        class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 text-sm shadow-md bg-white"
     >
     <FiltersLines class="h-4 w-4" /> Add filters
     </button>
-    
+</div>
+<div class="ml-auto">
             <label class="grid">
-                <input placeholder="Search" class="w-[220px] border-[1px] border-black/60 rounded-md p-2" />
+                <input placeholder="Search" class="w-[320px] border-[1px] border-black/60 rounded-md p-2" />
             </label>
-
+		</div>
             
            
         </div>
@@ -199,9 +214,11 @@
 
 			<label>
 				<span class="text-primary font-medium"> Upload Contract File</span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2 hidden" type="file" accept=".pdf,.png,.jpg">
+				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2 hidden"  type="file" accept=".pdf,.png,.jpg">
 				<div class="flex">
-					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10">icon</button>
+				
+					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2" ><Preview/></button>
+					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2" ><FileUpload/></button>
 
 				</div>
 				<span class="text-[#64748B] font-medium"> Formats:pdf,png,jpg</span>
