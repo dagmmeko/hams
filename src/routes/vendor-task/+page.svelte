@@ -16,16 +16,7 @@
     
 	$: rows = [{ val: 1 }];
 	$: columns = [
-        {
-			key: 'Selection',
-			title:'',
-			renderComponent: {
-				component: Selector
-			},
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
-		},
+      
 		{
 			key: 'Name',
 			title: 'Name',
