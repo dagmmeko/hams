@@ -26,15 +26,7 @@ export const load = async (event) => {
 			Fired: true,
 			Role: true,
 			Suspensions: true,
-			EmployeesLeaves: {
-				include: {
-					AprrovedBy: {
-						include: {
-							User: true
-						}
-					}
-				}
-			},
+			EmployeesLeaves: true,
 			Attendance: true,
 			User: true
 		}

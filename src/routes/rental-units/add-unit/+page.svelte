@@ -1,5 +1,5 @@
 <script lang="ts">
-	import QR from '$lib/assets/qr.svg';
+	import QR from '$lib/assets/qr.png';
 </script>
 
 <div class="mt-6 mx-10">
