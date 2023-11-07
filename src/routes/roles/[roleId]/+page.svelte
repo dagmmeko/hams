@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { allScopes } from '$lib/utils/scopes.js';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { goto } from '$app/navigation';
 
 	export let data;
+	export let form;
 
 	let noChange = true;
 
@@ -11,6 +14,19 @@
 		enhance: editFormEnhance,
 		constraints
 	} = superForm(data.editRoleForm);
+
+	const { form: deleteRoleForm, enhance: deleteFormEnhance } = superForm(data.deleteRoleForm, {
+		onSubmit: ({ formData, cancel }) => {
+			if (!window.confirm('Are you sure you want to delete this role?')) {
+				cancel();
+			}
+			formData.set('deleteRoleId', data.role.id.toString());
+		}
+	});
+
+	$: form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
+	$: form?.deleteRoleForm ? goto('/roles') : null;
+	$: form?.editRoleForm ? toast.push('Role edited successfully') : null;
 </script>
 
 <form method="post" action="?/editRole" use:editFormEnhance>
@@ -52,13 +68,26 @@
 				>
 					Edit Role</button
 				>
-				<button
-					on:click|stopPropagation
-					type="submit"
-					class="bg-danger text-white rounded-md py-2 w-full"
-				>
-					Archive Role</button
-				>
+				{#if data.role.Employees.length}<button
+						on:click|stopPropagation={() =>
+							toast.push('Can not delete a role with Employees in it.')}
+						type="submit"
+						class="bg-subtitle text-white rounded-md py-2 w-full"
+					>
+						Archive Role</button
+					>
+				{:else}
+					<form
+						use:deleteFormEnhance
+						method="post"
+						action="?/archiveRole"
+						class="w-full bg-danger text-white flex justify-center rounded-md py-2"
+					>
+						<button on:click|stopPropagation type="submit" class="w-full h-full">
+							Archive Role</button
+						>
+					</form>
+				{/if}
 			</div>
 		</div>
 		<div class="flex-1 col-span-2">

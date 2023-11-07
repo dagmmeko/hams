@@ -8,16 +8,24 @@ const editRoleSchema = z.object({
 	description: z.string(),
 	scopes: z.string().array()
 });
+
+const deleteRoleSchema = z.object({
+	deleteRoleId: z.number()
+});
+
 export type editRoleType = z.infer<typeof editRoleSchema>;
 
 export const load = async (event) => {
+	const deleteRoleForm = await superValidate(deleteRoleSchema);
+
 	const { roleId } = event.params;
 	const role = await prisma.role.findUnique({
 		where: {
 			id: Number(roleId)
 		},
 		include: {
-			Scopes: true
+			Scopes: true,
+			Employees: true
 		}
 	});
 
@@ -33,7 +41,7 @@ export const load = async (event) => {
 		editRoleSchema
 	);
 
-	return { editRoleForm, role };
+	return { deleteRoleForm, editRoleForm, role };
 };
 
 export const actions = {
@@ -87,5 +95,19 @@ export const actions = {
 		} catch (e) {
 			console.error(e);
 		}
+	},
+	archiveRole: async (event) => {
+		const deleteRoleForm = await superValidate(event.request, deleteRoleSchema);
+
+		const deleteRole = await prisma.role.update({
+			where: {
+				id: Number(deleteRoleForm.data.deleteRoleId)
+			},
+			data: {
+				deletedAt: new Date()
+			}
+		});
+
+		return { deleteRoleForm, deleteRole };
 	}
 };

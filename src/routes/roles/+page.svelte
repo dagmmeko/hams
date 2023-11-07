@@ -5,6 +5,9 @@
 	import dayjs from 'dayjs';
 	import { page } from '$app/stores';
 	import DeleteRoleTableComponent from './delete-role-table-component.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
+
+	export let form;
 
 	let dateInput: any;
 	let hasDeleteRoleScope = true;
@@ -52,6 +55,7 @@
 			  }
 			: (null as unknown as TableColumn<typeof rows[number]>)
 	];
+	$: form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
 </script>
 
 <div>
