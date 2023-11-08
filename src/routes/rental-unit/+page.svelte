@@ -3,7 +3,7 @@
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import { clickOutside } from '$lib/utils/click-outside';
     import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
-    import Name from './name.svelte';
+  
 	import Remove from '$lib/assets/remove.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import Preview from '$lib/assets/preview.svg.svelte';
@@ -15,56 +15,77 @@
 	$: columns = [
       
 		{
-			key: 'Name',
-			title: 'Name',
-			renderComponent: {
-				component: Name
-			},
+			key: 'room-no',
+			title: 'Room No.',
+			value: (v: typeof rows[number]) => 'security',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
-			key: 'service',
-			title: 'Service',
-			value: (v: typeof rows[number]) => 'security',
+			key: 'floor',
+			title: 'Floor',
+			value: (v: typeof rows[number]) => 'floor',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		},
 		{
-			key: 'phone',
-			title: 'Phone number',
+			key: 'status',
+			title: 'Status',
 			value: (v: typeof rows[number]) => '0911480875',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		},
 		{
-			key: 'email',
-			title: 'Email address',
+			key: 'condition',
+			title: 'Condition',
 			value: (v: typeof rows[number]) => 'dagi@gmail.com',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		},
 		{
-			key: 'Score',
-			title: 'Score',
+			key: 'Unit type',
+			title: 'Unit Type',
 			value: (v: typeof rows[number]) => '5',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		},
-		{
-			key: 'Start_date',
-			title: 'Contact start Date',
+        {
+			key: 'price',
+			title: 'price',
 			value: (v: typeof rows[number]) => 'jan 5,2020',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		},
-      
+		{
+			key: 'size',
+			title: 'Size m2',
+			value: (v: typeof rows[number]) => 'jan 5,2020',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
+		},
+        {
+			key: 'Delete',
+			title: '',
+			value: (v: typeof rows[number]) => 'security',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#1] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
+		},
+        {
+			key: 'Edit',
+			title: '',
+			value: (v: typeof rows[number]) => 'security',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		}
 	];
 
 
@@ -72,22 +93,18 @@
 </script>
 <div class='mx-10 my-5' >
     <div class=" text-[#64748B]">
-        vendor 
+        Rental Units
     </div>
-        <div class="bg-ghost/60 p-2 my-4 rounded-md shadow-md inline-flex">
-            <div class="bg-white p-2 rounded-md">vendors </div>
-			<div class=" p-2 rounded-md text-[#64748B]"> tasks </div>
-			<div class=" p-2 rounded-md text-[#64748B]">pending tasks</div>
-        </div>
+      
 
     <div class=" bg-white rounded-sm shadow-md border-[1px] border-black/20">
         <div class="flex justify-between p-6">
             <div class="flex space-x-4">
-                <p class="text-lg">Vendors</p>
-                <p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Vendors</p>
+                <p class="text-lg">Rental units</p>
+                <p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Units</p>
             </div>
             <button class="bg-primary text-white rounded-md py-2 px-6"  on:click={() => (modal = true)}>
-                New Vendor</button
+                New Rental Unit</button
             >
         </div>
 
@@ -143,59 +160,3 @@
 
 
 
-{#if modal}
-	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
-		<div
-			use:clickOutside={() => (modal = false)}
-			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
-		>
-			<div>
-				<p class="text-xl font-semibold">New Vendor</p>
-				<p class="text-sm text-subtitle pt-2">
-					Register new tenants here. Click save when you're done.
-				</p>
-			</div>
-			<label class="grid">
-				<span class="text-primary font-medium"> Vendor Name </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
-			</label>
-			<label class="grid">
-				<span class="text-primary font-medium"> Phone Number </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
-			</label>
-			<label class="grid">
-				<span class="text-primary font-medium"> Email </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
-			</label>
-			<label>
-				<span class="text-primary font-medium"> Score </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" type="number" min="1" max="10" step="0.1">
-			</label>
-			
-			<label class="grid">
-				<span class="text-primary font-medium"> Start Date </span>
-				<input
-					type="date"
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-					bind:this={dateInput}
-					on:click={() => {
-						dateInput && dateInput.showPicker();
-					}}
-				/>
-			</label>
-
-			<label>
-				<span class="text-primary font-medium"> Upload Contract File</span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2 hidden"  type="file" accept=".pdf,.png,.jpg">
-				<div class="flex">
-				
-					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2" ><Preview/></button>
-					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2" ><FileUpload/></button>
-
-				</div>
-				<span class="text-[#64748B] font-medium"> Formats:pdf,png,jpg</span>
-			</label>
-			<button class="bg-primary text-white rounded-md py-2"> Save tenant</button>
-		</div>
-	</div>
-{/if}

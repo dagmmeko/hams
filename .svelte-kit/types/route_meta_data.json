@@ -20,6 +20,9 @@
 		"src/routes/employees/add-employee/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/rental-unit": [
+		"src/routes/+layout.server.ts"
+	],
 	"/roles": [
 		"src/routes/roles/+page.server.ts",
 		"src/routes/+layout.server.ts"

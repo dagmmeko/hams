@@ -11,7 +11,7 @@
 		<div class=" text-purple-500 text-lg  ">DM</div>
 	  {/if}
 	</div>
-	<div class="">
+	<div class="font-inter text-base font-medium">
 	  Dagem Mekonnen
 	</div>
   </div>
