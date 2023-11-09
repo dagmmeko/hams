@@ -34,7 +34,7 @@ model RentalUnits {
   buildingId        Int?
   maximumTenants    Int
   minimumRentalDate Int
-  roomNumber        String               @default("0")
+  roomNumber        String
   unitType          RentalUnits_unitType
   Tenants           Tenants[]
 
@@ -57,6 +57,7 @@ model Tenants {
   emergencyContactName        String
   emergencyContactPhoneNumber String
   tenantScore                 Int          @default(0)
+  active                      Boolean      @default(true)
   RentalUnits                 RentalUnits? @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
 
@@ -100,6 +101,8 @@ model Employee {
   height         Float                   @default(0)
   image          String?
   jobTitle       String                  @default("employee")
+  isAbsent       Boolean                 @default(false)
+  onLeave        Boolean                 @default(false)
   User           User                    @relation(fields: [userId], references: [id])
   Role           Role                    @relation(fields: [roleId], references: [id])
   Suspensions    Suspended[]
@@ -376,13 +379,6 @@ model VendorTask {
   @@index([vendorId])
 }
 
-enum Inspection_InspectionStatus {
-  DAMAGED
-  NEEDS_REPAIR
-  MISSING_ITEMS
-  GOOD_CONDITION
-}
-
 enum UnitProperty_propertyStatus {
   DAMAGED
   NEEDS_REPAIR
@@ -404,13 +400,19 @@ enum Vendor_serviceType {
   SECURITY
 }
 
+enum Inspection_InspectionStatus {
+  NEEDS_REPAIR
+  OUT_OF_SERVICE
+  GOOD_CONDITION
+}
+
 enum RentalUnits_unitType {
-  COMMERICAL
+  COMMERCIAL
   RESIDENTIAL
 }
 
 enum Employee_EmployeeStatus {
   FULL_TIME
-  PART_TYME
+  PART_TIME
   TEMPORARY
 }
