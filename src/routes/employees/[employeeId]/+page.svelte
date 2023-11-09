@@ -1,10 +1,9 @@
 <script lang="ts">
+	import Attendance from './attendance.svelte';
 	import Info from './info.svelte';
 	import Leaves from './leaves.svelte';
 
 	export let data;
-
-	$: console.log({ data });
 
 	let displayedComponent: 'info' | 'attendance' | 'leaves' = 'info';
 </script>
@@ -32,7 +31,7 @@
 		{#if displayedComponent === 'info'}
 			<Info bind:data />
 		{:else if displayedComponent === 'attendance'}
-			<p>Attendance</p>
+			<Attendance bind:data />
 		{:else if displayedComponent === 'leaves'}
 			<Leaves bind:data />
 		{:else}

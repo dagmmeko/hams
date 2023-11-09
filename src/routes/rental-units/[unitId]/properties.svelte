@@ -68,7 +68,6 @@
 		<SvelteTable
 			classNameTable="unitPropertyTables"
 			on:clickCell={(event) => {
-				console.log(event.detail.row);
 				selectedUnitId = event.detail.row.id;
 				editModal = true;
 			}}

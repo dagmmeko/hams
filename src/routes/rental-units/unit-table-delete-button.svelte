@@ -6,7 +6,6 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	export let row: any;
 	export let data: PageData;
-	$: console.log({ row });
 
 	const { enhance } = superForm(data.deleteUnitForm, {
 		onSubmit: ({ formData, cancel }) => {

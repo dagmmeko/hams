@@ -18,7 +18,6 @@
 		constraints
 	} = superForm(data.addAmenityForm, {
 		onSubmit: ({ formData }) => {
-			console.log({ formData: formData.get('paid') });
 			addModal = false;
 		}
 	});
@@ -68,7 +67,6 @@
 		<SvelteTable
 			classNameTable="unitAmenitiesTables"
 			on:clickCell={(event) => {
-				console.log(event.detail.row);
 				selectedUnitId = event.detail.row.id;
 				editModal = true;
 			}}

@@ -25,15 +25,16 @@ model File {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   userName    String?
-  phoneNumber String?   @unique
-  email       String    @unique
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime  @updatedAt
+  phoneNumber String?    @unique
+  email       String     @unique
+  createdAt   DateTime   @default(now())
+  updateAt    DateTime   @updatedAt
   deletedAt   DateTime?
   jwtPassword String?
   Employee    Employee?
+  Manager     Employee[] @relation("manager")
 
   @@fulltext([userName, phoneNumber, email])
 }
@@ -218,36 +219,41 @@ model ReceiptsFile {
 }
 
 model Employee {
-  id              Int            @id @default(autoincrement())
-  hiredDate       DateTime
-  isSuspended     Boolean
-  userId          Int            @unique
-  roleId          Int
-  createdAt       DateTime       @default(now())
-  updateAt        DateTime       @updatedAt
-  deletedAt       DateTime?
-  isFired         Boolean        @default(false)
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+  hiredDate DateTime
+
+  isSuspended Boolean
+  isAbsent    Boolean @default(false)
+  isFired     Boolean @default(false)
+  onLeave     Boolean @default(false)
+
+  userId Int @unique
+  roleId Int
+
   address         String
   dateOfBirth     DateTime?
   staffIdNumber   String
-  EmployeeStatus  EmployeeStatus @default(FULL_TIME)
-  bloodType       String         @default("O+")
-  department      String         @default("employee")
-  height          Float          @default(0)
+  EmploymentType  EmploymentType?
+  bloodType       String          @default("O+")
+  height          Float           @default(0)
   image           String?
-  jobTitle        String         @default("employee")
-  isAbsent        Boolean        @default(false)
-  onLeave         Boolean        @default(false)
-  User            User           @relation(fields: [userId], references: [id])
-  Role            Role           @relation(fields: [roleId], references: [id])
+  jobTitle        String          @default("employee")
+  User            User            @relation(fields: [userId], references: [id])
+  Role            Role            @relation(fields: [roleId], references: [id])
+  managerUserId   Int?
+  Manager         User?           @relation("manager", fields: [managerUserId], references: [id])
   Suspensions     Suspended[]
   Fired           Fired[]
   Attendance      Attendance[]
-  ApprovedBy      Leaves[]       @relation("aprrovedBy")
-  EmployeesLeaves Leaves[]       @relation("takenBy")
+  ApprovedBy      Leaves[]        @relation("aprrovedBy")
+  EmployeesLeaves Leaves[]        @relation("takenBy")
 
   @@index([roleId])
   @@index([userId])
+  @@index([managerUserId])
 }
 
 model Leaves {
@@ -261,22 +267,20 @@ model Leaves {
   employeeId   Int
   creatorId    Int
   Employee     Employee  @relation("takenBy", fields: [employeeId], references: [id])
-  ApprrovedBy  Employee  @relation("aprrovedBy", fields: [creatorId], references: [id])
+  ApprovedBy   Employee  @relation("aprrovedBy", fields: [creatorId], references: [id])
 
   @@index([employeeId])
   @@index([creatorId])
 }
 
 model Attendance {
-  id           Int       @id @default(autoincrement())
-  startingDate DateTime
-  endDate      DateTime
-  description  String
-  createdAt    DateTime  @default(now())
-  updateAt     DateTime  @updatedAt
-  deletedAt    DateTime?
-  employeeId   Int
-  Employee     Employee  @relation(fields: [employeeId], references: [id])
+  id          Int       @id @default(autoincrement())
+  description String
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  employeeId  Int
+  Employee    Employee  @relation(fields: [employeeId], references: [id])
 
   @@index([employeeId])
 }
@@ -423,7 +427,7 @@ model PaymentFile {
   @@index([fileId])
 }
 
-enum EmployeeStatus {
+enum EmploymentType {
   FULL_TIME
   PART_TIME
   TEMPORARY

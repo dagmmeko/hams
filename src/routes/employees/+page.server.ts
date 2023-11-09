@@ -8,9 +8,12 @@ const addEmployeeSchema = z.object({
 	userName: z.string(),
 	phoneNumber: z.string(),
 	email: z.string(),
+	address: z.string(),
 	roleId: z.number(),
-	hiredDate: z.string()
+	managerId: z.number(),
+	hiredDate: z.date()
 });
+
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 
 export const load = async (event) => {
@@ -33,7 +36,8 @@ export const load = async (event) => {
 		},
 		include: {
 			User: true,
-			Role: true
+			Role: true,
+			Manager: true
 		}
 	});
 
@@ -53,8 +57,6 @@ export const actions = {
 			return fail(400, { addEmployeeForm });
 		}
 
-		console.log({ addEmployeeForm });
-
 		const user = await prisma.user
 			.create({
 				data: {
@@ -67,7 +69,6 @@ export const actions = {
 			.catch((e) => {
 				return fail(400, { addEmployeeForm, e });
 			});
-		console.log({ user });
 		let employee;
 		if ('id' in user) {
 			employee = await prisma.employee
@@ -79,15 +80,16 @@ export const actions = {
 						hiredDate: addEmployeeForm.data.hiredDate,
 						isSuspended: false,
 						staffIdNumber: `HAMS/${addEmployeeForm.data.roleId}/${user.id}`,
-						address: 'address'
+						address: addEmployeeForm.data.address,
+						managerUserId: addEmployeeForm.data.managerId
 					}
 				})
 				.catch((e) => {
 					return fail(400, { addEmployeeForm, e });
 				});
-
-			console.log({ employee });
 		}
+
+		console.log({ addEmployeeForm, user, employee });
 
 		return { addEmployeeForm, user, employee };
 	}

@@ -168,8 +168,6 @@ export const actions = {
 			return fail(400, { addAmenityForm });
 		}
 
-		console.log({ addAmenityForm: addAmenityForm.data });
-
 		const addAmenity = await prisma.rentalUnits.update({
 			where: {
 				id: Number(event.params.unitId)
@@ -185,8 +183,6 @@ export const actions = {
 				}
 			}
 		});
-
-		console.log(addAmenity);
 
 		return { addAmenityForm, addAmenity };
 	},

@@ -7,6 +7,7 @@
 	import dayjs from 'dayjs';
 	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
 	let dateInput: any;
@@ -26,75 +27,25 @@
 	});
 
 	// const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
-
-	$: rows = data.employee.EmployeesLeaves;
-	$: columns = [
-		{
-			key: 'title',
-			title: 'Reason',
-			value: (v: typeof rows[number]) => v?.description ?? '',
-			headerClass:
-				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'from',
-			title: 'Start Date',
-			value: (v: typeof rows[number]) =>
-				dayjs(v?.startingDate).format('MMM DD, YYYY').toString() ?? '',
-			headerClass:
-				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'to',
-			title: 'End Date',
-			value: (v: typeof rows[number]) => dayjs(v?.endDate).format('MMM DD, YYYY').toString() ?? '',
-			headerClass:
-				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'by',
-			title: 'Approved By',
-			value: (v: typeof rows[number]) => v.ApprovedBy.User.userName ?? '',
-			headerClass:
-				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-
-		hasDeleteLeavesScope
-			? {
-					key: 'delete',
-					title: '',
-					renderComponent: {
-						component: DeleteLeavesTableComponent,
-						props: {
-							data: data
-						}
-					},
-					headerClass:
-						'bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-					class: 'border-b-[1px] border-[#B3B4B8]'
-			  }
-			: (null as unknown as TableColumn<typeof rows[number]>)
-	];
 </script>
 
 <div class="">
 	<div class="flex justify-between p-6">
 		<div class="flex space-x-4">
-			<p class="text-lg">Employee Leave</p>
+			<p class="text-lg">Employee Attendance</p>
 		</div>
-		<button
-			on:click={() => (modal = true)}
-			class="bg-primary text-white rounded-md py-2 px-6"
-			on:click={() => (modal = true)}
-		>
-			New Leave Permission</button
-		>
+		<form method="post" use:enhance action="?/markAbsent">
+			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				Mark Today absent</button
+			>
+		</form>
 	</div>
-	<SvelteTable classNameTable="rolesTable" on:clickCell={(event) => {}} {columns} {rows} />
+	<div>
+		{#each data.employee.Attendance as attendance}
+			{attendance.description}
+			{attendance.createdAt}
+		{/each}
+	</div>
 </div>
 
 {#if modal}
