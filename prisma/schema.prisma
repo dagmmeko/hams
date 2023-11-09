@@ -10,15 +10,16 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   userName    String?
-  phoneNumber String?   @unique
-  email       String    @unique
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime  @updatedAt
+  phoneNumber String?    @unique
+  email       String     @unique
+  createdAt   DateTime   @default(now())
+  updateAt    DateTime   @updatedAt
   deletedAt   DateTime?
   jwtPassword String?
   Employee    Employee?
+  Manager     Employee[] @relation("manager")
 
   @@fulltext([userName, phoneNumber, email])
 }
@@ -83,33 +84,70 @@ model Receipts {
 }
 
 model Employee {
-  id             Int                     @id @default(autoincrement())
-  hiredDate      DateTime
-  isSuspended    Boolean
-  userId         Int                     @unique
-  roleId         Int
-  createdAt      DateTime                @default(now())
-  updateAt       DateTime                @updatedAt
-  deletedAt      DateTime?
-  isFired        Boolean                 @default(false)
-  address        String
-  dateOfBirth    DateTime?
-  staffIdNumber  String
-  EmployeeStatus Employee_EmployeeStatus @default(FULL_TIME)
-  bloodType      String                  @default("O+")
-  department     String                  @default("employee")
-  height         Float                   @default(0)
-  image          String?
-  jobTitle       String                  @default("employee")
-  isAbsent       Boolean                 @default(false)
-  onLeave        Boolean                 @default(false)
-  User           User                    @relation(fields: [userId], references: [id])
-  Role           Role                    @relation(fields: [roleId], references: [id])
-  Suspensions    Suspended[]
-  Fired          Fired[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+  hiredDate DateTime
+
+  isSuspended Boolean
+  isAbsent    Boolean @default(false)
+  isFired     Boolean @default(false)
+  onLeave     Boolean @default(false)
+
+  userId Int @unique
+  roleId Int
+
+  address         String
+  dateOfBirth     DateTime?
+  staffIdNumber   String
+  EmploymentType  EmploymentType?
+  bloodType       String          @default("O+")
+  height          Float           @default(0)
+  image           String?
+  jobTitle        String          @default("employee")
+  User            User            @relation(fields: [userId], references: [id])
+  Role            Role            @relation(fields: [roleId], references: [id])
+  managerUserId   Int?
+  Manager         User?           @relation("manager", fields: [managerUserId], references: [id])
+  Suspensions     Suspended[]
+  Fired           Fired[]
+  Attendance      Attendance[]
+  ApprovedBy      Leaves[]        @relation("aprrovedBy")
+  EmployeesLeaves Leaves[]        @relation("takenBy")
 
   @@index([roleId])
   @@index([userId])
+  @@index([managerUserId])
+}
+
+model Leaves {
+  id           Int       @id @default(autoincrement())
+  startingDate DateTime
+  endDate      DateTime
+  description  String
+  createdAt    DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  deletedAt    DateTime?
+  employeeId   Int
+  creatorId    Int
+  Employee     Employee  @relation("takenBy", fields: [employeeId], references: [id])
+  ApprovedBy   Employee  @relation("aprrovedBy", fields: [creatorId], references: [id])
+
+  @@index([employeeId])
+  @@index([creatorId])
+}
+
+model Attendance {
+  id          Int       @id @default(autoincrement())
+  description String
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  employeeId  Int
+  Employee    Employee  @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
 }
 
 model Suspended {
@@ -379,7 +417,67 @@ model VendorTask {
   @@index([vendorId])
 }
 
-enum UnitProperty_propertyStatus {
+model TaskFile {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  fileId     Int        @unique
+  taskId     Int
+  VendorTask VendorTask @relation(fields: [taskId], references: [id])
+  File       File       @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([fileId])
+}
+
+model Payment {
+  id               Int           @id @default(autoincrement())
+  createdAt        DateTime      @default(now())
+  updateAt         DateTime      @updatedAt
+  deletedAt        DateTime?
+  amount           Float
+  despositedToBank String
+  paidOn           DateTime?
+  vendorTaskId     Int?
+  VendorTask       VendorTask?   @relation(fields: [vendorTaskId], references: [id])
+  PaymentFile      PaymentFile[]
+
+  @@index([vendorTaskId])
+}
+
+model PaymentFile {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  fileId    Int       @unique
+  paymentId Int
+  Payment   Payment   @relation(fields: [paymentId], references: [id])
+  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([paymentId])
+  @@index([fileId])
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  TEMPORARY
+}
+
+enum UnitType {
+  COMMERCIAL
+  RESIDENTIAL
+}
+
+enum InspectionStatus {
+  NEEDS_REPAIR
+  OUT_OF_SERVICE
+  GOOD_CONDITION
+}
+
+enum PropertyStatus {
   DAMAGED
   NEEDS_REPAIR
   MISSING_ITEMS

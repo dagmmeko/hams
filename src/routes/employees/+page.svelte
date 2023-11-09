@@ -2,11 +2,27 @@
 	import { clickOutside } from '$lib/utils/click-outside';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import Name from './name.svelte';
-	import DeleteButton from './delete-button.svelte';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { goto } from '$app/navigation';
+	import dayjs from 'dayjs';
+	import StatusComponent from './status-component.svelte';
+	import { page } from '$app/stores';
+	import { superForm } from 'sveltekit-superforms/client';
+
+	export let data;
 
 	let modal = false;
+
+	const {
+		form: addEmployeeForm,
+		enhance: addEmployeeFormEnhance,
+		constraints
+	} = superForm(data.addEmployeeForm, {
+		onUpdate: () => {
+			modal = false;
+		}
+	});
+
 	let dateInput: any;
 	$: rows = [{ val: 1 }];
 	$: columns = [
@@ -47,17 +63,7 @@
 		{
 			key: 'hiredOn',
 			title: 'Hired Date',
-			value: (v: typeof rows[number]) => 'Jan 12/2023',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'second',
-			title: '',
-			renderComponent: {
-				component: DeleteButton
-			},
+			value: (v: typeof rows[number]) => dayjs(v.hiredDate).format('MMM DD, YYYY'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -95,16 +101,106 @@
 	/>
 </div>
 {#if modal}
-	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+	<form use:addEmployeeFormEnhance method="post" action="?/addEmployee">
 		<div
 			use:clickOutside={() => (modal = false)}
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
-			<div>
-				<p class="text-xl font-semibold">New Employee</p>
-				<p class="text-sm text-subtitle pt-2">
-					Register new employee here. Click save when you're done.
-				</p>
+			<div
+				use:clickOutside={() => (modal = false)}
+				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			>
+				<div>
+					<p class="text-xl font-semibold">New Employee</p>
+					<p class="text-sm text-subtitle pt-2">
+						Register new employee here. Click save when you're done.
+					</p>
+				</div>
+				<label class="grid">
+					<span class="text-primary font-medium"> Full Name </span>
+					<input
+						required
+						bind:value={$addEmployeeForm.userName}
+						{...$constraints.userName}
+						name="userName"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Phone Number </span>
+					<input
+						required
+						bind:value={$addEmployeeForm.phoneNumber}
+						{...$constraints.phoneNumber}
+						name="phoneNumber"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Email </span>
+					<input
+						required
+						bind:value={$addEmployeeForm.email}
+						{...$constraints.email}
+						name="email"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Address </span>
+					<input
+						required
+						bind:value={$addEmployeeForm.address}
+						{...$constraints.address}
+						name="address"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label>
+					<span class="text-primary font-medium"> Role </span>
+					<select
+						required
+						bind:value={$addEmployeeForm.roleId}
+						{...$constraints.roleId}
+						name="roleId"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					>
+						<option selected disabled> Select Role </option>
+						{#each data.roles as role}
+							<option value={role.id}> {role.name} </option>
+						{/each}
+					</select>
+				</label>
+				<label>
+					<span class="text-primary font-medium"> Manager </span>
+					<select
+						required
+						bind:value={$addEmployeeForm.managerId}
+						{...$constraints.managerId}
+						name="managerId"
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					>
+						<option selected disabled> Select Manager </option>
+						{#each data.employees as employee}
+							<option value={employee.User.id}> {employee.User.userName} </option>
+						{/each}
+					</select>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Start Date </span>
+					<input
+						type="date"
+						name="hiredDate"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+						bind:value={$addEmployeeForm.hiredDate}
+						{...$constraints.hiredDate}
+					/>
+				</label>
+				<button class="bg-primary text-white rounded-md py-2"> Save Employee</button>
 			</div>
 			<label class="grid">
 				<span class="text-primary font-medium"> Full Name </span>
