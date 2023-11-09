@@ -32,9 +32,6 @@
 		"src/routes/rental-units/[unitId]/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/rental-unit": [
-		"src/routes/+layout.server.ts"
-	],
 	"/roles": [
 		"src/routes/roles/+page.server.ts",
 		"src/routes/+layout.server.ts"
@@ -43,16 +40,12 @@
 		"src/routes/roles/add-role/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-<<<<<<< HEAD
 	"/roles/[roleId]": [
 		"src/routes/roles/[roleId]/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
 	"/tenants": [
 		"src/routes/tenants/+page.server.ts",
-=======
-	"/vendor-task": [
->>>>>>> experiment
 		"src/routes/+layout.server.ts"
 	]
 }
