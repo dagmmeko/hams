@@ -3,14 +3,22 @@
 	import { clickOutside } from '$lib/utils/click-outside';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import Name from './name.svelte';
-	import Remove from '$lib/assets/remove.svg.svelte';
-	import FileUpload from '$lib/assets/file-upload.svg.svelte';
-	import Preview from '$lib/assets/preview.svg.svelte';
+	// import Preview from '$lib/assets/preview.svg.svelte';
 	import Search from '$lib/assets/search.svg.svelte';
+	import Delete from '$lib/assets/delete.svg.svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { superForm } from 'sveltekit-superforms/client';
+	import dayjs from 'dayjs';
+	import { toast } from '@zerodevx/svelte-toast';
 	let modal = false;
 	let dateInput: any;
+	export let data;
+	export let form;
 
-	$: rows = [{ val: 1 }];
+	$: form?.addVendorForm ? toast.push('Vendor added successfully') : null;
+
+	$: rows = data.vendor ?? [];
 	$: columns = [
 		{
 			key: 'Name',
@@ -25,7 +33,7 @@
 		{
 			key: 'service',
 			title: 'Service',
-			value: (v: typeof rows[number]) => 'security',
+			value: (v: typeof rows[number]) => v.serviceType || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
@@ -33,7 +41,7 @@
 		{
 			key: 'phone',
 			title: 'Phone number',
-			value: (v: typeof rows[number]) => '0911480875',
+			value: (v: typeof rows[number]) => v.phoneNumber || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
@@ -41,7 +49,7 @@
 		{
 			key: 'email',
 			title: 'Email address',
-			value: (v: typeof rows[number]) => 'dagi@gmail.com',
+			value: (v: typeof rows[number]) => v.email || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
@@ -49,7 +57,7 @@
 		{
 			key: 'Score',
 			title: 'Score',
-			value: (v: typeof rows[number]) => '5',
+			value: (v: typeof rows[number]) => v.score || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
@@ -57,12 +65,22 @@
 		{
 			key: 'Start_date',
 			title: 'Contact start Date',
-			value: (v: typeof rows[number]) => 'jan 5,2020',
+			value: (v: typeof rows[number]) => dayjs(v.createdAt).format('MMM DD, YYYY'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#64748B] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-[#64748B]'
 		}
 	];
+
+	const {
+		form: addVendorForm,
+		enhance: addVendorFormEnhance,
+		constraints
+	} = superForm(data.addVendorForm, {
+		onUpdate: () => {
+			modal = false;
+		}
+	});
 </script>
 
 <div class="mx-10 my-5">
@@ -84,37 +102,26 @@
 			>
 		</div>
 
-		<div class="bg-ghost/60 p-6 flex">
-			<div class=" flex mr-auto">
-				<button
-					class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 font-bold text-sm shadow-md bg-[#E2E8F0]"
-				>
-					All time
-					<div><Remove /></div>
-				</button>
-				<button
-					class=" text-primary grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 font-bold text-sm shadow-md bg-[#E2E8F0]"
-				>
-					US,AU,+4
-					<div><Remove /></div>
-				</button>
-
-				<button
-					class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 text-sm shadow-md bg-white"
-				>
-					<FiltersLines class="h-4 w-4" /> Add filters
-				</button>
-			</div>
-			<div class="ml-auto">
-				<label class="grid">
-					<div
-						class="  text-[#64748B] flex items-center border-[1px] w-[320px] h-[44px] border-[#E2E8F0] rounded-md px-2 py-3 bg-white"
-					>
-						<div><Search /></div>
-						<input placeholder="Search" class=" border-none focus:outline-none w-full pl-2" />
-					</div>
-				</label>
-			</div>
+		<div class="bg-ghost/60 p-6 flex justify-between">
+			<button
+				class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 text-sm shadow-md bg-white"
+			>
+				<FiltersLines class="h-4 w-4" /> Add filters
+			</button>
+			<label class="grid">
+				<input
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					type="search"
+					id="search"
+					name="search"
+					placeholder="Search"
+					on:change={async (e) => {
+						const newSearchParams = new URLSearchParams($page.url.search);
+						newSearchParams.set('search', e.currentTarget.value);
+						await goto(`?${newSearchParams.toString()}`);
+					}}
+				/>
+			</label>
 		</div>
 
 		<SvelteTable classNameTable="rolesTable" {columns} {rows} />
@@ -122,7 +129,12 @@
 </div>
 
 {#if modal}
-	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+	<form
+		use:addVendorFormEnhance
+		class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+		method="post"
+		action="?/addVendor"
+	>
 		<div
 			use:clickOutside={() => (modal = false)}
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
@@ -135,15 +147,70 @@
 			</div>
 			<label class="grid">
 				<span class="text-primary font-medium"> Vendor Name </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+				<input
+					bind:value={$addVendorForm.name}
+					{...$constraints.name}
+					name="name"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
 			</label>
 			<label class="grid">
 				<span class="text-primary font-medium"> Phone Number </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+				<input
+					bind:value={$addVendorForm.phoneNumber}
+					{...$constraints.phoneNumber}
+					name="phoneNumber"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
 			</label>
 			<label class="grid">
 				<span class="text-primary font-medium"> Email </span>
-				<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+				<input
+					bind:value={$addVendorForm.email}
+					{...$constraints.email}
+					name="email"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Address </span>
+				<input
+					bind:value={$addVendorForm.address}
+					{...$constraints.address}
+					name="address"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Service Description </span>
+				<input
+					bind:value={$addVendorForm.serviceDescription}
+					{...$constraints.serviceDescription}
+					name="serviceDescription"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Service Type </span>
+				<select
+					bind:value={$addVendorForm.serviceType}
+					{...$constraints.serviceType}
+					name="serviceType"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				>
+					<option selected disabled> Select Type </option>
+					<option value="CLEANING">Cleaning</option>
+					<option value="ELECTRICITY">Electricity</option>
+					<option value="PLUMBING">Pluming</option>
+					<option value="PAINTING">Painting</option>
+					<option value="SECURITY">Security</option>
+				</select>
 			</label>
 			<label>
 				<span class="text-primary font-medium"> Score </span>
@@ -153,39 +220,16 @@
 					min="1"
 					max="10"
 					step="0.1"
+					bind:value={$addVendorForm.score}
+					{...$constraints.score}
+					name="score"
+					required
 				/>
 			</label>
 
-			<label class="grid">
-				<span class="text-primary font-medium"> Start Date </span>
-				<input
-					type="date"
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-					bind:this={dateInput}
-					on:click={() => {
-						dateInput && dateInput.showPicker();
-					}}
-				/>
-			</label>
-
-			<label>
-				<span class="text-primary font-medium"> Upload Contract File</span>
-				<input
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 hidden"
-					type="file"
-					accept=".pdf,.png,.jpg"
-				/>
-				<div class="flex">
-					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2"
-						><Preview /></button
-					>
-					<button class="border-dotted border-2 border-[#64748B] rounded-md py-14 px-10 mx-2"
-						><FileUpload /></button
-					>
-				</div>
-				<span class="text-[#64748B] font-medium"> Formats:pdf,png,jpg</span>
-			</label>
-			<button class="bg-primary text-white rounded-md py-2"> Save tenant</button>
+			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+				Save Vendor
+			</button>
 		</div>
-	</div>
+	</form>
 {/if}

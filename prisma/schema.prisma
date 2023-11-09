@@ -163,6 +163,7 @@ model Tenants {
   active                      Boolean       @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
+  emergencyContactEmail       String
   tenantScore                 Int           @default(0)
   RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
@@ -343,10 +344,7 @@ model Vendor {
   address            String
   serviceDescription String
   serviceType        ServiceType
-  bankName           String
-  bankAccount        String
-  swiftCode          String
-  iban               String
+  score              String
   VendorTask         VendorTask[]
   VendorFile         VendorFile[]
 }

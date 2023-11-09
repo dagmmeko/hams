@@ -14,7 +14,9 @@ export const nodes = [
 	() => import('./nodes/10'),
 	() => import('./nodes/11'),
 	() => import('./nodes/12'),
-	() => import('./nodes/13')
+	() => import('./nodes/13'),
+	() => import('./nodes/14'),
+	() => import('./nodes/15')
 ];
 
 export const server_loads = [0];
@@ -31,7 +33,9 @@ export const dictionary = {
 		"/roles": [~10],
 		"/roles/add-role": [~12],
 		"/roles/[roleId]": [~11],
-		"/tenants": [~13]
+		"/tenants": [~13],
+		"/tenants/add-tenant": [~14],
+		"/vendor-task": [~15]
 	};
 
 export const hooks = {

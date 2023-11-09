@@ -6,7 +6,7 @@
 	import { enhance } from '$app/forms';
 
 	let addModal = false;
-	let editModal = true;
+	let editModal = false;
 
 	let selectedUnitId: number;
 
