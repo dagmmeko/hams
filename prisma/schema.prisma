@@ -76,7 +76,7 @@ model RentalUnits {
   buildingId        Int?
   maximumTenants    Int
   minimumRentalDate Int
-  roomNumber        String          @default("0")
+  roomNumber        String
   unitType          UnitType
   Inspection        Inspection[]
   Property          UnitProperty[]
@@ -159,6 +159,7 @@ model Tenants {
   rentalUnitsId               Int
   durationOfStayInCountry     Int
   email                       String
+  active                      Boolean       @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
   tenantScore                 Int           @default(0)
@@ -429,14 +430,13 @@ enum EmployeeStatus {
 }
 
 enum UnitType {
-  COMMERICAL
+  COMMERCIAL
   RESIDENTIAL
 }
 
 enum InspectionStatus {
-  DAMAGED
   NEEDS_REPAIR
-  MISSING_ITEMS
+  OUT_OF_SERVICE
   GOOD_CONDITION
 }
 

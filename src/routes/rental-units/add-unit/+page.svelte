@@ -1,5 +1,14 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import QR from '$lib/assets/qr.png';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { superForm } from 'sveltekit-superforms/client';
+	export let data;
+	export let form;
+	$: form?.addUnitForm && goto('/rental-units');
+	$: form?.addUnitForm &&
+		toast.push('Unit added successfully', { theme: { '--toastBackground': '#059669' } });
+	const { form: addUnitForm, enhance: addFormEnhance, constraints } = superForm(data.addUnitForm);
 </script>
 
 <div class="mt-6 mx-10">
@@ -9,30 +18,60 @@
 			<p class="text-2xl font-medium">New Rental Unit</p>
 			<p class="text-sm py-2">Register new rental unit here. Click save when you're done.</p>
 		</div>
-		<form class="grid grid-flow-col mt-6">
-			<div class="grid">
+		<form method="post" action="?/addUnit" use:addFormEnhance class="grid grid-flow-col mt-6">
+			<div class="flex flex-col gap-4">
 				<label class="grid">
 					<span class="text-primary font-medium"> Room Number </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="roomNumber"
+						bind:value={$addUnitForm.roomNumber}
+						{...$constraints.roomNumber}
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Floor </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="floor"
+						bind:value={$addUnitForm.floor}
+						{...$constraints.floor}
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Size </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="size"
+						bind:value={$addUnitForm.size}
+						{...$constraints.size}
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Price </span>
-					<input class="w-[420px] border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="price"
+						bind:value={$addUnitForm.price}
+						{...$constraints.price}
+					/>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Unit Type </span>
-					<select class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2">
+					<select
+						required
+						name="unitType"
+						bind:value={$addUnitForm.unitType}
+						{...$constraints.unitType}
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					>
 						<option selected disabled> Pick a Type </option>
-						<option> Residential </option>
-						<option> Commercial </option>
+						<option value="RESIDENTIAL"> Residential </option>
+						<option value="COMMERCIAL"> Commercial </option>
 					</select>
 				</label>
 
@@ -42,23 +81,41 @@
 				</div>
 				<button class="bg-primary text-white rounded-md py-2 px-6 w-fit"> Create unit</button>
 			</div>
-			<div class="grid">
-				<label class="">
+			<div class="flex flex-col gap-4">
+				<label class="grid">
 					<span class="text-primary font-medium"> Condition </span>
-					<select class="mt-2 w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2">
+					<select
+						required
+						name="condition"
+						bind:value={$addUnitForm.condition}
+						{...$constraints.condition}
+						class="mt-2 w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
+					>
 						<option selected disabled> Pick a role </option>
-						<option> Good Condition </option>
-						<option> Need Repair </option>
-						<option> Out of service </option>
+						<option value="OUT_OF_SERVICE"> Out of service </option>
+						<option value="NEEDS_REPAIR"> Needs Repair </option>
+						<option value="GOOD_CONDITION"> Good Condition </option>
 					</select>
 				</label>
-				<label class="">
+				<label class="grid">
 					<span class="text-primary font-medium"> Minimum Rental Day </span>
-					<input class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						required
+						name="minimumRentalDate"
+						bind:value={$addUnitForm.minimumRentalDate}
+						{...$constraints.minimumRentalDate}
+						class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
+					/>
 				</label>
-				<label class="">
+				<label class="grid">
 					<span class="text-primary font-medium"> Number of People Allowed </span>
-					<input class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2" />
+					<input
+						required
+						name="maximumTenants"
+						bind:value={$addUnitForm.maximumTenants}
+						{...$constraints.maximumTenants}
+						class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
+					/>
 				</label>
 			</div>
 		</form>

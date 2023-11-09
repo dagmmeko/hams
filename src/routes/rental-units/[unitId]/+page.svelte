@@ -5,8 +5,6 @@
 
 	export let data;
 
-	$: console.log({ data });
-
 	let displayedComponent: 'info' | 'attendance' | 'leaves' = 'info';
 </script>
 
@@ -33,7 +31,7 @@
 		{#if displayedComponent === 'info'}
 			<Info bind:data />
 		{:else if displayedComponent === 'attendance'}
-			<Properties />
+			<Properties bind:data />
 		{:else if displayedComponent === 'leaves'}
 			<Amenities bind:data />
 		{:else}

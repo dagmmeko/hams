@@ -1,14 +1,31 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
+	import Tenant from '$lib/assets/tenant.svg.svelte';
+	import { superForm } from 'sveltekit-superforms/client';
 	export let row: any;
 	export let data: PageData;
+	$: console.log({ row });
+
+	const { enhance } = superForm(data.deleteUnitForm, {
+		onSubmit: ({ formData, cancel }) => {
+			if (!window.confirm('Are you sure you want to delete this Unit?')) {
+				cancel();
+			}
+			formData.set('deleteUnitId', row.id);
+		}
+	});
 </script>
 
 <div class="">
-	<form method="post" action="?/deleteTask">
-		<button on:click|stopPropagation={() => alert('Are you sure you want to delete the task?')}>
-			<Delete class="h-6 w-6 text-[#EC6738]" />
+	{#if row.Tenants.length > 0 && row.Tenants[0].active}
+		<button on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
+			><Delete class="text-subtitle" />
 		</button>
-	</form>
+	{:else}
+		<form use:enhance method="post" action="?/archiveUnit">
+			<button on:click|stopPropagation={() => {}}> <Delete class="text-danger" /> </button>
+		</form>
+	{/if}
 </div>
