@@ -1,9 +1,6 @@
 <script>
 	import Header from '$lib/components/header.svelte';
 	import SideNav from '$lib/components/side-nav.svelte';
-	import Nprogress from '$lib/components/nprogress.svelte';
-	import { SvelteToast } from '@zerodevx/svelte-toast';
-
 	import '../app.css';
 
 	export let data;
@@ -23,6 +20,3 @@
 		</div>
 	{/if}
 </div>
-
-<SvelteToast />
-<Nprogress />

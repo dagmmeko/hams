@@ -1,13 +1,10 @@
-<script lang="ts">
+<script>
 	import QR from '$lib/assets/qr.png';
-	import type { PageData } from './$types';
-	export let row: any;
 </script>
 
-<div class="grid grid-flow-col w-fit gap-6 items-center">
+<div class="grid grid-flow-col items-center">
 	<img src={QR} alt="img" class="w-10 h-10 rounded-full" />
 	<div class="grid">
-		<span class="text-sm font-medium"> {row.User.userName}</span>
-		<span class="text-xs"> {row.staffIdNumber}</span>
+		<span class="text-sm font-medium"> Name</span> <span class="text-xs"> role</span>
 	</div>
 </div>

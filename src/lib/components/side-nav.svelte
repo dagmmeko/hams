@@ -6,9 +6,9 @@
 	import Cash from '$lib/assets/cash.svg.svelte';
 	import Store from '$lib/assets/store.svg.svelte';
 	import Webhook from '$lib/assets/webhook.svg.svelte';
+	import Home from '$lib/assets/home.svg.svelte'
 
 	import { page } from '$app/stores';
-	import Home from '$lib/assets/home.svg.svelte';
 </script>
 
 <div class="h-screen bg-black w-60 px-4">
@@ -23,18 +23,18 @@
 				<ChartPie /> OverView
 			</div>
 		</a>
-		<a href="/rental-units">
+		<a href="/rental-unit">
 			<div
-				class="text-white flex gap-2 m-2 {$page.url.pathname === '/rental-units'
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/rental-unit'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
-				<Home /> Rental Units
+				<Home/> Rental Units
 			</div>
 		</a>
-		<a href="/tenants">
+		<a href="/tenant">
 			<div
-				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tenants'
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tenant'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>

@@ -8,7 +8,7 @@
 <div class="">
 	<form method="post" action="?/deleteTask">
 		<button on:click|stopPropagation={() => alert('Are you sure you want to delete the task?')}>
-			<Delete class="h-6 w-6 text-[#EC6738]" />
+			<Delete color="#EC6738" class="h-6 w-6" />
 		</button>
 	</form>
 </div>

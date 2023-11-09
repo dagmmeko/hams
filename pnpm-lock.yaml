@@ -26,18 +26,12 @@ devDependencies:
   '@types/node':
     specifier: 20.8.4
     version: 20.8.4
-  '@types/nprogress':
-    specifier: ^0.2.2
-    version: 0.2.2
   '@typescript-eslint/eslint-plugin':
     specifier: 6.0.0
     version: 6.0.0(@typescript-eslint/parser@6.0.0)(eslint@8.28.0)(typescript@5.0.2)
   '@typescript-eslint/parser':
     specifier: 6.0.0
     version: 6.0.0(eslint@8.28.0)(typescript@5.0.2)
-  '@zerodevx/svelte-toast':
-    specifier: 0.9.5
-    version: 0.9.5(svelte@4.0.5)
   autoprefixer:
     specifier: 10.4.16
     version: 10.4.16(postcss@8.4.31)
@@ -56,9 +50,6 @@ devDependencies:
   eslint-plugin-svelte:
     specifier: 2.30.0
     version: 2.30.0(eslint@8.28.0)(svelte@4.0.5)(ts-node@10.9.1)
-  nprogress:
-    specifier: 0.2.0
-    version: 0.2.0
   postcss:
     specifier: 8.4.31
     version: 8.4.31
@@ -630,10 +621,6 @@ packages:
       undici-types: 5.25.3
     dev: true
 
-  /@types/nprogress@0.2.2:
-    resolution: {integrity: sha512-2wLrSJXLztGmr7wXwM0hA/wuIOY9DznVdd+ZFofHOiXcj9JnVt+2ZeLRJ7v5ZVlmheSkUOSg3Q3O4Ce7yji79A==}
-    dev: true
-
   /@types/pug@2.0.7:
     resolution: {integrity: sha512-I469DU0UXNC1aHepwirWhu9YKg5fkxohZD95Ey/5A7lovC+Siu+MCLffva87lnfThaOrw9Vb1DUN5t55oULAAw==}
     dev: true
@@ -774,14 +761,6 @@ packages:
     dependencies:
       '@typescript-eslint/types': 6.0.0
       eslint-visitor-keys: 3.4.3
-    dev: true
-
-  /@zerodevx/svelte-toast@0.9.5(svelte@4.0.5):
-    resolution: {integrity: sha512-JLeB/oRdJfT+dz9A5bgd3Z7TuQnBQbeUtXrGIrNWMGqWbabpepBF2KxtWVhL2qtxpRqhae2f6NAOzH7xs4jUSw==}
-    peerDependencies:
-      svelte: ^3.57.0 || ^4.0.0
-    dependencies:
-      svelte: 4.0.5
     dev: true
 
   /abbrev@1.1.1:
@@ -1909,10 +1888,6 @@ packages:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
-    dev: true
-
-  /nprogress@0.2.0:
-    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
     dev: true
 
   /oauth4webapi@2.3.0:

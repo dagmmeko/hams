@@ -16,20 +16,11 @@
 		"src/routes/employees/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/employees/[employeeId]": [
-		"src/routes/employees/[employeeId]/+page.server.ts",
+	"/employees/add-employee": [
+		"src/routes/employees/add-employee/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/rental-units": [
-		"src/routes/rental-units/+page.server.ts",
-		"src/routes/+layout.server.ts"
-	],
-	"/rental-units/add-unit": [
-		"src/routes/rental-units/add-unit/+page.server.ts",
-		"src/routes/+layout.server.ts"
-	],
-	"/rental-units/[unitId]": [
-		"src/routes/rental-units/[unitId]/+page.server.ts",
+	"/rental-unit": [
 		"src/routes/+layout.server.ts"
 	],
 	"/roles": [
@@ -40,12 +31,7 @@
 		"src/routes/roles/add-role/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/roles/[roleId]": [
-		"src/routes/roles/[roleId]/+page.server.ts",
-		"src/routes/+layout.server.ts"
-	],
-	"/tenants": [
-		"src/routes/tenants/+page.server.ts",
+	"/vendor-task": [
 		"src/routes/+layout.server.ts"
 	]
 }
