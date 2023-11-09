@@ -93,6 +93,7 @@ declare module '$env/static/private' {
 	export const __CFBundleIdentifier: string;
 	export const USER_ZDOTDIR: string;
 	export const CONDA_PREFIX: string;
+	export const npm_package_devDependencies__types_nprogress: string;
 	export const npm_package_devDependencies_svelte_table: string;
 	export const TTY: string;
 	export const PWD: string;
@@ -114,6 +115,7 @@ declare module '$env/static/private' {
 	export const npm_package_version: string;
 	export const npm_package_devDependencies__sveltejs_adapter_auto: string;
 	export const VSCODE_INJECTION: string;
+	export const npm_package_devDependencies__zerodevx_svelte_toast: string;
 	export const npm_package_devDependencies_autoprefixer: string;
 	export const npm_package_devDependencies_svelte_check: string;
 	export const SHLVL: string;
@@ -127,6 +129,7 @@ declare module '$env/static/private' {
 	export const LESS: string;
 	export const CONDA_PYTHON_EXE: string;
 	export const npm_package_scripts_format: string;
+	export const npm_package_devDependencies_nprogress: string;
 	export const npm_lifecycle_script: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const NVM_BIN: string;
@@ -241,6 +244,7 @@ declare module '$env/dynamic/private' {
 		__CFBundleIdentifier: string;
 		USER_ZDOTDIR: string;
 		CONDA_PREFIX: string;
+		npm_package_devDependencies__types_nprogress: string;
 		npm_package_devDependencies_svelte_table: string;
 		TTY: string;
 		PWD: string;
@@ -262,6 +266,7 @@ declare module '$env/dynamic/private' {
 		npm_package_version: string;
 		npm_package_devDependencies__sveltejs_adapter_auto: string;
 		VSCODE_INJECTION: string;
+		npm_package_devDependencies__zerodevx_svelte_toast: string;
 		npm_package_devDependencies_autoprefixer: string;
 		npm_package_devDependencies_svelte_check: string;
 		SHLVL: string;
@@ -275,6 +280,7 @@ declare module '$env/dynamic/private' {
 		LESS: string;
 		CONDA_PYTHON_EXE: string;
 		npm_package_scripts_format: string;
+		npm_package_devDependencies_nprogress: string;
 		npm_lifecycle_script: string;
 		VSCODE_GIT_IPC_HANDLE: string;
 		NVM_BIN: string;

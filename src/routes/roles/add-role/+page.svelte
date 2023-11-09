@@ -2,11 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { allScopes } from '$lib/utils/scopes';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data;
 	export let form;
 
 	$: form?.addRole ? goto('/roles') : null;
+	$: form?.addRole ? toast.push('Role created successfully') : null;
 
 	const { form: addRoleForm, enhance: addFormEnhance, constraints } = superForm(data.addRoleForm);
 </script>

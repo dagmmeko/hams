@@ -20,7 +20,6 @@ export const actions = {
 			return fail(400, { addRoleForm });
 		}
 
-		console.log({ addRoleForm });
 		const addRole = await prisma.role.create({
 			data: {
 				name: addRoleForm.data.name,

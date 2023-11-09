@@ -9,6 +9,21 @@ datasource db {
   relationMode = "prisma"
 }
 
+model File {
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime?
+  deletedAt    DateTime?
+  fileName     String
+  key          String
+  PaymentFile  PaymentFile?
+  TaskFile     TaskFile?
+  VendorFile   VendorFile?
+  ReceiptsFile ReceiptsFile?
+  TenantsFile  TenantsFile?
+  UnitsFile    UnitsFile?
+}
+
 model User {
   id          Int       @id @default(autoincrement())
   userName    String?
@@ -23,30 +38,120 @@ model User {
   @@fulltext([userName, phoneNumber, email])
 }
 
-model RentalUnits {
-  id                Int                  @id @default(autoincrement())
-  createdAt         DateTime             @default(now())
-  updateAt          DateTime             @updatedAt
+model Building {
+  id                Int                 @id @default(autoincrement())
+  createdAt         DateTime            @default(now())
+  updateAt          DateTime            @updatedAt
   deletedAt         DateTime?
-  floor             String
-  kareMeter         Float                @default(0)
-  price             Float                @default(0)
-  buildingId        Int?
-  maximumTenants    Int
-  minimumRentalDate Int
-  roomNumber        String
-  unitType          RentalUnits_unitType
-  Tenants           Tenants[]
+  name              String              @unique
+  location          String
+  numberofUnits     Int
+  RentalUnits       RentalUnits[]
+  BuildingAmenities BuildingAmenities[]
+}
+
+model BuildingAmenities {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  name        String
+  description String
+  buildingId  Int?
+  paid        Boolean   @default(false)
+  price       Float
+  Building    Building? @relation(fields: [buildingId], references: [id])
 
   @@index([buildingId])
 }
 
+model RentalUnits {
+  id                Int             @id @default(autoincrement())
+  createdAt         DateTime        @default(now())
+  updateAt          DateTime        @updatedAt
+  deletedAt         DateTime?
+  floor             String
+  kareMeter         Float           @default(0)
+  price             Float           @default(0)
+  buildingId        Int?
+  maximumTenants    Int
+  minimumRentalDate Int
+  roomNumber        String
+  unitType          UnitType
+  Inspection        Inspection[]
+  Property          UnitProperty[]
+  Amenities         UnitAmenities[]
+  Tenants           Tenants[]
+  Building          Building?       @relation(fields: [buildingId], references: [id])
+  UnitsFile         UnitsFile[]
+
+  @@index([buildingId])
+}
+
+model UnitsFile {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime?
+  deletedAt    DateTime?
+  fileId       Int         @unique
+  rentalUnitId Int
+  RentalUnits  RentalUnits @relation(fields: [rentalUnitId], references: [id])
+  File         File        @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([rentalUnitId])
+  @@index([fileId])
+}
+
+model UnitAmenities {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updateAt      DateTime     @updatedAt
+  deletedAt     DateTime?
+  name          String
+  description   String
+  rentalUnitsId Int?
+  paid          Boolean      @default(false)
+  price         Float
+  RentalUnits   RentalUnits? @relation(fields: [rentalUnitsId], references: [id])
+
+  @@index([rentalUnitsId])
+}
+
+model UnitProperty {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now())
+  updateAt       DateTime       @updatedAt
+  deletedAt      DateTime?
+  name           String
+  description    String
+  rentalUnitsId  Int?
+  propertyStatus PropertyStatus
+  numberofUnits  Int
+  RentalUnits    RentalUnits?   @relation(fields: [rentalUnitsId], references: [id])
+
+  @@index([rentalUnitsId])
+}
+
+model Inspection {
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  updateAt         DateTime         @updatedAt
+  deletedAt        DateTime?
+  inspectionDate   DateTime
+  description      String
+  InspectionStatus InspectionStatus
+  rentalUnitsId    Int?
+  RentalUnits      RentalUnits?     @relation(fields: [rentalUnitsId], references: [id])
+
+  @@index([rentalUnitsId])
+}
+
 model Tenants {
-  id                          Int          @id @default(autoincrement())
-  createdAt                   DateTime     @default(now())
-  updateAt                    DateTime     @updatedAt
+  id                          Int           @id @default(autoincrement())
+  createdAt                   DateTime      @default(now())
+  updateAt                    DateTime      @updatedAt
   deletedAt                   DateTime?
-  fullName                    String       @default("name")
+  fullName                    String        @default("name")
   phoneNumber                 String
   purposeOfRent               String
   contractStartDate           DateTime?
@@ -54,62 +159,126 @@ model Tenants {
   rentalUnitsId               Int
   durationOfStayInCountry     Int
   email                       String
+  active                      Boolean       @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
-  tenantScore                 Int          @default(0)
-  active                      Boolean      @default(true)
-  RentalUnits                 RentalUnits? @relation(fields: [rentalUnitsId], references: [id])
+  tenantScore                 Int           @default(0)
+  RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
+  TenantsFile                 TenantsFile[]
 
   @@index([rentalUnitsId])
 }
 
+model TenantsFile {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  fileId    Int       @unique
+  tenantsId Int
+  Tenants   Tenants   @relation(fields: [tenantsId], references: [id])
+  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([tenantsId])
+  @@index([fileId])
+}
+
 model Receipts {
-  id                Int       @id @default(autoincrement())
-  createdAt         DateTime  @default(now())
-  updateAt          DateTime  @updatedAt
+  id                Int            @id @default(autoincrement())
+  createdAt         DateTime       @default(now())
+  updateAt          DateTime       @updatedAt
   deletedAt         DateTime?
   startDate         DateTime
   endDate           DateTime
-  receiptReceived   Boolean   @default(false)
+  receiptReceived   Boolean        @default(false)
   receiptReceivedOn DateTime?
-  paymentConfirmed  Boolean   @default(false)
+  paymentConfirmed  Boolean        @default(false)
   amount            Float
   bankName          String
   tenantsId         Int?
-  Tenants           Tenants?  @relation(fields: [tenantsId], references: [id])
+  Tenants           Tenants?       @relation(fields: [tenantsId], references: [id])
+  ReceiptsFile      ReceiptsFile[]
 
   @@index([tenantsId])
 }
 
+model ReceiptsFile {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  fileId     Int       @unique
+  receiptsId Int
+  Receipts   Receipts  @relation(fields: [receiptsId], references: [id])
+  File       File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([receiptsId])
+  @@index([fileId])
+}
+
 model Employee {
-  id             Int                     @id @default(autoincrement())
-  hiredDate      DateTime
-  isSuspended    Boolean
-  userId         Int                     @unique
-  roleId         Int
-  createdAt      DateTime                @default(now())
-  updateAt       DateTime                @updatedAt
-  deletedAt      DateTime?
-  isFired        Boolean                 @default(false)
-  address        String
-  dateOfBirth    DateTime?
-  staffIdNumber  String
-  EmployeeStatus Employee_EmployeeStatus @default(FULL_TIME)
-  bloodType      String                  @default("O+")
-  department     String                  @default("employee")
-  height         Float                   @default(0)
-  image          String?
-  jobTitle       String                  @default("employee")
-  isAbsent       Boolean                 @default(false)
-  onLeave        Boolean                 @default(false)
-  User           User                    @relation(fields: [userId], references: [id])
-  Role           Role                    @relation(fields: [roleId], references: [id])
-  Suspensions    Suspended[]
-  Fired          Fired[]
+  id              Int            @id @default(autoincrement())
+  hiredDate       DateTime
+  isSuspended     Boolean
+  userId          Int            @unique
+  roleId          Int
+  createdAt       DateTime       @default(now())
+  updateAt        DateTime       @updatedAt
+  deletedAt       DateTime?
+  isFired         Boolean        @default(false)
+  address         String
+  dateOfBirth     DateTime?
+  staffIdNumber   String
+  EmployeeStatus  EmployeeStatus @default(FULL_TIME)
+  bloodType       String         @default("O+")
+  department      String         @default("employee")
+  height          Float          @default(0)
+  image           String?
+  jobTitle        String         @default("employee")
+  isAbsent        Boolean        @default(false)
+  onLeave         Boolean        @default(false)
+  User            User           @relation(fields: [userId], references: [id])
+  Role            Role           @relation(fields: [roleId], references: [id])
+  Suspensions     Suspended[]
+  Fired           Fired[]
+  Attendance      Attendance[]
+  ApprovedBy      Leaves[]       @relation("aprrovedBy")
+  EmployeesLeaves Leaves[]       @relation("takenBy")
 
   @@index([roleId])
   @@index([userId])
+}
+
+model Leaves {
+  id           Int       @id @default(autoincrement())
+  startingDate DateTime
+  endDate      DateTime
+  description  String
+  createdAt    DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  deletedAt    DateTime?
+  employeeId   Int
+  creatorId    Int
+  Employee     Employee  @relation("takenBy", fields: [employeeId], references: [id])
+  ApprrovedBy  Employee  @relation("aprrovedBy", fields: [creatorId], references: [id])
+
+  @@index([employeeId])
+  @@index([creatorId])
+}
+
+model Attendance {
+  id           Int       @id @default(autoincrement())
+  startingDate DateTime
+  endDate      DateTime
+  description  String
+  createdAt    DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
+  deletedAt    DateTime?
+  employeeId   Int
+  Employee     Employee  @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId])
 }
 
 model Suspended {
@@ -159,89 +328,83 @@ model Scope {
   @@index([roleId])
 }
 
-model Attendance {
-  id           Int       @id @default(autoincrement())
-  startingDate DateTime
-  endDate      DateTime
-  description  String
-  createdAt    DateTime  @default(now())
-  updateAt     DateTime
-  deletedAt    DateTime?
-  employeeId   Int
-
-  @@index([employeeId])
+model Vendor {
+  id                 Int          @id @default(autoincrement())
+  createdAt          DateTime     @default(now())
+  updateAt           DateTime     @updatedAt
+  deletedAt          DateTime?
+  name               String
+  phoneNumber        String
+  email              String
+  address            String
+  serviceDescription String
+  serviceType        ServiceType
+  bankName           String
+  bankAccount        String
+  swiftCode          String
+  iban               String
+  VendorTask         VendorTask[]
+  VendorFile         VendorFile[]
 }
 
-model Leaves {
-  id           Int       @id @default(autoincrement())
-  startingDate DateTime
-  endDate      DateTime
-  description  String
-  createdAt    DateTime  @default(now())
-  updateAt     DateTime
-  deletedAt    DateTime?
-  employeeId   Int
-  creatorId    Int
-
-  @@index([creatorId])
-  @@index([employeeId])
-}
-
-model Building {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime
-  deletedAt     DateTime?
-  name          String    @unique
-  location      String
-  numberofUnits Int
-}
-
-model BuildingAmenities {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime
-  deletedAt   DateTime?
-  name        String
-  description String
-  buildingId  Int?
-  paid        Boolean   @default(false)
-  price       Float
-
-  @@index([buildingId])
-}
-
-model File {
+model VendorFile {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime?
   deletedAt DateTime?
-  fileName  String
-  key       String
+  fileId    Int       @unique
+  vendorId  Int
+  Vendor    Vendor    @relation(fields: [vendorId], references: [id])
+  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId])
+  @@index([fileId])
 }
 
-model Inspection {
-  id               Int                         @id @default(autoincrement())
-  createdAt        DateTime                    @default(now())
-  updateAt         DateTime
-  deletedAt        DateTime?
-  inspectionDate   DateTime
-  description      String
-  InspectionStatus Inspection_InspectionStatus
-  rentalUnitsId    Int?
+model VendorTask {
+  id                      Int        @id @default(autoincrement())
+  createdAt               DateTime   @default(now())
+  updateAt                DateTime   @updatedAt
+  deletedAt               DateTime?
+  taskDescription         String
+  paymentStatus           Boolean    @default(false)
+  paymentTerms            String
+  taskStatus              TaskStatus
+  regularJob              Boolean
+  estimatedTimeToComplete String
+  vendorId                Int?
+  Vendor                  Vendor?    @relation(fields: [vendorId], references: [id])
+  Payment                 Payment[]
+  TaskFile                TaskFile[]
 
-  @@index([rentalUnitsId])
+  @@index([vendorId])
+}
+
+model TaskFile {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  fileId     Int        @unique
+  taskId     Int
+  VendorTask VendorTask @relation(fields: [taskId], references: [id])
+  File       File       @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([fileId])
 }
 
 model Payment {
-  id               Int       @id @default(autoincrement())
-  createdAt        DateTime  @default(now())
-  updateAt         DateTime
+  id               Int           @id @default(autoincrement())
+  createdAt        DateTime      @default(now())
+  updateAt         DateTime      @updatedAt
   deletedAt        DateTime?
   amount           Float
   despositedToBank String
   paidOn           DateTime?
   vendorTaskId     Int?
+  VendorTask       VendorTask?   @relation(fields: [vendorTaskId], references: [id])
+  PaymentFile      PaymentFile[]
 
   @@index([vendorTaskId])
 }
@@ -253,146 +416,38 @@ model PaymentFile {
   deletedAt DateTime?
   fileId    Int       @unique
   paymentId Int
+  Payment   Payment   @relation(fields: [paymentId], references: [id])
+  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
 
-  @@index([fileId])
   @@index([paymentId])
-}
-
-model ReceiptsFile {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime?
-  deletedAt  DateTime?
-  fileId     Int       @unique
-  receiptsId Int
-
   @@index([fileId])
-  @@index([receiptsId])
 }
 
-model TaskFile {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
-  fileId    Int       @unique
-  taskId    Int
-
-  @@index([fileId])
-  @@index([taskId])
+enum EmployeeStatus {
+  FULL_TIME
+  PART_TIME
+  TEMPORARY
 }
 
-model TenantsFile {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
-  fileId    Int       @unique
-  tenantsId Int
-
-  @@index([fileId])
-  @@index([tenantsId])
+enum UnitType {
+  COMMERCIAL
+  RESIDENTIAL
 }
 
-model UnitAmenities {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updateAt      DateTime
-  deletedAt     DateTime?
-  name          String
-  description   String
-  rentalUnitsId Int?
-  paid          Boolean   @default(false)
-  price         Float
-
-  @@index([rentalUnitsId])
+enum InspectionStatus {
+  NEEDS_REPAIR
+  OUT_OF_SERVICE
+  GOOD_CONDITION
 }
 
-model UnitProperty {
-  id             Int                         @id @default(autoincrement())
-  createdAt      DateTime                    @default(now())
-  updateAt       DateTime
-  deletedAt      DateTime?
-  name           String
-  description    String
-  rentalUnitsId  Int?
-  propertyStatus UnitProperty_propertyStatus
-  numberofUnits  Int
-
-  @@index([rentalUnitsId])
-}
-
-model UnitsFile {
-  id           Int       @id @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime?
-  deletedAt    DateTime?
-  fileId       Int       @unique
-  rentalUnitId Int
-
-  @@index([fileId])
-  @@index([rentalUnitId])
-}
-
-model Vendor {
-  id                 Int                @id @default(autoincrement())
-  createdAt          DateTime           @default(now())
-  updateAt           DateTime
-  deletedAt          DateTime?
-  name               String
-  phoneNumber        String
-  email              String
-  address            String
-  serviceDescription String
-  serviceType        Vendor_serviceType
-  bankName           String
-  bankAccount        String
-  swiftCode          String
-  iban               String
-}
-
-model VendorFile {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
-  fileId    Int       @unique
-  vendorId  Int
-
-  @@index([fileId])
-  @@index([vendorId])
-}
-
-model VendorTask {
-  id                      Int                   @id @default(autoincrement())
-  createdAt               DateTime              @default(now())
-  updateAt                DateTime
-  deletedAt               DateTime?
-  taskDescription         String
-  paymentStatus           Boolean               @default(false)
-  paymentTerms            String
-  taskStatus              VendorTask_taskStatus
-  regularJob              Boolean
-  estimatedTimeToComplete String
-  vendorId                Int?
-
-  @@index([vendorId])
-}
-
-enum UnitProperty_propertyStatus {
+enum PropertyStatus {
   DAMAGED
   NEEDS_REPAIR
   MISSING_ITEMS
   GOOD_CONDITION
 }
 
-enum VendorTask_taskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-}
-
-enum Vendor_serviceType {
+enum ServiceType {
   CLEANING
   ELECTRICITY
   PLUMBING
@@ -400,19 +455,8 @@ enum Vendor_serviceType {
   SECURITY
 }
 
-enum Inspection_InspectionStatus {
-  NEEDS_REPAIR
-  OUT_OF_SERVICE
-  GOOD_CONDITION
-}
-
-enum RentalUnits_unitType {
-  COMMERCIAL
-  RESIDENTIAL
-}
-
-enum Employee_EmployeeStatus {
-  FULL_TIME
-  PART_TIME
-  TEMPORARY
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
 }
