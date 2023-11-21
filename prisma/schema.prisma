@@ -374,6 +374,7 @@ model VendorTask {
   taskStatus              TaskStatus
   regularJob              Boolean
   estimatedTimeToComplete String
+  dueDate                 DateTime
   vendorId                Int?
   Vendor                  Vendor?    @relation(fields: [vendorId], references: [id])
   Payment                 Payment[]

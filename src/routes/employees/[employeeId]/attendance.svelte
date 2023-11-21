@@ -8,29 +8,22 @@
 	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { enhance } from '$app/forms';
+	import { updated } from '$app/stores';
 
 	export let data: PageData;
 	let dateInput: any;
 	let dateInput2: any;
 
 	let modal = false;
-
 	let hasDeleteLeavesScope = true;
-	const {
-		form: addLeaveForm,
-		enhance: addLeaveFormEnhance,
-		constraints
-	} = superForm(data.addLeaveForm, {
-		onUpdate: () => {
-			modal = false;
-		}
-	});
+
+	let selectedAttendance: any;
 
 	// const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 </script>
 
-<div class="">
-	<div class="flex justify-between p-6">
+<div class="p-6">
+	<div class="flex justify-between">
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Attendance</p>
 		</div>
@@ -40,16 +33,40 @@
 			>
 		</form>
 	</div>
-	<div>
+	<div class="grid grid-cols-3 gap-4 my-6">
 		{#each data.employee.Attendance as attendance}
-			{attendance.description}
-			{attendance.createdAt}
+			<button
+				on:click={() => {
+					modal = true;
+					selectedAttendance = attendance;
+				}}
+				class="shadow-md text-left rounded bg-primary/10 p-4"
+			>
+				<p class="font-medium">
+					Description <br /> <span class="font-normal"> {attendance.description} </span>
+				</p>
+				<p class="font-medium">
+					Absent on <br />
+					<span class="font-normal"> {dayjs(attendance.createdAt).format('MMM DD, YYYY')} </span>
+				</p>
+			</button>
 		{/each}
 	</div>
 </div>
 
 {#if modal}
-	<form use:addLeaveFormEnhance method="post" action="?/addLeave">
+	<form
+		use:enhance={({ formData }) => {
+			formData.set('id', selectedAttendance.id.toString());
+			return (updated) => {
+				if (updated) {
+					modal = false;
+				}
+			};
+		}}
+		method="post"
+		action="?/editAttendance"
+	>
 		<div
 			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
 		>
@@ -63,49 +80,25 @@
 						Register new leave here. Click save when you're done.
 					</p>
 				</div>
+				<div class="gird">
+					<span class="text-primary font-medium"> On </span>
+					<span class="font-normal">
+						{dayjs(selectedAttendance.createdAt).format('MMM DD, YYYY')}
+					</span>
+				</div>
+
 				<label class="grid">
 					<span class="text-primary font-medium"> Reason </span>
 					<textarea
 						required
-						bind:value={$addLeaveForm.description}
-						{...$constraints.description}
+						bind:value={selectedAttendance.description}
 						name="description"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
 
-				<label class="grid">
-					<span class="text-primary font-medium"> Start Date </span>
-					<input
-						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-						bind:this={dateInput}
-						on:click={() => {
-							dateInput && dateInput.showPicker();
-						}}
-						required
-						bind:value={$addLeaveForm.startingDate}
-						{...$constraints.startingDate}
-						name="startingDate"
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> End Date </span>
-					<input
-						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-						bind:this={dateInput2}
-						on:click={() => {
-							dateInput2 && dateInput2.showPicker();
-						}}
-						required
-						bind:value={$addLeaveForm.endDate}
-						{...$constraints.endDate}
-						name="endDate"
-					/>
-				</label>
 				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
-					Save Leave
+					Save Attendance
 				</button>
 			</div>
 		</div>

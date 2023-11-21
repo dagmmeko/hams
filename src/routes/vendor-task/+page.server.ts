@@ -13,15 +13,49 @@ const addVendorSchema = z.object({
 	score: z.string()
 });
 
-export const load = async () => {
+const addTaskSchema = z.object({
+	taskDescription: z.string(),
+	paymentTerm: z.string(),
+	regularJob: z.boolean(),
+	estimatedTime: z.string(),
+	dueDate: z.date(),
+	vendorId: z.number().int()
+});
+
+export const load = async (event) => {
 	const addVendorForm = await superValidate(addVendorSchema);
+	const addTaskForm = await superValidate(addTaskSchema);
+	const searchVendor = event.url.searchParams.get('searchVendor');
+	const searchTask = event.url.searchParams.get('searchTask');
+
 	const vendor = await prisma.vendor.findMany({
 		where: {
+			...(searchVendor && {
+				name: {
+					contains: searchVendor
+				}
+			}),
 			deletedAt: null
 		}
 	});
+	const tasks = await prisma.vendorTask.findMany({
+		where: {
+			...(searchTask && {
+				taskDescription: {
+					contains: searchTask
+				}
+			}),
+			deletedAt: null,
+			taskStatus: {
+				not: 'COMPLETED'
+			}
+		},
+		include: {
+			Vendor: true
+		}
+	});
 
-	return { vendor, addVendorForm };
+	return { vendor, addVendorForm, tasks, addTaskForm };
 };
 
 export const actions = {
@@ -47,6 +81,30 @@ export const actions = {
 		return {
 			addVendorForm,
 			vendor
+		};
+	},
+	addVendorTask: async (event) => {
+		const addTaskForm = await superValidate(event.request, addTaskSchema);
+		if (!addTaskForm) {
+			return fail(400, { addTaskForm });
+		}
+
+		const vendorTask = await prisma.vendorTask.create({
+			data: {
+				taskDescription: addTaskForm.data.taskDescription,
+				paymentTerms: addTaskForm.data.paymentTerm,
+				taskStatus: 'PENDING',
+				regularJob: addTaskForm.data.regularJob,
+				estimatedTimeToComplete: addTaskForm.data.estimatedTime,
+				dueDate: addTaskForm.data.dueDate,
+				vendorId: addTaskForm.data.vendorId
+			}
+		});
+		console.log({ vendorTask, data: addTaskForm.data });
+
+		return {
+			addTaskForm,
+			vendorTask
 		};
 	}
 };

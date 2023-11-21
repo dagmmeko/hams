@@ -76,7 +76,6 @@ export const load = async (event) => {
 		}
 	});
 
-	console.log({ employee });
 	const editEmployeeForm = await superValidate(
 		{
 			userName: employee.User.userName || '',
@@ -85,7 +84,7 @@ export const load = async (event) => {
 			hiredDate: employee.hiredDate,
 			address: employee.address || '',
 			dob: employee.dateOfBirth || new Date(),
-			// employmentType: employee.employmentType,
+			employmentType: employee.EmploymentType as EmploymentType,
 			bloodType: employee.bloodType,
 			height: employee.height,
 			jobTitle: employee.jobTitle,
@@ -163,14 +162,43 @@ export const actions = {
 		return { addLeaveForm, leave };
 	},
 	markAbsent: async (event) => {
-		const absent = await prisma.attendance.create({
+		const absent = await prisma.employee.update({
+			where: {
+				id: Number(event.params.employeeId),
+				isAbsent: false
+			},
 			data: {
-				employeeId: Number(event.params.employeeId),
-				description: 'Absent'
+				isAbsent: true,
+				Attendance: {
+					create: {
+						description: 'Absent'
+					}
+				}
 			}
 		});
 
-		console.log({ absent });
 		return { absent };
+	},
+	editAttendance: async (event) => {
+		console.log('event');
+		const data = await event.request.formData();
+		const attendanceId = data.get('attendanceId');
+		const description = data.get('description');
+
+		if (typeof attendanceId !== 'string' || typeof description !== 'string') {
+			return fail(500, { errorMessage: 'Query is not a string' });
+		}
+
+		const attendance = await prisma.attendance.update({
+			where: {
+				id: Number(attendanceId)
+			},
+			data: {
+				description: description
+			}
+		});
+		console.log({ attendance, attendanceId, description });
+
+		return { attendance };
 	}
 };
