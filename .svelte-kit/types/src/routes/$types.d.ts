@@ -1,7 +1,9 @@
 import type * as Kit from '@sveltejs/kit';
 
 type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
-type RouteParams = {  }
+// @ts-ignore
+type MatcherParam<M> = M extends (param : string) => param is infer U ? U extends string ? U : string : string;
+type RouteParams = {  };
 type RouteId = '/';
 type MaybeWithVoid<T> = {} extends T ? T | void : T;
 export type RequiredKeys<T> = { [K in keyof T]-?: {} extends { [P in K]: T[K] } ? never : K; }[keyof T];
@@ -12,7 +14,7 @@ export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageServerParentData = EnsureDefined<LayoutServerData>;
 type PageParentData = EnsureDefined<LayoutData>;
 type LayoutRouteId = RouteId | "/" | "/auth" | "/auth/signup-error" | "/employees" | "/employees/[employeeId]" | "/rental-units" | "/rental-units/[unitId]" | "/rental-units/add-unit" | "/roles" | "/roles/[roleId]" | "/roles/add-role" | "/tenants" | "/tenants/add-tenant" | "/vendor-task" | null
-type LayoutParams = RouteParams & { employeeId?: string,unitId?: string,roleId?: string }
+type LayoutParams = RouteParams & { employeeId?: string; unitId?: string; roleId?: string }
 type LayoutServerParentData = EnsureDefined<{}>;
 type LayoutParentData = EnsureDefined<{}>;
 

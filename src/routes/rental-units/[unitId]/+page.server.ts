@@ -267,7 +267,7 @@ export const actions = {
 		const data = await event.request.formData();
 		const unitKey = data.get('unitKey');
 
-		console.log(unitKey);
+		console.log({ unitKey });
 
 		if (typeof unitKey !== 'string') {
 			return fail(500, { errorMessage: 'Issus with file download' });

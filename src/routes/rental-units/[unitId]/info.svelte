@@ -107,32 +107,31 @@
 
 		<div class=" w-full p-4 mb-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
 			{#each data.unitDetails?.UnitsFile ?? [] as file}
-				<div
-					class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
-				>
-					<div class=" relative z-10 w-full h-36 bg-red-50">
-						<img src={FileBg} alt="bg" class="w-full h-full" />
-					</div>
+				<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
+					<div class="relative">
+						<div class=" relative z-10 w-full h-36">
+							<img src={FileBg} alt="bg" class="w-full h-full" />
+						</div>
 
-					<div class="absolute top-0 w-full h-full left-0 z-30 pointer-events-none">
-						<div class="flex flex-col gap-2 justify-center items-center h-full">
-							<form
-								method="post"
-								action="?/downloadUnitFile"
-								use:enhance={({ formData }) => {
-									formData.set('unitKey', `${file.File.key}`);
-								}}
-							>
-								<button type="submit">
-									<div class="h-full flex flex-col items-center justify-center">
-										<Eye class="text-primary w-7 h-7" />
-										<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
-									</div>
-								</button>
-							</form>
+						<div class="absolute top-0 w-full h-full left-0 z-30">
+							<div class="flex flex-col gap-2 justify-center items-center h-full">
+								<form
+									method="post"
+									action="?/downloadUnitFile"
+									use:enhance={({ formData }) => {
+										formData.set('unitKey', `${file.File.key}`);
+									}}
+								>
+									<button on:click|stopPropagation={() => console.log('download')} type="submit">
+										<div class="h-full flex flex-col items-center justify-center">
+											<Eye class="text-primary w-7 h-7" />
+											<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
+										</div>
+									</button>
+								</form>
+							</div>
 						</div>
 					</div>
-
 					<form
 						method="post"
 						action="?/deleteUnitFile"
@@ -140,8 +139,12 @@
 							formData.set('unitFileId', `${file.fileId}`);
 						}}
 					>
-						<button on:click={() => console.log('hello')}>
-							<Delete class="h-10 w-10" />
+						<button
+							on:click|stopPropagation={() => console.log('hello')}
+							class="flex gap-1 items-center justify-center w-full p-2"
+						>
+							<Delete class="h-5 w-5 text-danger" />
+							<span class="text-danger text-sm">Delete</span>
 						</button>
 					</form>
 				</div>
@@ -170,7 +173,7 @@
 							}}
 						/>
 
-						<div class=" relative z-10 h-48" />
+						<div class=" relative z-10 h-44" />
 						<div class="absolute top-0 w-full h-full left-0 z-30">
 							<div class="flex flex-col gap-2 justify-center items-center h-full">
 								<FileUp class="text-primary w-7 h-7" />
