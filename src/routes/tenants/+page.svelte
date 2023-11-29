@@ -2,6 +2,70 @@
 	import { goto } from '$app/navigation';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { page } from '$app/stores';
+	import SvelteTable from 'svelte-table';
+	import Name from './name.svelte';
+	import dayjs from 'dayjs';
+	import DeleteTenantTable from './delete-tenant-table.svelte';
+
+	export let data;
+
+	$: rows = data.tenants || [];
+	$: columns = [
+		{
+			key: 'tenant',
+			title: 'Tenant',
+			renderComponent: {
+				component: Name
+			},
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'phoneNumber',
+			title: 'Phone Number',
+			value: (v: typeof rows[number]) => v.phoneNumber ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'email',
+			title: 'Email',
+			value: (v: typeof rows[number]) => v.email ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'contractStartDate',
+			title: 'Contract Start Date',
+			value: (v: typeof rows[number]) =>
+				dayjs(v.contractStartDate).format('MMM DD,YYYY') ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'contractEndDate',
+			title: 'Contract End Date',
+			value: (v: typeof rows[number]) =>
+				dayjs(v.contractEndDate).format('MMM DD,YYYY') ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'delete',
+			title: '',
+			renderComponent: {
+				component: DeleteTenantTable
+			},
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		}
+	];
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
@@ -27,10 +91,11 @@
 				name="search"
 				on:change={async (e) => {
 					const newSearchParams = new URLSearchParams($page.url.search);
-					newSearchParams.set('search', e.currentTarget.value);
+					newSearchParams.set('searchTenant', e.currentTarget.value);
 					await goto(`?${newSearchParams.toString()}`);
 				}}
 			/>
 		</label>
 	</div>
+	<SvelteTable {columns} {rows} />
 </div>

@@ -115,7 +115,6 @@
 					<input
 						type="checkbox"
 						name="paid"
-						required
 						bind:checked={$addAmenityForm.paid}
 						{...$constraints.paid}
 						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"

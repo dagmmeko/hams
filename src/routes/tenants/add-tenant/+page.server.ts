@@ -2,6 +2,8 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
+import { s3, getFile } from '$lib/utils/aws-file.js';
+import { S3_BUCKET_NAME } from '$env/static/private';
 
 const addTenantSchema = z.object({
 	fullName: z.string(),
@@ -15,7 +17,9 @@ const addTenantSchema = z.object({
 	emergencyContactPhoneNumber: z.string(),
 	emergencyContactEmail: z.string().email(),
 	tenantScore: z.number(),
-	rentalUnitsId: z.number()
+	rentalUnitsId: z.number(),
+	newPrice: z.number().optional(),
+	priceChange: z.boolean().optional()
 });
 
 export const load = async (event) => {
@@ -31,29 +35,86 @@ export const load = async (event) => {
 
 export const actions = {
 	addTenant: async (event) => {
-		const addTenantForm = await superValidate(event.request, addTenantSchema);
+		const data = await event.request.clone().formData();
+		const tenantFile = data.getAll('tenantFile');
 
+		tenantFile.map(async (file) => {
+			if (!(file instanceof File)) {
+				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+			}
+		});
+		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);
+
+		console.log({ addTenantForm });
 		if (!addTenantForm) {
 			return fail(400, { addTenantForm });
 		}
 
-		const addTenant = await prisma.tenants.create({
-			data: {
-				fullName: addTenantForm.data.fullName,
-				phoneNumber: addTenantForm.data.phoneNumber,
-				purposeOfRent: addTenantForm.data.purposeOfRent,
-				contractStartDate: addTenantForm.data.contractStartDate,
-				contractEndDate: addTenantForm.data.contractEndDate,
-				durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
-				email: addTenantForm.data.email,
-				emergencyContactName: addTenantForm.data.emergencyContactName,
-				emergencyContactPhoneNumber: addTenantForm.data.emergencyContactPhoneNumber,
-				emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
-				tenantScore: addTenantForm.data.tenantScore,
-				rentalUnitsId: addTenantForm.data.rentalUnitsId
-			}
-		});
+		try {
+			const addTenant = await prisma.tenants.create({
+				data: {
+					fullName: addTenantForm.data.fullName,
+					phoneNumber: addTenantForm.data.phoneNumber,
+					purposeOfRent: addTenantForm.data.purposeOfRent,
+					contractStartDate: addTenantForm.data.contractStartDate,
+					contractEndDate: addTenantForm.data.contractEndDate,
+					durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
+					email: addTenantForm.data.email,
+					emergencyContactName: addTenantForm.data.emergencyContactName,
+					emergencyContactPhoneNumber: addTenantForm.data.emergencyContactPhoneNumber,
+					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
+					tenantScore: addTenantForm.data.tenantScore,
+					rentalUnitsId: addTenantForm.data.rentalUnitsId,
+					...(addTenantForm.data.priceChange && {
+						PriceChange: {
+							create: {
+								price: addTenantForm.data.newPrice,
+								unitId: addTenantForm.data.rentalUnitsId,
+								active: false
+							}
+						}
+					})
+				}
+			});
+			console.log({ addTenant });
 
-		return { addTenantForm, addTenant };
+			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
+			console.log({ addTenant });
+			tenantFile.map(async (file) => {
+				if (!(file instanceof File)) {
+					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				}
+				console.log({ file });
+				const buffer = await file.arrayBuffer();
+				const send = Buffer.from(buffer);
+				try {
+					await s3
+						.putObject({
+							Bucket: S3_BUCKET_NAME,
+							Key: `tenantsFile/${addTenant.id}/${file.name}`,
+							Body: send
+						})
+						.promise();
+
+					await prisma.file.create({
+						data: {
+							key: `tenantsFile/${addTenant.id}/${file.name}`,
+							fileName: file.name,
+							TenantsFile: {
+								create: {
+									tenantsId: Number(addTenant.id)
+								}
+							}
+						}
+					});
+				} catch (error) {
+					console.log(error as Error);
+				}
+			});
+
+			return { addTenantForm, addTenant };
+		} catch (error) {
+			return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
+		}
 	}
 };

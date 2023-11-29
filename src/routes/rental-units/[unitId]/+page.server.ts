@@ -1,3 +1,5 @@
+import { S3_BUCKET_NAME } from '$env/static/private';
+import { getFile, s3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { PropertyStatus } from '@prisma/client';
 import { fail } from '@sveltejs/kit';
@@ -29,7 +31,7 @@ const addPropertySchema = z.object({
 const addAmenitySchema = z.object({
 	name: z.string(),
 	description: z.string(),
-	paid: z.boolean(),
+	paid: z.boolean().optional(),
 	price: z.number()
 });
 export const load = async (event) => {
@@ -54,7 +56,12 @@ export const load = async (event) => {
 				take: 1
 			},
 			Property: true,
-			Amenities: true
+			Amenities: true,
+			UnitsFile: {
+				include: {
+					File: true
+				}
+			}
 		}
 	});
 	const editUnitForm = await superValidate(
@@ -95,6 +102,7 @@ export const actions = {
 				minimumRentalDate: editUnitForm.data.minimumRentalDate
 			}
 		});
+		console.log(editUnit);
 
 		return { editUnitForm, editUnit };
 	},
@@ -217,5 +225,92 @@ export const actions = {
 				}
 			}
 		});
+	},
+	editUnitFile: async (event) => {
+		const data = await event.request.formData();
+		const file = data.getAll('unitFile');
+
+		const allNewFiles = file.map(async (file) => {
+			if (!(file instanceof File)) {
+				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+			}
+			const buffer = await file.arrayBuffer();
+			const send = Buffer.from(buffer);
+			try {
+				await s3
+					.putObject({
+						Bucket: S3_BUCKET_NAME,
+						Key: `unitFile/${event.params.unitId}/${file.name}`,
+						Body: send
+					})
+					.promise();
+
+				const newFile = await prisma.file.create({
+					data: {
+						key: `unitFile/${event.params.unitId}/${file.name}`,
+						fileName: file.name,
+						UnitsFile: {
+							create: {
+								rentalUnitId: Number(event.params.unitId)
+							}
+						}
+					}
+				});
+			} catch (error) {
+				console.log(error as Error);
+			}
+		});
+		console.log(allNewFiles);
+		// return { allNewFiles };
+	},
+	downloadUnitFile: async (event) => {
+		const data = await event.request.formData();
+		const unitKey = data.get('unitKey');
+
+		console.log(unitKey);
+
+		if (typeof unitKey !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const fileUrl = await getFile(unitKey);
+		console.log(fileUrl);
+
+		return { fileUrl };
+	},
+	deleteUnitFile: async (event) => {
+		console.log('bitch');
+		const data = await event.request.formData();
+		const unitFileId = data.get('unitFileId');
+		console.log(unitFileId);
+		if (typeof unitFileId !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const deleteFile = await prisma.file.delete({
+			where: {
+				id: Number(unitFileId)
+			}
+		});
+
+		console.log(deleteFile);
+
+		return { deleteFile };
+	},
+	archiveUnit: async (event) => {
+		console.log('delete unit');
+		const deletedUnit = await prisma.rentalUnits.update({
+			where: { id: Number(event.params.unitId) },
+			data: {
+				deletedAt: new Date()
+			}
+		});
+
+		if (!deletedUnit) {
+			return fail(500, { errorMessage: 'Unit not deleted' });
+		}
+		return {
+			deletedUnit
+		};
 	}
 };

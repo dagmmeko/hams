@@ -85,8 +85,25 @@ model RentalUnits {
   Tenants           Tenants[]
   Building          Building?       @relation(fields: [buildingId], references: [id])
   UnitsFile         UnitsFile[]
+  PriceChange       PriceChange[]
 
   @@index([buildingId])
+}
+
+model PriceChange {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+  deletedAt   DateTime?
+  price       Float
+  unitId      Int
+  tenantId    Int
+  active      Boolean
+  Tenant      Tenants     @relation(fields: [tenantId], references: [id])
+  RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
+
+  @@index([unitId])
+  @@index([tenantId])
 }
 
 model UnitsFile {
@@ -168,6 +185,7 @@ model Tenants {
   RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
+  PriceChange                 PriceChange[]
 
   @@index([rentalUnitsId])
 }
