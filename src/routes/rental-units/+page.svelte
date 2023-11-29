@@ -30,7 +30,7 @@
 		{
 			key: 'status',
 			title: 'Status',
-			value: (v: typeof rows[number]) => (v.Tenants.length > 0 ? 'Occupied' : 'Vacant'),
+			value: (v: typeof rows[number]) => (v.active ? 'Occupied' : 'Vacant'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'

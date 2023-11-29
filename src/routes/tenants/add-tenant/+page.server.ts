@@ -26,7 +26,8 @@ export const load = async (event) => {
 	const addTenantForm = await superValidate(addTenantSchema);
 	const rentalUnits = await prisma.rentalUnits.findMany({
 		where: {
-			deletedAt: null
+			deletedAt: null,
+			active: false
 		}
 	});
 
@@ -65,21 +66,41 @@ export const actions = {
 					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
 					tenantScore: addTenantForm.data.tenantScore,
 					rentalUnitsId: addTenantForm.data.rentalUnitsId,
-					...(addTenantForm.data.priceChange && {
-						PriceChange: {
+					...(addTenantForm.data.priceChange &&
+						addTenantForm.data.newPrice && {
+							PriceChange: {
+								create: {
+									price: addTenantForm.data.newPrice,
+									unitId: addTenantForm.data.rentalUnitsId,
+									active: false
+								}
+							}
+						}),
+					...(!addTenantForm.data.priceChange && {
+						TenantRental: {
 							create: {
-								price: addTenantForm.data.newPrice,
-								unitId: addTenantForm.data.rentalUnitsId,
-								active: false
+								unitId: addTenantForm.data.rentalUnitsId
 							}
 						}
 					})
 				}
 			});
-			console.log({ addTenant });
 
 			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
-			console.log({ addTenant });
+
+			//update unit status
+			if (!addTenantForm.data.priceChange) {
+				await prisma.rentalUnits.update({
+					where: {
+						id: addTenant.rentalUnitsId
+					},
+					data: {
+						active: true
+					}
+				});
+			}
+
+			//upload files
 			tenantFile.map(async (file) => {
 				if (!(file instanceof File)) {
 					return fail(500, { errorMessage: 'Issue with the file uploaded.' });

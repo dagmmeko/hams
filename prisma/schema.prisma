@@ -78,6 +78,7 @@ model RentalUnits {
   maximumTenants    Int
   minimumRentalDate Int
   roomNumber        String
+  active            Boolean         @default(false)
   unitType          UnitType
   Inspection        Inspection[]
   Property          UnitProperty[]
@@ -86,6 +87,7 @@ model RentalUnits {
   Building          Building?       @relation(fields: [buildingId], references: [id])
   UnitsFile         UnitsFile[]
   PriceChange       PriceChange[]
+  TenantRental      TenantRental[]
 
   @@index([buildingId])
 }
@@ -99,6 +101,7 @@ model PriceChange {
   unitId      Int
   tenantId    Int
   active      Boolean
+  approved    Boolean
   Tenant      Tenants     @relation(fields: [tenantId], references: [id])
   RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
 
@@ -165,11 +168,11 @@ model Inspection {
 }
 
 model Tenants {
-  id                          Int           @id @default(autoincrement())
-  createdAt                   DateTime      @default(now())
-  updateAt                    DateTime      @updatedAt
+  id                          Int            @id @default(autoincrement())
+  createdAt                   DateTime       @default(now())
+  updateAt                    DateTime       @updatedAt
   deletedAt                   DateTime?
-  fullName                    String        @default("name")
+  fullName                    String         @default("name")
   phoneNumber                 String
   purposeOfRent               String
   contractStartDate           DateTime?
@@ -177,17 +180,32 @@ model Tenants {
   rentalUnitsId               Int
   durationOfStayInCountry     Int
   email                       String
-  active                      Boolean       @default(true)
+  active                      Boolean        @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
   emergencyContactEmail       String
-  tenantScore                 Int           @default(0)
-  RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
+  tenantScore                 Int            @default(0)
+  RentalUnits                 RentalUnits?   @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
   PriceChange                 PriceChange[]
+  TenantRental                TenantRental[]
 
   @@index([rentalUnitsId])
+}
+
+model TenantRental {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
+  deletedAt   DateTime?
+  tenantId    Int
+  unitId      Int
+  Tenants     Tenants     @relation(fields: [tenantId], references: [id])
+  RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
+
+  @@index([tenantId])
+  @@index([unitId])
 }
 
 model TenantsFile {

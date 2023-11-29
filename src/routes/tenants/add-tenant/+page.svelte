@@ -6,6 +6,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
+	import dayjs from 'dayjs';
 
 	export let form;
 
@@ -158,8 +159,10 @@
 						}}
 						bind:value={$addTenantForm.contractStartDate}
 						{...$constraints.contractStartDate}
+						min={new Date().toISOString().substr(0, 10)}
 					/>
 				</label>
+
 				<label class="grid gap-2">
 					<span class="text-primary font-medium"> Contract End Date </span>
 					<input
@@ -172,6 +175,12 @@
 						}}
 						bind:value={$addTenantForm.contractEndDate}
 						{...$constraints.contractEndDate}
+						min={!$addTenantForm.contractStartDate
+							? undefined
+							: dayjs(new Date($addTenantForm.contractStartDate))
+									.add(selectedUnit?.minimumRentalDate ?? 0, 'D')
+									.toISOString()
+									.substr(0, 10)}
 					/>
 				</label>
 				<label class="grid gap-2">
@@ -258,6 +267,12 @@
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
 									<p class="text-sm ml-2 py-2">{file}</p>
+									<button
+										on:click|preventDefault={() => {
+											// remove the file.id from the frontFileData array
+											frontFileData = frontFileData.filter((res) => res !== file);
+										}}>x</button
+									>
 								</div>
 							</div>
 						</div>
