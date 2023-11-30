@@ -83,7 +83,6 @@ model RentalUnits {
   Inspection        Inspection[]
   Property          UnitProperty[]
   Amenities         UnitAmenities[]
-  Tenants           Tenants[]
   Building          Building?       @relation(fields: [buildingId], references: [id])
   UnitsFile         UnitsFile[]
   PriceChange       PriceChange[]
@@ -100,7 +99,7 @@ model PriceChange {
   price       Float
   unitId      Int
   tenantId    Int
-  active      Boolean
+  active      Boolean?
   approved    Boolean?
   Tenant      Tenants     @relation(fields: [tenantId], references: [id])
   RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
@@ -168,37 +167,36 @@ model Inspection {
 }
 
 model Tenants {
-  id                          Int            @id @default(autoincrement())
-  createdAt                   DateTime       @default(now())
-  updateAt                    DateTime       @updatedAt
-  deletedAt                   DateTime?
-  fullName                    String         @default("name")
-  phoneNumber                 String
-  purposeOfRent               String
-  contractStartDate           DateTime?
-  contractEndDate             DateTime?
-  rentalUnitsId               Int
-  durationOfStayInCountry     Int
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  fullName    String    @default("name")
+  phoneNumber String
+
   email                       String
   active                      Boolean        @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
   emergencyContactEmail       String
   tenantScore                 Int            @default(0)
-  RentalUnits                 RentalUnits?   @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
   PriceChange                 PriceChange[]
   TenantRental                TenantRental[]
-
-  @@index([rentalUnitsId])
 }
 
 model TenantRental {
-  id          Int         @id @default(autoincrement())
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?
-  deletedAt   DateTime?
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  purposeOfRent           String
+  contractStartDate       DateTime?
+  contractEndDate         DateTime?
+  durationOfStayInCountry Int
+
   tenantId    Int
   unitId      Int
   Tenants     Tenants     @relation(fields: [tenantId], references: [id])

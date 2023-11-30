@@ -52,6 +52,10 @@
 		"src/routes/tenants/add-tenant/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	],
+	"/tenants/rent-room": [
+		"src/routes/tenants/rent-room/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
 	"/vendor-task": [
 		"src/routes/vendor-task/+page.server.ts",
 		"src/routes/+layout.server.ts"

@@ -41,19 +41,9 @@
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
-			key: 'contractStartDate',
-			title: 'Contract Start Date',
-			value: (v: typeof rows[number]) =>
-				dayjs(v.contractStartDate).format('MMM DD,YYYY') ?? 'NOT FOUND',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'contractEndDate',
-			title: 'Contract End Date',
-			value: (v: typeof rows[number]) =>
-				dayjs(v.contractEndDate).format('MMM DD,YYYY') ?? 'NOT FOUND',
+			key: 'activeRoom',
+			title: 'Active room',
+			value: (v: typeof rows[number]) => v.email ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -92,9 +82,20 @@
 					<p class="text-lg">Tenants</p>
 					<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tenants</p>
 				</div>
-				<a href="/tenants/add-tenant" class="bg-primary text-white rounded-md py-2 px-6">
-					New Tenant</a
-				>
+				<div>
+					<a
+						href="/tenants/rent-room"
+						class="border-[1px] border-primary text-primary shadow-sm mr-2 rounded-md py-2 px-6"
+					>
+						Rent Room
+					</a>
+					<a
+						href="/tenants/add-tenant"
+						class="bg-primary text-white shadow-sm rounded-md py-2 px-6"
+					>
+						New Tenant</a
+					>
+				</div>
 			</div>
 			<div class="bg-ghost/60 p-6 flex justify-between">
 				<button

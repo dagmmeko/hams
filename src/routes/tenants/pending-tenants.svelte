@@ -2,7 +2,6 @@
 	import SvelteTable from 'svelte-table';
 	import type { PageData } from './$types';
 	import AcceptPendingTableComponent from './accept-pending-table-component.svelte';
-	import DenyPendingTableComponent from './deny-pending-table-component.svelte';
 
 	export let data: PageData;
 	$: rows = data.priceChangeRequest || [];
@@ -26,7 +25,7 @@
 		{
 			key: 'roomNumber',
 			title: 'Room Number',
-			value: (v: typeof rows[number]) => v.RentalUnits.roomNumber ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => v?.RentalUnits.roomNumber ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -47,6 +46,7 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
+
 		{
 			key: 'accept',
 			title: '',
@@ -54,18 +54,8 @@
 				component: AcceptPendingTableComponent
 			},
 			headerClass:
-				'text-left px-1 w-32  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left px-1 w-32 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'deny',
-			title: '',
-			renderComponent: {
-				component: DenyPendingTableComponent
-			},
-			headerClass:
-				'text-left px-1 w-32 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left px-1 w-32 h-12 border-b-[1px] border-[#B3B4B8]'
+				'text-left px-1 w-64  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left px-1  w-32 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
 </script>

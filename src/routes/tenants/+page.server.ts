@@ -31,13 +31,22 @@ export const load = async (event) => {
 
 	const priceChangeRequest = await prisma.priceChange.findMany({
 		where: {
-			approved: null
+			OR: [
+				{
+					approved: true
+				},
+				{
+					approved: null
+				}
+			],
+			active: null
 		},
 		include: {
 			Tenant: true,
 			RentalUnits: true
 		}
 	});
+	console.log({ priceChangeRequest });
 	if (!tenants) {
 		return fail(400, { tenants });
 	}
@@ -59,25 +68,24 @@ export const actions = {
 					id: Number(priceChangeId)
 				},
 				data: {
-					approved: true,
-					active: true
+					approved: true
 				}
 			});
 
-			const rentalUnit = await prisma.rentalUnits.update({
-				where: {
-					id: priceChange.unitId
-				},
-				data: {
-					active: true,
-					TenantRental: {
-						create: {
-							tenantId: priceChange.tenantId
-						}
-					}
-				}
-			});
-			return { rentalUnit, priceChange };
+			// const rentalUnit = await prisma.rentalUnits.update({
+			// 	where: {
+			// 		id: priceChange.unitId
+			// 	},
+			// 	data: {
+			// 		active: true,
+			// 		TenantRental: {
+			// 			create: {
+			// 				tenantId: priceChange.tenantId
+			// 			}
+			// 		}
+			// 	}
+			// });
+			return { priceChange };
 		} catch (error) {
 			console.log(error);
 			return fail(400, { error });
@@ -100,7 +108,6 @@ export const actions = {
 					active: false
 				}
 			});
-			console.log({ priceChange });
 			return { priceChange };
 		} catch (error) {
 			console.log(error);

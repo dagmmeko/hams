@@ -46,7 +46,6 @@ export const actions = {
 		});
 		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);
 
-		console.log({ addTenantForm });
 		if (!addTenantForm) {
 			return fail(400, { addTenantForm });
 		}
@@ -56,30 +55,28 @@ export const actions = {
 				data: {
 					fullName: addTenantForm.data.fullName,
 					phoneNumber: addTenantForm.data.phoneNumber,
-					purposeOfRent: addTenantForm.data.purposeOfRent,
-					contractStartDate: addTenantForm.data.contractStartDate,
-					contractEndDate: addTenantForm.data.contractEndDate,
-					durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
 					email: addTenantForm.data.email,
 					emergencyContactName: addTenantForm.data.emergencyContactName,
 					emergencyContactPhoneNumber: addTenantForm.data.emergencyContactPhoneNumber,
 					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
 					tenantScore: addTenantForm.data.tenantScore,
-					rentalUnitsId: addTenantForm.data.rentalUnitsId,
 					...(addTenantForm.data.priceChange &&
 						addTenantForm.data.newPrice && {
 							PriceChange: {
 								create: {
 									price: addTenantForm.data.newPrice,
-									unitId: addTenantForm.data.rentalUnitsId,
-									active: false
+									unitId: addTenantForm.data.rentalUnitsId
 								}
 							}
 						}),
 					...(!addTenantForm.data.priceChange && {
 						TenantRental: {
 							create: {
-								unitId: addTenantForm.data.rentalUnitsId
+								unitId: addTenantForm.data.rentalUnitsId,
+								purposeOfRent: addTenantForm.data.purposeOfRent,
+								contractStartDate: addTenantForm.data.contractStartDate,
+								contractEndDate: addTenantForm.data.contractEndDate,
+								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry
 							}
 						}
 					})
@@ -92,7 +89,7 @@ export const actions = {
 			if (!addTenantForm.data.priceChange) {
 				await prisma.rentalUnits.update({
 					where: {
-						id: addTenant.rentalUnitsId
+						id: addTenantForm.data.rentalUnitsId
 					},
 					data: {
 						active: true
