@@ -2,7 +2,6 @@
 	import QR from '$lib/assets/qr.png';
 	import type { PageData } from './$types';
 	export let row: any;
-	$: console.log(row);
 </script>
 
 <div class="grid grid-flow-col w-fit gap-6 items-center">

@@ -6,8 +6,11 @@
 	import Name from './name.svelte';
 	import dayjs from 'dayjs';
 	import DeleteTenantTable from './delete-tenant-table.svelte';
+	import PendingTenants from './pending-tenants.svelte';
 
 	export let data;
+
+	let displayTenant: 'Tenant' | 'Pending' = 'Tenant';
 
 	$: rows = data.tenants || [];
 	$: columns = [
@@ -68,34 +71,55 @@
 	];
 </script>
 
-<div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
-		<div class="flex space-x-4">
-			<p class="text-lg">Tenants</p>
-			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tenants</p>
-		</div>
-		<a href="/tenants/add-tenant" class="bg-primary text-white rounded-md py-2 px-6"> New Tenant</a>
-	</div>
-	<div class="bg-ghost/60 p-6 flex justify-between">
+<div class="mx-10 my-12">
+	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
 		<button
-			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+			on:click={() => {
+				displayTenant = 'Tenant';
+				console.log({ displayTenant });
+			}}
 		>
-			<FiltersLines class="h-4 w-4" /> Add filters
+			<p class="py-2 px-3 rounded-md {displayTenant === 'Tenant' ? 'bg-white' : ''} ">Tenant</p>
 		</button>
-		<label class="grid">
-			<input
-				placeholder="Search"
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-				type="search"
-				id="search"
-				name="search"
-				on:change={async (e) => {
-					const newSearchParams = new URLSearchParams($page.url.search);
-					newSearchParams.set('searchTenant', e.currentTarget.value);
-					await goto(`?${newSearchParams.toString()}`);
-				}}
-			/>
-		</label>
+		<button on:click={() => (displayTenant = 'Pending')}>
+			<p class="p-2 px-3 rounded-md {displayTenant === 'Pending' ? 'bg-white' : ''}">Pending</p>
+		</button>
 	</div>
-	<SvelteTable {columns} {rows} />
+	{#if displayTenant === 'Tenant'}
+		<div class=" bg-white rounded-md shadow-md border-[1px] border-black/20 mt-3">
+			<div class="flex justify-between p-6">
+				<div class="flex space-x-4">
+					<p class="text-lg">Tenants</p>
+					<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tenants</p>
+				</div>
+				<a href="/tenants/add-tenant" class="bg-primary text-white rounded-md py-2 px-6">
+					New Tenant</a
+				>
+			</div>
+			<div class="bg-ghost/60 p-6 flex justify-between">
+				<button
+					class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+				>
+					<FiltersLines class="h-4 w-4" /> Add filters
+				</button>
+				<label class="grid">
+					<input
+						placeholder="Search"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						type="search"
+						id="search"
+						name="search"
+						on:change={async (e) => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('searchTenant', e.currentTarget.value);
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+					/>
+				</label>
+			</div>
+			<SvelteTable {columns} {rows} />
+		</div>
+	{:else if displayTenant === 'Pending'}
+		<PendingTenants bind:data />
+	{/if}
 </div>

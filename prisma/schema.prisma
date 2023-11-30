@@ -101,7 +101,7 @@ model PriceChange {
   unitId      Int
   tenantId    Int
   active      Boolean
-  approved    Boolean
+  approved    Boolean?
   Tenant      Tenants     @relation(fields: [tenantId], references: [id])
   RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
 
