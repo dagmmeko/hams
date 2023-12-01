@@ -46,7 +46,6 @@ export const load = async (event) => {
 			RentalUnits: true
 		}
 	});
-	console.log({ priceChangeRequest });
 	if (!tenants) {
 		return fail(400, { tenants });
 	}
