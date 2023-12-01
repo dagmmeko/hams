@@ -4,9 +4,6 @@
 		"src/routes/+layout.server.ts",
 		"src/routes/+layout.server.ts"
 	],
-	"/accounting": [
-		"src/routes/+layout.server.ts"
-	],
 	"/auth": [
 		"src/routes/auth/+page.server.ts",
 		"src/routes/+layout.server.ts"
@@ -57,6 +54,10 @@
 	],
 	"/vendor-task": [
 		"src/routes/vendor-task/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/vendor-task/[vendorId]": [
+		"src/routes/vendor-task/[vendorId]/+page.server.ts",
 		"src/routes/+layout.server.ts"
 	]
 }

@@ -24,20 +24,20 @@ export const server_loads = [0];
 
 export const dictionary = {
 		"/": [~2],
-		"/accounting": [3],
-		"/auth": [~4],
-		"/auth/signup-error": [~5],
-		"/employees": [~6],
-		"/employees/[employeeId]": [~7],
-		"/rental-units": [~8],
-		"/rental-units/add-unit": [~9],
-		"/rental-units/[unitId]": [~10],
-		"/roles": [~11],
-		"/roles/add-role": [~12],
-		"/roles/[roleId]": [~13],
-		"/tenants": [~14],
-		"/tenants/add-tenant": [~15],
-		"/vendor-task": [~16]
+		"/auth": [~3],
+		"/auth/signup-error": [~4],
+		"/employees": [~5],
+		"/employees/[employeeId]": [~6],
+		"/rental-units": [~7],
+		"/rental-units/add-unit": [~8],
+		"/rental-units/[unitId]": [~9],
+		"/roles": [~10],
+		"/roles/add-role": [~11],
+		"/roles/[roleId]": [~12],
+		"/tenants": [~13],
+		"/tenants/add-tenant": [~14],
+		"/vendor-task": [~15],
+		"/vendor-task/[vendorId]": [~16]
 	};
 
 export const hooks = {
