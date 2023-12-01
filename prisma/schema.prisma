@@ -78,15 +78,34 @@ model RentalUnits {
   maximumTenants    Int
   minimumRentalDate Int
   roomNumber        String
+  active            Boolean         @default(false)
   unitType          UnitType
   Inspection        Inspection[]
   Property          UnitProperty[]
   Amenities         UnitAmenities[]
-  Tenants           Tenants[]
   Building          Building?       @relation(fields: [buildingId], references: [id])
   UnitsFile         UnitsFile[]
+  PriceChange       PriceChange[]
+  TenantRental      TenantRental[]
 
   @@index([buildingId])
+}
+
+model PriceChange {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+  deletedAt   DateTime?
+  price       Float
+  unitId      Int
+  tenantId    Int
+  active      Boolean?
+  approved    Boolean?
+  Tenant      Tenants     @relation(fields: [tenantId], references: [id])
+  RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
+
+  @@index([unitId])
+  @@index([tenantId])
 }
 
 model UnitsFile {
@@ -148,28 +167,52 @@ model Inspection {
 }
 
 model Tenants {
-  id                          Int           @id @default(autoincrement())
-  createdAt                   DateTime      @default(now())
-  updateAt                    DateTime      @updatedAt
-  deletedAt                   DateTime?
-  fullName                    String        @default("name")
-  phoneNumber                 String
-  purposeOfRent               String
-  contractStartDate           DateTime?
-  contractEndDate             DateTime?
-  rentalUnitsId               Int
-  durationOfStayInCountry     Int
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+  deletedAt   DateTime?
+  fullName    String    @default("name")
+  phoneNumber String
+
   email                       String
+<<<<<<< HEAD
   emergencyContactName        String
   emergencyContactPhoneNumber String
   tenantScore                 Int           @default(0)
   active                      Boolean       @default(true)
   emergencyContactEmail       String
   RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
+=======
+  active                      Boolean        @default(true)
+  emergencyContactName        String
+  emergencyContactPhoneNumber String
+  emergencyContactEmail       String
+  tenantScore                 Int            @default(0)
+>>>>>>> 04372113576f51322675d477665437e2ca45344a
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
+  PriceChange                 PriceChange[]
+  TenantRental                TenantRental[]
+}
 
-  @@index([rentalUnitsId])
+model TenantRental {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  purposeOfRent           String
+  contractStartDate       DateTime?
+  contractEndDate         DateTime?
+  durationOfStayInCountry Int
+
+  tenantId    Int
+  unitId      Int
+  Tenants     Tenants     @relation(fields: [tenantId], references: [id])
+  RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
+
+  @@index([tenantId])
+  @@index([unitId])
 }
 
 model TenantsFile {

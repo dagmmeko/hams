@@ -11,7 +11,7 @@ type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends 
 export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageServerParentData = EnsureDefined<LayoutServerData>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/auth" | "/auth/signup-error" | "/employees" | "/employees/[employeeId]" | "/rental-units" | "/rental-units/add-unit" | "/rental-units/[unitId]" | "/roles" | "/roles/add-role" | "/roles/[roleId]" | "/tenants" | "/tenants/add-tenant" | "/vendor-task" | "/vendor-task/[vendorId]" | null
+type LayoutRouteId = RouteId | "/" | "/auth" | "/auth/signup-error" | "/employees" | "/employees/[employeeId]" | "/rental-units" | "/rental-units/add-unit" | "/rental-units/[unitId]" | "/roles" | "/roles/add-role" | "/roles/[roleId]" | "/tenants" | "/tenants/add-tenant" | "/tenants/rent-room" | "/vendor-task" | "/vendor-task/[vendorId]" | null
 type LayoutParams = RouteParams & { employeeId?: string,unitId?: string,roleId?: string,vendorId?: string }
 type LayoutServerParentData = EnsureDefined<{}>;
 type LayoutParentData = EnsureDefined<{}>;
@@ -23,7 +23,7 @@ export type PageServerData = Expand<OptionalUnion<EnsureDefined<Kit.AwaitedPrope
 export type PageData = Expand<Omit<PageParentData, keyof PageServerData> & EnsureDefined<PageServerData>>;
 export type Action<OutputData extends Record<string, any> | void = Record<string, any> | void> = Kit.Action<RouteParams, OutputData, RouteId>
 export type Actions<OutputData extends Record<string, any> | void = Record<string, any> | void> = Kit.Actions<RouteParams, OutputData, RouteId>
-export type LayoutServerLoad<OutputData extends OutputDataShape<LayoutServerParentData> = OutputDataShape<LayoutServerParentData>> = Kit.ServerLoad<LayoutParams, LayoutServerParentData, OutputData, LayoutRouteId>;
+export type LayoutServerLoad<OutputData extends Partial<App.PageData> & Record<string, any> | void = Partial<App.PageData> & Record<string, any> | void> = Kit.ServerLoad<LayoutParams, LayoutServerParentData, OutputData, LayoutRouteId>;
 export type LayoutServerLoadEvent = Parameters<LayoutServerLoad>[0];
 export type LayoutServerData = Expand<OptionalUnion<EnsureDefined<Kit.AwaitedProperties<Awaited<ReturnType<typeof import('../../../../src/routes/+layout.server.js').load>>>>>>;
 export type LayoutData = Expand<Omit<LayoutParentData, keyof LayoutServerData> & EnsureDefined<LayoutServerData>>;

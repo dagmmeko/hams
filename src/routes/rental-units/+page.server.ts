@@ -26,11 +26,14 @@ export const load = async (event) => {
 				},
 				take: 1
 			},
-			Tenants: {
+			TenantRental: {
 				orderBy: {
 					createdAt: 'desc'
 				},
-				take: 1
+				take: 1,
+				include: {
+					Tenants: true
+				}
 			}
 		}
 	});

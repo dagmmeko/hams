@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import FileUp from '$lib/assets/file-up.svg.svelte';
+	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import QR from '$lib/assets/qr.png';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -9,6 +11,8 @@
 	$: form?.addUnitForm &&
 		toast.push('Unit added successfully', { theme: { '--toastBackground': '#059669' } });
 	const { form: addUnitForm, enhance: addFormEnhance, constraints } = superForm(data.addUnitForm);
+
+	let frontFileData: string[] = [];
 </script>
 
 <div class="mt-6 mx-10">
@@ -74,11 +78,56 @@
 						<option value="COMMERCIAL"> Commercial </option>
 					</select>
 				</label>
+				<hr class="my-4" />
 
-				<div>
-					Room Documents
-					<img src={QR} alt="qr" />
-				</div>
+				<label>
+					<input
+						class="hidden"
+						type="file"
+						name="unitFile"
+						accept="image/*"
+						multiple
+						on:change={(e) => {
+							const data = e.currentTarget.files;
+							if (data) {
+								for (let i = 0; i <= data?.length; i++) {
+									if (data.item(i)) {
+										frontFileData = [...frontFileData, data[i].name];
+									}
+								}
+							}
+						}}
+					/>
+					<div class=" flex-1 flex-shrink-0 grid grid-cols-4 items-start gap-2">
+						{#each frontFileData as file}
+							<div
+								class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
+							>
+								<div class=" relative z-10 w-32 h-36" />
+
+								<div class="absolute top-0 w-full h-full left-0 z-30">
+									<div class="flex flex-col gap-2 justify-center items-center h-full">
+										<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
+										<p class="text-sm ml-2 py-2">{file}</p>
+									</div>
+								</div>
+							</div>
+						{/each}
+						<div
+							class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
+						>
+							<div class=" relative z-10 w-32 h-36" />
+							<div class="absolute top-0 w-full h-full left-0 z-30">
+								<div class="flex flex-col gap-2 justify-center items-center h-full">
+									<FileUp class="text-primary w-7 h-7" />
+									<span class="text-xs">Upload File</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</label>
+				<hr class="my-6" />
+
 				<button class="bg-primary text-white rounded-md py-2 px-6 w-fit"> Create unit</button>
 			</div>
 			<div class="flex flex-col gap-4">
