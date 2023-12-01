@@ -160,11 +160,11 @@ model Tenants {
   rentalUnitsId               Int
   durationOfStayInCountry     Int
   email                       String
-  active                      Boolean       @default(true)
   emergencyContactName        String
   emergencyContactPhoneNumber String
-  emergencyContactEmail       String
   tenantScore                 Int           @default(0)
+  active                      Boolean       @default(true)
+  emergencyContactEmail       String
   RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
@@ -220,31 +220,28 @@ model ReceiptsFile {
 }
 
 model Employee {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-  deletedAt DateTime?
-  hiredDate DateTime
-
-  isSuspended Boolean
-  isAbsent    Boolean @default(false)
-  isFired     Boolean @default(false)
-  onLeave     Boolean @default(false)
-
-  userId Int @unique
-  roleId Int
-
+  id              Int             @id @default(autoincrement())
+  hiredDate       DateTime
+  isSuspended     Boolean
+  userId          Int             @unique
+  roleId          Int
+  createdAt       DateTime        @default(now())
+  updateAt        DateTime        @updatedAt
+  deletedAt       DateTime?
+  isFired         Boolean         @default(false)
   address         String
   dateOfBirth     DateTime?
   staffIdNumber   String
-  EmploymentType  EmploymentType?
   bloodType       String          @default("O+")
   height          Float           @default(0)
   image           String?
   jobTitle        String          @default("employee")
+  isAbsent        Boolean         @default(false)
+  onLeave         Boolean         @default(false)
+  managerUserId   Int?
+  EmploymentType  EmploymentType?
   User            User            @relation(fields: [userId], references: [id])
   Role            Role            @relation(fields: [roleId], references: [id])
-  managerUserId   Int?
   Manager         User?           @relation("manager", fields: [managerUserId], references: [id])
   Suspensions     Suspended[]
   Fired           Fired[]
@@ -374,8 +371,8 @@ model VendorTask {
   taskStatus              TaskStatus
   regularJob              Boolean
   estimatedTimeToComplete String
-  dueDate                 DateTime
   vendorId                Int?
+  dueDate                 DateTime
   Vendor                  Vendor?    @relation(fields: [vendorId], references: [id])
   Payment                 Payment[]
   TaskFile                TaskFile[]
@@ -424,6 +421,20 @@ model PaymentFile {
 
   @@index([paymentId])
   @@index([fileId])
+}
+
+model PriceChange {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime
+  deletedAt DateTime?
+  price     Float
+  unitId    Int
+  tenantId  Int
+  active    Boolean
+
+  @@index([tenantId])
+  @@index([unitId])
 }
 
 enum EmploymentType {

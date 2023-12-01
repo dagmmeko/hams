@@ -109,7 +109,12 @@
 		</label>
 	</div>
 
-	<SvelteTable classNameTable="rolesTable" {columns} {rows} />
+	<SvelteTable 
+	classNameTable="rolesTable" 
+	on:clickCell = {(event) => {
+		goto (`/vendor-task/${event.detail.row.id}`);
+	}}
+	{columns} {rows} />
 </div>
 {#if modal}
 	<form
