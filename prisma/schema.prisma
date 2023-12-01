@@ -78,8 +78,8 @@ model RentalUnits {
   maximumTenants    Int
   minimumRentalDate Int
   roomNumber        String
-  active            Boolean         @default(false)
   unitType          UnitType
+  active            Boolean         @default(false)
   Inspection        Inspection[]
   Property          UnitProperty[]
   Amenities         UnitAmenities[]
@@ -167,28 +167,18 @@ model Inspection {
 }
 
 model Tenants {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime  @updatedAt
-  deletedAt   DateTime?
-  fullName    String    @default("name")
-  phoneNumber String
-
+  id                          Int            @id @default(autoincrement())
+  createdAt                   DateTime       @default(now())
+  updateAt                    DateTime       @updatedAt
+  deletedAt                   DateTime?
+  fullName                    String         @default("name")
+  phoneNumber                 String
   email                       String
-<<<<<<< HEAD
   emergencyContactName        String
   emergencyContactPhoneNumber String
-  tenantScore                 Int           @default(0)
-  active                      Boolean       @default(true)
-  emergencyContactEmail       String
-  RentalUnits                 RentalUnits?  @relation(fields: [rentalUnitsId], references: [id])
-=======
-  active                      Boolean        @default(true)
-  emergencyContactName        String
-  emergencyContactPhoneNumber String
-  emergencyContactEmail       String
   tenantScore                 Int            @default(0)
->>>>>>> 04372113576f51322675d477665437e2ca45344a
+  active                      Boolean        @default(true)
+  emergencyContactEmail       String
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
   PriceChange                 PriceChange[]
@@ -196,20 +186,18 @@ model Tenants {
 }
 
 model TenantRental {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
-
-  purposeOfRent           String
-  contractStartDate       DateTime?
+  id                      Int         @id @default(autoincrement())
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime?
+  deletedAt               DateTime?
+  tenantId                Int
+  unitId                  Int
   contractEndDate         DateTime?
+  contractStartDate       DateTime?
   durationOfStayInCountry Int
-
-  tenantId    Int
-  unitId      Int
-  Tenants     Tenants     @relation(fields: [tenantId], references: [id])
-  RentalUnits RentalUnits @relation(fields: [unitId], references: [id])
+  purposeOfRent           String
+  Tenants                 Tenants     @relation(fields: [tenantId], references: [id])
+  RentalUnits             RentalUnits @relation(fields: [unitId], references: [id])
 
   @@index([tenantId])
   @@index([unitId])
@@ -464,20 +452,6 @@ model PaymentFile {
 
   @@index([paymentId])
   @@index([fileId])
-}
-
-model PriceChange {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updateAt  DateTime
-  deletedAt DateTime?
-  price     Float
-  unitId    Int
-  tenantId  Int
-  active    Boolean
-
-  @@index([tenantId])
-  @@index([unitId])
 }
 
 enum EmploymentType {
