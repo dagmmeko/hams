@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
+	import Delete from '$lib/assets/delete.svg.svelte';
 	import type { PageData } from './$types';
 	import QR from '$lib/assets/qr.png';
+	import Vendors from '../vendors.svelte';
 	export let data: PageData;
 	const {
 		form: editVendorForm,
@@ -96,17 +98,11 @@
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
 		<div class="flex justify-between">
 			<div>
-				<p class="text-lg">Suspend Employee</p>
-				<p class="text-black/50">Suspend employee from job for a given time.</p>
+				<p class="text-lg">Delete Vendor</p>
+				<p class="text-black/50">Remove all data related to vendor.Once you take this action their is no going back</p>
 			</div>
-			<button class="bg-danger text-white rounded-md py-2 px-6">Suspend</button>
+			<button class="bg-danger flex text-white rounded-md py-2 px-6"><Delete/> Delete Vendor</button>
 		</div>
-		<div class="flex mt-6 justify-between">
-			<div>
-				<p class="text-lg">Archive Employee</p>
-				<p class="text-black/50">Archive employment contract with employee.</p>
-			</div>
-			<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
-		</div>
+
 	</div>
 </div>

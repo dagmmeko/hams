@@ -50,7 +50,7 @@ export const load = async (event) => {
 		editVendorSchema
 	);
 
-	console.log('this is the '+ editVendorForm.data.name);
+	
 	return { editVendorForm,};
 };
 
