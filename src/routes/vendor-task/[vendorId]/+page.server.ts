@@ -2,7 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import type { ServiceType } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
+import z, { number } from 'zod';
 
 const editVendorSchema = z.object({
 	name: z.string(),
@@ -13,7 +13,18 @@ const editVendorSchema = z.object({
 	score: z.string(),
 });
 
+
+const addPaymentSchema = z.object({
+	amount: z.number(),
+	despositedToBank :z.string(),
+	paidOn :z.date(),
+	//needs to have account Number
+	
+});
+
+
 export type vendorType = z.infer<typeof editVendorSchema>;
+export type paymentType = z.infer<typeof addPaymentSchema>;
 
 
 export const load = async (event) => {
@@ -22,19 +33,31 @@ export const load = async (event) => {
 		throw error(404, 'Vendor ID not found');
 	}
 
-	const allVendors = await prisma.vendor.findMany();
+	
 
 	const vendor = await prisma.vendor.findFirst({
 		where: {
-			id: parseInt(event.params.vendorId)
+			id: Number(event.params.vendorId)
 			
 		}	
 	});
 
-	
 	if (!vendor) {
 		throw error(404, 'Vendor not found');
 	}
+
+	
+
+	const payments = await prisma.payment.findMany({
+		where: {
+			id:Number(event.params.vendorId),
+			deletedAt: null
+		},
+		include :
+			{
+				VendorTask:true
+				}
+	});
 
 
 	const editVendorForm = await superValidate(
@@ -50,8 +73,15 @@ export const load = async (event) => {
 		editVendorSchema
 	);
 
+
+
 	
-	return { editVendorForm,};
+
+
+
+
+	
+	return { editVendorForm,payments };
 };
 
 export const actions = {
@@ -82,5 +112,24 @@ export const actions = {
 		
 	},
 
+	addVendor: async (event) => {
+		const addPaymentForm = await superValidate(event.request, addPaymentSchema);
+		if (!addPaymentForm) {
+			return fail(400, { addPaymentForm });
+		}
+
+		const payment = await prisma.payment.create({
+
+			data :
+			{
+				amount: addPaymentForm.data.amount,
+				despositedToBank :addPaymentForm.data.despositedToBank,
+				paidOn :addPaymentForm.data.paidOn,
+			}
+
+			}
+		)
 	
-};
+}
+
+}

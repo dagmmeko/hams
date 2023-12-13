@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
 	import Delete from '$lib/assets/delete.svg.svelte';
-	import type { PageData } from './$types';
+	
 	import QR from '$lib/assets/qr.png';
 	import Vendors from '../vendors.svelte';
-	export let data: PageData;
+	export let data;
 	const {
 		form: editVendorForm,
 		enhance: editFormEnhance,
@@ -74,7 +74,7 @@
 				<input type="date" name="hiredDate" bind:value={$CreatedAt} />
 			</label>			
 			
-				<br>
+				
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Contract Files</span>
 			<input type="file" name ="" alt= "contract files"/>
@@ -86,12 +86,7 @@
 		</div>
 
 	</form>
-	<p class="text-2xl mt-10">Documents</p>
-	<hr class="my-6" />
-	<div>
-		<img src={QR} alt="qr" />
-	</div>
-
+	
 	<p class="text-2xl mt-10">Danger</p>
 	<hr class="my-6" />
 

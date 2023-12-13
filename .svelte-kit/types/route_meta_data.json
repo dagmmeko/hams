@@ -63,5 +63,9 @@
 	"/vendor-task/[vendorId]": [
 		"src/routes/vendor-task/[vendorId]/+page.server.ts",
 		"src/routes/+layout.server.ts"
+	],
+	"/vendor-task/[vendorId]/[paymentId]": [
+		"src/routes/vendor-task/[vendorId]/[paymentId]/+page.server.ts",
+		"src/routes/+layout.server.ts"
 	]
 }
