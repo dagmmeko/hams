@@ -10,12 +10,13 @@ datasource db {
 }
 
 model File {
-  id           Int           @id @default(autoincrement())
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime?
-  deletedAt    DateTime?
-  fileName     String
-  key          String
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  fileName  String
+  key       String
+
   PaymentFile  PaymentFile?
   TaskFile     TaskFile?
   VendorFile   VendorFile?
@@ -25,16 +26,17 @@ model File {
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   userName    String?
-  phoneNumber String?    @unique
-  email       String     @unique
-  createdAt   DateTime   @default(now())
-  updateAt    DateTime   @updatedAt
+  phoneNumber String?   @unique
+  email       String    @unique
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
   deletedAt   DateTime?
   jwtPassword String?
-  Employee    Employee?
-  Manager     Employee[] @relation("manager")
+
+  Employee Employee?
+  Manager  Employee[] @relation("manager")
 
   @@fulltext([userName, phoneNumber, email])
 }
@@ -67,26 +69,28 @@ model BuildingAmenities {
 }
 
 model RentalUnits {
-  id                Int             @id @default(autoincrement())
-  createdAt         DateTime        @default(now())
-  updateAt          DateTime        @updatedAt
-  deletedAt         DateTime?
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  deletedAt DateTime?
+
   floor             String
-  kareMeter         Float           @default(0)
-  price             Float           @default(0)
+  kareMeter         Float    @default(0)
+  price             Float    @default(0)
   buildingId        Int?
   maximumTenants    Int
   minimumRentalDate Int
   roomNumber        String
   unitType          UnitType
-  active            Boolean         @default(false)
-  Inspection        Inspection[]
-  Property          UnitProperty[]
-  Amenities         UnitAmenities[]
-  Building          Building?       @relation(fields: [buildingId], references: [id])
-  UnitsFile         UnitsFile[]
-  PriceChange       PriceChange[]
-  TenantRental      TenantRental[]
+  active            Boolean  @default(false)
+
+  Inspection   Inspection[]
+  Property     UnitProperty[]
+  Amenities    UnitAmenities[]
+  Building     Building?       @relation(fields: [buildingId], references: [id])
+  UnitsFile    UnitsFile[]
+  PriceChange  PriceChange[]
+  TenantRental TenantRental[]
 
   @@index([buildingId])
 }

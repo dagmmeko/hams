@@ -1,11 +1,10 @@
 <script lang="ts">
-	
 	import Info from './info.svelte';
 	import Payments from './all_Payments.svelte';
 
 	export let data;
-	
-	let displayedComponent:  'all_payments'| 'info'='info';
+
+	let displayedComponent: 'all_payments' | 'info' = 'info';
 </script>
 
 <div class="mx-10 my-12">
@@ -17,7 +16,9 @@
 			<p class="py-2 px-3 rounded-md {displayedComponent === 'info' ? 'bg-white' : ''} ">Info</p>
 		</button>
 		<button on:click={() => (displayedComponent = 'all_payments')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'all_payments' ? 'bg-white' : ''}">Payments</p>
+			<p class="p-2 px-3 rounded-md {displayedComponent === 'all_payments' ? 'bg-white' : ''}">
+				Payments
+			</p>
 		</button>
 	</div>
 
@@ -26,7 +27,7 @@
 		{#if displayedComponent === 'info'}
 			<Info bind:data />
 		{:else if displayedComponent === 'all_payments'}
-			<Payments bind:data />
+			<!-- <Payments bind:data /> -->
 		{:else}
 			<p>Something went wrong</p>
 		{/if}

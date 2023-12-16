@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
 	import Delete from '$lib/assets/delete.svg.svelte';
-	
 	import QR from '$lib/assets/qr.png';
 	import Vendors from '../vendors.svelte';
 	export let data;
@@ -10,9 +9,6 @@
 		enhance: editFormEnhance,
 		constraints
 	} = superForm(data.editVendorForm);
-
-	const CreatedAt = dateProxy(editVendorForm, 'CreatedAt', { format: 'date', empty: 'undefined' });
-	
 </script>
 
 <div class="p-6">
@@ -71,22 +67,17 @@
 
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Created At</span>
-				<input type="date" name="hiredDate" bind:value={$CreatedAt} />
-			</label>			
-			
-				
+				<!-- <input type="date" name="hiredDate" bind:value={$CreatedAt} /> -->
+			</label>
+
+			<br />
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Contract Files</span>
-			<input type="file" name ="" alt= "contract files"/>
-
-			</label>			
-			
-		
-			
+				<input type="file" name="" alt="contract files" />
+			</label>
 		</div>
-
 	</form>
-	
+
 	<p class="text-2xl mt-10">Danger</p>
 	<hr class="my-6" />
 
@@ -94,10 +85,13 @@
 		<div class="flex justify-between">
 			<div>
 				<p class="text-lg">Delete Vendor</p>
-				<p class="text-black/50">Remove all data related to vendor.Once you take this action their is no going back</p>
+				<p class="text-black/50">
+					Remove all data related to vendor.Once you take this action their is no going back
+				</p>
 			</div>
-			<button class="bg-danger flex text-white rounded-md py-2 px-6"><Delete/> Delete Vendor</button>
+			<button class="bg-danger flex text-white rounded-md py-2 px-6"
+				><Delete /> Delete Vendor</button
+			>
 		</div>
-
 	</div>
 </div>
