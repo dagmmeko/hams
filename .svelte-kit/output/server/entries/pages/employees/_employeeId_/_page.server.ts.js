@@ -1,0 +1,186 @@
+import { p as prisma } from "../../../../chunks/prisma.js";
+import { e as error, f as fail } from "../../../../chunks/index.js";
+import { s as superValidate } from "../../../../chunks/superValidate.js";
+import z from "zod";
+const editEmployeeSchema = z.object({
+  userName: z.string(),
+  phoneNumber: z.string(),
+  email: z.string(),
+  address: z.string(),
+  roleId: z.number(),
+  managerId: z.number(),
+  hiredDate: z.date(),
+  dob: z.date(),
+  employmentType: z.enum(["FULL_TIME", "PART_TIME", "TEMPORARY"]),
+  bloodType: z.string(),
+  height: z.number(),
+  jobTitle: z.string()
+});
+const addLeaveSchema = z.object({
+  startingDate: z.date(),
+  endDate: z.date(),
+  description: z.string()
+});
+const load = async (event) => {
+  const addLeaveForm = await superValidate(addLeaveSchema);
+  if (!event.params.employeeId) {
+    throw error(404, "Employee ID not found");
+  }
+  const allEmployees = await prisma.employee.findMany({
+    where: {
+      isFired: false,
+      isSuspended: false
+    },
+    include: {
+      User: true,
+      Role: true,
+      Manager: true
+    }
+  });
+  const employee = await prisma.employee.findFirst({
+    where: {
+      id: parseInt(event.params.employeeId)
+    },
+    include: {
+      Fired: true,
+      Role: true,
+      Suspensions: true,
+      EmployeesLeaves: {
+        include: {
+          ApprovedBy: {
+            include: {
+              User: true
+            }
+          }
+        }
+      },
+      Attendance: true,
+      User: true,
+      Manager: true
+    }
+  });
+  if (!employee) {
+    throw error(404, "Employee not found");
+  }
+  const roles = await prisma.role.findMany({
+    where: {
+      deletedAt: null
+    }
+  });
+  const editEmployeeForm = await superValidate(
+    {
+      userName: employee.User.userName || "",
+      phoneNumber: employee.User.phoneNumber || "",
+      email: employee.User.email || "",
+      hiredDate: employee.hiredDate,
+      address: employee.address || "",
+      dob: employee.dateOfBirth || /* @__PURE__ */ new Date(),
+      employmentType: employee.EmploymentType,
+      bloodType: employee.bloodType,
+      height: employee.height,
+      jobTitle: employee.jobTitle,
+      roleId: employee.Role.id,
+      managerId: employee.Manager?.id
+    },
+    editEmployeeSchema
+  );
+  return { addLeaveForm, editEmployeeForm, employee, roles, allEmployees };
+};
+const actions = {
+  editEmployeeInfo: async (event) => {
+    const editEmployeeForm = await superValidate(event.request, editEmployeeSchema);
+    if (!editEmployeeForm) {
+      return fail(400, { editEmployeeForm });
+    }
+    console.log({ editEmployeeForm });
+    const employee = await prisma.employee.update({
+      where: {
+        id: parseInt(event.params.employeeId)
+      },
+      data: {
+        hiredDate: editEmployeeForm.data.hiredDate,
+        address: editEmployeeForm.data.address,
+        dateOfBirth: editEmployeeForm.data.dob,
+        EmploymentType: editEmployeeForm.data.employmentType,
+        bloodType: editEmployeeForm.data.bloodType,
+        height: editEmployeeForm.data.height,
+        jobTitle: editEmployeeForm.data.jobTitle,
+        roleId: editEmployeeForm.data.roleId,
+        managerUserId: editEmployeeForm.data.managerId
+      }
+    });
+    const user = await prisma.user.update({
+      where: {
+        id: employee.userId
+      },
+      data: {
+        userName: editEmployeeForm.data.userName,
+        phoneNumber: editEmployeeForm.data.phoneNumber,
+        email: editEmployeeForm.data.email
+      }
+    });
+    return { editEmployeeForm, employee, user };
+  },
+  addLeave: async (event) => {
+    const session = await event.locals.getSession();
+    const addLeaveForm = await superValidate(event.request, addLeaveSchema);
+    const leave = await prisma.employee.update({
+      where: {
+        id: Number(event.params.employeeId)
+      },
+      data: {
+        onLeave: true,
+        EmployeesLeaves: {
+          create: {
+            description: addLeaveForm.data.description,
+            startingDate: addLeaveForm.data.startingDate,
+            endDate: addLeaveForm.data.endDate,
+            // @ts-ignore
+            creatorId: session?.authUser.Employee.id
+          }
+        }
+      }
+    });
+    return { addLeaveForm, leave };
+  },
+  markAbsent: async (event) => {
+    const absent = await prisma.employee.update({
+      where: {
+        id: Number(event.params.employeeId),
+        isAbsent: false
+      },
+      data: {
+        isAbsent: true,
+        Attendance: {
+          create: {
+            description: "Absent"
+          }
+        }
+      }
+    });
+    return { absent };
+  },
+  editAttendance: async (event) => {
+    console.log("event");
+    const data = await event.request.formData();
+    const attendanceId = data.get("attendanceId");
+    const description = data.get("description");
+    if (typeof attendanceId !== "string" || typeof description !== "string") {
+      return fail(500, { errorMessage: "Query is not a string" });
+    }
+    const attendance = await prisma.attendance.update({
+      where: {
+        id: Number(attendanceId)
+      },
+      data: {
+        description
+      }
+    });
+    console.log({ attendance, attendanceId, description });
+    return { attendance };
+  }
+};
+export {
+  actions,
+  load
+};
