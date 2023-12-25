@@ -25,11 +25,11 @@
 				Task
 			</p></button
 		>
-		<button on:click={() => (displayedComponent = 'pending')}>
+		<!-- <button on:click={() => (displayedComponent = 'pending')}>
 			<p class="p-2 px-3 rounded-md {displayedComponent === 'pending' ? 'bg-white' : ''}">
 				Pending Tasks
 			</p>
-		</button>
+		</button> -->
 	</div>
 	{#if displayedComponent === 'vendor'}
 		<Vendors bind:data />

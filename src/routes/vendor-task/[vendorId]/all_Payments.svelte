@@ -1,5 +1,4 @@
 <script lang="ts">
-	
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
@@ -7,9 +6,11 @@
 	import SvelteTable from 'svelte-table';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import type { PageData } from './$types';
+	let dateInput: any;
 
 	let modal = false;
-	export let data;
+	export let data: PageData;
 
 	$: rows = data.payments ?? [];
 	$: columns = [
@@ -40,7 +41,7 @@
 		{
 			key: 'Ref ID',
 			title: 'Ref ID',
-			value: (v: typeof rows[number])=>v.vendorTaskId ||'',
+			value: (v: typeof rows[number]) => v.vendorTaskId || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -52,10 +53,8 @@
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-	
+		}
 	];
-	
 
 	const {
 		form: addPaymentForm,
@@ -66,8 +65,6 @@
 			modal = false;
 		}
 	});
-
-
 </script>
 
 <div class=" bg-white rounded-sm shadow-md border-[1px] border-black/20">
@@ -106,67 +103,60 @@
 		>
 			<div>
 				<p class="text-xl font-semibold">New Payment</p>
-				<p class="text-sm text-subtitle pt-2">
-					Record New payment here. Click save when your done
-				</p>
+				<p class="text-sm text-subtitle pt-2">Record New payment here. Click save when your done</p>
 			</div>
-			<label class="grid">
-				<span class="text-primary font-medium"> Label </span>
-				<input
-					bind:value={$addPaymentForm.label}
-					name="Label"
-					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-				/>
-			</label>
+
+			<select
+				bind:value={$addPaymentForm.taskId}
+				name="taskId"
+				required
+				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+			>
+				<option selected disabled>Select Task</option>
+				{#each data.vendor.VendorTask as task}
+					{#if task.taskStatus !== 'COMPLETED' && task.paymentStatus === false}
+						<option value={task.id}>{task.taskDescription}</option>
+					{/if}
+				{/each}
+			</select>
+
 			<label class="grid">
 				<span class="text-primary font-medium"> Amount</span>
 				<input
 					bind:value={$addPaymentForm.amount}
-					name="phoneNumber"
-					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-				/>
-			</label>
-			<!--
-			<label class="grid">
-				<span class="text-primary font-medium"> Ref ID</span>
-				<input
-					bind:value={$addPaymentForm.vendorTaskId}
-					{...$constraints.email}
-					name="email"
-					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-				/>
-			</label>
-	
-			<label class="grid">
-				<span class="text-primary font-medium"> Deposit account</span>
-				<input
-					bind:value={$addPaymentForm.AAAA}
-					name="address"
+					name="amount"
 					required
 					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
 
-				-->
-				
 			<label class="grid">
 				<span class="text-primary font-medium"> Via Bank</span>
 				<input
-					bind:value={$addPaymentForm.despositedToBank}
-					name="serviceDescription"
+					bind:value={$addPaymentForm.depositedToBank}
+					name="depositedToBank"
 					required
 					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			
-			
+			<label class="grid">
+				<span class="text-primary font-medium"> Paid on </span>
+				<input
+					type="date"
+					name="paidOn"
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+					bind:this={dateInput}
+					on:click={() => {
+						dateInput && dateInput.showPicker();
+					}}
+					bind:value={$addPaymentForm.paidOn}
+					{...$constraints.paidOn}
+				/>
+			</label>
+
 			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
 				Save Payment
 			</button>
 		</div>
 	</form>
 {/if}
-

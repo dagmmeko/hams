@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	export let data;
@@ -6,6 +7,8 @@
 	let selectedTenant: any;
 	let id: number;
 
+	let dateInput: any;
+	let dateInput2: any;
 	let unitData: any;
 	$: {
 		unitData = data.rentalUnits.find((unit) => unit.id === Number(selectedUnit));
@@ -21,16 +24,37 @@
 				Find the tenant and select. Assign room and click save when you're done.
 			</p>
 		</div>
-		<div class="mt-6 grid grid-cols-2">
-			<div>
+		<form
+			use:enhance={({ formData }) => {
+				formData.set('selectedTenantId', selectedTenant);
+				formData.set('selectedUnitId', selectedUnit.id);
+			}}
+			method="post"
+			action="/rentRoom"
+			class="mt-6 grid grid-cols-2"
+		>
+			<div class="grid gap-4">
 				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Full Name </span>
+					<span class="text-primary font-medium"> Purpose of Rent </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 						required
-						name="fullName"
+						name="purposeOfRent"
 					/>
 				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Start Date </span>
+					<input
+						type="date"
+						name="startDate"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+					/>
+				</label>
+
 				<label class="grid">
 					<span class="text-primary font-medium"> Tenant </span>
 
@@ -48,13 +72,25 @@
 					/>
 				</label>
 			</div>
-			<div>
+			<div class="grid gap-4">
 				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Full Name </span>
+					<span class="text-primary font-medium"> Duration of stay </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 						required
-						name="fullName"
+						name="duration"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> End Date </span>
+					<input
+						type="date"
+						name="endDate"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						bind:this={dateInput2}
+						on:click={() => {
+							dateInput2 && dateInput2.showPicker();
+						}}
 					/>
 				</label>
 				<label class="grid">
@@ -77,15 +113,15 @@
 					</select>
 				</label>
 			</div>
-		</div>
+		</form>
 	</div>
 	<div class="grid grid-cols-2">
 		<div>
 			{#if data.tenants}
 				{#each data.tenants as tenant}
-					<button on:click={() => (selectedTenant = tenant)}>
+					<button on:click={() => (selectedTenant = tenant.id)}>
 						<div
-							class=" {selectedTenant?.id === tenant.id
+							class=" {selectedTenant === tenant.id
 								? 'bg-primary/20 '
 								: 'bg-white'} grid text-start p-6 w-[444px] mt-6 rounded-md shadow-sm border-[1px] border-black/20"
 						>

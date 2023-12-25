@@ -3,6 +3,7 @@
 	import Payments from './all_Payments.svelte';
 
 	export let data;
+	export let form;
 
 	let displayedComponent: 'all_payments' | 'info' = 'info';
 </script>
@@ -25,9 +26,9 @@
 	<!-- main component -->
 	<div class=" bg-white rounded-sm shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'info'}
-			<Info bind:data />
+			<Info bind:data bind:form />
 		{:else if displayedComponent === 'all_payments'}
-			<!-- <Payments bind:data /> -->
+			<Payments bind:data />
 		{:else}
 			<p>Something went wrong</p>
 		{/if}

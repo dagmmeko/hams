@@ -3,16 +3,25 @@
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import QR from '$lib/assets/qr.png';
 	import Vendors from '../vendors.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
+	import type { ActionData } from './$types';
 	export let data;
+
+	export let form: ActionData;
+
 	const {
 		form: editVendorForm,
 		enhance: editFormEnhance,
 		constraints
 	} = superForm(data.editVendorForm);
+
+	$: form?.vendor
+		? toast.push('Vendor info updated', { theme: { '--toastBackground': '#059669' } })
+		: '';
 </script>
 
 <div class="p-6">
-	<form use:editFormEnhance method="post" action="?/editEmployeeInfo">
+	<form use:editFormEnhance method="post" action="?/editVendorInfo">
 		<div class="flex justify-between">
 			<div class="grid">
 				<p class="text-2xl">Vendor Info</p>
@@ -26,7 +35,7 @@
 		<div class="grid gap-6 grid-cols-4">
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Vendor Name</span>
-				<input name="userName" bind:value={$editVendorForm.name} {...$constraints.name} />
+				<input name="name" bind:value={$editVendorForm.name} {...$constraints.name} />
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Contact number</span>
@@ -37,22 +46,22 @@
 				/>
 			</label>
 			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Status</span>
-				<input name="status" bind:value={$editVendorForm.name} />
+				<span class="text-primary font-semibold py-1"> Address</span>
+				<input name="address" bind:value={$editVendorForm.address} />
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Service Type </span>
 				<select
-					name="employmentType"
+					name="ServiceType"
 					bind:value={$editVendorForm.ServiceType}
 					{...$constraints.ServiceType}
 				>
-					<option selected disabled>Select Employment Type</option>
-					<option value="CLEANING">Full Time</option>
-					<option value="ELECTRICITY">Part Time</option>
-					<option value="PLUMBING">Contract</option>
-					<option value="PAINTING">Contract</option>
-					<option value="SECURITY">Contract</option>
+					<option selected disabled>Select Service Type</option>
+					<option value="CLEANING">Cleaning</option>
+					<option value="ELECTRICITY">Electricity</option>
+					<option value="PLUMBING">Plumbing</option>
+					<option value="PAINTING">Painting</option>
+					<option value="SECURITY">Security</option>
 				</select>
 			</label>
 
@@ -62,18 +71,18 @@
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Score</span>
-				<input name="height" bind:value={$editVendorForm.score} />
+				<input name="score" bind:value={$editVendorForm.score} />
 			</label>
-
-			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Created At</span>
-				<!-- <input type="date" name="hiredDate" bind:value={$CreatedAt} /> -->
-			</label>
-
-			<br />
-			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Contract Files</span>
-				<input type="file" name="" alt="contract files" />
+		</div>
+		<div class="mt-4">
+			<label class="grid">
+				<span class="text-primary font-semibold py-1"> Description</span>
+				<textarea
+					class="max-w-md border-[1px] border-[#3b82f6]/30 rounded-md p-2"
+					name="serviceDescription"
+					bind:value={$editVendorForm.serviceDescription}
+					{...$constraints.serviceDescription}
+				/>
 			</label>
 		</div>
 	</form>

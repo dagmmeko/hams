@@ -8,57 +8,56 @@ const editVendorSchema = z.object({
 	name: z.string(),
 	phoneNumber: z.string(),
 	email: z.string(),
-	ServiceType: z.enum(['CLEANING', 'ELECTRICITY', 'PLUMBING','PAINTING','SECURITY']),//
-	CreatedAt: z.date(),// contract start date???
+	address: z.string(),
+	ServiceType: z.enum(['CLEANING', 'ELECTRICITY', 'PLUMBING', 'PAINTING', 'SECURITY']), //
 	score: z.string(),
+	serviceDescription: z.string()
 });
-
 
 const addPaymentSchema = z.object({
 	amount: z.number(),
-	despositedToBank :z.string(),
-	paidOn :z.date(),
+	depositedToBank: z.string(),
+	paidOn: z.date(),
+	taskId: z.number()
 	//needs to have account Number
-	
 });
-
 
 export type vendorType = z.infer<typeof editVendorSchema>;
 export type paymentType = z.infer<typeof addPaymentSchema>;
 
-
 export const load = async (event) => {
-
 	if (!event.params.vendorId) {
 		throw error(404, 'Vendor ID not found');
 	}
 
-	
-
 	const vendor = await prisma.vendor.findFirst({
 		where: {
 			id: Number(event.params.vendorId)
-			
-		}	
+		},
+		include: {
+			VendorTask: true
+		}
 	});
 
 	if (!vendor) {
 		throw error(404, 'Vendor not found');
 	}
 
-	
-
 	const payments = await prisma.payment.findMany({
 		where: {
-			id:Number(event.params.vendorId),
-			deletedAt: null
+			deletedAt: null,
+			VendorTask: {
+				vendorId: Number(event.params.vendorId),
+				taskStatus: 'COMPLETED',
+				paymentStatus: true
+			}
 		},
-		include :
-			{
-				VendorTask:true
-				}
+		include: {
+			VendorTask: true
+		}
 	});
 
+	const addPaymentForm = await superValidate(addPaymentSchema);
 
 	const editVendorForm = await superValidate(
 		{
@@ -66,22 +65,14 @@ export const load = async (event) => {
 			phoneNumber: vendor.phoneNumber || '',
 			email: vendor.email || '',
 			ServiceType: vendor.serviceType as ServiceType,
-			CreatedAt: vendor.createdAt || '',// contract start date???
 			score: vendor.score || '',
-
+			serviceDescription: vendor.serviceDescription || '',
+			address: vendor.address || ''
 		},
 		editVendorSchema
 	);
 
-
-
-	
-
-
-
-
-	
-	return { editVendorForm,payments };
+	return { editVendorForm, payments, addPaymentForm, vendor };
 };
 
 export const actions = {
@@ -92,44 +83,46 @@ export const actions = {
 		}
 
 		console.log({ editVendorForm });
-
 		const vendor = await prisma.vendor.update({
 			where: {
 				id: parseInt(event.params.vendorId)
 			},
 			data: {
 				name: editVendorForm.data.name,
-			phoneNumber: editVendorForm.data.phoneNumber,
-			email: editVendorForm.data.email,
-			serviceType: editVendorForm.data.ServiceType as ServiceType,
-			score: editVendorForm.data.score
-			
+				phoneNumber: editVendorForm.data.phoneNumber,
+				email: editVendorForm.data.email,
+				address: editVendorForm.data.address,
+				serviceType: editVendorForm.data.ServiceType as ServiceType,
+				score: editVendorForm.data.score,
+				serviceDescription: editVendorForm.data.serviceDescription
 			}
 		});
 
-	
-
-		
+		return { editVendorForm, vendor };
 	},
 
-	addVendor: async (event) => {
+	addPayment: async (event) => {
 		const addPaymentForm = await superValidate(event.request, addPaymentSchema);
 		if (!addPaymentForm) {
 			return fail(400, { addPaymentForm });
 		}
-
-		const payment = await prisma.payment.create({
-
-			data :
-			{
-				amount: addPaymentForm.data.amount,
-				despositedToBank :addPaymentForm.data.despositedToBank,
-				paidOn :addPaymentForm.data.paidOn,
+		const vendorTask = await prisma.vendorTask.update({
+			where: {
+				id: addPaymentForm.data.taskId
+			},
+			data: {
+				paymentStatus: true,
+				taskStatus: 'COMPLETED',
+				Payment: {
+					create: {
+						amount: addPaymentForm.data.amount,
+						despositedToBank: addPaymentForm.data.depositedToBank,
+						paidOn: addPaymentForm.data.paidOn
+					}
+				}
 			}
+		});
 
-			}
-		)
-	
-}
-
-}
+		return { addPaymentForm, vendorTask };
+	}
+};

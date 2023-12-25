@@ -38,3 +38,11 @@ export const load = async (event) => {
 
 	return { tenants, rentalUnits };
 };
+
+export const actions = {
+	rentRoom: async (event) => {
+		const data = await event.request.formData();
+		const purposeOfRent = data.get('purposeOfRent');
+		const startDate = data.get('startDate');
+	}
+};
