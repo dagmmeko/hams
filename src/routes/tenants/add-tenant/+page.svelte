@@ -178,7 +178,11 @@
 						min={!$addTenantForm.contractStartDate
 							? undefined
 							: dayjs(new Date($addTenantForm.contractStartDate))
-									.add(selectedUnit?.minimumRentalDate ?? 0, 'D')
+									.add(
+										data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
+											?.minimumRentalDate ?? 0,
+										'D'
+									)
 									.toISOString()
 									.substr(0, 10)}
 					/>

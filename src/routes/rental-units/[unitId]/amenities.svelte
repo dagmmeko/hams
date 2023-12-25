@@ -188,7 +188,6 @@
 					<input
 						type="checkbox"
 						name="paid"
-						required
 						checked={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)?.paid}
 						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 					/>
@@ -204,7 +203,7 @@
 					/>
 
 					<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
-						Save Item</button
+						Update Amenity</button
 					>
 				</label>
 			</div>

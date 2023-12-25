@@ -80,7 +80,7 @@
 			<div class="flex justify-between p-6">
 				<div class="flex space-x-4">
 					<p class="text-lg">Tenants</p>
-					<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tenants</p>
+					<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.tenants?.length} Tenants</p>
 				</div>
 				<div>
 					<a

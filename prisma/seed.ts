@@ -8,6 +8,23 @@ const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 async function main() {
 	const data = await prisma.user.create({
 		data: {
+			email: 'dagixmeko@gmail.com',
+			phoneNumber: '251911480875',
+			userName: 'Dagem Mekonnen',
+			jwtPassword: encryptedPassword,
+			Employee: {
+				create: {
+					hiredDate: new Date(),
+					isSuspended: false,
+					address: 'Addis Ababa',
+					staffIdNumber: 'HAMS/1/1',
+					roleId: 1
+				}
+			}
+		}
+	});
+	const data1 = await prisma.user.create({
+		data: {
 			email: 'yafet@classicpackagingplc.com',
 			phoneNumber: '251911480872',
 			userName: 'Yafet Kebede',
@@ -17,7 +34,7 @@ async function main() {
 					hiredDate: new Date(),
 					isSuspended: false,
 					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/1/7',
+					staffIdNumber: 'HAMS/1/2',
 					roleId: 1
 				}
 			}
@@ -34,7 +51,7 @@ async function main() {
 					hiredDate: new Date(),
 					isSuspended: false,
 					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/1/8',
+					staffIdNumber: 'HAMS/1/3',
 					roleId: 1
 				}
 			}

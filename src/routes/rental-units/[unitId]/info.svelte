@@ -184,10 +184,9 @@
 				</form>
 			</div>
 		</div>
-		<hr class="my-6" />
 	</form>
 
-	<p class="text-2xl mt-10">Danger</p>
+	<p class="text-2xl mt-6">Danger</p>
 	<hr class="my-6" />
 
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
@@ -199,7 +198,14 @@
 				</p>
 			</div>
 			<form method="post" action="?/archiveUnit" use:enhance>
-				<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+				{#if data.unitDetails?.TenantRental && data.unitDetails?.TenantRental.length > 0 && data.unitDetails?.TenantRental[0]?.Tenants?.active}
+					<button
+						on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
+						class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+					>
+				{:else}
+					<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+				{/if}
 			</form>
 		</div>
 	</div>

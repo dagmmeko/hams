@@ -15,10 +15,12 @@
 			formData.set('deleteUnitId', row.id);
 		}
 	});
+
+	$: unitRow = data.units.find((unit) => unit.id === row.id);
 </script>
 
 <div class="">
-	{#if row.TenantRental.length > 0 && row.TenantRental[0].Tenant.active}
+	{#if unitRow && unitRow.TenantRental.length > 0 && unitRow.TenantRental[0]?.Tenants?.active}
 		<button on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
 			><Delete class="text-subtitle" />
 		</button>
