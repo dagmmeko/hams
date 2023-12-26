@@ -87,7 +87,7 @@
 							</p>
 							<label class="grid gap-2 mt-4">
 								<p class="grid">
-									<span class="text-primary font-medium">Old Price</span>
+									<span class="text-primary font-medium">Current Price</span>
 									<span class="font-normal text-sm">
 										{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price} Birr
 									</span>
@@ -96,7 +96,7 @@
 									class="w-full border-[1px] border-black/60 rounded-md p-2"
 									name="newPrice"
 									type="number"
-									placeholder="New Price"
+									placeholder="Amended Price"
 									bind:value={$addTenantForm.newPrice}
 									{...$constraints.newPrice}
 								/>

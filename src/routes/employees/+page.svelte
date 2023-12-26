@@ -198,7 +198,7 @@
 					</select>
 				</label>
 				<label>
-					<span class="text-primary font-medium"> Manager </span>
+					<span class="text-primary font-medium"> Supervisor </span>
 					<select
 						required
 						bind:value={$addEmployeeForm.managerId}

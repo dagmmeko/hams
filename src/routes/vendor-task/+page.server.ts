@@ -16,7 +16,7 @@ const addVendorSchema = z.object({
 const addTaskSchema = z.object({
 	taskDescription: z.string(),
 	paymentTerm: z.string(),
-	regularJob: z.boolean(),
+	regularJob: z.boolean().optional(),
 	estimatedTime: z.string(),
 	dueDate: z.date(),
 	vendorId: z.number().int()
@@ -94,7 +94,7 @@ export const actions = {
 				taskDescription: addTaskForm.data.taskDescription,
 				paymentTerms: addTaskForm.data.paymentTerm,
 				taskStatus: 'PENDING',
-				regularJob: addTaskForm.data.regularJob,
+				regularJob: addTaskForm.data.regularJob ?? false,
 				estimatedTimeToComplete: addTaskForm.data.estimatedTime,
 				dueDate: addTaskForm.data.dueDate,
 				vendorId: addTaskForm.data.vendorId

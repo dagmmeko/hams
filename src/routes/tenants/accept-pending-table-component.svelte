@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 
 	export let row: any;
+	$: console.log(row);
 </script>
 
 {#if !row.approved}
@@ -32,7 +33,7 @@
 		</form>
 	</div>
 {:else if !row.active}
-	<a href="/approve-tenant">
+	<a href="/tenants/approve-tenant?priceChangeId={row.id}">
 		<div class="border-primary border-[1px] p-[6px] rounded-md text-sm text-primary text-center">
 			Open
 		</div>

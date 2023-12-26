@@ -39,7 +39,8 @@ export const load = async (event) => {
 					approved: null
 				}
 			],
-			active: null
+			active: null,
+			deletedAt: null
 		},
 		include: {
 			Tenant: true,
@@ -67,23 +68,11 @@ export const actions = {
 					id: Number(priceChangeId)
 				},
 				data: {
-					approved: true
+					approved: true,
+					deletedAt: new Date()
 				}
 			});
 
-			// const rentalUnit = await prisma.rentalUnits.update({
-			// 	where: {
-			// 		id: priceChange.unitId
-			// 	},
-			// 	data: {
-			// 		active: true,
-			// 		TenantRental: {
-			// 			create: {
-			// 				tenantId: priceChange.tenantId
-			// 			}
-			// 		}
-			// 	}
-			// });
 			return { priceChange };
 		} catch (error) {
 			console.log(error);

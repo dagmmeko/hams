@@ -115,9 +115,9 @@
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
 			<div>
-				<p class="text-xl font-semibold">New Vendor</p>
+				<p class="text-xl font-semibold">New Vendor Task</p>
 				<p class="text-sm text-subtitle pt-2">
-					Register new tenants here. Click save when you're done.
+					Create and Assign tasks to Vendors here. Click save when you're done.
 				</p>
 			</div>
 			<label class="grid">

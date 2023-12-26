@@ -8,8 +8,7 @@
 	export let data;
 	export let form;
 	$: form?.addUnitForm && goto('/rental-units');
-	$: form?.addUnitForm &&
-		toast.push('Unit added successfully', { theme: { '--toastBackground': '#059669' } });
+	$: form?.addUnitForm && toast.push('Unit added successfully');
 	const { form: addUnitForm, enhance: addFormEnhance, constraints } = superForm(data.addUnitForm);
 
 	let frontFileData: string[] = [];

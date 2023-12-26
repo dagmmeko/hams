@@ -2,6 +2,8 @@
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 	import QR from '$lib/assets/qr.png';
+	import FileUpload from '$lib/assets/file-upload.svg.svelte';
+	import FileUp from '$lib/assets/file-up.svg.svelte';
 
 	export let data: PageData;
 	const {
@@ -12,6 +14,7 @@
 
 	const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 	const birthDate = dateProxy(editEmployeeForm, 'dob', { format: 'date', empty: 'undefined' });
+	let frontFileData: string[] = [];
 </script>
 
 <div class="p-6">
@@ -112,13 +115,67 @@
 				<span class="text-primary font-semibold py-1"> Job Title</span>
 				<input name="jobTitle" bind:value={$editEmployeeForm.jobTitle} />
 			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Emergency Contact Name</span>
+				<input name="emergencyName" />
+			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> EMergency Contact Email</span>
+				<input name="emergencyMail" />
+			</label><label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Emergency Contact Phone</span>
+				<input name="emergencyPhone" />
+			</label>
 		</div>
 	</form>
 	<p class="text-2xl mt-10">Documents</p>
 	<hr class="my-6" />
-	<div>
-		<img src={QR} alt="qr" />
-	</div>
+	<label>
+		<input
+			class="hidden"
+			type="file"
+			name="unitFile"
+			accept="image/*"
+			multiple
+			on:change={(e) => {
+				const data = e.currentTarget.files;
+				if (data) {
+					for (let i = 0; i <= data?.length; i++) {
+						if (data.item(i)) {
+							frontFileData = [...frontFileData, data[i].name];
+						}
+					}
+				}
+			}}
+		/>
+		<div class=" flex-1 flex-shrink-0 grid grid-cols-4 items-start gap-2">
+			{#each frontFileData as file}
+				<div
+					class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
+				>
+					<div class=" relative z-10 w-32 h-36" />
+
+					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<div class="flex flex-col gap-2 justify-center items-center h-full">
+							<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
+							<p class="text-sm ml-2 py-2">{file}</p>
+						</div>
+					</div>
+				</div>
+			{/each}
+			<div
+				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
+			>
+				<div class=" relative z-10 w-32 h-36" />
+				<div class="absolute top-0 w-full h-full left-0 z-30">
+					<div class="flex flex-col gap-2 justify-center items-center h-full">
+						<FileUp class="text-primary w-7 h-7" />
+						<span class="text-xs">Upload File</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</label>
 
 	<p class="text-2xl mt-10">Danger</p>
 	<hr class="my-6" />

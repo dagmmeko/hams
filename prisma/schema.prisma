@@ -177,7 +177,7 @@ model Tenants {
   emergencyContactName        String
   emergencyContactPhoneNumber String
   tenantScore                 Int            @default(0)
-  active                      Boolean        @default(true)
+  active                      Boolean        @default(false)
   emergencyContactEmail       String
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
