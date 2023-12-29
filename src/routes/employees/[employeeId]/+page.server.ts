@@ -152,8 +152,7 @@ export const actions = {
 						description: addLeaveForm.data.description,
 						startingDate: addLeaveForm.data.startingDate,
 						endDate: addLeaveForm.data.endDate,
-						// @ts-ignore
-						creatorId: session?.authUser.Employee.id
+						creatorId: session?.authUser.Employee.id || 0
 					}
 				}
 			}
