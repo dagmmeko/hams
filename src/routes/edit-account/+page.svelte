@@ -4,6 +4,8 @@
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { signOut } from '@auth/sveltekit/client';
+
 	export let data;
 	export let form;
 
@@ -94,6 +96,12 @@
 			</label>
 		</form>
 	{/if}
+	<button
+		on:click={() => signOut()}
+		class="text-white bg-danger/90 rounded-lg px-8 py-1 text-xs border-dashed justify-self-center mt-4 w-fit"
+	>
+		Sign Out</button
+	>
 
 	<form method="post" action="?/editAccount" class="mt-12 grid justify-items-stretch">
 		<div class="grid grid-cols-3 gap-4">
