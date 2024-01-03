@@ -3,9 +3,13 @@
 </script>
 
 <div
-	class="text-[10px] w-fit text-white p-1 rounded-full {row.Inspection[0].InspectionStatus ===
-	'GOOD_CONDITION'
-		? 'bg-success'
+	class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.Inspection[0]
+		.InspectionStatus === 'GOOD_CONDITION'
+		? 'bg-success text-white'
+		: row.Inspection[0].InspectionStatus === 'NEEDS_REPAIR'
+		? 'bg-warning text-black/70'
+		: row.Inspection[0].InspectionStatus === 'OUT_OF_SERVICE'
+		? 'bg-danger text-white'
 		: ''}"
 >
 	{row.Inspection[0].InspectionStatus.replace(/_/g, ' ')}
