@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { clickOutside } from '$lib/utils/click-outside';
-	import SvelteTable, { type TableColumn } from 'svelte-table';
-	import Name from './name.svelte';
-	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { goto } from '$app/navigation';
-	import dayjs from 'dayjs';
-	import StatusComponent from './status-component.svelte';
 	import { page } from '$app/stores';
+	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
+	import { clickOutside } from '$lib/utils/click-outside';
+	import dayjs from 'dayjs';
+	import SvelteTable from 'svelte-table';
 	import { superForm } from 'sveltekit-superforms/client';
+	import Name from './name.svelte';
+	import StatusComponent from './status-component.svelte';
 
 	export let data;
 
@@ -94,8 +94,8 @@
 			<p class="bg-[#F9F5FF] text-xs py-1 px-2 rounded-xl">{data.employees.length} Employees</p>
 		</div>
 		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
-			Add Employee</button
-		>
+			Add Employee
+		</button>
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<button

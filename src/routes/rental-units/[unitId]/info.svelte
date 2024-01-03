@@ -1,19 +1,20 @@
 <script lang="ts">
-	import { dateProxy, superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
-	import FileBg from '$lib/assets/file-bg.png';
-	import Upload from '$lib/assets/upload.svg.svelte';
+	import { clickOutside } from '$lib/utils/click-outside';
+	import { superForm } from 'sveltekit-superforms/client';
+
 	import { enhance } from '$app/forms';
-	import FileUpload from '$lib/assets/file-upload.svg.svelte';
-	import Delete from '$lib/assets/delete.svg.svelte';
-	import FileUp from '$lib/assets/file-up.svg.svelte';
-	import Eye from '$lib/assets/eye.svg.svelte';
-	import type { ActionData } from './$types';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { goto } from '$app/navigation';
+	import Delete from '$lib/assets/delete.svg.svelte';
+	import Eye from '$lib/assets/eye.svg.svelte';
+	import FileBg from '$lib/assets/file-bg.png';
+	import FileUp from '$lib/assets/file-up.svg.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
+	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
 	export let form: ActionData;
+	let dateInput: any;
+
 	const {
 		form: editUnitForm,
 		enhance: editUnitFormEnhance,
@@ -27,16 +28,29 @@
 	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
 	// $: newFiles = form?.allNewFiles;
 	$: form?.deletedUnit ? goto('/rental-units') : null;
+	$: form?.addInspection ? toast.push('Inspection added successfully') : null;
+	let modal = false;
 </script>
 
 <div>
 	<form use:editUnitFormEnhance method="post" action="?/editUnitInfo">
-		<div class="flex justify-between">
+		<div class="grid grid-flow-col justify-items-stretch">
 			<div class="grid">
 				<p class="text-2xl">Rental Unit Info</p>
 				<p class=" text-sm py-1 rounded-xl">Room details here.</p>
 			</div>
-			<button type="submit" class="bg-primary text-white rounded-md py-2 px-6"> Update Info</button>
+			<div class="justify-self-end">
+				<button
+					on:click|preventDefault={() => (modal = true)}
+					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
+				>
+					New Inspection
+				</button>
+
+				<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
+					Update Info
+				</button>
+			</div>
 		</div>
 		<hr class="my-6" />
 		<div class="grid gap-6 grid-cols-4">
@@ -62,15 +76,16 @@
 			<label class="grid">
 				<span class="text-primary font-semibold py-1"> Condition </span>
 				<select
-					required
+					disabled
 					name="condition"
 					bind:value={$editUnitForm.condition}
 					{...$constraints.condition}
 				>
-					<option selected disabled> Pick a role </option>
-					<option value="OUT_OF_SERVICE"> Out of service </option>
-					<option value="NEEDS_REPAIR"> Needs Repair </option>
+					<option selected disabled> Unit Condition </option>
+
 					<option value="GOOD_CONDITION"> Good Condition </option>
+					<option value="NEEDS_REPAIR"> Needs Repair </option>
+					<option value="OUT_OF_SERVICE"> Out of service </option>
 				</select>
 			</label>
 			<label class="grid flex-1">
@@ -210,3 +225,68 @@
 		</div>
 	</div>
 </div>
+
+{#if modal}
+	<form
+		method="post"
+		action="?/addInspection"
+		use:enhance={() => {
+			return async ({ update }) => {
+				await update();
+				modal = false;
+			};
+		}}
+	>
+		<div
+			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+		>
+			<div
+				use:clickOutside={() => (modal = false)}
+				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			>
+				<div class="text-2xl text-primary font-semibold mb-1 text-center">New Inspection</div>
+				<hr />
+				<label class="grid flex-1">
+					<span class="text-primary font-semibold py-1"> Inspection Date </span>
+					<input
+						required
+						name="inspectionDate"
+						type="date"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+						class=" border-[1px] border-primary/50 rounded-md p-2"
+					/>
+				</label>
+
+				<label class="grid">
+					<span class="text-primary font-semibold py-1"> Condition </span>
+					<select
+						required
+						name="inspectionCondition"
+						bind:value={$editUnitForm.condition}
+						{...$constraints.condition}
+						class=" border-[1px] border-primary/50 rounded-md p-2"
+					>
+						<option selected disabled> Unit Condition </option>
+
+						<option value="GOOD_CONDITION"> Good Condition </option>
+						<option value="NEEDS_REPAIR"> Needs Repair </option>
+						<option value="OUT_OF_SERVICE"> Out of service </option>
+					</select>
+				</label>
+				<label class="grid flex-1">
+					<span class="text-primary font-semibold py-2"> Inspection Description </span>
+					<textarea
+						name="inspectionDescription"
+						class=" border-[1px] h-24 border-primary/50 rounded-md p-2"
+					/>
+				</label>
+				<button type="submit" class="bg-primary text-white rounded-md py-2">
+					Save Inspection</button
+				>
+			</div>
+		</div>
+	</form>
+{/if}

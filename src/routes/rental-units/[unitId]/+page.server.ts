@@ -1,7 +1,7 @@
 import { S3_BUCKET_NAME } from '$env/static/private';
 import { getFile, s3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
-import type { PropertyStatus } from '@prisma/client';
+import type { InspectionStatus, PropertyStatus } from '@prisma/client';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -102,6 +102,7 @@ export const actions = {
 				kareMeter: editUnitForm.data.size,
 				price: editUnitForm.data.price,
 				unitType: editUnitForm.data.unitType,
+
 				maximumTenants: editUnitForm.data.maximumTenants,
 				minimumRentalDate: editUnitForm.data.minimumRentalDate
 			}
@@ -316,5 +317,31 @@ export const actions = {
 		return {
 			deletedUnit
 		};
+	},
+	addInspection: async (event) => {
+		const data = await event.request.formData();
+
+		const inspectionDate = data.get('inspectionDate');
+		const inspectionDescription = data.get('inspectionDescription');
+		const inspectionCondition = data.get('inspectionCondition');
+
+		if (
+			typeof inspectionDate !== 'string' ||
+			typeof inspectionDescription !== 'string' ||
+			typeof inspectionCondition !== 'string'
+		) {
+			return fail(500, { errorMessage: 'Query is not a string' });
+		}
+
+		const addInspection = await prisma.inspection.create({
+			data: {
+				inspectionDate: new Date(inspectionDate as string),
+				description: inspectionDescription,
+				InspectionStatus: inspectionCondition as InspectionStatus,
+				rentalUnitsId: Number(event.params.unitId)
+			}
+		});
+
+		return { addInspection };
 	}
 };
