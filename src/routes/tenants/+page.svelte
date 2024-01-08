@@ -4,9 +4,8 @@
 	import { page } from '$app/stores';
 	import SvelteTable from 'svelte-table';
 	import Name from './name.svelte';
-	import dayjs from 'dayjs';
-	import DeleteTenantTable from './delete-tenant-table.svelte';
 	import PendingTenants from './pending-tenants.svelte';
+	import dayjs from 'dayjs';
 
 	export let data;
 
@@ -43,17 +42,21 @@
 		{
 			key: 'activeRoom',
 			title: 'Active room',
-			value: (v: typeof rows[number]) => v.email ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) =>
+				v.active
+					? 'Room: ' + v.TenantRental[0].RentalUnits.roomNumber
+					: 'Not Booked' ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
-			key: 'delete',
-			title: '',
-			renderComponent: {
-				component: DeleteTenantTable
-			},
+			key: 'contractEndDate',
+			title: 'Contract End',
+			value: (v: typeof rows[number]) =>
+				v.TenantRental[0]?.contractEndDate
+					? dayjs(v.TenantRental[0]?.contractEndDate).format('MMM DD, YYYY')
+					: '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'

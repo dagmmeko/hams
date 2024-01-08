@@ -26,19 +26,20 @@ export const load = async (event) => {
 					}
 				]
 			})
+		},
+		include: {
+			TenantRental: {
+				orderBy: { createdAt: 'desc' },
+				take: 1,
+				include: {
+					RentalUnits: true
+				}
+			}
 		}
 	});
 
 	const priceChangeRequest = await prisma.priceChange.findMany({
 		where: {
-			OR: [
-				{
-					approved: true
-				},
-				{
-					approved: null
-				}
-			],
 			active: null,
 			deletedAt: null
 		},
@@ -68,8 +69,7 @@ export const actions = {
 					id: Number(priceChangeId)
 				},
 				data: {
-					approved: true,
-					deletedAt: new Date()
+					approved: true
 				}
 			});
 

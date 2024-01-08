@@ -51,6 +51,16 @@ export const actions = {
 						contractEndDate: new Date(parseInt(endDate ?? '')),
 						durationOfStayInCountry: Number(durationOfStayInCountry)
 					}
+				},
+				PriceChange: {
+					update: {
+						where: {
+							id: Number(priceChangeId)
+						},
+						data: {
+							active: true
+						}
+					}
 				}
 			}
 		});
