@@ -139,7 +139,7 @@
 						{...$constraints.condition}
 						class="mt-2 w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
 					>
-						<option selected disabled> Pick a role </option>
+						<option selected disabled> Unit's Condition </option>
 						<option value="OUT_OF_SERVICE"> Out of service </option>
 						<option value="NEEDS_REPAIR"> Needs Repair </option>
 						<option value="GOOD_CONDITION"> Good Condition </option>

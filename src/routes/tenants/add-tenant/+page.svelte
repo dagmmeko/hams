@@ -137,66 +137,79 @@
 						{...$constraints.email}
 					/>
 				</label>
-				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Purpose of Visit </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="purposeOfRent"
-						bind:value={$addTenantForm.purposeOfRent}
-						{...$constraints.purposeOfRent}
-					/>
-				</label>
-				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Contract Start Date </span>
-					<input
-						type="date"
-						name="contractStartDate"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-						bind:this={dateInput}
-						on:click={() => {
-							dateInput && dateInput.showPicker();
-						}}
-						bind:value={$addTenantForm.contractStartDate}
-						{...$constraints.contractStartDate}
-						min={new Date().toISOString().substr(0, 10)}
-					/>
-				</label>
+				{#if !$addTenantForm.priceChange}
+					<label class="grid gap-2">
+						<span class="text-primary font-medium"> Purpose of Visit </span>
+						<input
+							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="purposeOfRent"
+							bind:value={$addTenantForm.purposeOfRent}
+							{...$constraints.purposeOfRent}
+						/>
+					</label>
 
-				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Contract End Date </span>
-					<input
-						type="date"
-						name="contractEndDate"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
-						bind:this={dateInput2}
-						on:click={() => {
-							dateInput2 && dateInput2.showPicker();
-						}}
-						bind:value={$addTenantForm.contractEndDate}
-						{...$constraints.contractEndDate}
-						min={!$addTenantForm.contractStartDate
-							? undefined
-							: dayjs(new Date($addTenantForm.contractStartDate))
+					<label class="grid gap-2">
+						<span class="text-primary font-medium"> Contract Start Date </span>
+						<input
+							type="date"
+							name="contractStartDate"
+							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							bind:this={dateInput}
+							on:click={() => {
+								dateInput && dateInput.showPicker();
+							}}
+							bind:value={$addTenantForm.contractStartDate}
+							{...$constraints.contractStartDate}
+							min={new Date().toISOString().substr(0, 10)}
+						/>
+					</label>
+
+					<label class="grid gap-2">
+						<span class="text-primary font-medium"> Contract End Date </span>
+						<input
+							type="date"
+							name="contractEndDate"
+							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							bind:this={dateInput2}
+							on:click={() => {
+								dateInput2 && dateInput2.showPicker();
+							}}
+							bind:value={$addTenantForm.contractEndDate}
+							{...$constraints.contractEndDate}
+						/>
+						<!-- {$addTenantForm.contractStartDate} -->
+						{$addTenantForm.contractStartDate
+							? dayjs(new Date($addTenantForm.contractStartDate))
 									.add(
 										data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
 											?.minimumRentalDate ?? 0,
 										'D'
 									)
 									.toISOString()
-									.substr(0, 10)}
-					/>
-				</label>
-				<label class="grid gap-2">
-					<span class="text-primary font-medium"> Duration of Stay In Country </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="price"
-						bind:value={$addTenantForm.durationOfStayInCountry}
-						{...$constraints.durationOfStayInCountry}
-					/>
-				</label>
+									.substr(0, 10)
+							: null}
+						{data.rentalUnits.find((unit) => {
+							console.log({
+								addTenant: unit.id.toString(),
+								k: selectedUnit,
+								eq: unit.id.toString() === selectedUnit
+							});
+							return unit.id.toString() === selectedUnit;
+						})?.minimumRentalDate}
+					</label>
+
+					<label class="grid gap-2">
+						<span class="text-primary font-medium"> Duration of Stay In Country </span>
+						<input
+							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="price"
+							bind:value={$addTenantForm.durationOfStayInCountry}
+							{...$constraints.durationOfStayInCountry}
+						/>
+					</label>
+				{/if}
 				<label class="grid gap-2">
 					<span class="text-primary font-medium"> Emergency Contact Name </span>
 					<input
