@@ -27,10 +27,7 @@ export const actions = {
 		const data = await event.request.clone().formData();
 		const unitFile = data.getAll('unitFile');
 
-		console.log({ unitFile: JSON.stringify(unitFile) });
-
 		unitFile.map(async (file) => {
-			console.log({ file });
 			if (!(file instanceof File)) {
 				console.log({ file1: file });
 
@@ -38,16 +35,11 @@ export const actions = {
 			}
 		});
 
-		// console.log('passed');
 		if (!addUnitForm) {
-			console.log({ addUnitForm });
 			return fail(400, { addUnitForm });
 		}
 
-		console.log('passed');
-
 		try {
-			console.log({ p: addUnitForm.data });
 			const addUnit = await prisma.rentalUnits.create({
 				data: {
 					roomNumber: addUnitForm.data.roomNumber,
@@ -66,12 +58,11 @@ export const actions = {
 					}
 				}
 			});
-			console.log({ addUnit });
 
 			if (!addUnit) return fail(500, { errorMessage: 'Unit not created.' });
 
 			unitFile.map(async (file) => {
-				if (!(file instanceof File)) {
+				if (!(file instanceof File) || file.size === 0) {
 					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
 				}
 				const buffer = await file.arrayBuffer();
