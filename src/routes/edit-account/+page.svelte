@@ -195,7 +195,7 @@
 				<input
 					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
 					name="oldPassword"
-					placeholder="Old Password"
+					placeholder="Previous Password"
 					on:change={() => (editable = true)}
 					minlength="8"
 					type="password"

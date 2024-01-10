@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
-	import QR from '$lib/assets/qr.png';
+	import { currencyToNumber, numberToCurrency } from '$lib/utils/currency';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	export let data;
@@ -10,6 +10,13 @@
 	$: form?.addUnitForm && goto('/rental-units');
 	$: form?.addUnitForm && toast.push('Unit added successfully');
 	const { form: addUnitForm, enhance: addFormEnhance, constraints } = superForm(data.addUnitForm);
+
+	let priceCurrency = numberToCurrency($addUnitForm.price);
+	function setPriceCurrency(currency: string) {
+		$addUnitForm.price = currencyToNumber(currency);
+		priceCurrency =
+			numberToCurrency(currencyToNumber(currency)) + (currency.endsWith('.') ? '.' : '');
+	}
 
 	let frontFileData: string[] = [];
 </script>
@@ -59,7 +66,9 @@
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 						required
 						name="price"
-						bind:value={$addUnitForm.price}
+						type="text"
+						bind:value={priceCurrency}
+						on:input={(e) => setPriceCurrency(e.currentTarget.value)}
 						{...$constraints.price}
 					/>
 				</label>
