@@ -9,7 +9,15 @@
 	export let form;
 	$: form?.addUnitForm && goto('/rental-units');
 	$: form?.addUnitForm && toast.push('Unit added successfully');
-	const { form: addUnitForm, enhance: addFormEnhance, constraints } = superForm(data.addUnitForm);
+	const {
+		form: addUnitForm,
+		enhance: addFormEnhance,
+		constraints
+	} = superForm(data.addUnitForm, {
+		onSubmit: ({ formData }) => {
+			formData.set('price', currencyToNumber(priceCurrency).toString());
+		}
+	});
 
 	let priceCurrency = numberToCurrency($addUnitForm.price);
 	function setPriceCurrency(currency: string) {

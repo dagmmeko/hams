@@ -6,6 +6,7 @@
 	import SvelteTable from 'svelte-table';
 	import { goto } from '$app/navigation';
 	import InspectionStatusTable from './inspection-status-table.svelte';
+	import { numberToCurrency } from '$lib/utils/currency';
 	export let data;
 
 	let modal = false;
@@ -65,7 +66,7 @@
 		{
 			key: 'price',
 			title: 'Price',
-			value: (v: typeof rows[number]) => v.price ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => numberToCurrency(v.price) ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
