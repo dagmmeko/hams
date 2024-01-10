@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Logo from '$lib/assets/Logo.svg.svelte';
 	export let data;
 	import { signIn } from '@auth/sveltekit/client';
-	import { onMount } from 'svelte';
 
-	let email: String;
-	let password: String;
+	let email: string;
+	let password: string;
 	const login = async () => {
 		const auth = await signIn('credentials', {
 			callbackUrl: '/',
@@ -22,7 +22,7 @@
 			<p class="text-xl font-semibold">Login</p>
 			<p class="text-sm text-subtitle pt-2">Login to you company account</p>
 		</div>
-		<form class="grid gap-6 mt-6" on:submit={() => login()}>
+		<form class="grid gap-6 mt-6" method="post" use:enhance={() => login()}>
 			<label class="grid">
 				<span> Email </span>
 				<input
