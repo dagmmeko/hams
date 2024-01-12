@@ -26,8 +26,7 @@ export const load = async (event) => {
 						}
 					}
 				],
-				deletedAt: null,
-				active: false
+				deletedAt: null
 			}
 		});
 	}
@@ -95,7 +94,6 @@ export const actions = {
 				id: Number(selectedTenantId)
 			},
 			data: {
-				active: priceChange === 'on' ? false : true,
 				...(priceChange === 'on' &&
 					newPrice && {
 						PriceChange: {
@@ -112,7 +110,8 @@ export const actions = {
 							purposeOfRent: purposeOfRent ?? '',
 							contractStartDate: startDate,
 							contractEndDate: endDate,
-							durationOfStayInCountry: Number(durationOfStayInCountry)
+							durationOfStayInCountry: Number(durationOfStayInCountry),
+							active: priceChange === 'on' ? false : true
 						}
 					}
 				})

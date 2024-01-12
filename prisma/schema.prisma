@@ -177,7 +177,6 @@ model Tenants {
   emergencyContactName        String
   emergencyContactPhoneNumber String
   tenantScore                 Int            @default(0)
-  active                      Boolean        @default(false)
   emergencyContactEmail       String
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
@@ -194,6 +193,7 @@ model TenantRental {
   unitId                  Int
   contractEndDate         DateTime?
   contractStartDate       DateTime?
+  active                  Boolean     @default(false)
   durationOfStayInCountry Int
   purposeOfRent           String
   Tenants                 Tenants     @relation(fields: [tenantId], references: [id])

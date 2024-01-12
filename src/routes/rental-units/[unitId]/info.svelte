@@ -213,7 +213,7 @@
 				</p>
 			</div>
 			<form method="post" action="?/archiveUnit" use:enhance>
-				{#if data.unitDetails?.TenantRental && data.unitDetails?.TenantRental.length > 0 && data.unitDetails?.TenantRental[0]?.Tenants?.active}
+				{#if !data.unitDetails?.active}
 					<button
 						on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
 						class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button

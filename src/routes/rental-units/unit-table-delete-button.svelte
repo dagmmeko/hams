@@ -20,7 +20,7 @@
 </script>
 
 <div class="">
-	{#if unitRow && unitRow.TenantRental.length > 0 && unitRow.TenantRental[0]?.Tenants?.active}
+	{#if unitRow && unitRow.active}
 		<button on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
 			><Delete class="text-subtitle" />
 		</button>

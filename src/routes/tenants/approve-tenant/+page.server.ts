@@ -42,14 +42,14 @@ export const actions = {
 				id: priceChangeRequest?.Tenant?.id
 			},
 			data: {
-				active: true,
 				TenantRental: {
 					create: {
 						unitId: priceChangeRequest?.RentalUnits?.id,
 						purposeOfRent: purposeOfRent ?? '',
 						contractStartDate: new Date(parseInt(startDate ?? '')),
 						contractEndDate: new Date(parseInt(endDate ?? '')),
-						durationOfStayInCountry: Number(durationOfStayInCountry)
+						durationOfStayInCountry: Number(durationOfStayInCountry),
+						active: true
 					}
 				},
 				PriceChange: {

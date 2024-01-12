@@ -40,17 +40,6 @@
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
-			key: 'activeRoom',
-			title: 'Active room',
-			value: (v: typeof rows[number]) =>
-				v.active
-					? 'Room: ' + v.TenantRental[0].RentalUnits.roomNumber
-					: 'Not Booked' ?? 'NOT FOUND',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
 			key: 'contractEndDate',
 			title: 'Contract End',
 			value: (v: typeof rows[number]) =>
@@ -121,7 +110,14 @@
 					/>
 				</label>
 			</div>
-			<SvelteTable {columns} {rows} />
+			<SvelteTable
+				on:clickCell={(event) => {
+					const tenantId = event.detail.row.id;
+					goto(`/tenants/${tenantId}`);
+				}}
+				{columns}
+				{rows}
+			/>
 		</div>
 	{:else if displayTenant === 'Pending'}
 		<PendingTenants bind:data />

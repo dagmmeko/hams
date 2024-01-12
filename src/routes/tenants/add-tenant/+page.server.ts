@@ -60,7 +60,6 @@ export const actions = {
 					emergencyContactPhoneNumber: addTenantForm.data.emergencyContactPhoneNumber,
 					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
 					tenantScore: addTenantForm.data.tenantScore,
-					active: addTenantForm.data.priceChange ? false : true,
 					...(addTenantForm.data.priceChange &&
 						addTenantForm.data.newPrice && {
 							PriceChange: {
@@ -77,7 +76,8 @@ export const actions = {
 								purposeOfRent: addTenantForm.data.purposeOfRent,
 								contractStartDate: addTenantForm.data.contractStartDate,
 								contractEndDate: addTenantForm.data.contractEndDate,
-								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry
+								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
+								active: addTenantForm.data.priceChange ? false : true
 							}
 						}
 					})
