@@ -78,17 +78,6 @@ export const actions = {
 			return fail(400, { errorMessage: 'Invalid price change.' });
 		}
 
-		console.log({
-			selectedTenantId,
-			rentalUnitId,
-			purposeOfRent,
-			startDate,
-			endDate,
-			durationOfStayInCountry,
-			newPrice,
-			priceChange
-		});
-
 		const rentTenant = await prisma.tenants.update({
 			where: {
 				id: Number(selectedTenantId)
@@ -108,8 +97,8 @@ export const actions = {
 						create: {
 							unitId: Number(rentalUnitId),
 							purposeOfRent: purposeOfRent ?? '',
-							contractStartDate: startDate,
-							contractEndDate: endDate,
+							contractStartDate: new Date(startDate ?? Date.now()),
+							contractEndDate: new Date(endDate ?? Date.now()),
 							durationOfStayInCountry: Number(durationOfStayInCountry),
 							active: priceChange === 'on' ? false : true
 						}

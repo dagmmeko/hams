@@ -80,8 +80,9 @@
 							name="purposeOfRent"
 						/>
 					</label>
+
 					<label class="grid">
-						<span class="text-primary font-medium"> Start Date </span>
+						<span class="text-primary font-medium"> Contract Start Date </span>
 						<input
 							type="date"
 							name="startDate"
