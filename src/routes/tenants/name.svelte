@@ -1,6 +1,4 @@
 <script lang="ts">
-	import QR from '$lib/assets/qr.png';
-	import type { PageData } from './$types';
 	export let row: any;
 </script>
 

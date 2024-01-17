@@ -6,48 +6,89 @@
 	import Eye from '$lib/assets/eye.svg.svelte';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data: PageData;
 	export let form: ActionData;
+	const {
+		form: editTenantForm,
+		enhance: editTenantFormEnhance,
+		constraints
+	} = superForm(data.editTenantForm);
 	let frontFileData: string[] = [];
+	$: form?.editTenant ? toast.push('Tenant updated successfully') : null;
 </script>
 
-<div class="grid grid-flow-col justify-items-stretch">
-	<div class="grid">
-		<p class="text-2xl">Tenant Info</p>
-		<p class=" text-sm py-1 rounded-xl">Tenant details here.</p>
+<form use:editTenantFormEnhance method="post" action="?/editTenant">
+	<div class="grid grid-flow-col justify-items-stretch">
+		<div class="grid">
+			<p class="text-2xl">Tenant Info</p>
+			<p class=" text-sm py-1 rounded-xl">Tenant details here.</p>
+		</div>
+		<div class="justify-self-end">
+			<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
+				Update Info
+			</button>
+		</div>
 	</div>
-	<div class="justify-self-end">
-		<button type="submit" class="bg-primary text-white rounded-md py-2 px-6"> Update Info </button>
+	<hr class="my-6" />
+	<div class="grid gap-6 grid-cols-4">
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Full Name</span>
+			<input
+				name="fullName"
+				bind:value={$editTenantForm.fullName}
+				{...$constraints.fullName}
+				class="border-2"
+			/>
+		</label>
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Phone Number</span>
+			<input
+				name="phoneNumber"
+				bind:value={$editTenantForm.phoneNumber}
+				{...$constraints.phoneNumber}
+				class="border-2"
+			/>
+		</label>
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Email </span>
+			<input
+				name="email"
+				bind:value={$editTenantForm.email}
+				{...$constraints.email}
+				class="border-2"
+			/>
+		</label>
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Emergency Contact Name</span>
+			<input
+				name="roomNumber"
+				bind:value={$editTenantForm.emergencyContactName}
+				{...$constraints.emergencyContactName}
+				class="border-2"
+			/>
+		</label>
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Emergency Contact Phone Number</span>
+			<input
+				name="emergencyContactPhoneNumber"
+				bind:value={$editTenantForm.emergencyContactPhoneNumber}
+				{...$constraints.emergencyContactPhoneNumber}
+				class="border-2"
+			/>
+		</label>
+		<label class="grid flex-1">
+			<span class="text-primary font-semibold py-1"> Emergency Contact Email</span>
+			<input
+				name="emergencyContactEmail"
+				bind:value={$editTenantForm.emergencyContactEmail}
+				{...$constraints.emergencyContactEmail}
+				class="border-2"
+			/>
+		</label>
 	</div>
-</div>
-<hr class="my-6" />
-<div class="grid gap-6 grid-cols-4">
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Full Name</span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Phone Number</span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Email </span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Emergency Contact Name</span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Emergency Contact Phone Number</span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Emergency Contact Email</span>
-		<input name="roomNumber" class="border-2" />
-	</label>
-</div>
+</form>
 <div class="grid grid-cols-2 mt-6 gap-8">
 	<div>
 		<div class="w-full text-xl mb-4">Active Rooms</div>
@@ -154,7 +195,7 @@
 			</p>
 		</div>
 		<form method="post" action="?/archiveUnit" use:enhance>
-			{#if !data.tenant?.TenantRental.find((unit) => unit.active)?.active}
+			{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
 				<button
 					on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
 					class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
