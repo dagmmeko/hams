@@ -7,7 +7,7 @@ export function numberToCurrency(input: number, options?: Intl.NumberFormatOptio
 		...options
 	})
 		.format(input)
-		.replace(/.00$/, '');
+		.replace(/$/, '');
 }
 
 export function currencyToNumber(value: string, pattern: RegExp = /(\$|,)/gi) {
