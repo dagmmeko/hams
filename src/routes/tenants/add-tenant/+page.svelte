@@ -118,6 +118,16 @@
 					/>
 				</label>
 				<label class="grid gap-2">
+					<span class="text-primary font-medium"> Company Name </span>
+					<input
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="companyName"
+						bind:value={$addTenantForm.companyName}
+						{...$constraints.companyName}
+					/>
+				</label>
+				<label class="grid gap-2">
 					<span class="text-primary font-medium"> Phone Number </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
@@ -161,7 +171,6 @@
 							}}
 							bind:value={$addTenantForm.contractStartDate}
 							{...$constraints.contractStartDate}
-							min={new Date().toISOString().substr(0, 10)}
 						/>
 					</label>
 

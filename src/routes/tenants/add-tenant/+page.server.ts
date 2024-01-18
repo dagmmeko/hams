@@ -7,6 +7,7 @@ import { S3_BUCKET_NAME } from '$env/static/private';
 
 const addTenantSchema = z.object({
 	fullName: z.string(),
+	companyName: z.string(),
 	phoneNumber: z.string(),
 	purposeOfRent: z.string(),
 	contractStartDate: z.date(),
@@ -24,6 +25,7 @@ const addTenantSchema = z.object({
 
 export const load = async (event) => {
 	const addTenantForm = await superValidate(addTenantSchema);
+
 	const rentalUnits = await prisma.rentalUnits.findMany({
 		where: {
 			deletedAt: null,
@@ -54,6 +56,7 @@ export const actions = {
 			const addTenant = await prisma.tenants.create({
 				data: {
 					fullName: addTenantForm.data.fullName,
+					companyName: addTenantForm.data.fullName,
 					phoneNumber: addTenantForm.data.phoneNumber,
 					email: addTenantForm.data.email,
 					emergencyContactName: addTenantForm.data.emergencyContactName,

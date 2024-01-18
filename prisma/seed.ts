@@ -6,57 +6,129 @@ const prisma = new PrismaClient();
 
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 async function main() {
-	const data = await prisma.user.create({
+	// const data = await prisma.user.create({
+	// 	data: {
+	// 		email: 'dagixmeko@gmail.com',
+	// 		phoneNumber: '251911480875',
+	// 		userName: 'Dagem Mekonnen',
+	// 		jwtPassword: encryptedPassword,
+	// 		Employee: {
+	// 			create: {
+	// 				hiredDate: new Date(),
+	// 				isSuspended: false,
+	// 				address: 'Addis Ababa',
+	// 				staffIdNumber: 'HAMS/1/1',
+	// 				roleId: 1
+	// 			}
+	// 		}
+	// 	}
+	// });
+	// const data1 = await prisma.user.create({
+	// 	data: {
+	// 		email: 'yafet@classicpackagingplc.com',
+	// 		phoneNumber: '251911480872',
+	// 		userName: 'Yafet Kebede',
+	// 		jwtPassword: encryptedPassword,
+	// 		Employee: {
+	// 			create: {
+	// 				hiredDate: new Date(),
+	// 				isSuspended: false,
+	// 				address: 'Addis Ababa',
+	// 				staffIdNumber: 'HAMS/1/2',
+	// 				roleId: 1
+	// 			}
+	// 		}
+	// 	}
+	// });
+	// const data2 = await prisma.user.create({
+	// 	data: {
+	// 		email: 'afeworkeueal@gmail.com',
+	// 		phoneNumber: '251911480874',
+	// 		userName: 'Eyuel Afework',
+	// 		jwtPassword: encryptedPassword,
+	// 		Employee: {
+	// 			create: {
+	// 				hiredDate: new Date(),
+	// 				isSuspended: false,
+	// 				address: 'Addis Ababa',
+	// 				staffIdNumber: 'HAMS/1/3',
+	// 				roleId: 1
+	// 			}
+	// 		}
+	// 	}
+	// });
+
+	const coffeecology = await prisma.tenants.create({
 		data: {
-			email: 'dagixmeko@gmail.com',
-			phoneNumber: '251911480875',
-			userName: 'Dagem Mekonnen',
-			jwtPassword: encryptedPassword,
-			Employee: {
+			fullName: 'Nahom Liyew Semanew',
+			companyName: 'Coffeecology',
+			phoneNumber: '0911236353',
+			TenantRental: {
 				create: {
-					hiredDate: new Date(),
-					isSuspended: false,
-					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/1/1',
-					roleId: 1
+					unitId: 30,
+					contractStartDate: new Date('9/19/23'),
+					contractEndDate: new Date('1/22/28'),
+					active: true
+				}
+			},
+			Receipts: {
+				create: {
+					startDate: new Date('9/19/23'),
+					endDate: new Date('4/16/24'),
+					receiptReceived: true,
+					receiptReceivedOn: new Date('10/20/23'),
+					paymentConfirmed: true,
+					amount: 1144200,
+					bankName: '',
+					paymentReason: 'Rent',
+					receiptReferenceNumber: '1',
+					payToUnitId: 30
 				}
 			}
 		}
 	});
-	const data1 = await prisma.user.create({
+
+	const fnboutique = await prisma.tenants.create({
 		data: {
-			email: 'yafet@classicpackagingplc.com',
-			phoneNumber: '251911480872',
-			userName: 'Yafet Kebede',
-			jwtPassword: encryptedPassword,
-			Employee: {
+			fullName: 'Yohannes Membere Wolde',
+			companyName: 'FN Boutique',
+			phoneNumber: '0911466011',
+			emergencyContactName: 'Dagmawi Girma',
+			emergencyContactPhoneNumber: '0911214933',
+			emergencyContactEmail: 'dagmawi@omnalogistics.com',
+			TenantRental: {
 				create: {
-					hiredDate: new Date(),
-					isSuspended: false,
-					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/1/2',
-					roleId: 1
+					unitId: 27,
+					contractStartDate: new Date('9/19/23'),
+					contractEndDate: new Date('9/18/24'),
+					active: true
+				}
+			},
+			Receipts: {
+				create: {
+					startDate: new Date('9/19/23'),
+					endDate: new Date('12/18/23'),
+					receiptReceived: true,
+					receiptReceivedOn: new Date('10/20/23'),
+					paymentConfirmed: true,
+					amount: 296420.99,
+					bankName: 'CBE',
+					paymentReason: 'Rent',
+					receiptReferenceNumber: '2',
+					payToUnitId: 27
 				}
 			}
 		}
 	});
-	const data2 = await prisma.user.create({
-		data: {
-			email: 'afeworkeueal@gmail.com',
-			phoneNumber: '251911480874',
-			userName: 'Eyuel Afework',
-			jwtPassword: encryptedPassword,
-			Employee: {
-				create: {
-					hiredDate: new Date(),
-					isSuspended: false,
-					address: 'Addis Ababa',
-					staffIdNumber: 'HAMS/1/3',
-					roleId: 1
-				}
-			}
-		}
-	});
+
+	// const divineHair = await prisma.tenants.create({
+	// 	data: {
+	// 		fullName: 'Membere Abera',
+	// 		companyName: 'Divine Hair and Nail Salon',
+	// 		phoneNumber: '0911221686'
+	// 	}
+	// });
+	// const Intnom
 }
 main()
 	.then(async () => {

@@ -87,6 +87,7 @@ model RentalUnits {
   UnitsFile         UnitsFile[]
   PriceChange       PriceChange[]
   TenantRental      TenantRental[]
+  Receipts          Receipts[]
 
   @@index([buildingId])
 }
@@ -172,12 +173,13 @@ model Tenants {
   updateAt                    DateTime       @updatedAt
   deletedAt                   DateTime?
   fullName                    String         @default("name")
+  companyName                 String         @default("company Name")
   phoneNumber                 String
-  email                       String
-  emergencyContactName        String
-  emergencyContactPhoneNumber String
+  email                       String?
+  emergencyContactName        String?
+  emergencyContactPhoneNumber String?
   tenantScore                 Int            @default(0)
-  emergencyContactEmail       String
+  emergencyContactEmail       String?
   Receipts                    Receipts[]
   TenantsFile                 TenantsFile[]
   PriceChange                 PriceChange[]
@@ -194,8 +196,8 @@ model TenantRental {
   contractEndDate         DateTime?
   contractStartDate       DateTime?
   active                  Boolean     @default(false)
-  durationOfStayInCountry Int
-  purposeOfRent           String
+  durationOfStayInCountry Int?
+  purposeOfRent           String?
   Tenants                 Tenants     @relation(fields: [tenantId], references: [id])
   RentalUnits             RentalUnits @relation(fields: [unitId], references: [id])
 
@@ -218,22 +220,27 @@ model TenantsFile {
 }
 
 model Receipts {
-  id                Int            @id @default(autoincrement())
-  createdAt         DateTime       @default(now())
-  updateAt          DateTime       @updatedAt
-  deletedAt         DateTime?
-  startDate         DateTime
-  endDate           DateTime
-  receiptReceived   Boolean        @default(false)
-  receiptReceivedOn DateTime?
-  paymentConfirmed  Boolean        @default(false)
-  amount            Float
-  bankName          String
-  tenantsId         Int?
-  Tenants           Tenants?       @relation(fields: [tenantsId], references: [id])
-  ReceiptsFile      ReceiptsFile[]
+  id                     Int            @id @default(autoincrement())
+  createdAt              DateTime       @default(now())
+  updateAt               DateTime       @updatedAt
+  deletedAt              DateTime?
+  startDate              DateTime
+  endDate                DateTime
+  receiptReceived        Boolean        @default(false)
+  receiptReceivedOn      DateTime?
+  paymentConfirmed       Boolean        @default(false)
+  amount                 Float
+  bankName               String
+  paymentReason          String?
+  receiptReferenceNumber String?
+  tenantsId              Int?
+  payToUnitId            Int?
+  PayToUnit              RentalUnits?   @relation(fields: [payToUnitId], references: [id])
+  Tenants                Tenants?       @relation(fields: [tenantsId], references: [id])
+  ReceiptsFile           ReceiptsFile[]
 
   @@index([tenantsId])
+  @@index([payToUnitId])
 }
 
 model ReceiptsFile {

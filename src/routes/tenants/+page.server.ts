@@ -2,6 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 
 export const load = async (event) => {
+	console.log('hello');
 	const searchTenant = event.url.searchParams.get('searchTenant');
 
 	const tenants = await prisma.tenants.findMany({

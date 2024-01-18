@@ -1,4 +1,6 @@
-<script></script>
+<script>
+	console.log(new Date('9/19/23'));
+</script>
 
 <div class="mx-10 my-12">
 	<div class="mb-6">
