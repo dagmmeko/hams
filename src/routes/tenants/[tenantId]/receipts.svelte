@@ -1,27 +1,47 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import { numberToCurrency } from '$lib/utils/currency';
+	import { MultiSelect } from 'svelte-multiselect';
+	import type { PriceChange } from '@prisma/client';
 
 	let modal = true;
 
 	export let data: PageData;
 	export let form: ActionData;
-	const tenantsActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
-	const priceChange =
-		data.tenant?.PriceChange.filter((unit) => unit.tenantId === data.tenant?.id) ?? [];
-	// $: console.log({
-	// 	tenantsActiveUnits: tenantsActiveUnits?.filter((unit) => unit.RentalUnits),
-	// 	priceChange: priceChange
-	// });
-	let payToUnit: any;
-	let val: any;
+	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
+
+	let payToUnit: { label: string; value: number }[] = [];
+	let payToUtility: { label: string; value: number }[] = [];
+
+	let changedPrice: { price: number; unit: string; changed: boolean }[] = [];
 	$: {
-		console.log(
-			priceChange.filter((unit) => {
-				return unit.unitId === payToUnit;
-			})
-		);
+		changedPrice = payToUnit.map((payToUnitItem) => {
+			const priceChangeItem = data.tenant?.PriceChange.find(
+				(priceChangeUnit) => priceChangeUnit.unitId === payToUnitItem.value
+			);
+
+			if (priceChangeItem) {
+				return {
+					price: priceChangeItem.price,
+					unit: payToUnitItem.label,
+					changed: true
+				};
+			} else {
+				const rentalUnitItem = tenantRentalActiveUnits.find(
+					(rentalUnit) => rentalUnit.unitId === payToUnitItem.value
+				);
+
+				return {
+					price: rentalUnitItem ? rentalUnitItem.RentalUnits.price : 0,
+					unit: payToUnitItem.label,
+					changed: false
+				};
+			}
+		});
 	}
+
+	$: console.log({ payToUtility });
 </script>
 
 <div class="grid grid-flow-col justify-items-stretch">
@@ -45,27 +65,67 @@
 			use:clickOutside={() => (modal = false)}
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
-			<label class="grid">
-				<span class="text-primary font-medium"> Unit Type </span>
-				<select
-					bind:value={payToUnit}
-					required
-					name="unitType"
-					class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-				>
-					{#each tenantsActiveUnits ?? [] as unit}
-						<option value={unit.id}>{unit.RentalUnits.roomNumber}</option>
+			<div>
+				<p class="text-lg font-medium mb-2">Rent Payment</p>
+				<MultiSelect
+					bind:selected={payToUnit}
+					options={tenantRentalActiveUnits.map((unit) => ({
+						label: unit.RentalUnits.roomNumber,
+						value: unit.RentalUnits.id
+					}))}
+					--sms-padding="10px"
+				/>
+				{#if changedPrice.length}
+					<div class="grid grid-cols-3 mt-4 mb-2">
+						<p class="text-base font-medium">Room No.</p>
+						<p class="text-base font-medium">Negotiated</p>
+						<p class="text-base font-medium">Price</p>
+					</div>
+					<hr />
+					{#each changedPrice as price}
+						<div class="grid grid-cols-3 my-2">
+							<p class="text-base font-light">{price.unit}</p>
+							<p class="text-base font-light">{price.changed}</p>
+							<p class="text-base font-light">{numberToCurrency(price.price)}</p>
+						</div>
 					{/each}
-				</select>
-			</label>
-			{#if priceChange.find((unit) => {
-				unit.unitId === payToUnit;
-			})}
-				{priceChange.find((unit) => {
-					unit.unitId === payToUnit;
-				})?.price}
+					<hr />
+					<div class="grid grid-cols-3 mt-2 mb-4">
+						<p class="text-base font-semibold">Total:</p>
+						<p />
+						<p class="text-base font-semibold">
+							{numberToCurrency(changedPrice.reduce((total, price) => total + price.price, 0))}
+						</p>
+					</div>
+				{/if}
+			</div>
+			<div>
+				<p class="text-lg font-medium mb-2">Utility</p>
+				<MultiSelect
+					bind:selected={payToUtility}
+					options={tenantRentalActiveUnits.map((unit) => ({
+						label: unit.RentalUnits.roomNumber,
+						value: unit.RentalUnits.id
+					}))}
+					--sms-padding="10px"
+				/>
+				{#if payToUtility.length}
+					{#each payToUtility as unit}
+						<label class="grid p-4">
+							<span class="text-primary font-light text-base"> Amount </span>
+
+							<input
+								placeholder="Amount"
+								class="border-[1px] mt-1 border-black/10 rounded-md p-2"
+								name="search"
+							/>
+						</label>
+					{/each}
+				{/if}
+			</div>
+			{#if payToUtility.length || payToUnit.length}
+				<button class="bg-primary text-white rounded-md py-2 px-6"> Generate Bill</button>
 			{/if}
-			{payToUnit}
 		</div>
 	</div>
 {/if}

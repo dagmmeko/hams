@@ -131,6 +131,7 @@
 						<div class="absolute top-0 w-full h-full left-0 z-30">
 							<div class="flex flex-col gap-2 justify-center items-center h-full">
 								<form
+									id="downloadUnitFile"
 									method="post"
 									action="?/downloadUnitFile"
 									use:enhance={({ formData }) => {
@@ -148,6 +149,7 @@
 						</div>
 					</div>
 					<form
+						id="deleteUnitFile"
 						method="post"
 						action="?/deleteUnitFile"
 						use:enhance={({ formData }) => {
@@ -167,7 +169,7 @@
 			<div
 				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 			>
-				<form method="post" action="?/editUnitFile" use:enhance>
+				<form id="editUnitFile" method="post" action="?/editUnitFile" use:enhance>
 					<label>
 						<input
 							class="hidden"

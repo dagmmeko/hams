@@ -1,10 +1,23 @@
 import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+const rentRoomSchema = z.object({
+	purposeOfRent: z.string().optional(),
+	startDate: z.date().optional(),
+	endDate: z.date().optional(),
+	selectedTenantId: z.string().optional(),
+	selectedUnitId: z.string().optional(),
+	duration: z.string().optional(),
+	newPrice: z.string().optional(),
+	priceChange: z.boolean()
+});
 
 export const load = async (event) => {
 	const searchTenant = event.url.searchParams.get('searchTenant');
+	const rentRoomForm = await superValidate(rentRoomSchema);
 
-	console.log({ searchTenant });
 	let tenants;
 	if (searchTenant) {
 		tenants = await prisma.tenants.findMany({
@@ -38,69 +51,46 @@ export const load = async (event) => {
 		}
 	});
 
-	return { tenants, rentalUnits };
+	return { tenants, rentRoomForm, rentalUnits };
 };
 
 export const actions = {
 	rentRoom: async (event) => {
-		const data = await event.request.formData();
-		const purposeOfRent = data.get('purposeOfRent');
-		const startDate = data.get('startDate');
-		const endDate = data.get('endDate');
-		const selectedTenantId = data.get('selectedTenantId');
-		const rentalUnitId = data.get('selectedUnitId');
-		const durationOfStayInCountry = data.get('duration');
-		const newPrice = data.get('newPrice');
-		const priceChange = data.get('priceChange');
+		const rentRoomForm = await superValidate(event.request, rentRoomSchema);
 
-		if (selectedTenantId && typeof selectedTenantId !== 'string') {
-			return fail(400, { errorMessage: 'Invalid tenant id.' });
+		if (!rentRoomForm) {
+			return fail(400, { rentRoomForm });
 		}
-		if (rentalUnitId && typeof rentalUnitId !== 'string') {
-			return fail(400, { errorMessage: 'Invalid rental unit id.' });
-		}
-		if (purposeOfRent && typeof purposeOfRent !== 'string') {
-			return fail(400, { errorMessage: 'Invalid purpose of rent.' });
-		}
-		if (startDate && typeof startDate !== 'string') {
-			return fail(400, { errorMessage: 'Invalid start date.' });
-		}
-		if (endDate && typeof endDate !== 'string') {
-			return fail(400, { errorMessage: 'Invalid end date.' });
-		}
-		if (durationOfStayInCountry && typeof durationOfStayInCountry !== 'string') {
-			return fail(400, { errorMessage: 'Invalid duration of stay in country.' });
-		}
-		if (newPrice && typeof newPrice !== 'string') {
-			return fail(400, { errorMessage: 'Invalid new price.' });
-		}
-		if (priceChange && typeof priceChange !== 'string') {
-			return fail(400, { errorMessage: 'Invalid price change.' });
-		}
+
+		console.log({ rentRoomForm: rentRoomForm.data });
 
 		const rentTenant = await prisma.tenants.update({
 			where: {
-				id: Number(selectedTenantId)
+				id: Number(rentRoomForm.data.selectedTenantId)
 			},
 			data: {
-				...(priceChange === 'on' &&
-					newPrice && {
+				...(rentRoomForm.data.priceChange &&
+					rentRoomForm.data.newPrice && {
 						PriceChange: {
 							create: {
-								price: Number(newPrice),
-								unitId: Number(rentalUnitId)
+								price: Number(rentRoomForm.data.newPrice),
+								unitId: Number(rentRoomForm.data.selectedUnitId)
 							}
 						}
 					}),
-				...(priceChange !== 'on' && {
+				...(rentRoomForm.data.priceChange && {
 					TenantRental: {
 						create: {
-							unitId: Number(rentalUnitId),
-							purposeOfRent: purposeOfRent ?? '',
-							contractStartDate: new Date(startDate ?? Date.now()),
-							contractEndDate: new Date(endDate ?? Date.now()),
-							durationOfStayInCountry: Number(durationOfStayInCountry),
-							active: priceChange === 'on' ? false : true
+							RentalUnits: {
+								connect: {
+									id: Number(rentRoomForm.data.selectedUnitId)
+								}
+							},
+							purposeOfRent: rentRoomForm.data.purposeOfRent ?? '',
+							contractStartDate: new Date(rentRoomForm.data.startDate ?? Date.now()),
+							contractEndDate: new Date(rentRoomForm.data.endDate ?? Date.now()),
+							durationOfStayInCountry: Number(rentRoomForm.data.duration),
+							active: rentRoomForm.data.priceChange ? false : true
 						}
 					}
 				})
@@ -109,10 +99,10 @@ export const actions = {
 
 		if (!rentTenant) return fail(500, { errorMessage: 'Tenant not rented.' });
 
-		if (priceChange !== 'on') {
+		if (rentRoomForm.data.priceChange) {
 			await prisma.rentalUnits.update({
 				where: {
-					id: Number(rentalUnitId)
+					id: Number(rentRoomForm.data.selectedUnitId)
 				},
 				data: {
 					active: true
@@ -120,6 +110,6 @@ export const actions = {
 			});
 		}
 
-		return { rentTenant };
+		return { rentTenant, rentRoomForm };
 	}
 };
