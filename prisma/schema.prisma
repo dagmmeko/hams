@@ -229,6 +229,7 @@ model Receipts {
   receiptReceived        Boolean        @default(false)
   receiptReceivedOn      DateTime?
   paymentConfirmed       Boolean        @default(false)
+  isRentPayment          Boolean        @default(false)
   amount                 Float
   bankName               String
   paymentReason          String?

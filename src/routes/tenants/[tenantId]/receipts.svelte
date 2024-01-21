@@ -4,128 +4,205 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { MultiSelect } from 'svelte-multiselect';
 	import type { PriceChange } from '@prisma/client';
+	import { enhance } from '$app/forms';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { superForm } from 'sveltekit-superforms/client';
 
-	let modal = true;
+	let modal = false;
 
 	export let data: PageData;
 	export let form: ActionData;
+
+	let dateInput: any;
+	let dateInput2: any;
+	let dateInput3: any;
+
 	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
 
-	let payToUnit: { label: string; value: number }[] = [];
-	let payToUtility: { label: string; value: number }[] = [];
-
-	let changedPrice: { price: number; unit: string; changed: boolean }[] = [];
-	$: {
-		changedPrice = payToUnit.map((payToUnitItem) => {
-			const priceChangeItem = data.tenant?.PriceChange.find(
-				(priceChangeUnit) => priceChangeUnit.unitId === payToUnitItem.value
-			);
-
-			if (priceChangeItem) {
-				return {
-					price: priceChangeItem.price,
-					unit: payToUnitItem.label,
-					changed: true
-				};
-			} else {
-				const rentalUnitItem = tenantRentalActiveUnits.find(
-					(rentalUnit) => rentalUnit.unitId === payToUnitItem.value
-				);
-
-				return {
-					price: rentalUnitItem ? rentalUnitItem.RentalUnits.price : 0,
-					unit: payToUnitItem.label,
-					changed: false
-				};
-			}
-		});
-	}
-
-	$: console.log({ payToUtility });
+	const {
+		form: addReceiptForm,
+		enhance: addReceiptFormEnhance,
+		constraints
+	} = superForm(data.addReceiptsForm);
 </script>
 
-<div class="grid grid-flow-col justify-items-stretch">
-	<div class="grid">
-		<p class="text-2xl">Tenant Receipts</p>
-		<p class=" text-sm py-1 rounded-xl">Tenant Receipt here.</p>
+<div>
+	<div class="grid grid-flow-col justify-items-stretch">
+		<div class="grid">
+			<p class="text-2xl">Tenant Receipts</p>
+			<p class=" text-sm py-1 rounded-xl">Tenant Receipt here.</p>
+		</div>
+		<div class="justify-self-end">
+			<button
+				on:click={() => (modal = true)}
+				class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
+			>
+				Add Receipt
+			</button>
+		</div>
 	</div>
-	<div class="justify-self-end">
-		<button
-			on:click={() => (modal = true)}
-			class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
-		>
-			Add Receipt
-		</button>
-	</div>
+	{#each data.groupedReceipts as receipts}
+		<div class="bg-red-100">
+			<div>{receipts.receiptReferenceNumber}</div>
+			<div class="grid grid-cols-4 gap-10">
+				{#each receipts.receipts ?? [] as rec}
+					<div class="bg-slate-400">
+						<p>{numberToCurrency(rec.amount)}</p>
+						{rec.paymentReason}
+					</div>
+				{/each}
+			</div>
+		</div>
+	{/each}
 </div>
 
 {#if modal}
-	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+	<form
+		action="?/addReceipts"
+		method="post"
+		use:addReceiptFormEnhance
+		class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+	>
 		<div
 			use:clickOutside={() => (modal = false)}
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
-			<div>
-				<p class="text-lg font-medium mb-2">Rent Payment</p>
-				<MultiSelect
-					bind:selected={payToUnit}
-					options={tenantRentalActiveUnits.map((unit) => ({
-						label: unit.RentalUnits.roomNumber,
-						value: unit.RentalUnits.id
-					}))}
-					--sms-padding="10px"
-				/>
-				{#if changedPrice.length}
-					<div class="grid grid-cols-3 mt-4 mb-2">
-						<p class="text-base font-medium">Room No.</p>
-						<p class="text-base font-medium">Negotiated</p>
-						<p class="text-base font-medium">Price</p>
-					</div>
-					<hr />
-					{#each changedPrice as price}
-						<div class="grid grid-cols-3 my-2">
-							<p class="text-base font-light">{price.unit}</p>
-							<p class="text-base font-light">{price.changed}</p>
-							<p class="text-base font-light">{numberToCurrency(price.price)}</p>
-						</div>
+			<label class="grid">
+				<span class="text-primary font-medium"> Pay for Unit </span>
+				<select
+					bind:value={$addReceiptForm.payToUnit}
+					{...$constraints.payToUnit}
+					name="payToUnit"
+					class="mt-2 border-[1px] border-black/60 rounded-md p-2"
+				>
+					<option selected disabled> Select Unit to pay for </option>
+					{#each tenantRentalActiveUnits as tenantRental}
+						<option value={tenantRental.RentalUnits.id}>
+							{tenantRental.RentalUnits.roomNumber}
+						</option>
 					{/each}
-					<hr />
-					<div class="grid grid-cols-3 mt-2 mb-4">
-						<p class="text-base font-semibold">Total:</p>
-						<p />
-						<p class="text-base font-semibold">
-							{numberToCurrency(changedPrice.reduce((total, price) => total + price.price, 0))}
+				</select>
+			</label>
+			{#if $addReceiptForm.payToUnit && !$addReceiptForm.isUtilityPayment}
+				<div>
+					<div class="grid grid-cols-2">
+						<p class="text-base font-medium">Rent to Pay</p>
+						<p class="text-base font-medium">Negotiated from</p>
+					</div>
+					<hr class="my-2" />
+					<div class="grid grid-cols-2">
+						<p>
+							{data.tenant?.PriceChange.find(
+								(changed) => changed.unitId === $addReceiptForm.payToUnit
+							)
+								? numberToCurrency(
+										data.tenant?.PriceChange.find(
+											(changed) => changed.unitId === $addReceiptForm.payToUnit
+										)?.price ?? 0
+								  )
+								: numberToCurrency(
+										data.tenant?.TenantRental.find(
+											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+										)?.RentalUnits.price ?? 0
+								  )}
+						</p>
+						<p>
+							{data.tenant?.PriceChange.find(
+								(changed) => changed.unitId === $addReceiptForm.payToUnit
+							)
+								? numberToCurrency(
+										data.tenant?.TenantRental.find(
+											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+										)?.RentalUnits.price ?? 0
+								  )
+								: 'No Negotiation'}
 						</p>
 					</div>
-				{/if}
-			</div>
-			<div>
-				<p class="text-lg font-medium mb-2">Utility</p>
-				<MultiSelect
-					bind:selected={payToUtility}
-					options={tenantRentalActiveUnits.map((unit) => ({
-						label: unit.RentalUnits.roomNumber,
-						value: unit.RentalUnits.id
-					}))}
-					--sms-padding="10px"
-				/>
-				{#if payToUtility.length}
-					{#each payToUtility as unit}
-						<label class="grid p-4">
-							<span class="text-primary font-light text-base"> Amount </span>
-
-							<input
-								placeholder="Amount"
-								class="border-[1px] mt-1 border-black/10 rounded-md p-2"
-								name="search"
-							/>
-						</label>
-					{/each}
-				{/if}
-			</div>
-			{#if payToUtility.length || payToUnit.length}
-				<button class="bg-primary text-white rounded-md py-2 px-6"> Generate Bill</button>
+				</div>
 			{/if}
+
+			<label class="grid">
+				<span class="text-primary font-medium"> Payment Start Date </span>
+				<input
+					type="date"
+					bind:value={$addReceiptForm.paymentStartDate}
+					{...$constraints.paymentStartDate}
+					name="paymentStartDate"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					bind:this={dateInput}
+					on:click={() => {
+						dateInput && dateInput.showPicker();
+					}}
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Payment End Date </span>
+				<input
+					type="date"
+					bind:value={$addReceiptForm.paymentEndDate}
+					{...$constraints.paymentEndDate}
+					name="paymentEndDate"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					bind:this={dateInput2}
+					on:click={() => {
+						dateInput2 && dateInput2.showPicker();
+					}}
+				/>
+			</label>
+			<label class="flex">
+				<input
+					type="checkbox"
+					bind:checked={$addReceiptForm.isUtilityPayment}
+					{...$constraints.isUtilityPayment}
+					name="isUtilityPayment"
+					class=" border-[1px] border-black/60 rounded-md p-2"
+				/>
+				<span class="text-primary font-medium"> Utility Payment </span>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Amount </span>
+				<input
+					type="number"
+					bind:value={$addReceiptForm.amount}
+					{...$constraints.amount}
+					name="amount"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Receipt Issue Date </span>
+				<input
+					type="date"
+					bind:value={$addReceiptForm.receiptIssueDate}
+					{...$constraints.receiptIssueDate}
+					name="receiptIssueDate"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					bind:this={dateInput3}
+					on:click={() => {
+						dateInput3 && dateInput3.showPicker();
+					}}
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> Receipt No. </span>
+				<input
+					bind:value={$addReceiptForm.receiptNumber}
+					{...$constraints.receiptNumber}
+					name="receiptNumber"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+				/>
+			</label>
+
+			<label class="grid">
+				<span class="text-primary font-medium"> Deposited Bank Name </span>
+				<input
+					bind:value={$addReceiptForm.depositedBank}
+					{...$constraints.depositedBank}
+					name="depositedBank"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+				/>
+			</label>
+			<button class="bg-primary text-white rounded-md py-2"> Generate Attachment</button>
 		</div>
-	</div>
+	</form>
 {/if}

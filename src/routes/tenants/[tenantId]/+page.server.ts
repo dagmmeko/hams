@@ -13,7 +13,19 @@ const editTenantSchema = z.object({
 	emergencyContactEmail: z.string().email()
 });
 
+const addReceiptsSchema = z.object({
+	payToUnit: z.number().int().positive(),
+	paymentStartDate: z.date(),
+	paymentEndDate: z.date(),
+	isUtilityPayment: z.boolean().optional(),
+	amount: z.number(),
+	receiptIssueDate: z.date(),
+	receiptNumber: z.string(),
+	depositedBank: z.string()
+});
+
 export const load = async (event) => {
+	const addReceiptsForm = await superValidate(addReceiptsSchema);
 	const tenant = await prisma.tenants.findFirst({
 		where: {
 			id: Number(event.params.tenantId)
@@ -34,6 +46,24 @@ export const load = async (event) => {
 		}
 	});
 
+	const allReceipts = await prisma.receipts.groupBy({
+		by: ['receiptReferenceNumber'],
+		where: {
+			tenantsId: Number(event.params.tenantId)
+		}
+	});
+
+	let groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
+		return {
+			receiptReferenceNumber: receiptReferenceNumber.receiptReferenceNumber,
+			receipts: tenant?.Receipts.filter((receipt) => {
+				return receipt.receiptReferenceNumber === receiptReferenceNumber.receiptReferenceNumber;
+			})
+		};
+	});
+
+	console.log({ allReceipts: groupedReceipts });
+
 	const editTenantForm = await superValidate(
 		{
 			fullName: tenant?.fullName,
@@ -47,7 +77,7 @@ export const load = async (event) => {
 		editTenantSchema
 	);
 
-	return { editTenantForm, tenant };
+	return { editTenantForm, addReceiptsForm, tenant, groupedReceipts };
 };
 
 export const actions = {
@@ -72,5 +102,31 @@ export const actions = {
 			}
 		});
 		return { editTenantForm, editTenant };
+	},
+	addReceipts: async (event) => {
+		const addReceiptsForm = await superValidate(event.request.clone(), addReceiptsSchema);
+
+		if (!addReceiptsForm) {
+			return fail(400, { addReceiptsForm });
+		}
+
+		const newReceipts = await prisma.receipts.create({
+			data: {
+				startDate: addReceiptsForm.data.paymentStartDate,
+				endDate: addReceiptsForm.data.paymentEndDate,
+				receiptReceived: addReceiptsForm.data.receiptNumber ? true : false,
+				receiptReceivedOn: addReceiptsForm.data.receiptIssueDate,
+				paymentConfirmed: addReceiptsForm.data.receiptNumber ? true : false,
+				amount: addReceiptsForm.data.amount,
+				bankName: addReceiptsForm.data.depositedBank,
+				paymentReason: addReceiptsForm.data.isUtilityPayment ? 'Utility Payment' : 'Rent Payment',
+				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
+				tenantsId: Number(event.params.tenantId),
+				payToUnitId: addReceiptsForm.data.payToUnit,
+				isRentPayment: !addReceiptsForm.data.isUtilityPayment
+			}
+		});
+
+		return { addReceiptsForm, newReceipts };
 	}
 };
