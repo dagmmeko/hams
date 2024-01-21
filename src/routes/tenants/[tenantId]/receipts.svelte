@@ -7,6 +7,9 @@
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
+	import PdfPrint from '$lib/components/pdf-print.svelte';
+	import dayjs from 'dayjs';
+	import Logo from '$lib/assets/Logo.svg.svelte';
 
 	let modal = false;
 
@@ -41,19 +44,12 @@
 			</button>
 		</div>
 	</div>
-	{#each data.groupedReceipts as receipts}
-		<div class="bg-red-100">
-			<div>{receipts.receiptReferenceNumber}</div>
-			<div class="grid grid-cols-4 gap-10">
-				{#each receipts.receipts ?? [] as rec}
-					<div class="bg-slate-400">
-						<p>{numberToCurrency(rec.amount)}</p>
-						{rec.paymentReason}
-					</div>
-				{/each}
-			</div>
-		</div>
-	{/each}
+
+	<div>
+		{#each data.groupedReceipts as receipts}
+			<PdfPrint info={receipts} tenant={data.tenant} />
+		{/each}
+	</div>
 </div>
 
 {#if modal}

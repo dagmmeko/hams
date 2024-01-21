@@ -37,7 +37,14 @@ export const load = async (event) => {
 				}
 			},
 			PriceChange: true,
-			Receipts: true,
+			Receipts: {
+				include: {
+					PayToUnit: true
+				},
+				orderBy: {
+					createdAt: 'desc'
+				}
+			},
 			TenantsFile: {
 				include: {
 					File: true
@@ -47,7 +54,10 @@ export const load = async (event) => {
 	});
 
 	const allReceipts = await prisma.receipts.groupBy({
-		by: ['receiptReferenceNumber'],
+		by: ['receiptReferenceNumber', 'createdAt'],
+		orderBy: {
+			createdAt: 'desc'
+		},
 		where: {
 			tenantsId: Number(event.params.tenantId)
 		}
@@ -57,6 +67,7 @@ export const load = async (event) => {
 		return {
 			receiptReferenceNumber: receiptReferenceNumber.receiptReferenceNumber,
 			receipts: tenant?.Receipts.filter((receipt) => {
+				console.log({ receipt });
 				return receipt.receiptReferenceNumber === receiptReferenceNumber.receiptReferenceNumber;
 			})
 		};

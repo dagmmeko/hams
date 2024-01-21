@@ -91,6 +91,9 @@ devDependencies:
   svelte-multiselect:
     specifier: 10.2.0
     version: 10.2.0
+  svelte-printpdf:
+    specifier: 1.0.2-metadata
+    version: 1.0.2-metadata
   svelte-table:
     specifier: 0.6.1
     version: 0.6.1
@@ -2815,6 +2818,10 @@ packages:
       strip-indent: 3.0.0
       svelte: 4.2.7
       typescript: 5.3.2
+    dev: true
+
+  /svelte-printpdf@1.0.2-metadata:
+    resolution: {integrity: sha512-669cRonUfjG9tS9Y9o6I/ukIjRAWZXT3ZI+ze3Ew9oulalRFTUE1UMmtaSBmHILJTuaiFGpgUNC04ZOS74fV0A==}
     dev: true
 
   /svelte-table@0.6.1:
