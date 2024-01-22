@@ -54,10 +54,7 @@ export const load = async (event) => {
 	});
 
 	const allReceipts = await prisma.receipts.groupBy({
-		by: ['receiptReferenceNumber', 'createdAt'],
-		orderBy: {
-			createdAt: 'desc'
-		},
+		by: ['receiptReferenceNumber'],
 		where: {
 			tenantsId: Number(event.params.tenantId)
 		}
