@@ -64,21 +64,22 @@ export const actions = {
 
 		console.log({ rentRoomForm: rentRoomForm.data });
 
-		const rentTenant = await prisma.tenants.update({
-			where: {
-				id: Number(rentRoomForm.data.selectedTenantId)
-			},
-			data: {
-				...(rentRoomForm.data.priceChange &&
-					rentRoomForm.data.newPrice && {
-						PriceChange: {
-							create: {
-								price: Number(rentRoomForm.data.newPrice),
-								unitId: Number(rentRoomForm.data.selectedUnitId)
+		const rentTenant = await prisma.tenants
+			.update({
+				where: {
+					id: Number(rentRoomForm.data.selectedTenantId)
+				},
+				data: {
+					...(rentRoomForm.data.priceChange &&
+						rentRoomForm.data.newPrice && {
+							PriceChange: {
+								create: {
+									price: Number(rentRoomForm.data.newPrice),
+									unitId: Number(rentRoomForm.data.selectedUnitId)
+								}
 							}
-						}
-					}),
-				...(rentRoomForm.data.priceChange && {
+						}),
+
 					TenantRental: {
 						create: {
 							RentalUnits: {
@@ -93,22 +94,24 @@ export const actions = {
 							active: rentRoomForm.data.priceChange ? false : true
 						}
 					}
-				})
-			}
-		});
+				}
+			})
+			.catch((e) => console.error(e));
 
 		if (!rentTenant) return fail(500, { errorMessage: 'Tenant not rented.' });
 
-		if (rentRoomForm.data.priceChange) {
-			await prisma.rentalUnits.update({
-				where: {
-					id: Number(rentRoomForm.data.selectedUnitId)
-				},
-				data: {
-					active: true
-				}
-			});
-		}
+		console.log('hello');
+
+		await prisma.rentalUnits.update({
+			where: {
+				id: Number(rentRoomForm.data.selectedUnitId)
+			},
+			data: {
+				active: true
+			}
+		});
+
+		console.log('rrr');
 
 		return { rentTenant, rentRoomForm };
 	}
