@@ -11,7 +11,7 @@ const rentRoomSchema = z.object({
 	selectedUnitId: z.string().optional(),
 	duration: z.string().optional(),
 	newPrice: z.string().optional(),
-	priceChange: z.boolean()
+	priceChange: z.boolean().optional()
 });
 
 export const load = async (event) => {
