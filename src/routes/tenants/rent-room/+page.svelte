@@ -182,7 +182,6 @@
 							bind:value={$rentRoomForm.duration}
 							{...$constraints.duration}
 							class="border-[1px] border-black/60 rounded-md p-2"
-							required
 							name="duration"
 						/>
 					</label>
