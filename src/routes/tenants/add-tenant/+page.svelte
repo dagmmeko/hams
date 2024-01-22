@@ -39,7 +39,6 @@
 				<label class="grid gap-2 h-fit">
 					<span class="text-primary font-medium"> Unit Type </span>
 					<select
-						required
 						on:change={(e) => {
 							selectedUnit = e.currentTarget.value;
 						}}
@@ -111,7 +110,6 @@
 					<span class="text-primary font-medium"> Full Name </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="fullName"
 						bind:value={$addTenantForm.fullName}
 						{...$constraints.fullName}
@@ -121,7 +119,6 @@
 					<span class="text-primary font-medium"> Company Name </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="companyName"
 						bind:value={$addTenantForm.companyName}
 						{...$constraints.companyName}
@@ -131,7 +128,6 @@
 					<span class="text-primary font-medium"> Phone Number </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="phoneNumber"
 						bind:value={$addTenantForm.phoneNumber}
 						{...$constraints.phoneNumber}
@@ -141,7 +137,6 @@
 					<span class="text-primary font-medium"> Email </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="email"
 						bind:value={$addTenantForm.email}
 						{...$constraints.email}
@@ -152,7 +147,6 @@
 						<span class="text-primary font-medium"> Purpose of Visit </span>
 						<input
 							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-							required
 							name="purposeOfRent"
 							bind:value={$addTenantForm.purposeOfRent}
 							{...$constraints.purposeOfRent}
@@ -212,7 +206,6 @@
 						<span class="text-primary font-medium"> Duration of Stay In Country </span>
 						<input
 							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-							required
 							name="price"
 							bind:value={$addTenantForm.durationOfStayInCountry}
 							{...$constraints.durationOfStayInCountry}
@@ -223,7 +216,6 @@
 					<span class="text-primary font-medium"> Emergency Contact Name </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="emergencyContactName"
 						bind:value={$addTenantForm.emergencyContactName}
 						{...$constraints.emergencyContactName}
@@ -233,7 +225,6 @@
 					<span class="text-primary font-medium"> Emergency Contact Email </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						type="email"
 						name="emergencyContactEmail"
 						bind:value={$addTenantForm.emergencyContactEmail}
@@ -244,7 +235,6 @@
 					<span class="text-primary font-medium"> Emergency Contact Phone Number </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						type="tel"
 						name="emergencyContactPhoneNumber"
 						bind:value={$addTenantForm.emergencyContactPhoneNumber}
@@ -255,7 +245,6 @@
 					<span class="text-primary font-medium"> Tenant Internal Score </span>
 					<input
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
 						name="tenantScore"
 						bind:value={$addTenantForm.tenantScore}
 						{...$constraints.tenantScore}
