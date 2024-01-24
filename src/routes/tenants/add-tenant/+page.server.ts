@@ -56,7 +56,6 @@ export const actions = {
 			const addTenant = await prisma.tenants.create({
 				data: {
 					fullName: addTenantForm.data.fullName,
-					companyName: addTenantForm.data.fullName,
 					phoneNumber: addTenantForm.data.phoneNumber,
 					email: addTenantForm.data.email,
 					emergencyContactName: addTenantForm.data.emergencyContactName,
@@ -79,6 +78,7 @@ export const actions = {
 								purposeOfRent: addTenantForm.data.purposeOfRent,
 								contractStartDate: addTenantForm.data.contractStartDate,
 								contractEndDate: addTenantForm.data.contractEndDate,
+								companyName: addTenantForm.data.fullName,
 								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
 								active: addTenantForm.data.priceChange ? false : true
 							}

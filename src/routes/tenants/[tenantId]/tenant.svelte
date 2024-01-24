@@ -43,15 +43,6 @@
 			/>
 		</label>
 		<label class="grid flex-1">
-			<span class="text-primary font-semibold py-1"> Company Name</span>
-			<input
-				name="companyName"
-				bind:value={$editTenantForm.companyName}
-				{...$constraints.companyName}
-				class="border-2"
-			/>
-		</label>
-		<label class="grid flex-1">
 			<span class="text-primary font-semibold py-1"> Phone Number</span>
 			<input
 				name="phoneNumber"

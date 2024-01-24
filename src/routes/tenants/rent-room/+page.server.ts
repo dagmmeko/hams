@@ -79,21 +79,22 @@ export const actions = {
 								}
 							}
 						}),
-
-					TenantRental: {
-						create: {
-							RentalUnits: {
-								connect: {
-									id: Number(rentRoomForm.data.selectedUnitId)
-								}
-							},
-							purposeOfRent: rentRoomForm.data.purposeOfRent ?? '',
-							contractStartDate: new Date(rentRoomForm.data.startDate ?? Date.now()),
-							contractEndDate: new Date(rentRoomForm.data.endDate ?? Date.now()),
-							durationOfStayInCountry: Number(rentRoomForm.data.duration),
-							active: rentRoomForm.data.priceChange ? false : true
+					...(!rentRoomForm.data.priceChange && {
+						TenantRental: {
+							create: {
+								RentalUnits: {
+									connect: {
+										id: Number(rentRoomForm.data.selectedUnitId)
+									}
+								},
+								purposeOfRent: rentRoomForm.data.purposeOfRent ?? '',
+								contractStartDate: new Date(rentRoomForm.data.startDate ?? Date.now()),
+								contractEndDate: new Date(rentRoomForm.data.endDate ?? Date.now()),
+								durationOfStayInCountry: Number(rentRoomForm.data.duration),
+								active: rentRoomForm.data.priceChange ? false : true
+							}
 						}
-					}
+					})
 				}
 			})
 			.catch((e) => console.error(e));

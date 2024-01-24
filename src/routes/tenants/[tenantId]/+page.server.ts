@@ -5,7 +5,6 @@ import z from 'zod';
 
 const editTenantSchema = z.object({
 	fullName: z.string(),
-	companyName: z.string(),
 	phoneNumber: z.string(),
 	email: z.string().email(),
 	emergencyContactName: z.string(),
@@ -75,7 +74,6 @@ export const load = async (event) => {
 	const editTenantForm = await superValidate(
 		{
 			fullName: tenant?.fullName,
-			companyName: tenant?.companyName,
 			phoneNumber: tenant?.phoneNumber,
 			email: tenant?.email ?? undefined,
 			emergencyContactName: tenant?.emergencyContactName ?? undefined,
@@ -101,7 +99,6 @@ export const actions = {
 			},
 			data: {
 				fullName: editTenantForm.data.fullName,
-				companyName: editTenantForm.data.companyName,
 				phoneNumber: editTenantForm.data.phoneNumber,
 				email: editTenantForm.data.email,
 				emergencyContactName: editTenantForm.data.emergencyContactName,

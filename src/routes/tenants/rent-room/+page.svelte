@@ -100,7 +100,8 @@
 											: 'bg-white'} text-start rounded-md mb-2 shadow-md px-4 py-2 border-[1px] border-black/20"
 									>
 										<div class="font-medium">
-											{tenant.fullName} <span class="font-light"> {tenant.companyName} </span>
+											{tenant.fullName}
+											<!-- <span class="font-light"> {tenant.companyName} </span> -->
 										</div>
 										<div />
 										<div>{tenant.phoneNumber}</div>

@@ -79,6 +79,7 @@ model RentalUnits {
   minimumRentalDate Int
   roomNumber        String
   unitType          UnitType
+  currency          Currency        @default(DOLLAR)
   active            Boolean         @default(false)
   Inspection        Inspection[]
   Property          UnitProperty[]
@@ -173,7 +174,6 @@ model Tenants {
   updateAt                    DateTime       @updatedAt
   deletedAt                   DateTime?
   fullName                    String         @default("name")
-  companyName                 String         @default("company Name")
   phoneNumber                 String
   email                       String?
   emergencyContactName        String?
@@ -195,6 +195,7 @@ model TenantRental {
   unitId                  Int
   contractEndDate         DateTime?
   contractStartDate       DateTime?
+  companyName             String      @default("company Name")
   active                  Boolean     @default(false)
   durationOfStayInCountry Int?
   purposeOfRent           String?
@@ -498,4 +499,9 @@ enum TaskStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
+}
+
+enum Currency {
+  DOLLAR
+  BIRR
 }
