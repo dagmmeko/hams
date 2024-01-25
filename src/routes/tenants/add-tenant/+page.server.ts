@@ -2,7 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { s3, getFile } from '$lib/utils/aws-file.js';
+import { s3 } from '$lib/utils/aws-file.js';
 import { S3_BUCKET_NAME } from '$env/static/private';
 
 const addTenantSchema = z.object({
@@ -43,7 +43,7 @@ export const actions = {
 
 		tenantFile.map(async (file) => {
 			if (!(file instanceof File)) {
-				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				return fail(500, { addTenantForm, errorMessage: 'Issue with the file uploaded.' });
 			}
 		});
 		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);

@@ -1,29 +1,27 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	export let data;
-	import QR from '$lib/assets/qr.png';
 	import { goto } from '$app/navigation';
 	import { toast } from '@zerodevx/svelte-toast';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
-	import dayjs from 'dayjs';
+	import { numberToCurrency } from '$lib/utils/currency';
 
 	export let form;
+	export let data;
 
 	const {
 		form: addTenantForm,
 		enhance: addTenantEnhance,
 		constraints
 	} = superForm(data.addTenantForm);
+
 	let dateInput: any;
 	let dateInput2: any;
 
 	let selectedUnit: any;
-	let checkPriceChange: boolean = false;
 
 	$: form?.addTenant && goto('/tenants');
-	$: form?.addTenant &&
-		toast.push('Tenant added successfully', { theme: { '--toastBacground': '#059669' } });
+	$: form?.addTenant && toast.push('Tenant added successfully');
 	let frontFileData: string[] = [];
 </script>
 
@@ -35,8 +33,8 @@
 			<p class="text-sm py-2">Register new Tenant here. Click save when you're done.</p>
 		</div>
 		<form method="post" action="?/addTenant" use:addTenantEnhance class="mt-6">
-			<div class="flex flex-wrap gap-x-20 my-6">
-				<label class="grid gap-2 h-fit">
+			<div class="grid md:grid-cols-2 gap-x-10 my-6">
+				<label class="grid w-full gap-2 h-fit">
 					<span class="text-primary font-medium"> Unit Type </span>
 					<select
 						on:change={(e) => {
@@ -45,7 +43,7 @@
 						name="rentalUnitsId"
 						bind:value={$addTenantForm.rentalUnitsId}
 						{...$constraints.rentalUnitsId}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					>
 						<option selected disabled> Pick a Type </option>
 						{#each data.rentalUnits as unit}
@@ -53,9 +51,9 @@
 						{/each}
 					</select>
 				</label>
-				<div>
+				<div class="w-full">
 					{#if selectedUnit}
-						<div class="w-[420px]">
+						<div class="w-full">
 							<p class="font-semibold">
 								Maximum Number of Tenants <span class="font-normal">
 									{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
@@ -63,7 +61,7 @@
 								</span>
 							</p>
 						</div>
-						<div class="w-[420px]">
+						<div class="w-full">
 							<p class="font-semibold">
 								Minimum Days of Rental <span class="font-normal">
 									{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
@@ -71,7 +69,7 @@
 								</span>
 							</p>
 						</div>
-						<div class="bg-slate-100 p-3 w-[420px]">
+						<div class="bg-slate-100 p-3 w-full">
 							<label class="flex items-center gap-2">
 								<input
 									bind:checked={$addTenantForm.priceChange}
@@ -88,7 +86,18 @@
 								<p class="grid">
 									<span class="text-primary font-medium">Current Price</span>
 									<span class="font-normal text-sm">
-										{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price} Birr
+										{numberToCurrency(
+											data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price ??
+												0,
+											{
+												currency:
+													data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
+														?.currency === 'DOLLAR'
+														? 'USD'
+														: 'ETB',
+												currencyDisplay: 'code'
+											}
+										)}
 									</span>
 								</p>
 								<input
@@ -105,60 +114,71 @@
 				</div>
 			</div>
 			<hr />
-			<div class="flex flex-wrap gap-x-20 my-6 gap-y-6">
-				<label class="grid gap-2">
+			<div class="grid md:grid-cols-2 gap-x-10 my-6 gap-y-6">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Full Name </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="fullName"
 						bind:value={$addTenantForm.fullName}
 						{...$constraints.fullName}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Company Name </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="companyName"
 						bind:value={$addTenantForm.companyName}
 						{...$constraints.companyName}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Phone Number </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="phoneNumber"
 						bind:value={$addTenantForm.phoneNumber}
 						{...$constraints.phoneNumber}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Email </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="email"
 						bind:value={$addTenantForm.email}
 						{...$constraints.email}
 					/>
 				</label>
 				{#if !$addTenantForm.priceChange}
-					<label class="grid gap-2">
-						<span class="text-primary font-medium"> Purpose of Visit </span>
-						<input
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-							name="purposeOfRent"
-							bind:value={$addTenantForm.purposeOfRent}
-							{...$constraints.purposeOfRent}
-						/>
-					</label>
+					{#if data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.unitType !== 'COMMERCIAL'}
+						<label class="w-full grid gap-2">
+							<span class="text-primary font-medium"> Purpose of Visit </span>
+							<input
+								class=" border-[1px] border-black/60 rounded-md p-2"
+								name="purposeOfRent"
+								bind:value={$addTenantForm.purposeOfRent}
+								{...$constraints.purposeOfRent}
+							/>
+						</label>
+						<label class="w-full grid gap-2">
+							<span class="text-primary font-medium"> Duration of Stay In Country </span>
+							<input
+								class=" border-[1px] border-black/60 rounded-md p-2"
+								name="price"
+								bind:value={$addTenantForm.durationOfStayInCountry}
+								{...$constraints.durationOfStayInCountry}
+							/>
+						</label>
+					{/if}
 
 					<label class="grid gap-2">
-						<span class="text-primary font-medium"> Contract Start Date </span>
+						<span class="text-primary w-full font-medium"> Contract Start Date </span>
 						<input
 							type="date"
 							name="contractStartDate"
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 							bind:this={dateInput}
 							on:click={() => {
 								dateInput && dateInput.showPicker();
@@ -169,11 +189,11 @@
 					</label>
 
 					<label class="grid gap-2">
-						<span class="text-primary font-medium"> Contract End Date </span>
+						<span class="text-primary w-full font-medium"> Contract End Date </span>
 						<input
 							type="date"
 							name="contractEndDate"
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 							bind:this={dateInput2}
 							on:click={() => {
 								dateInput2 && dateInput2.showPicker();
@@ -181,70 +201,41 @@
 							bind:value={$addTenantForm.contractEndDate}
 							{...$constraints.contractEndDate}
 						/>
-						<!-- {$addTenantForm.contractStartDate} -->
-						{$addTenantForm.contractStartDate
-							? dayjs(new Date($addTenantForm.contractStartDate))
-									.add(
-										data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
-											?.minimumRentalDate ?? 0,
-										'D'
-									)
-									.toISOString()
-									.substr(0, 10)
-							: null}
-						{data.rentalUnits.find((unit) => {
-							console.log({
-								addTenant: unit.id.toString(),
-								k: selectedUnit,
-								eq: unit.id.toString() === selectedUnit
-							});
-							return unit.id.toString() === selectedUnit;
-						})?.minimumRentalDate}
-					</label>
-
-					<label class="grid gap-2">
-						<span class="text-primary font-medium"> Duration of Stay In Country </span>
-						<input
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-							name="price"
-							bind:value={$addTenantForm.durationOfStayInCountry}
-							{...$constraints.durationOfStayInCountry}
-						/>
 					</label>
 				{/if}
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Emergency Contact Name </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="emergencyContactName"
 						bind:value={$addTenantForm.emergencyContactName}
 						{...$constraints.emergencyContactName}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Emergency Contact Email </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						type="email"
 						name="emergencyContactEmail"
 						bind:value={$addTenantForm.emergencyContactEmail}
 						{...$constraints.emergencyContactEmail}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Emergency Contact Phone Number </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						type="tel"
 						name="emergencyContactPhoneNumber"
 						bind:value={$addTenantForm.emergencyContactPhoneNumber}
 						{...$constraints.emergencyContactPhoneNumber}
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Tenant Internal Score </span>
 					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="tenantScore"
 						bind:value={$addTenantForm.tenantScore}
 						{...$constraints.tenantScore}

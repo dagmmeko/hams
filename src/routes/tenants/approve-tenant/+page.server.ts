@@ -1,40 +1,61 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms/server';
+import z from 'zod';
 
+const approveRentSchema = z.object({
+	purposeOfRent: z.string().optional(),
+	durationOfStay: z.number().optional(),
+	priceChangeId: z.number(),
+	startDate: z.date(),
+	endDate: z.date()
+});
+
+export const load = async (event) => {
+	const approveRentForm = await superValidate(approveRentSchema);
+	const priceChange = await prisma.priceChange.findFirst({
+		where: {
+			id: Number(event.url.searchParams.get('priceChangeId'))
+		},
+		include: {
+			RentalUnits: true
+		}
+	});
+
+	if (!priceChange) {
+		throw error(500, 'Invalid price change request..');
+	}
+
+	return {
+		priceChange,
+		approveRentForm
+	};
+};
 export const actions = {
 	rentApprovedRoom: async (event) => {
-		const data = await event.request.formData();
-		const purposeOfRent = data.get('purposeOfRent');
-		const startDate = data.get('startDate');
-		const endDate = data.get('endDate');
-		const priceChangeId = data.get('priceChangeId');
-		const durationOfStayInCountry = data.get('duration');
+		const approveRentForm = await superValidate(event.request, approveRentSchema);
 
+		console.log({ s: event.url.searchParams.get('priceChangeId') });
 		const priceChangeRequest = await prisma.priceChange.findFirst({
 			where: {
-				id: Number(priceChangeId)
+				id: approveRentForm.data.priceChangeId
 			},
 			include: {
 				Tenant: true,
 				RentalUnits: true
 			}
 		});
+		console.log({ priceChangeRequest });
 
 		if (!priceChangeRequest) {
-			return fail(400, { errorMessage: 'Invalid price change request.' });
+			return fail(400, { approveRentForm, errorMessage: 'Invalid price change request.' });
 		}
+		console.log('hello');
 
-		if (purposeOfRent && typeof purposeOfRent !== 'string') {
-			return fail(400, { errorMessage: 'Invalid purpose of rent.' });
-		}
-		if (startDate && typeof startDate !== 'string') {
-			return fail(400, { errorMessage: 'Invalid start date.' });
-		}
-		if (endDate && typeof endDate !== 'string') {
-			return fail(400, { errorMessage: 'Invalid end date.' });
-		}
-		if (durationOfStayInCountry && typeof durationOfStayInCountry !== 'string') {
-			return fail(400, { errorMessage: 'Invalid duration of stay in country.' });
+		console.log({ approveRentForm });
+
+		if (!approveRentForm) {
+			return fail(400, { approveRentForm });
 		}
 
 		const tenant = await prisma.tenants.update({
@@ -45,17 +66,17 @@ export const actions = {
 				TenantRental: {
 					create: {
 						unitId: priceChangeRequest?.RentalUnits?.id,
-						purposeOfRent: purposeOfRent ?? '',
-						contractStartDate: new Date(parseInt(startDate ?? '')),
-						contractEndDate: new Date(parseInt(endDate ?? '')),
-						durationOfStayInCountry: Number(durationOfStayInCountry),
+						purposeOfRent: approveRentForm.data.purposeOfRent,
+						contractStartDate: approveRentForm.data.startDate,
+						contractEndDate: approveRentForm.data.endDate,
+						durationOfStayInCountry: approveRentForm.data.durationOfStay,
 						active: true
 					}
 				},
 				PriceChange: {
 					update: {
 						where: {
-							id: Number(priceChangeId)
+							id: approveRentForm.data.priceChangeId
 						},
 						data: {
 							active: true
@@ -65,7 +86,9 @@ export const actions = {
 			}
 		});
 
-		if (!tenant) return fail(500, { errorMessage: 'Tenant not rented.' });
+		console.log({ tenant });
+
+		if (!tenant) return fail(500, { approveRentForm, errorMessage: 'Tenant not rented.' });
 
 		await prisma.rentalUnits.update({
 			where: {
@@ -75,6 +98,6 @@ export const actions = {
 				active: true
 			}
 		});
-		return { tenant };
+		return { approveRentForm, tenant };
 	}
 };
