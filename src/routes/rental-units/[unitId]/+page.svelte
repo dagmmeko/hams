@@ -2,11 +2,12 @@
 	import Amenities from './amenities.svelte';
 	import Info from './info.svelte';
 	import Properties from './properties.svelte';
+	import Inspections from './inspections.svelte';
 
 	export let data;
 	export let form;
 
-	let displayedComponent: 'room' | 'properties' | 'amenities' = 'room';
+	let displayedComponent: 'room' | 'properties' | 'amenities' | 'inspections' = 'room';
 </script>
 
 <div class="mt-6 mx-10">
@@ -26,8 +27,8 @@
 				Amenities
 			</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'amenities')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'amenities' ? 'bg-white' : ''}">
+		<button on:click={() => (displayedComponent = 'inspections')}>
+			<p class="p-2 px-3 rounded-md {displayedComponent === 'inspections' ? 'bg-white' : ''}">
 				Inspections
 			</p>
 		</button>
@@ -41,7 +42,7 @@
 		{:else if displayedComponent === 'amenities'}
 			<Amenities bind:data />
 		{:else}
-			<p>Something went wrong</p>
+			<Inspections />
 		{/if}
 	</div>
 </div>

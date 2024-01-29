@@ -1,0 +1,1 @@
+<div>Inspections list</div>

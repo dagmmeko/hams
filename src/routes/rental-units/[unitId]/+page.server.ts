@@ -148,6 +148,8 @@ export const actions = {
 		const available = data.get('available');
 		const price = data.get('price');
 
+		console.log({ available });
+
 		if (
 			typeof name !== 'string' ||
 			typeof description !== 'string' ||
@@ -170,7 +172,9 @@ export const actions = {
 							name,
 							description,
 							propertyStatus,
-							numberofUnits: Number(numberofUnits)
+							numberofUnits: Number(numberofUnits),
+							itemsPrice: Number(price),
+							available: Boolean(available)
 						}
 					}
 				}

@@ -29,15 +29,13 @@
 		</button>
 	</div>
 
-	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
-		{#if displayedComponent === 'tenant'}
-			<Tenant bind:form bind:data />
-		{:else if displayedComponent === 'receipts'}
-			<Receipts bind:data bind:form />
-		{:else if displayedComponent === 'priceChange'}
-			<TenantPriceChange bind:data bind:form />
-		{:else}
-			<p>Something went wrong</p>
-		{/if}
-	</div>
+	{#if displayedComponent === 'tenant'}
+		<Tenant bind:form bind:data />
+	{:else if displayedComponent === 'receipts'}
+		<Receipts bind:data />
+	{:else if displayedComponent === 'priceChange'}
+		<TenantPriceChange bind:data bind:form />
+	{:else}
+		<p>Something went wrong</p>
+	{/if}
 </div>

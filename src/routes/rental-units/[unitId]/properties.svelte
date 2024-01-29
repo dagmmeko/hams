@@ -5,6 +5,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { enhance } from '$app/forms';
 	import { updated } from '$app/stores';
+	import PdfPrint from '$lib/components/pdf-print.svelte';
 
 	let addModal = false;
 	let editModal = false;
@@ -37,6 +38,14 @@
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'available',
+			title: 'Available',
+			value: (v: typeof rows[number]) => v.available.toString() ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
 
@@ -65,15 +74,18 @@
 		>
 	</div>
 	<div class="-mx-6 pt-5">
-		<SvelteTable
-			classNameTable="unitPropertyTables"
-			on:clickCell={(event) => {
-				selectedUnitId = event.detail.row.id;
-				editModal = true;
-			}}
-			{columns}
-			{rows}
-		/>
+		<PdfPrint class="mx-6">
+			<SvelteTable
+				classNameTable="unitPropertyTables"
+				classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
+				on:clickCell={(event) => {
+					selectedUnitId = event.detail.row.id;
+					editModal = true;
+				}}
+				{columns}
+				{rows}
+			/>
+		</PdfPrint>
 	</div>
 </div>
 
@@ -208,7 +220,7 @@
 							?.available}
 						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 					/>
-					<span class="text-primary font-medium"> Paid Service </span>
+					<span class="text-primary font-medium"> Available </span>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Description </span>

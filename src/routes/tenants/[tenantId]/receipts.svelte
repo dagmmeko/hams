@@ -1,20 +1,15 @@
 <script lang="ts">
-	import type { ActionData, PageData } from './$types';
+	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { numberToCurrency } from '$lib/utils/currency';
-	import { MultiSelect } from 'svelte-multiselect';
-	import type { PriceChange } from '@prisma/client';
-	import { enhance } from '$app/forms';
-	import { toast } from '@zerodevx/svelte-toast';
-	import { superForm } from 'sveltekit-superforms/client';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import dayjs from 'dayjs';
-	import Logo from '$lib/assets/Logo.svg.svelte';
+	import { superForm } from 'sveltekit-superforms/client';
+	import type { ActionData, PageData } from './$types';
 
 	let modal = false;
 
 	export let data: PageData;
-	export let form: ActionData;
+	// export let form: ActionData;
 
 	let dateInput: any;
 	let dateInput2: any;
@@ -29,7 +24,7 @@
 	} = superForm(data.addReceiptsForm);
 </script>
 
-<div>
+<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 	<div class="grid grid-flow-col justify-items-stretch">
 		<div class="grid">
 			<p class="text-2xl">Tenant Receipts</p>
@@ -44,12 +39,66 @@
 			</button>
 		</div>
 	</div>
+</div>
+<div>
+	{#each data.groupedReceipts as receipts}
+		<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
+			<PdfPrint>
+				<div>
+					<div class="w-full text-2xl font-bold print:block hidden text-center">Center Point</div>
+					<div class="text-xl font-semibold my-2">
+						Receipt Reference: {receipts.receiptReferenceNumber}
+					</div>
+					<div class="hidden">
+						<p class="text-lg font-medium">Name:</p>
+						<p class="text-base font-normal">{data.tenant?.fullName}</p>
+					</div>
+					<div class="grid print:grid-cols-1 grid-cols-3 gap-10">
+						{#each receipts.receipts ?? [] as rec}
+							<div class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md">
+								<p class="italic font-light">
+									Issued Date: <span class=""
+										>{dayjs(rec.receiptReceivedOn).format('MMM DD/YY')}</span
+									>
+								</p>
+								<div class="flex gap-4">
+									<div>
+										<p class="font-medium">
+											Room No: <span class="font-normal">{rec.PayToUnit?.roomNumber}</span>
+										</p>
 
-	<div>
-		{#each data.groupedReceipts as receipts}
-			<PdfPrint info={receipts} tenant={data.tenant} />
-		{/each}
-	</div>
+										<p class="font-medium">
+											Amount:
+											<span class="font-normal">{numberToCurrency(rec.amount)}</span>
+										</p>
+										<p class="font-medium">
+											Reason: <span class="font-normal">{rec.paymentReason}</span>
+										</p>
+									</div>
+									<div>
+										<p class="font-medium">
+											Start Date: <span class="font-normal">
+												{dayjs(rec.startDate).format('MMM DD/YY')}</span
+											>
+										</p>
+
+										<p class="font-medium">
+											End Date: <span class="font-normal"
+												>{dayjs(rec.endDate).format('MMM DD/YY')}</span
+											>
+										</p>
+										<p class="font-medium">
+											Bank Name: <span class="font-normal"> {rec.bankName}</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			</PdfPrint>
+		</div>
+	{/each}
 </div>
 
 {#if modal}

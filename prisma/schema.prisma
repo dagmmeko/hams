@@ -178,6 +178,7 @@ model Tenants {
   fullName                    String         @default("name")
   phoneNumber                 String
   email                       String?
+  passportNumber              String?
   emergencyContactName        String?
   emergencyContactPhoneNumber String?
   tenantScore                 Int            @default(0)
