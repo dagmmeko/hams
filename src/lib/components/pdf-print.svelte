@@ -12,7 +12,7 @@
 
 <div class="">
 	<PrintPdf bind:print>
-		<div class="">
+		<div class="print:hidden">
 			<div class="text-2xl font-semibold my-2">
 				Receipt Reference: {info.receiptReferenceNumber}
 			</div>

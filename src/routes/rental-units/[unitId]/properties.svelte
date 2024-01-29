@@ -102,6 +102,16 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
+				<label class="flex items-center gap-3">
+					<input
+						type="checkbox"
+						name="available"
+						bind:checked={$addPropertyForm.available}
+						{...$constraints.available}
+						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> Available now </span>
+				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Description </span>
 					<textarea
@@ -119,6 +129,16 @@
 						required
 						bind:value={$addPropertyForm.numberofUnits}
 						{...$constraints.numberofUnits}
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Price </span>
+					<input
+						name="price"
+						required
+						bind:value={$addPropertyForm.price}
+						{...$constraints.price}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
@@ -180,6 +200,16 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
+				<label class="flex items-center gap-3">
+					<input
+						type="checkbox"
+						name="available"
+						checked={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
+							?.available}
+						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> Paid Service </span>
+				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Description </span>
 					<textarea
@@ -196,6 +226,15 @@
 						required
 						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
 							?.numberofUnits}
+						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> Price </span>
+					<input
+						name="price"
+						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
+							?.itemsPrice}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>

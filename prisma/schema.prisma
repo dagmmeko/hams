@@ -147,6 +147,8 @@ model UnitProperty {
   name           String
   description    String
   rentalUnitsId  Int?
+  available      Boolean        @default(false)
+  itemsPrice     Float          @default(0)
   propertyStatus PropertyStatus
   numberofUnits  Int
   RentalUnits    RentalUnits?   @relation(fields: [rentalUnitsId], references: [id])

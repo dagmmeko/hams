@@ -25,7 +25,9 @@ const addPropertySchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	propertyStatus: z.enum(['DAMAGED', 'NEEDS_REPAIR', 'MISSING_ITEMS', 'GOOD_CONDITION']),
-	numberofUnits: z.number().int()
+	numberofUnits: z.number().int(),
+	price: z.number(),
+	available: z.boolean()
 });
 
 const addAmenitySchema = z.object({
@@ -143,6 +145,8 @@ export const actions = {
 		const propertyStatus = data.get('propertyStatus') as PropertyStatus;
 		const numberofUnits = data.get('numberofUnits');
 		const propertyId = data.get('propertyId');
+		const available = data.get('available');
+		const price = data.get('price');
 
 		if (
 			typeof name !== 'string' ||
