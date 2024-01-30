@@ -4,12 +4,11 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	export let row: any;
-	export let col: any;
 
 	export let data: PageData;
 
 	const { enhance } = superForm(data.deleteUnitForm, {
-		id: 'archiveUnit',
+		id: row.id,
 		onSubmit: ({ formData, cancel }) => {
 			if (!window.confirm('Are you sure you want to delete this Unit?')) {
 				cancel();

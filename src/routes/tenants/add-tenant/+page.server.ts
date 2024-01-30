@@ -103,7 +103,7 @@ export const actions = {
 
 			//upload files
 			tenantFile.map(async (file) => {
-				if (!(file instanceof File)) {
+				if (!(file instanceof File) || file.size === 0) {
 					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
 				}
 				console.log({ file });

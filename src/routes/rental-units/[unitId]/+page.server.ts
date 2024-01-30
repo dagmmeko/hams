@@ -27,7 +27,7 @@ const addPropertySchema = z.object({
 	propertyStatus: z.enum(['DAMAGED', 'NEEDS_REPAIR', 'MISSING_ITEMS', 'GOOD_CONDITION']),
 	numberofUnits: z.number().int(),
 	price: z.number(),
-	available: z.boolean()
+	available: z.boolean().optional()
 });
 
 const addAmenitySchema = z.object({

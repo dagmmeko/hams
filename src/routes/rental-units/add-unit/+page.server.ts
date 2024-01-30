@@ -67,6 +67,8 @@ export const actions = {
 				}
 				const buffer = await file.arrayBuffer();
 				const send = Buffer.from(buffer);
+
+				console.log({ file: file });
 				try {
 					await s3
 						.putObject({
@@ -82,7 +84,7 @@ export const actions = {
 							fileName: file.name,
 							UnitsFile: {
 								create: {
-									rentalUnitId: Number(addUnit.id)
+									rentalUnitId: addUnit.id
 								}
 							}
 						}
