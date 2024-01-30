@@ -92,7 +92,7 @@
 											{
 												currency:
 													data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
-														?.currency === 'DOLLAR'
+														?.currency === 'USD'
 														? 'USD'
 														: 'ETB',
 												currencyDisplay: 'code'

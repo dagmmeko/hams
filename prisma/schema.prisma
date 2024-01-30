@@ -74,12 +74,13 @@ model RentalUnits {
   floor             String
   kareMeter         Float           @default(0)
   price             Float           @default(0)
+  priceSetPerKare   Boolean         @default(false)
   buildingId        Int?
   maximumTenants    Int
   minimumRentalDate Int
   roomNumber        String
   unitType          UnitType
-  currency          Currency        @default(DOLLAR)
+  currency          Currency        @default(USD)
   active            Boolean         @default(false)
   Inspection        Inspection[]
   Property          UnitProperty[]
@@ -505,6 +506,6 @@ enum TaskStatus {
 }
 
 enum Currency {
-  DOLLAR
-  BIRR
+  USD
+  ETB
 }

@@ -36,99 +36,148 @@
 			<p class="text-2xl font-medium">New Rental Unit</p>
 			<p class="text-sm py-2">Register new rental unit here. Click save when you're done.</p>
 		</div>
-		<form method="post" action="?/addUnit" use:addFormEnhance class="grid grid-flow-col mt-6">
-			<div class="flex flex-col gap-4">
-				<label class="grid">
-					<span class="text-primary font-medium"> Room Number </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="roomNumber"
-						bind:value={$addUnitForm.roomNumber}
-						{...$constraints.roomNumber}
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Floor </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="floor"
-						bind:value={$addUnitForm.floor}
-						{...$constraints.floor}
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Size </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="size"
-						bind:value={$addUnitForm.size}
-						{...$constraints.size}
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Price </span>
-					<input
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-						required
-						name="price"
-						type="text"
-						bind:value={priceCurrency}
-						on:input={(e) => setPriceCurrency(e.currentTarget.value)}
-						{...$constraints.price}
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Unit Type </span>
-					<select
-						required
-						name="unitType"
-						bind:value={$addUnitForm.unitType}
-						{...$constraints.unitType}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					>
-						<option selected disabled> Pick a Type </option>
-						<option value="RESIDENTIAL"> Residential </option>
-						<option value="COMMERCIAL"> Commercial </option>
-					</select>
-				</label>
-				<hr class="my-4" />
+		<form method="post" action="?/addUnit" use:addFormEnhance>
+			<div class="grid md:grid-cols-2 gap-x-10 my-6">
+				<div class="flex flex-col gap-4">
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Room Number </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="roomNumber"
+							bind:value={$addUnitForm.roomNumber}
+							{...$constraints.roomNumber}
+						/>
+					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Floor </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="floor"
+							bind:value={$addUnitForm.floor}
+							{...$constraints.floor}
+						/>
+					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Size </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="size"
+							bind:value={$addUnitForm.size}
+							{...$constraints.size}
+						/>
+					</label>
 
-				<label>
-					<input
-						class="hidden"
-						type="file"
-						name="unitFile"
-						accept="image/*"
-						multiple
-						on:change={(e) => {
-							const data = e.currentTarget.files;
-							if (data) {
-								for (let i = 0; i <= data?.length; i++) {
-									if (data.item(i)) {
-										frontFileData = [...frontFileData, data[i].name];
+					<label class="grid">
+						<span class="text-primary font-medium"> Unit Type </span>
+						<select
+							required
+							name="unitType"
+							bind:value={$addUnitForm.unitType}
+							{...$constraints.unitType}
+							class="mt-2 border-[1px] border-black/60 rounded-md p-2"
+						>
+							<option selected disabled> Pick a Type </option>
+							<option value="RESIDENTIAL"> Residential </option>
+							<option value="COMMERCIAL"> Commercial </option>
+						</select>
+					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Condition </span>
+						<select
+							required
+							name="condition"
+							bind:value={$addUnitForm.condition}
+							{...$constraints.condition}
+							class=" border-[1px] border-black/60 rounded-md p-2"
+						>
+							<option selected disabled> Unit's Condition </option>
+							<option value="OUT_OF_SERVICE"> Out of service </option>
+							<option value="NEEDS_REPAIR"> Needs Repair </option>
+							<option value="GOOD_CONDITION"> Good Condition </option>
+						</select>
+					</label>
+				</div>
+				<div class="flex flex-col gap-4 mt-4 md:mt-0">
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Price </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							name="price"
+							type="text"
+							bind:value={priceCurrency}
+							on:input={(e) => setPriceCurrency(e.currentTarget.value)}
+							{...$constraints.price}
+						/>
+					</label>
+					<div class="flex mt-0 md:mt-8 gap-10">
+						<label class="flex items-center gap-3">
+							<input
+								type="checkbox"
+								name="inBirr"
+								bind:checked={$addUnitForm.inBirr}
+								{...$constraints.inBirr}
+								class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+							/>
+							<span class="text-primary font-medium"> In Birr </span>
+						</label>
+						<label class="flex items-center gap-3">
+							<input
+								type="checkbox"
+								name="perKare"
+								bind:checked={$addUnitForm.perKare}
+								{...$constraints.perKare}
+								class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+							/>
+							<span class="text-primary font-medium"> Per kare </span>
+						</label>
+					</div>
+
+					<label class="w-full grid gap-2 mt-4">
+						<span class="text-primary font-medium"> Minimum Rental Day </span>
+						<input
+							required
+							name="minimumRentalDate"
+							bind:value={$addUnitForm.minimumRentalDate}
+							{...$constraints.minimumRentalDate}
+							class=" border-[1px] border-black/60 rounded-md p-2"
+						/>
+					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Number of People Allowed </span>
+						<input
+							required
+							name="maximumTenants"
+							bind:value={$addUnitForm.maximumTenants}
+							{...$constraints.maximumTenants}
+							class=" border-[1px] border-black/60 rounded-md p-2"
+						/>
+					</label>
+				</div>
+			</div>
+			<div>
+				<hr class="my-6" />
+				<div class=" flex-1 flex-shrink-0 grid grid-cols-4 items-start gap-2">
+					<label>
+						<input
+							class="hidden"
+							type="file"
+							name="unitFile"
+							accept="image/*"
+							multiple
+							on:change={(e) => {
+								const data = e.currentTarget.files;
+								if (data) {
+									for (let i = 0; i <= data?.length; i++) {
+										if (data.item(i)) {
+											frontFileData = [...frontFileData, data[i].name];
+										}
 									}
 								}
-							}
-						}}
-					/>
-					<div class=" flex-1 flex-shrink-0 grid grid-cols-4 items-start gap-2">
-						{#each frontFileData as file}
-							<div
-								class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
-							>
-								<div class=" relative z-10 w-32 h-36" />
-
-								<div class="absolute top-0 w-full h-full left-0 z-30">
-									<div class="flex flex-col gap-2 justify-center items-center h-full">
-										<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
-										<p class="text-sm ml-2 py-2">{file}</p>
-									</div>
-								</div>
-							</div>
-						{/each}
+							}}
+						/>
 						<div
 							class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 						>
@@ -140,48 +189,23 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</label>
-				<hr class="my-6" />
+					</label>
+					{#each frontFileData as file}
+						<div
+							class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
+						>
+							<div class=" relative z-10 w-32 h-36" />
 
-				<button class="bg-primary text-white rounded-md py-2 px-6 w-fit"> Create unit</button>
-			</div>
-			<div class="flex flex-col gap-4">
-				<label class="grid">
-					<span class="text-primary font-medium"> Condition </span>
-					<select
-						required
-						name="condition"
-						bind:value={$addUnitForm.condition}
-						{...$constraints.condition}
-						class="mt-2 w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
-					>
-						<option selected disabled> Unit's Condition </option>
-						<option value="OUT_OF_SERVICE"> Out of service </option>
-						<option value="NEEDS_REPAIR"> Needs Repair </option>
-						<option value="GOOD_CONDITION"> Good Condition </option>
-					</select>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Minimum Rental Day </span>
-					<input
-						required
-						name="minimumRentalDate"
-						bind:value={$addUnitForm.minimumRentalDate}
-						{...$constraints.minimumRentalDate}
-						class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Number of People Allowed </span>
-					<input
-						required
-						name="maximumTenants"
-						bind:value={$addUnitForm.maximumTenants}
-						{...$constraints.maximumTenants}
-						class="w-[420px] h-12 border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
+							<div class="absolute top-0 w-full h-full left-0 z-30">
+								<div class="flex flex-col gap-2 justify-center items-center h-full">
+									<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
+									<p class="text-sm py-2 px-3 w-full line-clamp-1">{file}</p>
+								</div>
+							</div>
+						</div>
+					{/each}
+				</div>
+				<button class="bg-primary text-white rounded-md py-2 px-6 w-fit mt-6"> Create unit</button>
 			</div>
 		</form>
 	</div>

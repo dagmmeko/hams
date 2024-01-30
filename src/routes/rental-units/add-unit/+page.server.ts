@@ -8,12 +8,14 @@ import { S3_BUCKET_NAME } from '$env/static/private';
 const addUnitSchema = z.object({
 	roomNumber: z.string(),
 	floor: z.string(),
-	size: z.number(),
+	size: z.number().default('' as unknown as number),
 	price: z.number(),
 	unitType: z.enum(['COMMERCIAL', 'RESIDENTIAL']),
 	condition: z.enum(['NEEDS_REPAIR', 'OUT_OF_SERVICE', 'GOOD_CONDITION']),
 	minimumRentalDate: z.number().int(),
-	maximumTenants: z.number().int()
+	maximumTenants: z.number().int(),
+	inBirr: z.boolean().optional(),
+	perKare: z.boolean().optional()
 });
 
 export const load = async (event) => {
@@ -29,8 +31,6 @@ export const actions = {
 
 		unitFile.map(async (file) => {
 			if (!(file instanceof File)) {
-				console.log({ file1: file });
-
 				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
 			}
 		});
@@ -49,6 +49,8 @@ export const actions = {
 					unitType: addUnitForm.data.unitType,
 					maximumTenants: addUnitForm.data.maximumTenants,
 					minimumRentalDate: addUnitForm.data.minimumRentalDate,
+					currency: addUnitForm.data.inBirr ? 'ETB' : 'USD',
+					priceSetPerKare: addUnitForm.data.perKare,
 					Inspection: {
 						create: {
 							InspectionStatus: addUnitForm.data.condition,
@@ -68,7 +70,6 @@ export const actions = {
 				const buffer = await file.arrayBuffer();
 				const send = Buffer.from(buffer);
 
-				console.log({ file: file });
 				try {
 					await s3
 						.putObject({
