@@ -32,6 +32,14 @@
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
+			key: 'price',
+			title: 'Price',
+			value: (v: typeof rows[number]) => v.itemsPrice ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
 			key: 'status',
 			title: 'Condition',
 			value: (v: typeof rows[number]) => v.propertyStatus ?? 'NOT FOUND',
