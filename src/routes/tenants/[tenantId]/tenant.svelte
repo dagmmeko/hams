@@ -88,6 +88,15 @@
 					class="border-2"
 				/>
 			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Passport Number</span>
+				<input
+					name="passportNumber"
+					bind:value={$editTenantForm.passportNumber}
+					{...$constraints.passportNumber}
+					class="border-2"
+				/>
+			</label>
 		</div>
 	</form>
 	<div class="grid grid-cols-2 mt-6 gap-8">

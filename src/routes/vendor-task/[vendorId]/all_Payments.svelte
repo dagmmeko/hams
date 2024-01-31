@@ -119,6 +119,9 @@
 					{/if}
 				{/each}
 			</select>
+			{#if data.vendor.VendorTask.find((task) => task.id === $addPaymentForm.taskId)}
+				{data.vendor.VendorTask.find((task) => task.id === $addPaymentForm.taskId)?.paymentTerms}
+			{/if}
 
 			<label class="grid">
 				<span class="text-primary font-medium"> Amount</span>

@@ -143,7 +143,9 @@
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Full Name </span>
+					<span class="text-primary font-medium">
+						Full Name <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
 					<input
 						required
 						bind:value={$addEmployeeForm.userName}
@@ -153,7 +155,9 @@
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Phone Number </span>
+					<span class="text-primary font-medium">
+						Phone Number <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
 					<input
 						required
 						bind:value={$addEmployeeForm.phoneNumber}
@@ -163,7 +167,9 @@
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Email </span>
+					<span class="text-primary font-medium">
+						Email <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
 					<input
 						required
 						bind:value={$addEmployeeForm.email}
@@ -183,7 +189,9 @@
 					/>
 				</label>
 				<label>
-					<span class="text-primary font-medium"> Role </span>
+					<span class="text-primary font-medium">
+						Role <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
 					<select
 						required
 						bind:value={$addEmployeeForm.roleId}
@@ -191,7 +199,7 @@
 						name="roleId"
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					>
-						<option selected disabled> Select Role </option>
+						<option selected disabled value=""> Select Role </option>
 						{#each data.roles as role}
 							<option value={role.id}> {role.name} </option>
 						{/each}

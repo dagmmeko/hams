@@ -9,7 +9,8 @@ const editTenantSchema = z.object({
 	email: z.string().email(),
 	emergencyContactName: z.string(),
 	emergencyContactPhoneNumber: z.string(),
-	emergencyContactEmail: z.string().email()
+	emergencyContactEmail: z.string().email(),
+	passportNumber: z.string().optional()
 });
 
 const addReceiptsSchema = z.object({
@@ -78,7 +79,8 @@ export const load = async (event) => {
 			email: tenant?.email ?? undefined,
 			emergencyContactName: tenant?.emergencyContactName ?? undefined,
 			emergencyContactPhoneNumber: tenant?.emergencyContactPhoneNumber ?? undefined,
-			emergencyContactEmail: tenant?.emergencyContactEmail ?? undefined
+			emergencyContactEmail: tenant?.emergencyContactEmail ?? undefined,
+			passportNumber: tenant?.passportNumber ?? undefined
 		},
 		editTenantSchema
 	);

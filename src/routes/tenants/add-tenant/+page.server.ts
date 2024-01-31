@@ -17,10 +17,11 @@ const addTenantSchema = z.object({
 	emergencyContactName: z.string(),
 	emergencyContactPhoneNumber: z.string(),
 	emergencyContactEmail: z.string().email(),
-	tenantScore: z.number(),
+	tenantScore: z.number().optional(),
 	rentalUnitsId: z.number(),
 	newPrice: z.number().optional(),
-	priceChange: z.boolean().optional()
+	priceChange: z.boolean().optional(),
+	passportNumber: z.string().optional()
 });
 
 export const load = async (event) => {
@@ -61,6 +62,7 @@ export const actions = {
 					emergencyContactName: addTenantForm.data.emergencyContactName,
 					emergencyContactPhoneNumber: addTenantForm.data.emergencyContactPhoneNumber,
 					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
+					passportNumber: addTenantForm.data.passportNumber,
 					tenantScore: addTenantForm.data.tenantScore,
 					...(addTenantForm.data.priceChange &&
 						addTenantForm.data.newPrice && {

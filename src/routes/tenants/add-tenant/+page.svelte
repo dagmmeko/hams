@@ -116,7 +116,9 @@
 			<hr />
 			<div class="grid md:grid-cols-2 gap-x-10 my-6 gap-y-6">
 				<label class="w-full grid gap-2">
-					<span class="text-primary font-medium"> Full Name </span>
+					<span class="text-primary font-medium">
+						Full Name <span class="text-xs font-light text-danger"> * Required </span></span
+					>
 					<input
 						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="fullName"
@@ -134,7 +136,9 @@
 					/>
 				</label>
 				<label class="w-full grid gap-2">
-					<span class="text-primary font-medium"> Phone Number </span>
+					<span class="text-primary font-medium">
+						Phone Number <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
 					<input
 						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="phoneNumber"
@@ -203,6 +207,17 @@
 						/>
 					</label>
 				{/if}
+				{#if data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.unitType !== 'COMMERCIAL'}
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Passport Number </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							name="passportNumber"
+							bind:value={$addTenantForm.passportNumber}
+							{...$constraints.passportNumber}
+						/>
+					</label>
+				{/if}
 				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Emergency Contact Name </span>
 					<input
@@ -232,7 +247,7 @@
 						{...$constraints.emergencyContactPhoneNumber}
 					/>
 				</label>
-				<label class="w-full grid gap-2">
+				<!-- <label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Tenant Internal Score </span>
 					<input
 						class=" border-[1px] border-black/60 rounded-md p-2"
@@ -240,7 +255,7 @@
 						bind:value={$addTenantForm.tenantScore}
 						{...$constraints.tenantScore}
 					/>
-				</label>
+				</label> -->
 			</div>
 			<hr class="my-4" />
 
@@ -291,6 +306,9 @@
 							<div class="flex flex-col gap-2 justify-center items-center h-full">
 								<FileUp class="text-primary w-7 h-7" />
 								<span class="text-xs">Upload File</span>
+								<p class="text-[10px] text-center px-3">
+									For residential customers upload ID, License or Passport
+								</p>
 							</div>
 						</div>
 					</div>

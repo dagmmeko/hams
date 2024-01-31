@@ -40,7 +40,9 @@
 			<div class="grid md:grid-cols-2 gap-x-10 my-6">
 				<div class="flex flex-col gap-4">
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Room Number </span>
+						<span class="text-primary font-medium">
+							Room Number <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
 							required
@@ -50,7 +52,9 @@
 						/>
 					</label>
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Floor </span>
+						<span class="text-primary font-medium">
+							Floor <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
 							required
@@ -60,7 +64,9 @@
 						/>
 					</label>
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Size </span>
+						<span class="text-primary font-medium">
+							Size <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
 							required
@@ -71,7 +77,9 @@
 					</label>
 
 					<label class="grid">
-						<span class="text-primary font-medium"> Unit Type </span>
+						<span class="text-primary font-medium">
+							Unit Type <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<select
 							required
 							name="unitType"
@@ -79,13 +87,15 @@
 							{...$constraints.unitType}
 							class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 						>
-							<option selected disabled> Pick a Type </option>
+							<option selected disabled value=""> Pick a Type </option>
 							<option value="RESIDENTIAL"> Residential </option>
 							<option value="COMMERCIAL"> Commercial </option>
 						</select>
 					</label>
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Condition </span>
+						<span class="text-primary font-medium">
+							Condition <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<select
 							required
 							name="condition"
@@ -93,7 +103,7 @@
 							{...$constraints.condition}
 							class=" border-[1px] border-black/60 rounded-md p-2"
 						>
-							<option selected disabled> Unit's Condition </option>
+							<option selected disabled value=""> Unit's Condition </option>
 							<option value="OUT_OF_SERVICE"> Out of service </option>
 							<option value="NEEDS_REPAIR"> Needs Repair </option>
 							<option value="GOOD_CONDITION"> Good Condition </option>
@@ -186,6 +196,9 @@
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUp class="text-primary w-7 h-7" />
 									<span class="text-xs">Upload File</span>
+									<p class="text-[10px] text-center px-3">
+										Contract, Agreement, pictures or any other document
+									</p>
 								</div>
 							</div>
 						</div>
