@@ -209,7 +209,11 @@
 				{/if}
 				{#if data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.unitType !== 'COMMERCIAL'}
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Passport Number </span>
+						<span class="text-primary font-medium">
+							Passport Number <span class="text-xs font-light text-danger">
+								* Required for Foreign Customers
+							</span></span
+						>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
 							name="passportNumber"
