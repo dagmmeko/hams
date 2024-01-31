@@ -2,6 +2,8 @@
 	import Printer from '$lib/assets/printer.svg.svelte';
 
 	import PrintPdf from 'svelte-printpdf';
+	import CPHeader from '$lib/assets/cp_header.png';
+	import CPFooter from '$lib/assets/cp_footer.png';
 
 	let print = false;
 	let className = '';
@@ -21,6 +23,8 @@
 		<Printer class="h-4 w-4" /> Print
 	</button>
 	<PrintPdf bind:print>
+		<img src={CPHeader} class="hidden print:block mb-6" alt="cp header" />
 		<slot />
+		<img src={CPFooter} class="hidden print:block fixed bottom-0 w-full" alt="cp header" />
 	</PrintPdf>
 </div>
