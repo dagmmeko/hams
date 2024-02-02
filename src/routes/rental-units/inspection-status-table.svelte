@@ -4,14 +4,14 @@
 </script>
 
 <div
-	class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.Inspection[0]
+	class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.Inspections[0]
 		.InspectionStatus === 'GOOD_CONDITION'
 		? 'bg-success text-white'
-		: row.Inspection[0].InspectionStatus === 'NEEDS_REPAIR'
+		: row.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
 		? 'bg-warning text-black/70'
-		: row.Inspection[0].InspectionStatus === 'OUT_OF_SERVICE'
+		: row.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
 		? 'bg-danger text-white'
 		: ''}"
 >
-	{row.Inspection[0].InspectionStatus.replace(/_/g, ' ')}
+	{row.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
 </div>

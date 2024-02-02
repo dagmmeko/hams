@@ -6,6 +6,7 @@
 	import Name from './name.svelte';
 	import PendingTenants from './pending-tenants.svelte';
 	import dayjs from 'dayjs';
+	import { clickOutside } from '$lib/utils/click-outside';
 
 	export let data;
 
@@ -51,6 +52,8 @@
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
+
+	let filterModal = true;
 </script>
 
 <div class="mx-10 my-12">
@@ -109,6 +112,64 @@
 						}}
 					/>
 				</label>
+				{#if filterModal}
+					<div class="fixed mt-12 z-50">
+						<div
+							use:clickOutside={() => (filterModal = false)}
+							class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
+						>
+							<button
+								on:click={async () => {
+									await goto(`?`);
+								}}
+								class="hover:underline hover:text-primary"
+							>
+								All
+							</button>
+
+							<button
+								on:click={async () => {
+									const newSearchParams = new URLSearchParams($page.url.search);
+									newSearchParams.set('unitType', 'COMMERCIAL');
+									await goto(`?${newSearchParams.toString()}`);
+								}}
+								class="hover:underline hover:text-primary"
+							>
+								Rent Payment Expired
+							</button>
+							<button
+								on:click={async () => {
+									const newSearchParams = new URLSearchParams($page.url.search);
+									newSearchParams.set('unitType', 'COMMERCIAL');
+									await goto(`?${newSearchParams.toString()}`);
+								}}
+								class="hover:underline hover:text-primary"
+							>
+								Rent Payment Due in a month
+							</button>
+							<button
+								on:click={async () => {
+									const newSearchParams = new URLSearchParams($page.url.search);
+									newSearchParams.set('unitType', 'COMMERCIAL');
+									await goto(`?${newSearchParams.toString()}`);
+								}}
+								class="hover:underline hover:text-primary"
+							>
+								Contract Expired
+							</button>
+							<button
+								on:click={async () => {
+									const newSearchParams = new URLSearchParams($page.url.search);
+									newSearchParams.set('unitType', 'COMMERCIAL');
+									await goto(`?${newSearchParams.toString()}`);
+								}}
+								class="hover:underline hover:text-primary"
+							>
+								Contract Expired in a month
+							</button>
+						</div>
+					</div>
+				{/if}
 			</div>
 			<SvelteTable
 				on:clickCell={(event) => {

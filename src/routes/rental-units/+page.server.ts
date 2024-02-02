@@ -1,4 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
+import type { InspectionStatus, UnitType } from '@prisma/client';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -9,6 +10,9 @@ const deleteUnitSchema = z.object({
 export const load = async (event) => {
 	const deleteUnitForm = await superValidate(deleteUnitSchema);
 	const search = event.url.searchParams.get('search');
+	const condition = event.url.searchParams.get('condition') as InspectionStatus;
+	const status = event.url.searchParams.get('status');
+	const unitType = event.url.searchParams.get('unitType') as UnitType;
 
 	const units = await prisma.rentalUnits.findMany({
 		where: {
@@ -17,10 +21,21 @@ export const load = async (event) => {
 					contains: search
 				}
 			}),
+
+			...(status === 'vacant' && {
+				TenantRental: {
+					none: {
+						active: true
+					}
+				}
+			}),
+			...(unitType && {
+				unitType: unitType
+			}),
 			deletedAt: null
 		},
 		include: {
-			Inspection: {
+			Inspections: {
 				orderBy: {
 					inspectionDate: 'desc'
 				},

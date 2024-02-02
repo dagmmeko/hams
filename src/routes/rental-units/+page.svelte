@@ -7,9 +7,11 @@
 	import { goto } from '$app/navigation';
 	import InspectionStatusTable from './inspection-status-table.svelte';
 	import { numberToCurrency } from '$lib/utils/currency';
+	import { clickOutside } from '$lib/utils/click-outside';
+
 	export let data;
 
-	let modal = false;
+	let filterModal = true;
 
 	$: rows = data.units;
 	$: columns = [
@@ -93,20 +95,18 @@
 			<p class="text-lg">Rental Units</p>
 			<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.units.length} Units</p>
 		</div>
-		<a
-			href="/rental-units/add-unit"
-			class="bg-primary text-white rounded-md py-2 px-6"
-			on:click={() => (modal = true)}
-		>
+		<a href="/rental-units/add-unit" class="bg-primary text-white rounded-md py-2 px-6">
 			New Rental Unit</a
 		>
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<button
 			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+			on:click={() => (filterModal = !filterModal)}
 		>
 			<FiltersLines class="h-4 w-4" /> Add filters
 		</button>
+
 		<label class="grid">
 			<input
 				placeholder="Search"
@@ -121,6 +121,83 @@
 				}}
 			/>
 		</label>
+		{#if filterModal}
+			<div class="fixed mt-12 z-50">
+				<div
+					use:clickOutside={() => (filterModal = false)}
+					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
+				>
+					<button
+						on:click={async () => {
+							await goto(`?`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						All
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('condition', 'GOOD_CONDITION');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Good Condition
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('condition', 'NEEDS_REPAIR');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Needs Repair
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('condition', 'OUT_OF_SERVICE');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Out of Service
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('status', 'vacant');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Vacant
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('unitType', 'COMMERCIAL');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Commercial
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('unitType', 'RESIDENTIAL');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Residential</button
+					>
+				</div>
+			</div>
+		{/if}
 	</div>
 	<SvelteTable
 		classNameTable="rolesTable"
@@ -133,3 +210,9 @@
 		{rows}
 	/>
 </div>
+
+<style lang="postcss">
+	* :global(.rolesTable) {
+		@apply cursor-pointer;
+	}
+</style>

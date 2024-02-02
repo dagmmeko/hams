@@ -45,7 +45,7 @@ export const load = async (event) => {
 			id: Number(event.params.unitId)
 		},
 		include: {
-			Inspection: {
+			Inspections: {
 				orderBy: {
 					inspectionDate: 'desc'
 				},
@@ -77,7 +77,7 @@ export const load = async (event) => {
 			size: unitDetails?.kareMeter,
 			price: unitDetails?.price,
 			unitType: unitDetails?.unitType,
-			condition: unitDetails?.Inspection[0].InspectionStatus,
+			condition: unitDetails?.Inspections[0].InspectionStatus,
 			minimumRentalDate: unitDetails?.minimumRentalDate,
 			maximumTenants: unitDetails?.maximumTenants
 		},

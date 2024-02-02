@@ -67,29 +67,30 @@ model BuildingAmenities {
 }
 
 model RentalUnits {
-  id                Int             @id @default(autoincrement())
-  createdAt         DateTime        @default(now())
-  updateAt          DateTime        @updatedAt
-  deletedAt         DateTime?
-  floor             String
-  kareMeter         Float           @default(0)
-  price             Float           @default(0)
-  priceSetPerKare   Boolean         @default(false)
-  buildingId        Int?
-  maximumTenants    Int
-  minimumRentalDate Int
-  roomNumber        String
-  unitType          UnitType
-  currency          Currency        @default(USD)
-  active            Boolean         @default(false)
-  Inspection        Inspection[]
-  Property          UnitProperty[]
-  Amenities         UnitAmenities[]
-  Building          Building?       @relation(fields: [buildingId], references: [id])
-  UnitsFile         UnitsFile[]
-  PriceChange       PriceChange[]
-  TenantRental      TenantRental[]
-  Receipts          Receipts[]
+  id                     Int               @id @default(autoincrement())
+  createdAt              DateTime          @default(now())
+  updateAt               DateTime          @updatedAt
+  deletedAt              DateTime?
+  floor                  String
+  kareMeter              Float             @default(0)
+  price                  Float             @default(0)
+  priceSetPerKare        Boolean           @default(false)
+  buildingId             Int?
+  maximumTenants         Int
+  minimumRentalDate      Int
+  roomNumber             String
+  unitType               UnitType
+  currency               Currency          @default(USD)
+  active                 Boolean           @default(false)
+  latestInspectionStatus InspectionStatus?
+  Inspections            Inspection[]
+  Property               UnitProperty[]
+  Amenities              UnitAmenities[]
+  Building               Building?         @relation(fields: [buildingId], references: [id])
+  UnitsFile              UnitsFile[]
+  PriceChange            PriceChange[]
+  TenantRental           TenantRental[]
+  Receipts               Receipts[]
 
   @@index([buildingId])
 }

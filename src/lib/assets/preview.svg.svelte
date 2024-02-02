@@ -1,7 +1,6 @@
 <script>
 	let className = '';
 	export { className as class };
-	export let color = 'white';
 </script>
 
 <svg

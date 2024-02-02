@@ -51,7 +51,8 @@ export const actions = {
 					minimumRentalDate: addUnitForm.data.minimumRentalDate,
 					currency: addUnitForm.data.inBirr ? 'ETB' : 'USD',
 					priceSetPerKare: addUnitForm.data.perKare,
-					Inspection: {
+					latestInspectionStatus: addUnitForm.data.condition,
+					Inspections: {
 						create: {
 							InspectionStatus: addUnitForm.data.condition,
 							description: 'First Inspection',
