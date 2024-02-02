@@ -11,7 +11,7 @@
 
 	export let data;
 
-	let filterModal = true;
+	let filterModal = false;
 
 	$: rows = data.units;
 	$: columns = [

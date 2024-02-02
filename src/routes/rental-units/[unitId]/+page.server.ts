@@ -341,12 +341,19 @@ export const actions = {
 			return fail(500, { errorMessage: 'Query is not a string' });
 		}
 
-		const addInspection = await prisma.inspection.create({
+		const addInspection = await prisma.rentalUnits.update({
+			where: {
+				id: Number(event.params.unitId)
+			},
 			data: {
-				inspectionDate: new Date(inspectionDate as string),
-				description: inspectionDescription,
-				InspectionStatus: inspectionCondition as InspectionStatus,
-				rentalUnitsId: Number(event.params.unitId)
+				Inspections: {
+					create: {
+						inspectionDate: new Date(inspectionDate as string),
+						description: inspectionDescription,
+						InspectionStatus: inspectionCondition as InspectionStatus
+					}
+				},
+				latestInspectionStatus: inspectionCondition as InspectionStatus
 			}
 		});
 

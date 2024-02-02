@@ -53,7 +53,7 @@
 		}
 	];
 
-	let filterModal = true;
+	let filterModal = false;
 </script>
 
 <div class="mx-10 my-12">
