@@ -95,6 +95,7 @@
 			<div class="bg-ghost/60 p-6 flex justify-between">
 				<button
 					class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+					on:click={() => (filterModal = !filterModal)}
 				>
 					<FiltersLines class="h-4 w-4" /> Add filters
 				</button>

@@ -151,6 +151,7 @@ model UnitProperty {
   rentalUnitsId  Int?
   available      Boolean        @default(false)
   itemsPrice     Float          @default(0)
+  itemCategory   ItemsCategory?
   propertyStatus PropertyStatus
   numberofUnits  Int
   RentalUnits    RentalUnits?   @relation(fields: [rentalUnitsId], references: [id])
@@ -504,6 +505,14 @@ enum TaskStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
+}
+
+enum ItemsCategory {
+  SALON
+  KITCHEN
+  BATHROOM
+  BEDROOM
+  LAUNDRY
 }
 
 enum Currency {

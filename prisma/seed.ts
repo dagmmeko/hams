@@ -1,8 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import { ItemsCategory, PrismaClient, PropertyStatus } from '@prisma/client';
 import dayjs from 'dayjs';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
+import { unitProperty } from './property-data';
 const prisma = new PrismaClient();
+
+// const unitIds = [15, 16, 17, 18, 19, 20, 21, 22, 23];
+
+const unitIds = [111, 112, 211, 222, 223, 224];
 
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 async function main() {
@@ -58,68 +63,68 @@ async function main() {
 	// 	}
 	// });
 
-	const coffeecology = await prisma.tenants.create({
-		data: {
-			fullName: 'Nahom Liyew Semanew',
-			companyName: 'Coffeecology',
-			phoneNumber: '0911236353',
-			TenantRental: {
-				create: {
-					unitId: 30,
-					contractStartDate: new Date('9/19/23'),
-					contractEndDate: new Date('1/22/28'),
-					active: true
-				}
-			},
-			Receipts: {
-				create: {
-					startDate: new Date('9/19/23'),
-					endDate: new Date('4/16/24'),
-					receiptReceived: true,
-					receiptReceivedOn: new Date('10/20/23'),
-					paymentConfirmed: true,
-					amount: 1144200,
-					bankName: '',
-					paymentReason: 'Rent',
-					receiptReferenceNumber: '1',
-					payToUnitId: 30
-				}
-			}
-		}
-	});
+	// const coffeecology = await prisma.tenants.create({
+	// 	data: {
+	// 		fullName: 'Nahom Liyew Semanew',
+	// 		companyName: 'Coffeecology',
+	// 		phoneNumber: '0911236353',
+	// 		TenantRental: {
+	// 			create: {
+	// 				unitId: 30,
+	// 				contractStartDate: new Date('9/19/23'),
+	// 				contractEndDate: new Date('1/22/28'),
+	// 				active: true
+	// 			}
+	// 		},
+	// 		Receipts: {
+	// 			create: {
+	// 				startDate: new Date('9/19/23'),
+	// 				endDate: new Date('4/16/24'),
+	// 				receiptReceived: true,
+	// 				receiptReceivedOn: new Date('10/20/23'),
+	// 				paymentConfirmed: true,
+	// 				amount: 1144200,
+	// 				bankName: '',
+	// 				paymentReason: 'Rent',
+	// 				receiptReferenceNumber: '1',
+	// 				payToUnitId: 30
+	// 			}
+	// 		}
+	// 	}
+	// });
 
-	const fnboutique = await prisma.tenants.create({
-		data: {
-			fullName: 'Yohannes Membere Wolde',
-			companyName: 'FN Boutique',
-			phoneNumber: '0911466011',
-			emergencyContactName: 'Dagmawi Girma',
-			emergencyContactPhoneNumber: '0911214933',
-			emergencyContactEmail: 'dagmawi@omnalogistics.com',
-			TenantRental: {
-				create: {
-					unitId: 27,
-					contractStartDate: new Date('9/19/23'),
-					contractEndDate: new Date('9/18/24'),
-					active: true
-				}
-			},
-			Receipts: {
-				create: {
-					startDate: new Date('9/19/23'),
-					endDate: new Date('12/18/23'),
-					receiptReceived: true,
-					receiptReceivedOn: new Date('10/20/23'),
-					paymentConfirmed: true,
-					amount: 296420.99,
-					bankName: 'CBE',
-					paymentReason: 'Rent',
-					receiptReferenceNumber: '2',
-					payToUnitId: 27
-				}
-			}
-		}
-	});
+	// const fnboutique = await prisma.tenants.create({
+	// 	data: {
+	// 		fullName: 'Yohannes Membere Wolde',
+	// 		companyName: 'FN Boutique',
+	// 		phoneNumber: '0911466011',
+	// 		emergencyContactName: 'Dagmawi Girma',
+	// 		emergencyContactPhoneNumber: '0911214933',
+	// 		emergencyContactEmail: 'dagmawi@omnalogistics.com',
+	// 		TenantRental: {
+	// 			create: {
+	// 				unitId: 27,
+	// 				contractStartDate: new Date('9/19/23'),
+	// 				contractEndDate: new Date('9/18/24'),
+	// 				active: true
+	// 			}
+	// 		},
+	// 		Receipts: {
+	// 			create: {
+	// 				startDate: new Date('9/19/23'),
+	// 				endDate: new Date('12/18/23'),
+	// 				receiptReceived: true,
+	// 				receiptReceivedOn: new Date('10/20/23'),
+	// 				paymentConfirmed: true,
+	// 				amount: 296420.99,
+	// 				bankName: 'CBE',
+	// 				paymentReason: 'Rent',
+	// 				receiptReferenceNumber: '2',
+	// 				payToUnitId: 27
+	// 			}
+	// 		}
+	// 	}
+	// });
 
 	// const divineHair = await prisma.tenants.create({
 	// 	data: {
@@ -129,6 +134,32 @@ async function main() {
 	// 	}
 	// });
 	// const Intnom
+
+	unitIds.map(async (id) => {
+		await prisma.rentalUnits.update({
+			where: {
+				id: id
+			},
+			data: {
+				Property: {
+					createMany: {
+						data: [
+							...unitProperty.map((unit) => {
+								return {
+									name: unit.name,
+									description: unit.description,
+									numberofUnits: unit.numberofUnits,
+									propertyStatus: unit.propertyStatus as PropertyStatus,
+									available: unit.available,
+									itemsCategory: unit.itemCategory as ItemsCategory
+								};
+							})
+						]
+					}
+				}
+			}
+		});
+	});
 }
 main()
 	.then(async () => {
