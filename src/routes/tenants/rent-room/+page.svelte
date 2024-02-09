@@ -175,8 +175,17 @@
 							{...$constraints.startDate}
 						/>
 					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> TIN Number </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							name="tinNumber"
+							bind:value={$rentRoomForm.tinNumber}
+							{...$constraints.tinNumber}
+						/>
+					</label>
 				</div>
-				<div class="w-full grid gap-3">
+				<div class="w-full h-fit grid gap-3">
 					<label class="grid gap-1">
 						<span class="text-primary font-medium"> Duration of stay </span>
 						<input

@@ -21,7 +21,8 @@ const addTenantSchema = z.object({
 	rentalUnitsId: z.number(),
 	newPrice: z.number().optional(),
 	priceChange: z.boolean().optional(),
-	passportNumber: z.string().optional()
+	passportNumber: z.string().optional(),
+	tinNumber: z.string().optional()
 });
 
 export const load = async (event) => {
@@ -82,7 +83,8 @@ export const actions = {
 								contractEndDate: addTenantForm.data.contractEndDate,
 								companyName: addTenantForm.data.fullName,
 								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
-								active: addTenantForm.data.priceChange ? false : true
+								active: addTenantForm.data.priceChange ? false : true,
+								tinNumber: addTenantForm.data.tinNumber
 							}
 						}
 					})

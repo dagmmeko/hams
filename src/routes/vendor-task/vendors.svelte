@@ -109,7 +109,6 @@
 		</label>
 	</div>
 
-
 	<SvelteTable
 		classNameTable="rolesTable"
 		{columns}
@@ -164,6 +163,16 @@
 					bind:value={$addVendorForm.email}
 					{...$constraints.email}
 					name="email"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				/>
+			</label>
+			<label class="grid">
+				<span class="text-primary font-medium"> TIN Number </span>
+				<input
+					bind:value={$addVendorForm.tinNumber}
+					{...$constraints.tinNumber}
+					name="tinNumber"
 					required
 					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 				/>

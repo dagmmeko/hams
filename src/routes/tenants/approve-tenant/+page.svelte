@@ -35,7 +35,7 @@
 				>
 			</div>
 
-			<div class="grid grid-cols-2 mt-6">
+			<div class="grid grid-cols-2 gap-10 mt-6">
 				<div class="grid gap-4">
 					{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
 						<label class="grid gap-2">
@@ -49,12 +49,12 @@
 						</label>
 					{/if}
 
-					<label class="grid">
+					<label class="w-full grid gap-2">
 						<span class="text-primary font-medium"> Start Date </span>
 						<input
 							type="date"
 							name="startDate"
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							class=" border-[1px] border-black/60 rounded-md p-2"
 							bind:this={dateInput}
 							on:click={() => {
 								dateInput && dateInput.showPicker();
@@ -63,13 +63,22 @@
 							{...$approveRentConstraints.startDate}
 						/>
 					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> TIN number </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							name="tinNumber"
+							bind:value={$approveRentForm.tinNumber}
+							{...$approveRentConstraints.tinNumber}
+						/>
+					</label>
 				</div>
 				<div class="grid gap-4">
 					{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
 						<label class="grid gap-2">
 							<span class="text-primary font-medium"> Duration of stay </span>
 							<input
-								class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+								class=" border-[1px] border-black/60 rounded-md p-2"
 								type="number"
 								name="durationOfStay"
 								bind:value={$approveRentForm.durationOfStay}
@@ -77,12 +86,12 @@
 							/>
 						</label>
 					{/if}
-					<label class="grid">
+					<label class="w-full h-fit gap-2 grid">
 						<span class="text-primary font-medium"> End Date </span>
 						<input
 							type="date"
 							name="endDate"
-							class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+							class="border-[1px] border-black/60 rounded-md p-2"
 							bind:this={dateInput2}
 							on:click={() => {
 								dateInput2 && dateInput2.showPicker();

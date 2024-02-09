@@ -59,18 +59,16 @@ export const load = async (event) => {
 			tenantsId: Number(event.params.tenantId)
 		}
 	});
+	console.log({ allReceipts });
 
 	let groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
 		return {
 			receiptReferenceNumber: receiptReferenceNumber.receiptReferenceNumber,
 			receipts: tenant?.Receipts.filter((receipt) => {
-				console.log({ receipt });
 				return receipt.receiptReferenceNumber === receiptReferenceNumber.receiptReferenceNumber;
 			})
 		};
 	});
-
-	console.log({ allReceipts: groupedReceipts });
 
 	const editTenantForm = await superValidate(
 		{

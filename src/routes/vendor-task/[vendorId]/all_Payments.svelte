@@ -7,6 +7,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import type { PageData } from './$types';
+	import PdfPrint from '$lib/components/pdf-print.svelte';
 	let dateInput: any;
 
 	let modal = false;
@@ -77,17 +78,23 @@
 			New Payment</button
 		>
 	</div>
+	<PdfPrint class="ml-6">
+		<div class="print:block hidden">Name: {data.vendor.name}</div>
+		<div class="print:block hidden">Phone: {data.vendor.phoneNumber}</div>
+		<div class="print:block hidden">Service: {data.vendor.serviceType}</div>
+		<div class="print:block hidden">TIN: {data.vendor.tinNumber}</div>
 
-	<SvelteTable
-		classNameTable="rolesTable"
-		{columns}
-		{rows}
-		on:clickCell={(event) => {
-			const vendorId = event.detail.row.id;
-			const PaymentId = event.detail.row.id;
-			goto(`/vendor-task/${vendorId}/${PaymentId}`);
-		}}
-	/>
+		<SvelteTable
+			classNameTable="rolesTable"
+			{columns}
+			{rows}
+			on:clickCell={(event) => {
+				const vendorId = event.detail.row.id;
+				const PaymentId = event.detail.row.id;
+				goto(`/vendor-task/${vendorId}/${PaymentId}`);
+			}}
+		/>
+	</PdfPrint>
 </div>
 
 {#if modal}

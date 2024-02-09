@@ -11,7 +11,8 @@ const rentRoomSchema = z.object({
 	selectedUnitId: z.string().optional(),
 	duration: z.string().optional(),
 	newPrice: z.string().optional(),
-	priceChange: z.boolean().optional()
+	priceChange: z.boolean().optional(),
+	tinNumber: z.string().optional()
 });
 
 export const load = async (event) => {
@@ -91,7 +92,8 @@ export const actions = {
 								contractStartDate: new Date(rentRoomForm.data.startDate ?? Date.now()),
 								contractEndDate: new Date(rentRoomForm.data.endDate ?? Date.now()),
 								durationOfStayInCountry: Number(rentRoomForm.data.duration),
-								active: rentRoomForm.data.priceChange ? false : true
+								active: rentRoomForm.data.priceChange ? false : true,
+								tinNumber: rentRoomForm.data.tinNumber
 							}
 						}
 					})
@@ -101,8 +103,6 @@ export const actions = {
 
 		if (!rentTenant) return fail(500, { errorMessage: 'Tenant not rented.' });
 
-		console.log('hello');
-
 		await prisma.rentalUnits.update({
 			where: {
 				id: Number(rentRoomForm.data.selectedUnitId)
@@ -111,8 +111,6 @@ export const actions = {
 				active: true
 			}
 		});
-
-		console.log('rrr');
 
 		return { rentTenant, rentRoomForm };
 	}

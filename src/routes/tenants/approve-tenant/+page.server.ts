@@ -8,7 +8,8 @@ const approveRentSchema = z.object({
 	durationOfStay: z.number().optional(),
 	priceChangeId: z.number(),
 	startDate: z.date(),
-	endDate: z.date()
+	endDate: z.date(),
+	tinNumber: z.string().optional()
 });
 
 export const load = async (event) => {
@@ -70,7 +71,8 @@ export const actions = {
 						contractStartDate: approveRentForm.data.startDate,
 						contractEndDate: approveRentForm.data.endDate,
 						durationOfStayInCountry: approveRentForm.data.durationOfStay,
-						active: true
+						active: true,
+						tinNumber: approveRentForm.data.tinNumber
 					}
 				},
 				PriceChange: {
@@ -85,8 +87,6 @@ export const actions = {
 				}
 			}
 		});
-
-		console.log({ tenant });
 
 		if (!tenant) return fail(500, { approveRentForm, errorMessage: 'Tenant not rented.' });
 

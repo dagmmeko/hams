@@ -5,9 +5,9 @@ import { randomBytes } from 'crypto';
 import { unitProperty } from './property-data';
 const prisma = new PrismaClient();
 
-// const unitIds = [15, 16, 17, 18, 19, 20, 21, 22, 23];
+const unitIds = [15, 16, 17, 18, 19, 20, 21, 22, 23];
 
-const unitIds = [111, 112, 211, 222, 223, 224];
+// const unitIds = [111, 112, 211, 222, 223, 224];
 
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 async function main() {
@@ -151,7 +151,7 @@ async function main() {
 									numberofUnits: unit.numberofUnits,
 									propertyStatus: unit.propertyStatus as PropertyStatus,
 									available: unit.available,
-									itemsCategory: unit.itemCategory as ItemsCategory
+									itemCategory: unit.itemCategory as ItemsCategory
 								};
 							})
 						]

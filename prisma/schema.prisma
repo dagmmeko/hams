@@ -204,6 +204,7 @@ model TenantRental {
   companyName             String      @default("company Name")
   active                  Boolean     @default(false)
   durationOfStayInCountry Int?
+  tinNumber               String?
   purposeOfRent           String?
   Tenants                 Tenants     @relation(fields: [tenantId], references: [id])
   RentalUnits             RentalUnits @relation(fields: [unitId], references: [id])
@@ -385,6 +386,7 @@ model Vendor {
   phoneNumber        String
   email              String
   address            String
+  tinNumber          String?
   serviceDescription String
   serviceType        ServiceType
   score              String

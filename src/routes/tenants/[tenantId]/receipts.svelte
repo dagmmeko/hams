@@ -45,8 +45,17 @@
 		<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 			<PdfPrint>
 				<div>
-					<div class="w-full text-2xl font-bold print:block hidden text-center">Center Point</div>
-					<div class="text-xl font-semibold my-2">
+					<!-- <div class="w-full text-2xl font-bold print:block hidden text-center">Center Point</div> -->
+					<div class="print:block hidden">
+						<span class="font-semibold">Tenants Name:</span>
+						{data.tenant?.fullName}
+					</div>
+					<div class="print:block hidden">
+						<span class="font-semibold">Tenants phone:</span>
+						{data.tenant?.phoneNumber}
+					</div>
+
+					<div class="text-lg font-semibold my-2 print:block hidden">
 						Receipt Reference: {receipts.receiptReferenceNumber}
 					</div>
 					<div class="hidden">
@@ -61,6 +70,13 @@
 										>{dayjs(rec.receiptReceivedOn).format('MMM DD/YY')}</span
 									>
 								</p>
+								<div class="">
+									<span class="font-semibold">TIN Number:</span>
+									{data.tenant?.TenantRental.find(
+										(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId
+									)?.tinNumber ?? 'N/A'}
+								</div>
+
 								<div class="flex gap-4">
 									<div>
 										<p class="font-medium">

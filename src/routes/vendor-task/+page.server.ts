@@ -10,7 +10,8 @@ const addVendorSchema = z.object({
 	address: z.string(),
 	serviceDescription: z.string(),
 	serviceType: z.enum(['CLEANING', 'ELECTRICITY', 'PLUMBING', 'PAINTING', 'SECURITY']),
-	score: z.string()
+	score: z.string(),
+	tinNumber: z.string().optional()
 });
 
 const addTaskSchema = z.object({
@@ -73,7 +74,8 @@ export const actions = {
 				address: addVendorForm.data.address,
 				serviceDescription: addVendorForm.data.serviceDescription,
 				serviceType: addVendorForm.data.serviceType,
-				score: addVendorForm.data.score
+				score: addVendorForm.data.score,
+				tinNumber: addVendorForm.data.tinNumber
 			}
 		});
 

@@ -206,6 +206,15 @@
 							{...$constraints.contractEndDate}
 						/>
 					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> TIN Number </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							name="tinNumber"
+							bind:value={$addTenantForm.tinNumber}
+							{...$constraints.tinNumber}
+						/>
+					</label>
 				{/if}
 				{#if data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.unitType !== 'COMMERCIAL'}
 					<label class="w-full grid gap-2">
