@@ -1,5 +1,5 @@
 <script>
-	console.log(new Date('9/19/23'));
+	export let data;
 </script>
 
 <div class="mx-10 my-12">
@@ -7,8 +7,9 @@
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
 	<div class=" grid grid-cols-4 gap-4">
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			Occupancy rates
+		<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
+			<span>Occupancy rates</span>
+			<span>{data.activeUnit} / {data.allUnits}</span>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Bookings by source

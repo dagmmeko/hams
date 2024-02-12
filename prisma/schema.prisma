@@ -184,6 +184,7 @@ model Tenants {
   passportNumber              String?
   emergencyContactName        String?
   emergencyContactPhoneNumber String?
+  contactSource               ContactSource?
   tenantScore                 Int            @default(0)
   emergencyContactEmail       String?
   Receipts                    Receipts[]
@@ -520,4 +521,15 @@ enum ItemsCategory {
 enum Currency {
   USD
   ETB
+}
+
+enum ContactSource {
+  WEBSITE
+  REFERRAL
+  WALK_IN
+  PHONE
+  EMAIL
+  SOCIAL_MEDIA
+  BROKER
+  OTHER
 }

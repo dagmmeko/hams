@@ -1,6 +1,6 @@
 export function numberToCurrency(input: number, options?: Intl.NumberFormatOptions) {
 	return Intl.NumberFormat('en-US', {
-		// style: 'currency',
+		style: 'currency',
 		// currency: 'USD',
 		minimumFractionDigits: 0,
 		maximumFractionDigits: 2,

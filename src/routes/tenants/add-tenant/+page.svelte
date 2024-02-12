@@ -84,7 +84,14 @@
 							</p>
 							<label class="grid gap-2 mt-4">
 								<p class="grid">
-									<span class="text-primary font-medium">Current Price</span>
+									<span class="text-primary font-medium">
+										Current Price <span class="text-danger text-xs font-medium">
+											{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
+												?.priceSetPerKare
+												? 'Price Per Kare'
+												: ''}
+										</span>
+									</span>
 									<span class="font-normal text-sm">
 										{numberToCurrency(
 											data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price ??
@@ -154,6 +161,24 @@
 						bind:value={$addTenantForm.email}
 						{...$constraints.email}
 					/>
+				</label>
+				<label class="w-full gap-2 grid">
+					<span class="text-primary font-medium"> Booking Source </span>
+					<select
+						bind:value={$addTenantForm.contactSource}
+						{...$constraints.contactSource}
+						name="contactSource"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					>
+						<option selected disabled> Select Type </option>
+						<option value="WEBSITE"> Website </option>
+						<option value="REFERRAL">Referral</option>
+						<option value="WALK_IN">Walk in</option>
+						<option value="EMAIL">Email</option>
+						<option value="SOCIAL_MEDIA">Social Media</option>
+						<option value="BROKER">Broker</option>
+						<option value="OTHER">Other</option>
+					</select>
 				</label>
 				{#if !$addTenantForm.priceChange}
 					{#if data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.unitType !== 'COMMERCIAL'}

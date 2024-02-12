@@ -5,6 +5,7 @@
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { signOut } from '@auth/sveltekit/client';
+	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data;
 	export let form;
@@ -14,6 +15,11 @@
 
 	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
 	$: form?.passwordChanged ? toast.push('Password changed') : null;
+	const {
+		form: editUserForm,
+		enhance: editUserEnhance,
+		constraints
+	} = superForm(data.editUserForm);
 </script>
 
 <div class="mx-10 my-12 grid justify-items-stretch bg-white rounded-xl p-8">
@@ -98,28 +104,35 @@
 	{/if}
 	<button
 		on:click={() => signOut()}
-		class="text-white bg-danger/90 rounded-lg px-8 py-1 text-xs border-dashed justify-self-center mt-4 w-fit"
+		class="text-white bg-danger/90 rounded-lg px-10 py-2 text-xs border-dashed justify-self-center mt-4 w-fit"
 	>
 		Sign Out</button
 	>
 
-	<form method="post" action="?/editAccount" class="mt-12 grid justify-items-stretch">
-		<div class="grid grid-cols-3 gap-4">
+	<form
+		use:editUserEnhance
+		method="post"
+		action="?/editUser"
+		class="mt-12 grid justify-items-stretch"
+	>
+		<div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-4">
 			<label class="grid gap-2">
 				<span class="text-primary font-medium"> Username </span>
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="userName"
-					value={$page.data.session?.authUser.userName}
+					bind:value={$editUserForm.userName}
+					{...$constraints.userName}
 					on:change={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
 				<span class="text-primary font-medium"> Phone Number </span>
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="phoneNumber"
-					value={$page.data.session?.authUser.phoneNumber}
+					bind:value={$editUserForm.phoneNumber}
+					{...$constraints.phoneNumber}
 					on:change={() => (editable = true)}
 				/>
 			</label>
@@ -127,7 +140,7 @@
 				<span class="text-primary font-medium"> Email </span>
 				<input
 					disabled
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="email"
 					value={$page.data.session?.authUser.email}
 				/>
@@ -136,9 +149,10 @@
 			<label class="grid gap-2">
 				<span class="text-primary font-medium"> Address </span>
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="address"
-					value={$page.data.session?.authUser.Employee.address}
+					bind:value={$editUserForm.address}
+					{...$constraints.address}
 					on:change={() => (editable = true)}
 				/>
 			</label>
@@ -146,33 +160,37 @@
 				<span class="text-primary font-medium"> Date of Birth </span>
 				<input
 					type="date"
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="dateOfBirth"
-					value={$page.data.session?.authUser.Employee.dateOfBirth}
+					bind:value={$editUserForm.dateOfBirth}
+					{...$constraints.dateOfBirth}
 					on:change={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
 				<span class="text-primary font-medium"> Blood Type </span>
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="bloodType"
-					value={$page.data.session?.authUser.Employee.bloodType}
+					bind:value={$editUserForm.bloodType}
+					{...$constraints.bloodType}
 					on:change={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
 				<span class="text-primary font-medium"> Height </span>
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					type="number"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="height"
-					value={$page.data.session?.authUser.Employee.height}
+					bind:value={$editUserForm.height}
+					{...$constraints.height}
 					on:change={() => (editable = true)}
 				/>
 			</label>
 		</div>
 		<button
-			class="bg-primary text-white w-96 justify-self-center rounded-md py-2 mt-6"
+			class="bg-primary text-white justify-self-center rounded-md py-2 px-24 mt-6"
 			type="submit">Edit</button
 		>
 	</form>
@@ -190,10 +208,10 @@
 		}}
 	>
 		<p class="justify-self-center text-2xl text-primary font-medium mb-4">Change Password</p>
-		<div class="grid grid-cols-3 gap-4">
+		<div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-4">
 			<label class="grid gap-2">
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="oldPassword"
 					placeholder="Previous Password"
 					on:change={() => (editable = true)}
@@ -203,7 +221,7 @@
 			</label>
 			<label class="grid gap-2">
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="newPassword"
 					placeholder="New Password"
 					on:change={() => (editable = true)}
@@ -213,7 +231,7 @@
 			</label>
 			<label class="grid gap-2">
 				<input
-					class="w-96 border-[1px] border-primary/60 rounded-md p-2"
+					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="confirmPassword"
 					placeholder="Confirm Password"
 					on:change={() => (editable = true)}
@@ -223,7 +241,7 @@
 			</label>
 		</div>
 		<button
-			class="bg-primary text-white w-96 justify-self-center rounded-md py-2 mt-6"
+			class="bg-primary text-white justify-self-center rounded-md py-2 px-10 mt-6"
 			type="submit">Change Password</button
 		>
 	</form>

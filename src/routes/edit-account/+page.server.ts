@@ -10,11 +10,10 @@ import z from 'zod';
 const editUserSchema = z.object({
 	userName: z.string(),
 	phoneNumber: z.string(),
-	email: z.string().email(),
-	address: z.string(),
-	dateOfBirth: z.string(),
-	bloodType: z.string(),
-	height: z.number()
+	address: z.string().optional(),
+	dateOfBirth: z.string().optional(),
+	bloodType: z.string().optional(),
+	height: z.number().optional()
 });
 export const load = async (event) => {
 	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
@@ -23,7 +22,28 @@ export const load = async (event) => {
 		fileUrl = await getFile(session?.authUser.Employee.image);
 	}
 
-	return { fileUrl };
+	const user = await prisma.user.findFirst({
+		where: {
+			id: session?.authUser.id
+		},
+		include: {
+			Employee: true
+		}
+	});
+
+	const editUserForm = superValidate(
+		{
+			userName: user?.userName ?? '',
+			phoneNumber: user?.phoneNumber ?? '',
+			address: user?.Employee?.address ?? '',
+			dateOfBirth: user?.Employee?.dateOfBirth ? user?.Employee?.dateOfBirth.toISOString() : '',
+			bloodType: user?.Employee?.bloodType ?? '',
+			height: user?.Employee?.height ?? 0
+		},
+		editUserSchema
+	);
+
+	return { fileUrl, editUserForm };
 };
 
 export const actions = {
@@ -98,5 +118,32 @@ export const actions = {
 			}
 		});
 		return { passwordChanged };
+	},
+	editUser: async (event) => {
+		const editUserForm = await superValidate(event.request, editUserSchema);
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		if (!editUserForm) {
+			return fail(400, { editUserForm });
+		}
+		const editUser = await prisma.user.update({
+			where: {
+				id: session?.authUser.id
+			},
+			data: {
+				userName: editUserForm.data.userName,
+				phoneNumber: editUserForm.data.phoneNumber,
+				Employee: {
+					update: {
+						address: editUserForm.data.address,
+						dateOfBirth: editUserForm.data.dateOfBirth,
+						bloodType: editUserForm.data.bloodType,
+						height: editUserForm.data.height
+					}
+				}
+			}
+		});
+
+		return { editUserForm, editUser };
 	}
 };

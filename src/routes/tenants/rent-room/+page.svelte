@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { numberToCurrency } from '$lib/utils/currency.js';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	export let data;
@@ -129,9 +130,27 @@
 							</p>
 							<label class="grid gap-2 mt-4">
 								<p class="grid">
-									<span class="text-primary font-medium">Current Price</span>
+									<span class="text-primary font-medium">
+										Current Price <span class="text-danger text-xs font-medium">
+											{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
+												?.priceSetPerKare
+												? 'Price Per Kare'
+												: ''}
+										</span>
+									</span>
 									<span class="font-normal text-sm">
-										{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price} Birr
+										{numberToCurrency(
+											data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)?.price ??
+												0,
+											{
+												currency:
+													data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
+														?.currency === 'USD'
+														? 'USD'
+														: 'ETB',
+												currencyDisplay: 'code'
+											}
+										)}
 									</span>
 								</p>
 								<input

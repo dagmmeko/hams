@@ -4,6 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 import { s3 } from '$lib/utils/aws-file.js';
 import { S3_BUCKET_NAME } from '$env/static/private';
+import type { ContactSource } from '@prisma/client';
 
 const addTenantSchema = z.object({
 	fullName: z.string(),
@@ -22,7 +23,8 @@ const addTenantSchema = z.object({
 	newPrice: z.number().optional(),
 	priceChange: z.boolean().optional(),
 	passportNumber: z.string().optional(),
-	tinNumber: z.string().optional()
+	tinNumber: z.string().optional(),
+	contactSource: z.string().optional()
 });
 
 export const load = async (event) => {
@@ -65,6 +67,7 @@ export const actions = {
 					emergencyContactEmail: addTenantForm.data.emergencyContactEmail,
 					passportNumber: addTenantForm.data.passportNumber,
 					tenantScore: addTenantForm.data.tenantScore,
+					contactSource: addTenantForm.data.contactSource as ContactSource,
 					...(addTenantForm.data.priceChange &&
 						addTenantForm.data.newPrice && {
 							PriceChange: {
