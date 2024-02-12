@@ -10,6 +10,10 @@ const deleteUnitSchema = z.object({
 	deleteUnitId: z.number().int()
 });
 
+const deletePropertySchema = z.object({
+	propertyId: z.number().int()
+});
+
 const editUnitSchema = z.object({
 	roomNumber: z.string(),
 	floor: z.string(),
@@ -40,6 +44,11 @@ export const load = async (event) => {
 	const addPropertyForm = await superValidate(addPropertySchema);
 	const addAmenityForm = await superValidate(addAmenitySchema);
 	const deleteUnitForm = await superValidate(deleteUnitSchema);
+	const deletePropertyForm = await superValidate(deletePropertySchema);
+
+	const propertyCondition = event.url.searchParams.get('propertyCondition') as PropertyStatus;
+	const propertyAvailability = event.url.searchParams.get('propertyAvailability');
+
 	const unitDetails = await prisma.rentalUnits.findFirst({
 		where: {
 			id: Number(event.params.unitId)
@@ -61,7 +70,23 @@ export const load = async (event) => {
 				}
 			},
 
-			Property: true,
+			Property: {
+				where: {
+					...(propertyCondition && {
+						propertyStatus: propertyCondition
+					}),
+					...(propertyAvailability === 'true'
+						? {
+								available: true
+						  }
+						: propertyAvailability === 'false'
+						? {
+								available: false
+						  }
+						: {}),
+					deletedAt: null
+				}
+			},
 			Amenities: true,
 			UnitsFile: {
 				include: {
@@ -84,7 +109,14 @@ export const load = async (event) => {
 		editUnitSchema
 	);
 
-	return { deleteUnitForm, unitDetails, editUnitForm, addPropertyForm, addAmenityForm };
+	return {
+		deleteUnitForm,
+		unitDetails,
+		editUnitForm,
+		addPropertyForm,
+		addAmenityForm,
+		deletePropertyForm
+	};
 };
 export const actions = {
 	editUnitInfo: async (event) => {
@@ -358,5 +390,27 @@ export const actions = {
 		});
 
 		return { addInspection };
+	},
+	deleteProperty: async (event) => {
+		const deletePropertyForm = await superValidate(event.request, deletePropertySchema);
+
+		if (!deletePropertyForm) {
+			return fail(400, { deletePropertyForm });
+		}
+
+		const deleteProperty = await prisma.rentalUnits.update({
+			where: {
+				id: Number(event.params.unitId)
+			},
+			data: {
+				Property: {
+					delete: {
+						id: deletePropertyForm.data.propertyId
+					}
+				}
+			}
+		});
+
+		return { deletePropertyForm, deleteProperty };
 	}
 };

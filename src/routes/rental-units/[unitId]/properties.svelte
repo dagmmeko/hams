@@ -1,11 +1,15 @@
 <script lang="ts">
 	import SvelteTable from 'svelte-table';
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { enhance } from '$app/forms';
-	import { updated } from '$app/stores';
+	import { page } from '$app/stores';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
+	import { goto } from '$app/navigation';
+	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
+	import PropertyConditionTable from './property-condition-table.svelte';
+	import DeletePropertyTable from './delete-property-table.svelte';
 
 	let addModal = false;
 	let editModal = false;
@@ -13,6 +17,7 @@
 	let selectedUnitId: number;
 
 	export let data: PageData;
+	export let form: ActionData;
 	$: rows = data.unitDetails?.Property ?? [];
 	$: columns = [
 		{
@@ -42,7 +47,9 @@
 		{
 			key: 'status',
 			title: 'Condition',
-			value: (v: typeof rows[number]) => v.propertyStatus ?? 'NOT FOUND',
+			renderComponent: {
+				component: PropertyConditionTable
+			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -50,7 +57,21 @@
 		{
 			key: 'available',
 			title: 'Available',
-			value: (v: typeof rows[number]) => v.available.toString() ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => (v.available ? 'Yes' : 'No' ?? 'NOT FOUND'),
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'deleteProperty',
+			title: '',
+			renderComponent: {
+				component: DeletePropertyTable,
+				props: {
+					data: data,
+					form: form
+				}
+			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -66,6 +87,8 @@
 			addModal = false;
 		}
 	});
+	let filterModal = false;
+	$: urlSearchParams = new URLSearchParams($page.url.search);
 </script>
 
 <div>
@@ -80,6 +103,105 @@
 		>
 			New Property</button
 		>
+	</div>
+	<div class="">
+		<div class="flex gap-3">
+			<button
+				class="grid border-[1px] border-black/20 grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+				on:click={() => (filterModal = !filterModal)}
+			>
+				<FiltersLines class="h-4 w-4" /> Add filters
+			</button>
+			<span class=" items-center flex">
+				{urlSearchParams.get('propertyCondition') ? urlSearchParams.get('propertyCondition') : ''}
+			</span>
+			<span class=" items-center flex">
+				{urlSearchParams.get('propertyAvailability') === 'true'
+					? 'AVAILABLE'
+					: urlSearchParams.get('propertyAvailability') === 'false'
+					? 'NOT AVAILABLE'
+					: ''}
+			</span>
+		</div>
+
+		{#if filterModal}
+			<div class="fixed mt-4 z-50">
+				<div
+					use:clickOutside={() => (filterModal = false)}
+					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
+				>
+					<button
+						on:click={async () => {
+							await goto(`?`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						All
+					</button>
+
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyCondition', 'DAMAGED');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Damaged
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyCondition', 'NEEDS_REPAIR');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Needs Repair
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyCondition', 'MISSING_ITEMS');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Missing Items
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyCondition', 'GOOD_CONDITION');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Good Condition
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyAvailability', 'true');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Available
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('propertyAvailability', 'false');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Not Available
+					</button>
+				</div>
+			</div>
+		{/if}
 	</div>
 	<div class="-mx-6 pt-5">
 		<PdfPrint class="mx-6">

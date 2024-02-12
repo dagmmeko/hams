@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let row: any;
-	export let col: any;
 </script>
 
 <div
