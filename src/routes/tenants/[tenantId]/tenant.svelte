@@ -164,7 +164,6 @@
 								class="hidden"
 								type="file"
 								name="unitFile"
-								accept="image/*"
 								multiple
 								on:change={(e) => {
 									const data = e.currentTarget.files;
@@ -184,6 +183,9 @@
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUp class="text-primary w-7 h-7" />
 									<span class="text-xs">Upload File</span>
+									<p class="text-[10px] text-center px-3">
+										For residential customers upload ID, License or Passport
+									</p>
 								</div>
 							</div>
 						</label>

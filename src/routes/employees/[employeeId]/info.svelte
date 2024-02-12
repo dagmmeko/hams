@@ -135,7 +135,6 @@
 			class="hidden"
 			type="file"
 			name="unitFile"
-			accept="image/*"
 			multiple
 			on:change={(e) => {
 				const data = e.currentTarget.files;

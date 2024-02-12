@@ -302,7 +302,6 @@
 					class="hidden"
 					type="file"
 					name="tenantFile"
-					accept="image/*"
 					multiple
 					on:change={(e) => {
 						const data = e.currentTarget.files;

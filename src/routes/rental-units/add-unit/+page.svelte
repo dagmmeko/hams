@@ -19,11 +19,17 @@
 		}
 	});
 
-	let priceCurrency = numberToCurrency($addUnitForm.price);
+	let priceCurrency = numberToCurrency($addUnitForm.price, {
+		currency: $addUnitForm.inBirr ? 'ETB' : 'USD',
+		currencyDisplay: 'code'
+	});
 	function setPriceCurrency(currency: string) {
 		$addUnitForm.price = currencyToNumber(currency);
 		priceCurrency =
-			numberToCurrency(currencyToNumber(currency)) + (currency.endsWith('.') ? '.' : '');
+			numberToCurrency(currencyToNumber(currency), {
+				currency: $addUnitForm.inBirr ? 'ETB' : 'USD',
+				currencyDisplay: 'code'
+			}) + (currency.endsWith('.') ? '.' : '');
 	}
 
 	let frontFileData: string[] = [];
@@ -175,7 +181,6 @@
 							class="hidden"
 							type="file"
 							name="unitFile"
-							accept="image/*"
 							multiple
 							on:change={(e) => {
 								const data = e.currentTarget.files;
