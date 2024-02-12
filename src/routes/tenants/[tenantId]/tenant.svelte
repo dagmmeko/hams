@@ -7,6 +7,7 @@
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
+	import dayjs from 'dayjs';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -100,14 +101,24 @@
 		</div>
 	</form>
 	<div class="grid grid-cols-2 mt-6 gap-8">
-		<div>
+		<div class=" overflow-y-auto">
 			<div class="w-full text-xl mb-4">Active Rooms</div>
 
-			{#each data.tenant?.TenantRental ?? [] as tenantUnit}
-				{#if tenantUnit.active}
-					<div class="bg-green-50">{tenantUnit.RentalUnits.roomNumber}</div>
-				{/if}
-			{/each}
+			<div>
+				{#each data.tenant?.TenantRental ?? [] as tenantUnit}
+					{#if tenantUnit.active}
+						<div class="bg-white shadow-md p-2 rounded-md">
+							<div>
+								<span class="text-lg font-semibold">{tenantUnit.companyName}</span>
+								<span class="font-light">Room No: {tenantUnit.RentalUnits.roomNumber}</span>
+							</div>
+
+							<div>TIN: {tenantUnit.tinNumber ?? 'N/A'}</div>
+							<div>Contract End: {dayjs(tenantUnit.contractEndDate).format('MMM DD/YY')}</div>
+						</div>
+					{/if}
+				{/each}
+			</div>
 		</div>
 		<div class=" w-full">
 			<div class="w-full text-xl mb-4">Tenant Files</div>
