@@ -99,6 +99,8 @@
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
+
+	$: urlSearchParams = new URLSearchParams($page.url.search);
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
@@ -112,12 +114,29 @@
 		>
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
-		<button
-			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
-			on:click={() => (filterModal = !filterModal)}
-		>
-			<FiltersLines class="h-4 w-4" /> Add filters
-		</button>
+		<div class="flex gap-3">
+			<button
+				class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+				on:click={() => (filterModal = !filterModal)}
+			>
+				<FiltersLines class="h-4 w-4" /> Add filters
+			</button>
+			<span class=" items-center flex">
+				{urlSearchParams.get('condition')
+					? urlSearchParams.get('condition')?.replace(/_/g, ' ')
+					: ''}
+			</span>
+			<span class=" items-center flex">
+				{urlSearchParams.get('status') === 'vacant'
+					? 'VACANT'
+					: urlSearchParams.get('status') === 'occupied'
+					? 'OCCUPIED'
+					: ''}
+			</span>
+			<span class=" items-center flex">
+				{urlSearchParams.get('unitType') ? urlSearchParams.get('unitType') : ''}
+			</span>
+		</div>
 
 		<label class="grid">
 			<input
@@ -186,6 +205,16 @@
 						class="hover:underline hover:text-primary"
 					>
 						Vacant
+					</button>
+					<button
+						on:click={async () => {
+							const newSearchParams = new URLSearchParams($page.url.search);
+							newSearchParams.set('status', 'occupied');
+							await goto(`?${newSearchParams.toString()}`);
+						}}
+						class="hover:underline hover:text-primary"
+					>
+						Occupied
 					</button>
 					<button
 						on:click={async () => {

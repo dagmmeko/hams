@@ -70,7 +70,7 @@
 
 			<div class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Status</span>
-				<div>Available</div>
+				<div>{data.unitDetails?.active ? 'Occupied' : 'Vacant'}</div>
 			</div>
 
 			<label class="grid">

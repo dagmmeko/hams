@@ -113,7 +113,9 @@
 				<FiltersLines class="h-4 w-4" /> Add filters
 			</button>
 			<span class=" items-center flex">
-				{urlSearchParams.get('propertyCondition') ? urlSearchParams.get('propertyCondition') : ''}
+				{urlSearchParams.get('propertyCondition')
+					? urlSearchParams.get('propertyCondition')?.replace(/_/g, ' ')
+					: ''}
 			</span>
 			<span class=" items-center flex">
 				{urlSearchParams.get('propertyAvailability') === 'true'

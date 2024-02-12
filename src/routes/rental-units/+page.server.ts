@@ -22,13 +22,19 @@ export const load = async (event) => {
 				}
 			}),
 
-			...(status === 'vacant' && {
-				TenantRental: {
-					none: {
-						active: true
-					}
-				}
+			...(condition && {
+				latestInspectionStatus: condition
 			}),
+
+			...(status === 'vacant'
+				? {
+						active: false
+				  }
+				: status === 'occupied'
+				? {
+						active: true
+				  }
+				: null),
 			...(unitType && {
 				unitType: unitType
 			}),
