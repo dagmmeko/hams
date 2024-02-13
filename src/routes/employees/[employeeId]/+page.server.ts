@@ -67,6 +67,7 @@ export const load = async (event) => {
 			Manager: true
 		}
 	});
+
 	if (!employee) {
 		throw error(404, 'Employee not found');
 	}

@@ -324,7 +324,6 @@ export const actions = {
 		return { fileUrl };
 	},
 	deleteUnitFile: async (event) => {
-		console.log('bitch');
 		const data = await event.request.formData();
 		const unitFileId = data.get('unitFileId');
 		console.log(unitFileId);

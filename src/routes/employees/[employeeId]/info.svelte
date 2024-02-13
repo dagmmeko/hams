@@ -49,7 +49,7 @@
 					bind:value={$editEmployeeForm.employmentType}
 					{...$constraints.employmentType}
 				>
-					<option selected disabled>Select Employment Type</option>
+					<option selected disabled value={null}>Select Employment Type</option>
 					<option value="FULL_TIME">Full Time</option>
 					<option value="PART_TIME">Part Time</option>
 					<option value="TEMPORARY">Contract</option>
@@ -87,7 +87,7 @@
 				<input type="date" name="hiredDate" bind:value={$hireDate} />
 			</label>
 			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Manager</span>
+				<span class="text-primary font-semibold py-1"> Head of Department</span>
 				<select
 					name="managerId"
 					bind:value={$editEmployeeForm.managerId}
@@ -120,7 +120,7 @@
 				<input name="emergencyName" />
 			</label>
 			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> EMergency Contact Email</span>
+				<span class="text-primary font-semibold py-1"> Emergency Contact Email</span>
 				<input name="emergencyMail" />
 			</label><label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Emergency Contact Phone</span>

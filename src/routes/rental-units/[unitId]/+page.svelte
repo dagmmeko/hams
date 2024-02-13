@@ -38,7 +38,7 @@
 		{#if displayedComponent === 'room'}
 			<Info bind:form bind:data />
 		{:else if displayedComponent === 'properties'}
-			<Properties bind:data />
+			<Properties bind:data bind:form />
 		{:else if displayedComponent === 'amenities'}
 			<Amenities bind:data />
 		{:else}

@@ -41,7 +41,7 @@
 		},
 		{
 			key: 'status',
-			title: 'Status',
+			title: 'Employment Type',
 			renderComponent: {
 				component: StatusComponent,
 				props: {

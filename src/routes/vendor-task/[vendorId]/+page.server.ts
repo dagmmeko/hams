@@ -1,8 +1,10 @@
+import { S3_BUCKET_NAME } from '$env/static/private';
+import { getFile, s3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { ServiceType } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
-import z, { number } from 'zod';
+import z from 'zod';
 
 const editVendorSchema = z.object({
 	name: z.string(),
@@ -35,7 +37,12 @@ export const load = async (event) => {
 			id: Number(event.params.vendorId)
 		},
 		include: {
-			VendorTask: true
+			VendorTask: true,
+			VendorFile: {
+				include: {
+					File: true
+				}
+			}
 		}
 	});
 
@@ -124,5 +131,68 @@ export const actions = {
 		});
 
 		return { addPaymentForm, vendorTask };
+	},
+	downloadVendorFile: async (event) => {
+		const data = await event.request.formData();
+		const vendorFileKey = data.get('vendorFileKey');
+		if (typeof vendorFileKey !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const vendorFileUrl = await getFile(vendorFileKey);
+
+		return { vendorFileUrl };
+	},
+	deleteVendorFile: async (event) => {
+		const data = await event.request.formData();
+		const deleteVendorFileId = data.get('deleteVendorFileId');
+
+		if (typeof deleteVendorFileId !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file id' });
+		}
+
+		const deletedVendorFile = await prisma.file.delete({
+			where: {
+				id: Number(deleteVendorFileId)
+			}
+		});
+
+		return { deletedVendorFile };
+	},
+	editVendorFile: async (event) => {
+		const data = await event.request.formData();
+		const file = data.getAll('vendorFile');
+
+		const allNewFiles = file.map(async (file) => {
+			if (!(file instanceof File)) {
+				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+			}
+			const buffer = await file.arrayBuffer();
+			const send = Buffer.from(buffer);
+
+			try {
+				await s3
+					.putObject({
+						Bucket: S3_BUCKET_NAME,
+						Key: `vendorFile/${event.params.vendorId}/${file.name}`,
+						Body: send
+					})
+					.promise();
+
+				const newFile = await prisma.file.create({
+					data: {
+						key: `vendorFile/${event.params.vendorId}/${file.name}`,
+						fileName: file.name,
+						VendorFile: {
+							create: {
+								vendorId: Number(event.params.vendorId)
+							}
+						}
+					}
+				});
+			} catch (error) {
+				console.log(error as Error);
+			}
+		});
 	}
 };
