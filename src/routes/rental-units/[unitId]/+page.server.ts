@@ -95,6 +95,11 @@ export const load = async (event) => {
 			}
 		}
 	});
+	const allInspections = await prisma.inspection.findMany({
+		where: {
+			rentalUnitsId: Number(event.params.unitId)
+		}
+	});
 	const editUnitForm = await superValidate(
 		{
 			roomNumber: unitDetails?.roomNumber,
@@ -115,7 +120,8 @@ export const load = async (event) => {
 		editUnitForm,
 		addPropertyForm,
 		addAmenityForm,
-		deletePropertyForm
+		deletePropertyForm,
+		allInspections
 	};
 };
 export const actions = {

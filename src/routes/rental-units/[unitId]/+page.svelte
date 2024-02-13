@@ -42,7 +42,7 @@
 		{:else if displayedComponent === 'amenities'}
 			<Amenities bind:data />
 		{:else}
-			<Inspections />
+			<Inspections bind:data />
 		{/if}
 	</div>
 </div>
