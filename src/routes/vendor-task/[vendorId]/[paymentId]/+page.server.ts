@@ -4,57 +4,45 @@ import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z, { number } from 'zod';
 
-
 const editPaymentSchema = z.object({
-	id : z.number().int(),
+	id: z.number().int(),
 	amount: z.number(),
-	despositedToBank :z.string(),
-	paidOn :z.date(),
-	
+	depositedToBank: z.string(),
+	paidOn: z.date()
 });
-
 
 export type paymentType = z.infer<typeof editPaymentSchema>;
 
-
 export const load = async (event) => {
-
-
-	
-	const payment = await prisma.payment.findFirst(
-		{
-			where : {
-				id : parseInt(event.params.vendorId)
-			},
-			include :
-			{
-				VendorTask:true
+	const payment = await prisma.payment.findFirst({
+		where: {
+			id: parseInt(event.params.paymentId)
+		},
+		include: {
+			VendorTask: {
+				include: {
+					Vendor: true
 				}
-			});
-	
-	
+			}
+		}
+	});
 
-if (!payment) {
+	if (!payment) {
 		throw error(404, 'payment not found');
 	}
-	
+
 	const editPaymentForm = await superValidate(
 		{
-			id: payment?.id || 0 ,
-			amount: payment?.amount || 0 ,
-			despositedToBank :payment?.despositedToBank || '',
-			paidOn :payment?.paidOn || new Date()
-			
+			id: payment?.id || 0,
+			amount: payment?.amount || 0,
+			depositedToBank: payment?.depositedToBank || '',
+			paidOn: payment?.paidOn || new Date()
 		},
 		editPaymentSchema
 	);
 
-
-
-	
-	return {editPaymentForm };
+	return { editPaymentForm, payment };
 };
-
 
 export const actions = {
 	editPaymentInfo: async (event) => {
@@ -63,25 +51,15 @@ export const actions = {
 			return fail(400, { editPaymentForm });
 		}
 
-		
-
 		const payment = await prisma.payment.update({
 			where: {
 				id: parseInt(event.params.paymentId)
 			},
 			data: {
-			
 				amount: editPaymentForm.data.amount,
-				despositedToBank : editPaymentForm.data.despositedToBank,
-				paidOn :editPaymentForm.data.paidOn,
+				depositedToBank: editPaymentForm.data.depositedToBank,
+				paidOn: editPaymentForm.data.paidOn
 			}
 		});
-
-	
-
-		
-	},
-
-	
+	}
 };
-

@@ -102,7 +102,6 @@ export const actions = {
 				vendorId: addTaskForm.data.vendorId
 			}
 		});
-		console.log({ vendorTask, data: addTaskForm.data });
 
 		return {
 			addTaskForm,

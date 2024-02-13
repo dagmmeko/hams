@@ -85,7 +85,12 @@
 
 										<p class="font-medium">
 											Amount:
-											<span class="font-normal">{numberToCurrency(rec.amount)}</span>
+											<span class="font-normal"
+												>{numberToCurrency(rec.amount, {
+													currency: rec.PayToUnit?.currency,
+													currencyDisplay: 'code'
+												})}</span
+											>
 										</p>
 										<p class="font-medium">
 											Reason: <span class="font-normal">{rec.paymentReason}</span>
@@ -159,12 +164,24 @@
 								? numberToCurrency(
 										data.tenant?.PriceChange.find(
 											(changed) => changed.unitId === $addReceiptForm.payToUnit
-										)?.price ?? 0
+										)?.price ?? 0,
+										{
+											currency: data.tenant?.TenantRental.find(
+												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+											)?.RentalUnits.currency,
+											currencyDisplay: 'code'
+										}
 								  )
 								: numberToCurrency(
 										data.tenant?.TenantRental.find(
 											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-										)?.RentalUnits.price ?? 0
+										)?.RentalUnits.price ?? 0,
+										{
+											currency: data.tenant?.TenantRental.find(
+												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+											)?.RentalUnits.currency,
+											currencyDisplay: 'code'
+										}
 								  )}
 						</p>
 						<p>
@@ -174,7 +191,13 @@
 								? numberToCurrency(
 										data.tenant?.TenantRental.find(
 											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-										)?.RentalUnits.price ?? 0
+										)?.RentalUnits.price ?? 0,
+										{
+											currency: data.tenant?.TenantRental.find(
+												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+											)?.RentalUnits.currency,
+											currencyDisplay: 'code'
+										}
 								  )
 								: 'No Negotiation'}
 						</p>

@@ -34,7 +34,7 @@
 		{
 			key: 'via Bank',
 			title: 'Via Bank',
-			value: (v: typeof rows[number]) => v.despositedToBank || '',
+			value: (v: typeof rows[number]) => v.depositedToBank || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -89,9 +89,9 @@
 			{columns}
 			{rows}
 			on:clickCell={(event) => {
-				const vendorId = event.detail.row.id;
+				console.log(event);
 				const PaymentId = event.detail.row.id;
-				goto(`/vendor-task/${vendorId}/${PaymentId}`);
+				goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
 			}}
 		/>
 	</PdfPrint>

@@ -444,16 +444,16 @@ model TaskFile {
 }
 
 model Payment {
-  id               Int           @id @default(autoincrement())
-  createdAt        DateTime      @default(now())
-  updateAt         DateTime      @updatedAt
-  deletedAt        DateTime?
-  amount           Float
-  despositedToBank String
-  paidOn           DateTime?
-  vendorTaskId     Int?
-  VendorTask       VendorTask?   @relation(fields: [vendorTaskId], references: [id])
-  PaymentFile      PaymentFile[]
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updateAt        DateTime      @updatedAt
+  deletedAt       DateTime?
+  amount          Float
+  depositedToBank String?
+  paidOn          DateTime?
+  vendorTaskId    Int?
+  VendorTask      VendorTask?   @relation(fields: [vendorTaskId], references: [id])
+  PaymentFile     PaymentFile[]
 
   @@index([vendorTaskId])
 }

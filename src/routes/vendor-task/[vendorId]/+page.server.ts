@@ -123,7 +123,7 @@ export const actions = {
 				Payment: {
 					create: {
 						amount: addPaymentForm.data.amount,
-						despositedToBank: addPaymentForm.data.depositedToBank,
+						depositedToBank: addPaymentForm.data.depositedToBank,
 						paidOn: addPaymentForm.data.paidOn
 					}
 				}
