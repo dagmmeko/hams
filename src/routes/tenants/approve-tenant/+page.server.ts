@@ -9,7 +9,8 @@ const approveRentSchema = z.object({
 	priceChangeId: z.number(),
 	startDate: z.date(),
 	endDate: z.date(),
-	tinNumber: z.string().optional()
+	tinNumber: z.string().optional(),
+	securityDeposit: z.number().optional()
 });
 
 export const load = async (event) => {
@@ -72,7 +73,8 @@ export const actions = {
 						contractEndDate: approveRentForm.data.endDate,
 						durationOfStayInCountry: approveRentForm.data.durationOfStay,
 						active: true,
-						tinNumber: approveRentForm.data.tinNumber
+						tinNumber: approveRentForm.data.tinNumber,
+						securityDeposit: approveRentForm.data.securityDeposit
 					}
 				},
 				PriceChange: {

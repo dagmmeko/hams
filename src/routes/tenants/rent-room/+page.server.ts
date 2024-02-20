@@ -12,7 +12,8 @@ const rentRoomSchema = z.object({
 	duration: z.string().optional(),
 	newPrice: z.string().optional(),
 	priceChange: z.boolean().optional(),
-	tinNumber: z.string().optional()
+	tinNumber: z.string().optional(),
+	securityDeposit: z.number().optional()
 });
 
 export const load = async (event) => {
@@ -93,7 +94,8 @@ export const actions = {
 								contractEndDate: new Date(rentRoomForm.data.endDate ?? Date.now()),
 								durationOfStayInCountry: Number(rentRoomForm.data.duration),
 								active: rentRoomForm.data.priceChange ? false : true,
-								tinNumber: rentRoomForm.data.tinNumber
+								tinNumber: rentRoomForm.data.tinNumber,
+								securityDeposit: rentRoomForm.data.securityDeposit
 							}
 						}
 					})

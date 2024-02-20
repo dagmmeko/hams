@@ -205,6 +205,7 @@ model TenantRental {
   contractStartDate       DateTime?
   companyName             String      @default("company Name")
   active                  Boolean     @default(false)
+  securityDeposit         Float?
   durationOfStayInCountry Int?
   tinNumber               String?
   purposeOfRent           String?

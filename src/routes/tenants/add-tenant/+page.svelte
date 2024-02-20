@@ -232,6 +232,16 @@
 						/>
 					</label>
 					<label class="w-full grid gap-2">
+						<span class=" text-primary w-full font-medium"> Security Deposit</span>
+						<input
+							name="securityDeposit"
+							type="number"
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							bind:value={$addTenantForm.securityDeposit}
+							{...$constraints.securityDeposit}
+						/>
+					</label>
+					<label class="w-full grid gap-2">
 						<span class="text-primary font-medium"> TIN Number </span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"

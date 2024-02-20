@@ -24,7 +24,8 @@ const addTenantSchema = z.object({
 	priceChange: z.boolean().optional(),
 	passportNumber: z.string().optional(),
 	tinNumber: z.string().optional(),
-	contactSource: z.string().optional()
+	contactSource: z.string().optional(),
+	securityDeposit: z.number().optional()
 });
 
 export const load = async (event) => {
@@ -87,7 +88,8 @@ export const actions = {
 								companyName: addTenantForm.data.fullName,
 								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
 								active: addTenantForm.data.priceChange ? false : true,
-								tinNumber: addTenantForm.data.tinNumber
+								tinNumber: addTenantForm.data.tinNumber,
+								securityDeposit: addTenantForm.data.securityDeposit
 							}
 						}
 					})

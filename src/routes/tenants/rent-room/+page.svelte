@@ -228,6 +228,16 @@
 							{...$constraints.endDate}
 						/>
 					</label>
+					<label class="w-full grid gap-2">
+						<span class=" text-primary w-full font-medium"> Security Deposit</span>
+						<input
+							name="securityDeposit"
+							type="number"
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							bind:value={$rentRoomForm.securityDeposit}
+							{...$constraints.securityDeposit}
+						/>
+					</label>
 				</div>
 				<button class="bg-primary text-white rounded-md py-2 px-6"> Rent Room</button>
 			</div>
