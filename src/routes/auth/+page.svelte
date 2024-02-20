@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import Logo from '$lib/assets/Logo.svg.svelte';
-	export let data;
 	import { signIn } from '@auth/sveltekit/client';
 
 	let email: string;

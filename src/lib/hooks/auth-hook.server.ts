@@ -13,34 +13,39 @@ export const authHook = SvelteKitAuth({
 				password: { label: 'password', type: 'text' }
 			},
 			async authorize(credentials) {
-				if (!credentials.email) {
-					throw new Error('Email not found');
-				}
-				if (!credentials.password || typeof credentials.password !== 'string') {
-					throw new Error('Password not found');
-				}
-				const user = await prisma.user.findFirst({
-					where: {
-						email: credentials.email
+				try {
+					if (!credentials.email) {
+						throw new Error('Email not found');
 					}
-				});
+					if (!credentials.password || typeof credentials.password !== 'string') {
+						throw new Error('Password not found');
+					}
+					const user = await prisma.user.findFirst({
+						where: {
+							email: credentials.email
+						}
+					});
 
-				if (!user) {
-					throw new Error('User not found!');
-				}
-				if (!user.jwtPassword) {
-					throw new Error('User password not set.');
-				}
+					if (!user) {
+						throw new Error('User not found!');
+					}
+					if (!user.jwtPassword) {
+						throw new Error('User password not set.');
+					}
 
-				const authorized = await bcrypt.compare(credentials.password, user.jwtPassword);
-				if (!authorized) {
-					throw new Error('User not Authorized');
+					const authorized = await bcrypt.compare(credentials.password, user.jwtPassword);
+					if (!authorized) {
+						throw new Error('User not Authorized');
+					}
+					return {
+						id: user.id.toString(),
+						name: user.userName,
+						email: user.email
+					};
+				} catch (e) {
+					console.error('authorize error:', e);
+					throw e;
 				}
-				return {
-					id: user.id.toString(),
-					name: user.userName,
-					email: user.email
-				};
 			}
 		})
 	],
@@ -50,35 +55,50 @@ export const authHook = SvelteKitAuth({
 	secret: AUTH_SECRET,
 	callbacks: {
 		signIn: async (params) => {
-			if (params.account?.provider === 'credentials') {
-				return true;
+			try {
+				if (params.account?.provider === 'credentials') {
+					return true;
+				}
+				throw new Error('Account provider not known.');
+			} catch (e) {
+				console.error('signIn callback error:', e);
+				throw e;
 			}
-			throw new Error('Account provider not known.');
 		},
 		jwt: async (params) => {
-			if (!params.token?.email) {
-				throw new Error('JWT email not found.');
-			}
-
-			const authUser = await prisma.user.findFirst({
-				where: {
-					email: params.token.email
-				},
-				select: {
-					email: true,
-					Employee: true,
-					phoneNumber: true,
-					userName: true,
-					id: true
+			try {
+				if (!params.token?.email) {
+					throw new Error('JWT email not found.');
 				}
-			});
-			return { ...params.token, authUser };
+
+				const authUser = await prisma.user.findFirst({
+					where: {
+						email: params.token.email
+					},
+					select: {
+						email: true,
+						Employee: true,
+						phoneNumber: true,
+						userName: true,
+						id: true
+					}
+				});
+				return { ...params.token, authUser };
+			} catch (e) {
+				console.error('jwt callback error:', e);
+				throw e;
+			}
 		},
 		session: async (params) => {
-			return {
-				...params.session,
-				authUser: params.token.authUser
-			};
+			try {
+				return {
+					...params.session,
+					authUser: params.token.authUser
+				};
+			} catch (e) {
+				console.error('session callback error:', e);
+				throw e;
+			}
 		}
 	}
 });
