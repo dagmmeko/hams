@@ -1,7 +1,7 @@
 import { S3_BUCKET_NAME } from '$env/static/private';
 import { getFile, s3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
-import type { InspectionStatus, PropertyStatus } from '@prisma/client';
+import type { InspectionStatus, ItemsCategory, PropertyStatus } from '@prisma/client';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -31,7 +31,9 @@ const addPropertySchema = z.object({
 	propertyStatus: z.enum(['DAMAGED', 'NEEDS_REPAIR', 'MISSING_ITEMS', 'GOOD_CONDITION']),
 	numberofUnits: z.number().int(),
 	price: z.number(),
-	available: z.boolean().optional()
+	available: z.boolean().optional(),
+	inBirr: z.boolean().optional(),
+	itemCategory: z.enum(['SALON', 'KITCHEN', 'BATHROOM', 'BEDROOM', 'LAUNDRY'])
 });
 
 const addAmenitySchema = z.object({
@@ -158,6 +160,8 @@ export const actions = {
 			return fail(400, { addPropertyForm });
 		}
 
+		console.log({ addPropertyForm: addPropertyForm.data });
+
 		const addProperty = await prisma.rentalUnits.update({
 			where: {
 				id: Number(event.params.unitId)
@@ -168,7 +172,11 @@ export const actions = {
 						name: addPropertyForm.data.name,
 						description: addPropertyForm.data.description,
 						propertyStatus: addPropertyForm.data.propertyStatus,
-						numberofUnits: addPropertyForm.data.numberofUnits
+						numberofUnits: addPropertyForm.data.numberofUnits,
+						itemsCurrency: addPropertyForm.data.inBirr ? 'ETB' : 'USD',
+						itemsPrice: addPropertyForm.data.price,
+						itemCategory: addPropertyForm.data.itemCategory,
+						available: addPropertyForm.data.available
 					}
 				}
 			}
@@ -185,8 +193,8 @@ export const actions = {
 		const propertyId = data.get('propertyId');
 		const available = data.get('available');
 		const price = data.get('price');
-
-		console.log({ available });
+		const itemsCategory = data.get('itemCategory') as ItemsCategory;
+		const inBirr = data.get('inBirr');
 
 		if (
 			typeof name !== 'string' ||
@@ -212,7 +220,9 @@ export const actions = {
 							propertyStatus,
 							numberofUnits: Number(numberofUnits),
 							itemsPrice: Number(price),
-							available: Boolean(available)
+							available: Boolean(available),
+							itemsCurrency: inBirr ? 'ETB' : 'USD',
+							itemCategory: itemsCategory
 						}
 					}
 				}

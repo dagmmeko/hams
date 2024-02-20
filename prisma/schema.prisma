@@ -151,6 +151,7 @@ model UnitProperty {
   rentalUnitsId  Int?
   available      Boolean        @default(false)
   itemsPrice     Float          @default(0)
+  itemsCurrency  Currency       @default(USD)
   itemCategory   ItemsCategory?
   propertyStatus PropertyStatus
   numberofUnits  Int

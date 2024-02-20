@@ -5,7 +5,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -13,7 +13,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -21,7 +21,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -29,7 +29,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -37,7 +37,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -45,7 +45,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -53,7 +53,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -61,7 +61,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -69,7 +69,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -77,7 +77,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -85,7 +85,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 	{
@@ -93,7 +93,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'SALON'
 	},
 
@@ -104,7 +104,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -112,7 +112,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -120,7 +120,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -128,7 +128,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -136,7 +136,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -144,7 +144,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -152,7 +152,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -160,7 +160,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -168,7 +168,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -176,7 +176,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -184,7 +184,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -192,7 +192,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -200,7 +200,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -208,7 +208,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -216,7 +216,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -224,7 +224,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -232,7 +232,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -240,7 +240,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 	{
@@ -248,7 +248,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BEDROOM'
 	},
 
@@ -258,7 +258,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -266,7 +266,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -274,7 +274,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -282,7 +282,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -290,7 +290,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -298,7 +298,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -306,7 +306,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -314,7 +314,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -322,7 +322,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -330,7 +330,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -338,7 +338,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -346,7 +346,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -354,7 +354,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -362,7 +362,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 	{
@@ -370,7 +370,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'LAUNDRY'
 	},
 
@@ -381,7 +381,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -389,7 +389,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -397,7 +397,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -405,7 +405,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -413,7 +413,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -421,7 +421,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -429,7 +429,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -437,7 +437,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -445,7 +445,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -453,7 +453,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -461,7 +461,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -469,7 +469,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 	{
@@ -477,7 +477,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'BATHROOM'
 	},
 
@@ -488,7 +488,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -496,7 +496,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -504,7 +504,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -512,7 +512,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -520,7 +520,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -528,7 +528,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -536,7 +536,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -544,7 +544,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -552,7 +552,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -560,7 +560,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -568,7 +568,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -576,7 +576,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -584,7 +584,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -592,7 +592,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -600,7 +600,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -608,7 +608,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -616,7 +616,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -624,7 +624,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -632,7 +632,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -640,7 +640,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -648,7 +648,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -656,7 +656,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -664,7 +664,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -672,7 +672,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -680,7 +680,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -688,7 +688,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -696,7 +696,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -704,7 +704,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -712,7 +712,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -720,7 +720,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -728,7 +728,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -736,7 +736,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -744,7 +744,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -752,7 +752,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -760,7 +760,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -768,7 +768,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -776,7 +776,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -784,7 +784,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -792,7 +792,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -800,7 +800,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -808,7 +808,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -816,7 +816,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -824,7 +824,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -832,7 +832,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -840,7 +840,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -848,7 +848,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -856,7 +856,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	},
 	{
@@ -864,7 +864,7 @@ export const unitProperty = [
 		description: '',
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
-		available: false,
+		available: true,
 		itemCategory: 'KITCHEN'
 	}
 ];

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Printer from '$lib/assets/printer.svg.svelte';
 
-	import PrintPdf from 'svelte-printpdf';
+	import PrintPdf, { Page } from 'svelte-printpdf';
 	import CPHeader from '$lib/assets/cp_header.png';
 	import CPFooter from '$lib/assets/cp_footer.png';
 
@@ -13,7 +13,7 @@
 	// export let tenant: Tenants | null;
 </script>
 
-<div class="">
+<div>
 	<button
 		class="border-primary border-[1px] text-primary rounded-md h-fit px-8 py-2 flex items-center text-sm gap-2 {className} mb-2"
 		on:click={() => {

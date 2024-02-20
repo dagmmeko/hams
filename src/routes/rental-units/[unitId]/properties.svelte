@@ -10,6 +10,7 @@
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import PropertyConditionTable from './property-condition-table.svelte';
 	import DeletePropertyTable from './delete-property-table.svelte';
+	import { numberToCurrency } from '$lib/utils/currency';
 
 	let addModal = false;
 	let editModal = false;
@@ -39,7 +40,11 @@
 		{
 			key: 'price',
 			title: 'Price',
-			value: (v: typeof rows[number]) => v.itemsPrice ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) =>
+				numberToCurrency(v.itemsPrice, {
+					currency: v.itemsCurrency,
+					currencyDisplay: 'code'
+				}) ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -217,6 +222,28 @@
 				{columns}
 				{rows}
 			/>
+			<div class="print:block hidden p-8">
+				<p class="text-lg font-semibold">Attention</p>
+				<p class="text-sm">
+					I, [____________________________________], acknowledge that I have received and carefully
+					reviewed the attached inventory list, detailing the furnishings and equipment within the
+					room I am renting. I confirm that all items are present and in good condition upon my
+					arrival. I understand that I am responsible for the safekeeping and proper use of all
+					listed items throughout my stay. I agree to pay the full replacement cost for any damage
+					or loss to the listed items caused by me or my guests, beyond normal wear and tear. This
+					includes, but is not limited to, spills, stains, breakage, rips, burns, or missing
+					equipment. By signing below, I acknowledge my understanding and acceptance of this clause.
+				</p>
+			</div>
+			<div class="print:block hidden">
+				<p class="mt-2 text-xl font-semibold pl-6">Sign here</p>
+				<p class="mt-2 pl-8"><span> Name: </span> _________________________________</p>
+				<p class="mt-2 pl-8"><span> Date: </span> _________________________________</p>
+
+				<p class="mt-2 ml-8 pl-2 pt-10 pb-1 border-[1px] border-black">
+					<span> Signature: </span> _________________________________
+				</p>
+			</div>
 		</PdfPrint>
 	</div>
 </div>
@@ -266,6 +293,23 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
+				<label class="w-full grid gap-2">
+					<span class="text-primary font-medium"> Category </span>
+					<select
+						required
+						name="itemCategory"
+						bind:value={$addPropertyForm.itemCategory}
+						{...$constraints.itemCategory}
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					>
+						<option selected disabled value=""> Item Category </option>
+						<option value="SALON"> Salon </option>
+						<option value="KITCHEN"> Kitchen </option>
+						<option value="BATHROOM"> Bathroom </option>
+						<option value="BEDROOM"> Bedroom </option>
+						<option value="LAUNDRY"> Laundry </option>
+					</select>
+				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Number of the Item </span>
 					<input
@@ -285,6 +329,16 @@
 						{...$constraints.price}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
+				</label>
+				<label class="flex items-center gap-3">
+					<input
+						type="checkbox"
+						name="inBirr"
+						bind:checked={$addPropertyForm.inBirr}
+						{...$constraints.inBirr}
+						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> In Birr </span>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Property Status </span>
@@ -352,16 +406,34 @@
 							?.available}
 						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 					/>
-					<span class="text-primary font-medium"> Available </span>
+					<span class="text-primary font-medium"> Available Now </span>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Description </span>
 					<textarea
 						name="description"
 						required
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)?.name}
+						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
+							?.description}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
+				</label>
+				<label class="w-full grid gap-2">
+					<span class="text-primary font-medium"> Category </span>
+					<select
+						required
+						name="itemCategory"
+						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
+							?.itemCategory}
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					>
+						<option selected disabled value=""> Item Category </option>
+						<option value="SALON"> Salon </option>
+						<option value="KITCHEN"> Kitchen </option>
+						<option value="BATHROOM"> Bathroom </option>
+						<option value="BEDROOM"> Bedroom </option>
+						<option value="LAUNDRY"> Laundry </option>
+					</select>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Number of the Item </span>
@@ -381,6 +453,17 @@
 							?.itemsPrice}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
+				</label>
+				<label class="flex items-center gap-3">
+					<input
+						type="checkbox"
+						name="inBirr"
+						checked={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
+							?.itemsCurrency === 'ETB'}
+						{...$constraints.inBirr}
+						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> In Birr </span>
 				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Property Status </span>
