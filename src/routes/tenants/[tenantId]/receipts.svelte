@@ -45,7 +45,14 @@
 		<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 			<PdfPrint>
 				<div>
-					<!-- <div class="w-full text-2xl font-bold print:block hidden text-center">Center Point</div> -->
+					<div class="print:block hidden">
+						<p><span class="font-semibold">Address: </span> A.A. Bole Wereda 03 H.No 567</p>
+						<p><span class="font-semibold">VAT Reg. No:</span> 11296</p>
+						<p><span class="font-semibold">VAT Reg Date:</span> 03-Oct-2023</p>
+						<p><span class="font-semibold">TIN:</span> 0000024081</p>
+					</div>
+					<hr class="my-1" />
+
 					<div class="print:block hidden">
 						<span class="font-semibold">Tenants Name:</span>
 						{data.tenant?.fullName}
@@ -54,49 +61,67 @@
 						<span class="font-semibold">Tenants phone:</span>
 						{data.tenant?.phoneNumber}
 					</div>
-
-					<div class="text-lg font-semibold my-2 print:block hidden">
+					<hr class="mt-1" />
+					<div class="text-lg font-semibold my-1 print:block hidden">
 						Receipt Reference: {receipts.receiptReferenceNumber}
 					</div>
 					<div class="hidden">
 						<p class="text-lg font-medium">Name:</p>
 						<p class="text-base font-normal">{data.tenant?.fullName}</p>
 					</div>
-					<div class="grid print:grid-cols-1 grid-cols-3 gap-10">
+					<div class="grid grid-cols-1 gap-10">
 						{#each receipts.receipts ?? [] as rec}
 							<div class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md">
-								<p class="italic font-light">
-									Issued Date: <span class=""
-										>{dayjs(rec.receiptReceivedOn).format('MMM DD/YY')}</span
-									>
-								</p>
-								<div class="">
-									<span class="font-semibold">TIN Number:</span>
-									{data.tenant?.TenantRental.find(
-										(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId
-									)?.tinNumber ?? 'N/A'}
-								</div>
-
-								<div class="flex gap-4">
+								<div class="print:grid print:grid-cols-2 flex print:gap-2 gap-12">
 									<div>
+										<div class="">
+											<span class="font-semibold">TIN Number:</span>
+											{data.tenant?.TenantRental.find(
+												(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId
+											)?.tinNumber ?? 'N/A'}
+										</div>
 										<p class="font-medium">
 											Room No: <span class="font-normal">{rec.PayToUnit?.roomNumber}</span>
-										</p>
-
-										<p class="font-medium">
-											Amount:
-											<span class="font-normal"
-												>{numberToCurrency(rec.amount, {
-													currency: rec.PayToUnit?.currency,
-													currencyDisplay: 'code'
-												})}</span
-											>
 										</p>
 										<p class="font-medium">
 											Reason: <span class="font-normal">{rec.paymentReason}</span>
 										</p>
 									</div>
 									<div>
+										<p class="font-medium">
+											Amount:
+											<span class="font-normal"
+												>{numberToCurrency(rec.amount / 1.15, {
+													currency: rec.PayToUnit?.currency,
+													currencyDisplay: 'code'
+												})}</span
+											>
+										</p>
+										<p class="font-medium">
+											VAT:
+											<span class="font-normal"
+												>{numberToCurrency(rec.amount - rec.amount / 1.15, {
+													currency: rec.PayToUnit?.currency,
+													currencyDisplay: 'code'
+												})}</span
+											>
+										</p>
+										<p class="font-medium">
+											Total Amount:
+											<span class="font-normal"
+												>{numberToCurrency(rec.amount / 1.15, {
+													currency: rec.PayToUnit?.currency,
+													currencyDisplay: 'code'
+												})}</span
+											>
+										</p>
+									</div>
+									<div>
+										<p class="italic font-light">
+											Issued Date: <span class=""
+												>{dayjs(rec.receiptReceivedOn).format('MMM DD/YY')}</span
+											>
+										</p>
 										<p class="font-medium">
 											Start Date: <span class="font-normal">
 												{dayjs(rec.startDate).format('MMM DD/YY')}</span
@@ -108,6 +133,8 @@
 												>{dayjs(rec.endDate).format('MMM DD/YY')}</span
 											>
 										</p>
+									</div>
+									<div>
 										<p class="font-medium">
 											Bank Name: <span class="font-normal"> {rec.bankName}</span>
 										</p>
@@ -257,14 +284,11 @@
 				<span class="text-primary font-medium"> Receipt Issue Date </span>
 				<input
 					type="date"
-					bind:value={$addReceiptForm.receiptIssueDate}
-					{...$constraints.receiptIssueDate}
+					bind:value={$addReceiptForm.paymentStartDate}
+					{...$constraints.paymentStartDate}
 					name="receiptIssueDate"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput3}
-					on:click={() => {
-						dateInput3 && dateInput3.showPicker();
-					}}
 				/>
 			</label>
 			<label class="grid">
