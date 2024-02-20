@@ -22,7 +22,7 @@
 			<p class="text-xl font-semibold">Login</p>
 			<p class="text-sm text-subtitle pt-2">Login to you company account</p>
 		</div>
-		<form class="grid gap-6 mt-6" method="post" use:enhance={() => login()}>
+		<form class="grid gap-6 mt-6" method="post" action="#" on:submit|preventDefault={() => login()}>
 			<label class="grid">
 				<span> Email </span>
 				<input
@@ -43,7 +43,7 @@
 					name="password"
 				/>
 			</label>
-			<button class="bg-primary w-full text-white rounded-md py-2"> Login</button>
+			<button type="submit" class="bg-primary w-full text-white rounded-md py-2"> Login</button>
 		</form>
 	</div>
 </div>
