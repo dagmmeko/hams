@@ -13,8 +13,6 @@ export const load = async (event) => {
 
 	const tenantFromWebsite = tenants.filter((tenant) => tenant.contactSource === 'WEBSITE').length;
 
-	console.log(tenantFromWebsite);
-
 	return {
 		activeUnit,
 		allUnits
