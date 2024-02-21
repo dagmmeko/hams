@@ -28,28 +28,44 @@
 					<span class="font-medium">Security Deposit:</span>
 					{tenantUnit.securityDeposit}
 				</div>
+				<hr class="my-4" />
 				<div>
-					<span class="font-medium">Termination Reason:</span>
-					{tenantUnit.terminationReason}
+					<p class="font-medium">Termination Reason:</p>
+					<p>{tenantUnit.terminationReason}</p>
 				</div>
+				<hr class="my-4" />
 				<div>
 					<p class="font-medium">Latest Inspection:</p>
-					<p>{dayjs(tenantUnit.RentalUnits.Inspections[0].inspectionDate).format('MMM DD / YY')}</p>
-					<p
-						class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {tenantUnit
-							.RentalUnits.Inspections[0].InspectionStatus === 'GOOD_CONDITION'
-							? 'bg-success text-white'
-							: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
-							? 'bg-warning text-black/70'
-							: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
-							? 'bg-danger text-white'
-							: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
-							? 'bg-info text-white'
-							: ''}"
-					>
-						{tenantUnit.RentalUnits.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
-					</p>
-					<p>{tenantUnit.RentalUnits.Inspections[0].description}</p>
+					<div class="pl-8">
+						<p>
+							<span class="font-medium">Inspection Date:</span>
+
+							{dayjs(tenantUnit.RentalUnits.Inspections[0].inspectionDate).format('MMM DD / YY')}
+						</p>
+						<div>
+							<span class="font-medium">Inspection Status:</span>
+							<p
+								class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {tenantUnit
+									.RentalUnits.Inspections[0].InspectionStatus === 'GOOD_CONDITION'
+									? 'bg-success text-white'
+									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
+									? 'bg-warning text-black/70'
+									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
+									? 'bg-danger text-white'
+									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
+									? 'bg-info text-white'
+									: ''}"
+							>
+								{tenantUnit.RentalUnits.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
+							</p>
+						</div>
+
+						<p>
+							<span class="font-medium">Inspection description:</span>
+
+							{tenantUnit.RentalUnits.Inspections[0].description}
+						</p>
+					</div>
 				</div>
 			</PdfPrint>
 			<hr class="my-4" />
