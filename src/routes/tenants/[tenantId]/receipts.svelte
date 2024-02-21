@@ -87,7 +87,7 @@
 											Reason: <span class="font-normal">{rec.paymentReason}</span>
 										</p>
 									</div>
-									<div>
+									<div class="print:hidden block">
 										<p class="font-medium">
 											Amount:
 											<span class="font-normal"
@@ -109,8 +109,41 @@
 										<p class="font-medium">
 											Total Amount:
 											<span class="font-normal"
-												>{numberToCurrency(rec.amount / 1.15, {
+												>{numberToCurrency(rec.amount, {
 													currency: rec.PayToUnit?.currency,
+													currencyDisplay: 'code'
+												})}</span
+											>
+										</p>
+									</div>
+									<div class="print:block hidden">
+										<p class="font-medium">
+											Amount:
+											<span class="font-normal"
+												>{numberToCurrency((rec.amount / 1.15) * (rec.usdRateAtPayment || 1), {
+													currency: 'ETB',
+													currencyDisplay: 'code'
+												})}</span
+											>
+										</p>
+
+										<p class="font-medium">
+											VAT:
+											<span class="font-normal"
+												>{numberToCurrency(
+													(rec.amount - rec.amount / 1.15) * (rec.usdRateAtPayment || 1),
+													{
+														currency: 'ETB',
+														currencyDisplay: 'code'
+													}
+												)}</span
+											>
+										</p>
+										<p class="font-medium">
+											Total Amount:
+											<span class="font-normal"
+												>{numberToCurrency(rec.amount * (rec.usdRateAtPayment || 1), {
+													currency: 'ETB',
 													currencyDisplay: 'code'
 												})}</span
 											>

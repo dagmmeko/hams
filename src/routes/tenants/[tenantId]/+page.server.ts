@@ -136,6 +136,8 @@ export const actions = {
 			return fail(400, { addReceiptsForm });
 		}
 
+		const usdRate = await prisma.currencyRate.findMany({});
+
 		const newReceipts = await prisma.receipts.create({
 			data: {
 				startDate: addReceiptsForm.data.paymentStartDate,
@@ -149,7 +151,8 @@ export const actions = {
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
-				isRentPayment: !addReceiptsForm.data.isUtilityPayment
+				isRentPayment: !addReceiptsForm.data.isUtilityPayment,
+				usdRateAtPayment: usdRate[0].rate
 			}
 		});
 

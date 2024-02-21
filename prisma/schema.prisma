@@ -247,6 +247,7 @@ model Receipts {
   bankName               String
   paymentReason          String?
   receiptReferenceNumber String?
+  usdRateAtPayment       Float?
   tenantsId              Int?
   payToUnitId            Int?
   PayToUnit              RentalUnits?   @relation(fields: [payToUnitId], references: [id])
@@ -474,6 +475,14 @@ model PaymentFile {
 
   @@index([paymentId])
   @@index([fileId])
+}
+
+model CurrencyRate {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  rate      Float
 }
 
 enum EmploymentType {
