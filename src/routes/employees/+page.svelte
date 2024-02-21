@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
 	import SvelteTable from 'svelte-table';

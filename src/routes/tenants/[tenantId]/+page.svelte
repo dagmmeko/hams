@@ -2,10 +2,11 @@
 	import Receipts from './receipts.svelte';
 	import Tenant from './tenant.svelte';
 	import TenantPriceChange from './tenant-price-change.svelte';
+	import EndingProcess from './ending-process.svelte';
 
 	export let data;
 	export let form;
-	let displayedComponent: 'tenant' | 'receipts' | 'priceChange' = 'tenant';
+	let displayedComponent: 'tenant' | 'receipts' | 'priceChange' | 'ending' = 'tenant';
 </script>
 
 <div class="mt-6 mx-10">
@@ -27,6 +28,11 @@
 				Price Change
 			</p>
 		</button>
+		<button on:click={() => (displayedComponent = 'ending')}>
+			<p class="p-2 px-3 rounded-md {displayedComponent === 'ending' ? 'bg-white' : ''}">
+				Ending Process
+			</p>
+		</button>
 	</div>
 
 	{#if displayedComponent === 'tenant'}
@@ -35,6 +41,8 @@
 		<Receipts bind:data />
 	{:else if displayedComponent === 'priceChange'}
 		<TenantPriceChange bind:data bind:form />
+	{:else if displayedComponent === 'ending'}
+		<EndingProcess bind:data bind:form />
 	{:else}
 		<p>Something went wrong</p>
 	{/if}

@@ -24,8 +24,21 @@ const addReceiptsSchema = z.object({
 	depositedBank: z.string()
 });
 
+const extendRentSchema = z.object({
+	unitRenalId: z.number().int(),
+	contractEndDate: z.date()
+});
+
+const endRentSchema = z.object({
+	unitRenalId: z.number().int(),
+	terminationReason: z.string()
+});
+
 export const load = async (event) => {
 	const addReceiptsForm = await superValidate(addReceiptsSchema);
+	const extendRentForm = await superValidate(extendRentSchema);
+	const endRentForm = await superValidate(endRentSchema);
+
 	const tenant = await prisma.tenants.findFirst({
 		where: {
 			id: Number(event.params.tenantId)
@@ -33,7 +46,16 @@ export const load = async (event) => {
 		include: {
 			TenantRental: {
 				include: {
-					RentalUnits: true
+					RentalUnits: {
+						include: {
+							Inspections: {
+								take: 1,
+								orderBy: {
+									inspectionDate: 'desc'
+								}
+							}
+						}
+					}
 				}
 			},
 			PriceChange: true,
@@ -59,7 +81,6 @@ export const load = async (event) => {
 			tenantsId: Number(event.params.tenantId)
 		}
 	});
-	console.log({ allReceipts });
 
 	let groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
 		return {
@@ -83,7 +104,7 @@ export const load = async (event) => {
 		editTenantSchema
 	);
 
-	return { editTenantForm, addReceiptsForm, tenant, groupedReceipts };
+	return { endRentForm, editTenantForm, addReceiptsForm, tenant, groupedReceipts, extendRentForm };
 };
 
 export const actions = {
@@ -133,5 +154,66 @@ export const actions = {
 		});
 
 		return { addReceiptsForm, newReceipts };
+	},
+	extendRent: async (event) => {
+		const extendRentForm = await superValidate(event.request, extendRentSchema);
+		if (!extendRentForm) {
+			return fail(400, { extendRentForm });
+		}
+
+		console.log({ extendRentForm: extendRentForm.data });
+		const updateEndDate = await prisma.tenantRental.update({
+			where: {
+				id: extendRentForm.data.unitRenalId
+			},
+			data: {
+				contractEndDate: extendRentForm.data.contractEndDate
+			}
+		});
+
+		return { extendRentForm, updateEndDate };
+	},
+	initialEndContract: async (event) => {
+		const endRentForm = await superValidate(event.request, endRentSchema);
+		if (!endRentForm) {
+			return fail(400, { endRentForm });
+		}
+
+		console.log({ endRentForm: endRentForm.data });
+		const updateEndDate = await prisma.tenantRental.update({
+			where: {
+				id: endRentForm.data.unitRenalId
+			},
+			data: {
+				terminationReason: endRentForm.data.terminationReason,
+				exitingTenant: true
+			}
+		});
+
+		return { endRentForm, updateEndDate };
+	},
+	endContract: async (event) => {
+		const data = await event.request.formData();
+		const unitId = data.get('unitId');
+
+		if (typeof unitId !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const updateEnd = await prisma.tenantRental.update({
+			where: {
+				id: Number(unitId)
+			},
+			data: {
+				active: false,
+				RentalUnits: {
+					update: {
+						active: false
+					}
+				}
+			}
+		});
+
+		return { updateEnd };
 	}
 };

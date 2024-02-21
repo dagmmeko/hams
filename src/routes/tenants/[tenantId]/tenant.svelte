@@ -7,7 +7,11 @@
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { clickOutside } from '$lib/utils/click-outside';
+
 	import dayjs from 'dayjs';
+	import ExtendContract from './extend-contract.svelte';
+	import EndContract from './end-contract.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -18,6 +22,11 @@
 	} = superForm(data.editTenantForm);
 	let frontFileData: string[] = [];
 	$: form?.editTenant ? toast.push('Tenant updated successfully') : null;
+
+	let extendContractModal = false;
+	let unitToExtend: any;
+	let endContractModal = false;
+	let unitToEnd: any;
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -72,7 +81,7 @@
 				/>
 			</label>
 			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Emergency Contact Phone Number</span>
+				<span class="text-primary font-semibold py-1"> Emergency Contact Phone </span>
 				<input
 					name="emergencyContactPhoneNumber"
 					bind:value={$editTenantForm.emergencyContactPhoneNumber}
@@ -101,27 +110,58 @@
 		</div>
 	</form>
 	<div class="grid grid-cols-2 mt-6 gap-8">
-		<div class=" overflow-y-auto">
-			<div class="w-full text-xl mb-4">Active Rooms</div>
-
-			<div>
+		<div>
+			<div class="w-full font-medium text-xl mb-1">Active Rooms</div>
+			<hr class="mb-1" />
+			<div class="h-60 overflow-y-auto">
 				{#each data.tenant?.TenantRental ?? [] as tenantUnit}
-					{#if tenantUnit.active}
-						<div class="bg-white shadow-md p-2 rounded-md">
-							<div>
-								<span class="text-lg font-semibold">{tenantUnit.companyName}</span>
-								<span class="font-light">Room No: {tenantUnit.RentalUnits.roomNumber}</span>
+					{#if tenantUnit.active && tenantUnit.exitingTenant === false}
+						<div class="bg-primary/10 shadow-md p-2 mb-3 rounded-md">
+							<div class="">
+								<span class="font-medium">Company Name:</span>
+								{tenantUnit.companyName}
+							</div>
+							<div class="font-light">
+								<span class="font-medium">Room No: </span>{tenantUnit.RentalUnits.roomNumber}
 							</div>
 
-							<div>TIN: {tenantUnit.tinNumber ?? 'N/A'}</div>
-							<div>Contract End: {dayjs(tenantUnit.contractEndDate).format('MMM DD/YY')}</div>
+							<div><span class="font-medium">TIN:</span> {tenantUnit.tinNumber ?? 'N/A'}</div>
+							<div>
+								<span class="font-medium">Security Deposit:</span>
+								{tenantUnit.securityDeposit}
+							</div>
+							<div>
+								<span class="font-medium">Contract End:</span>
+								{dayjs(tenantUnit.contractEndDate).format('MMM DD/YY')}
+							</div>
+
+							<div class="flex gap-2 mt-1">
+								<button
+									class="bg-warning rounded-md p-2 text-xs text-white"
+									on:click|preventDefault={() => {
+										extendContractModal = true;
+										unitToExtend = tenantUnit.id;
+									}}
+								>
+									Extend Contract
+								</button>
+								<button
+									class="bg-info rounded-md p-2 text-xs text-white"
+									on:click|preventDefault={() => {
+										endContractModal = true;
+										unitToEnd = tenantUnit.id;
+									}}
+								>
+									Start End Process
+								</button>
+							</div>
 						</div>
 					{/if}
 				{/each}
 			</div>
 		</div>
 		<div class=" w-full">
-			<div class="w-full text-xl mb-4">Tenant Files</div>
+			<div class="w-full font-medium text-xl mb-4">Tenant Files</div>
 			<div class="flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
 				{#each data.tenant?.TenantsFile ?? [] as file}
 					<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
@@ -205,7 +245,6 @@
 			</div>
 		</div>
 	</div>
-
 	<p class="text-2xl mt-6">Danger</p>
 	<hr class="my-6" />
 
@@ -231,3 +270,25 @@
 		</div>
 	</div>
 </div>
+
+{#if extendContractModal}
+	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+		<div
+			use:clickOutside={() => (extendContractModal = false)}
+			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+		>
+			<ExtendContract {form} {data} unitId={unitToExtend} />
+		</div>
+	</div>
+{/if}
+
+{#if endContractModal}
+	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+		<div
+			use:clickOutside={() => (endContractModal = false)}
+			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+		>
+			<EndContract {form} {data} unitId={unitToEnd} />
+		</div>
+	</div>
+{/if}

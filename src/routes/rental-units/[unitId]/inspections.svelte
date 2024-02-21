@@ -32,7 +32,7 @@
 						? 'bg-info text-white'
 						: ''}"
 				>
-					{inspection.InspectionStatus}
+					{inspection.InspectionStatus.replace(/_/g, ' ')}
 				</p>
 			</div>
 		</div>

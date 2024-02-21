@@ -207,6 +207,8 @@ model TenantRental {
   active                  Boolean     @default(false)
   securityDeposit         Float?
   durationOfStayInCountry Int?
+  exitingTenant           Boolean     @default(false)
+  terminationReason       String?
   tinNumber               String?
   purposeOfRent           String?
   Tenants                 Tenants     @relation(fields: [tenantId], references: [id])
