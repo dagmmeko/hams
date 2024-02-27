@@ -1,6 +1,10 @@
 <script>
 	import { toast } from '@zerodevx/svelte-toast';
+	import { Pie } from 'svelte-chartjs';
 	import { superForm } from 'sveltekit-superforms/client';
+
+	import { ArcElement, CategoryScale, Chart, Legend, Title, Tooltip } from 'chart.js';
+	Chart.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 	export let data;
 	export let form;
@@ -27,21 +31,86 @@
 			>Save</button
 		>
 	</form>
+	<div class="w-fit" />
 	<div class="my-6">
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
 	<div class=" grid grid-cols-4 gap-4">
 		<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
 			<span>Occupancy rates</span>
-			<span>{data.activeUnit} / {data.allUnits}</span>
+			<span>{data.activeUnits} / {data.allUnits.length}</span>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Bookings by source
+			<Pie
+				data={{
+					datasets: [
+						{
+							data: [
+								data.tenantFromWebsite,
+								data.tenantFromReferral,
+								data.tenantFromWalkIn,
+								data.tenantFromPhone,
+								data.tenantFromEmail,
+								data.tenantFromSocial,
+								data.tenantFromBroker,
+								data.tenantFromOther
+							],
+							backgroundColor: [
+								'#F7464A',
+								'#46BFBD',
+								'#FDB45C',
+								'#949FB1',
+								'#4D5360',
+								'#AC64AD',
+								'#123456',
+								'#654321'
+							],
+							hoverBackgroundColor: [
+								'#FF5A5E',
+								'#5AD3D1',
+								'#FFC870',
+								'#A8B3C5',
+								'#616774',
+								'#DA92DB',
+								'#789ABC',
+								'#CBA987'
+							]
+						}
+					],
+					labels: [
+						'Website',
+						'Referral',
+						'Walk-in',
+						'Phone',
+						'Email',
+						'Social Media',
+						'Broker',
+						'Other'
+					]
+				}}
+				options={{ responsive: true }}
+			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Upcoming reservations
 		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">unit status</div>
+		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
+			unit status
+
+			<Pie
+				data={{
+					labels: ['Out of Service', 'Good Condition', 'Needs Repair'],
+					datasets: [
+						{
+							data: [data.badUnits, data.goodUnits, data.repairUnits],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+						}
+					]
+				}}
+			/>
+		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			employee on leave
 		</div>

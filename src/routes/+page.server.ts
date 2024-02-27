@@ -10,16 +10,22 @@ const usdRateSchema = z.object({
 
 export const load = async (event) => {
 	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
-	const activeUnit = await prisma.rentalUnits.count({
-		where: {
-			active: true
-		}
-	});
-	const allUnits = await prisma.rentalUnits.count();
 
-	const tenants = await prisma.tenants.findMany({});
+	// Unit Data
+	const allUnits = await prisma.rentalUnits.findMany({});
+	const activeUnits = allUnits.filter((unit) => unit.active).length;
+	const goodUnits = allUnits.filter(
+		(unit) => unit.latestInspectionStatus === 'GOOD_CONDITION'
+	).length;
+	const repairUnits = allUnits.filter(
+		(unit) => unit.latestInspectionStatus === 'NEEDS_REPAIR'
+	).length;
+	const badUnits = allUnits.filter(
+		(unit) => unit.latestInspectionStatus === 'OUT_OF_SERVICE'
+	).length;
+
+	// USD Rate Data
 	const usdRate = await prisma.currencyRate.findMany({});
-	console.log({ usdRate });
 	const usdRateForm = await superValidate(
 		{
 			id: usdRate[0]?.id,
@@ -28,12 +34,35 @@ export const load = async (event) => {
 		usdRateSchema
 	);
 
+	// Tenant Data
+	const tenants = await prisma.tenants.findMany({});
+
 	const tenantFromWebsite = tenants.filter((tenant) => tenant.contactSource === 'WEBSITE').length;
+	const tenantFromReferral = tenants.filter((tenant) => tenant.contactSource === 'REFERRAL').length;
+	const tenantFromWalkIn = tenants.filter((tenant) => tenant.contactSource === 'WALK_IN').length;
+	const tenantFromPhone = tenants.filter((tenant) => tenant.contactSource === 'PHONE').length;
+	const tenantFromEmail = tenants.filter((tenant) => tenant.contactSource === 'EMAIL').length;
+	const tenantFromSocial = tenants.filter(
+		(tenant) => tenant.contactSource === 'SOCIAL_MEDIA'
+	).length;
+	const tenantFromBroker = tenants.filter((tenant) => tenant.contactSource === 'BROKER').length;
+	const tenantFromOther = tenants.filter((tenant) => tenant.contactSource === 'OTHER').length;
 
 	return {
-		activeUnit,
 		allUnits,
-		usdRateForm
+		activeUnits,
+		goodUnits,
+		repairUnits,
+		badUnits,
+		usdRateForm,
+		tenantFromWebsite,
+		tenantFromReferral,
+		tenantFromWalkIn,
+		tenantFromPhone,
+		tenantFromEmail,
+		tenantFromSocial,
+		tenantFromBroker,
+		tenantFromOther
 	};
 };
 

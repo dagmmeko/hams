@@ -54,6 +54,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"mock-aws-s3": "4.0.2"
+		"chart.js": "^4.4.1",
+		"mock-aws-s3": "4.0.2",
+		"svelte-chartjs": "^3.1.5"
 	}
 }
