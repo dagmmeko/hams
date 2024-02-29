@@ -22,6 +22,9 @@
 	} = superForm(data.editTenantForm);
 	let frontFileData: string[] = [];
 	$: form?.editTenant ? toast.push('Tenant updated successfully') : null;
+	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
+	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
+	$: form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
 
 	let extendContractModal = false;
 	let unitToExtend: any;
@@ -162,7 +165,7 @@
 		</div>
 		<div class=" w-full">
 			<div class="w-full font-medium text-xl mb-4">Tenant Files</div>
-			<div class="flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
+			<div class="grid grid-cols-3 h-60 overflow-y-auto items-start gap-2">
 				{#each data.tenant?.TenantsFile ?? [] as file}
 					<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
 						<div class="relative">
@@ -174,9 +177,9 @@
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<form
 										method="post"
-										action="?/downloadUnitFile"
+										action="?/downloadTenantFile"
 										use:enhance={({ formData }) => {
-											formData.set('unitKey', `${file.File.key}`);
+											formData.set('tenantKey', `${file.File.key}`);
 										}}
 									>
 										<button on:click|stopPropagation={() => console.log('download')} type="submit">
@@ -191,9 +194,9 @@
 						</div>
 						<form
 							method="post"
-							action="?/deleteUnitFile"
+							action="?/deleteTenantFile"
 							use:enhance={({ formData }) => {
-								formData.set('unitFileId', `${file.fileId}`);
+								formData.set('tenantFileId', `${file.fileId}`);
 							}}
 						>
 							<button
@@ -209,12 +212,12 @@
 				<div
 					class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 				>
-					<form method="post" action="?/editUnitFile" use:enhance>
+					<form method="post" action="?/editTenantFile" use:enhance>
 						<label>
 							<input
 								class="hidden"
 								type="file"
-								name="unitFile"
+								name="tenantFile"
 								multiple
 								on:change={(e) => {
 									const data = e.currentTarget.files;

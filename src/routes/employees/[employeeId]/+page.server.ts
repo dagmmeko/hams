@@ -1,6 +1,7 @@
 import { prisma } from '$lib/utils/prisma.js';
 import type { EmploymentType } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -62,11 +63,30 @@ export const load = async (event) => {
 					}
 				}
 			},
-			Attendance: true,
+			Attendance: {
+				orderBy: {
+					createdAt: 'desc'
+				}
+			},
 			User: true,
 			Manager: true
 		}
 	});
+
+	const date1 = dayjs(employee?.Attendance[0].createdAt).format('YYYY-MM-DD');
+	const date2 = dayjs(new Date()).format('YYYY-MM-DD');
+
+	if (date1 !== date2) {
+		console.log('Not Absent Today');
+		const updateAttendance = await prisma.employee.update({
+			where: {
+				id: parseInt(event.params.employeeId)
+			},
+			data: {
+				isAbsent: false
+			}
+		});
+	}
 
 	if (!employee) {
 		throw error(404, 'Employee not found');

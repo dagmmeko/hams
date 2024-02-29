@@ -29,6 +29,7 @@
 	// $: newFiles = form?.allNewFiles;
 	$: form?.deletedUnit ? goto('/rental-units') : null;
 	$: form?.addInspection ? toast.push('Inspection added successfully') : null;
+	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
 	let modal = false;
 </script>
 

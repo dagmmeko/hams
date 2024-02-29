@@ -344,7 +344,7 @@ export const actions = {
 		const unitFileId = data.get('unitFileId');
 		console.log(unitFileId);
 		if (typeof unitFileId !== 'string') {
-			return fail(500, { errorMessage: 'Issus with file download' });
+			return fail(500, { errorMessage: 'Issus with file deletion' });
 		}
 
 		const deleteFile = await prisma.file.delete({

@@ -1,7 +1,10 @@
+import { getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
+import { s3 } from '$lib/utils/aws-file.js';
+import { S3_BUCKET_NAME } from '$env/static/private';
 
 const editTenantSchema = z.object({
 	fullName: z.string(),
@@ -218,5 +221,75 @@ export const actions = {
 		});
 
 		return { updateEnd };
+	},
+	downloadTenantFile: async (event) => {
+		const data = await event.request.formData();
+		const tenantKey = data.get('tenantKey');
+
+		if (typeof tenantKey !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const fileUrl = await getFile(tenantKey);
+
+		return { fileUrl };
+	},
+	deleteTenantFile: async (event) => {
+		const data = await event.request.formData();
+		const tenantFileId = data.get('tenantFileId');
+
+		if (typeof tenantFileId !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file deletion' });
+		}
+
+		const deleteFile = await prisma.file.delete({
+			where: {
+				id: Number(tenantFileId)
+			}
+		});
+
+		return { deleteFile };
+	},
+	editTenantFile: async (event) => {
+		const data = await event.request.formData();
+		const file = data.getAll('tenantFile');
+
+		const allNewFiles = await new Promise(async (resolve, reject) => {
+			file.map(async (file) => {
+				if (!(file instanceof File)) {
+					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				}
+
+				const buffer = await file.arrayBuffer();
+				const send = Buffer.from(buffer);
+
+				try {
+					await s3
+						.putObject({
+							Bucket: S3_BUCKET_NAME,
+							Key: `tenantsFile/${event.params.tenantId}/${file.name}`,
+							Body: send
+						})
+						.promise();
+
+					const newFile = await prisma.file.create({
+						data: {
+							key: `tenantsFile/${event.params.tenantId}/${file.name}`,
+							fileName: file.name,
+							TenantsFile: {
+								create: {
+									tenantsId: Number(event.params.tenantId)
+								}
+							}
+						}
+					});
+					resolve(newFile);
+				} catch (error) {
+					reject(error);
+					console.log(error as Error);
+				}
+			});
+		});
+		return { allNewFiles };
 	}
 };
