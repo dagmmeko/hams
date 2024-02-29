@@ -174,22 +174,23 @@
 							</div>
 
 							<div class="absolute top-0 w-full h-full left-0 z-30">
-								<div class="flex flex-col gap-2 justify-center items-center h-full">
-									<form
-										method="post"
-										action="?/downloadTenantFile"
-										use:enhance={({ formData }) => {
-											formData.set('tenantKey', `${file.File.key}`);
-										}}
-									>
-										<button on:click|stopPropagation={() => console.log('download')} type="submit">
-											<div class="h-full flex flex-col items-center justify-center">
-												<Eye class="text-primary w-7 h-7" />
-												<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
-											</div>
-										</button>
-									</form>
-								</div>
+								<form
+									method="post"
+									action="?/downloadTenantFile"
+									use:enhance={({ formData }) => {
+										formData.set('tenantKey', `${file.File.key}`);
+									}}
+									class="flex flex-col gap-2 justify-center items-center h-full"
+								>
+									<button on:click|stopPropagation={() => console.log('download')} type="submit">
+										<div class="h-full w-full flex flex-col items-center justify-center">
+											<Eye class="text-primary w-7 h-7" />
+											<span class="text-sm mx-3 py-2 break-all">
+												{file.File.fileName}
+											</span>
+										</div>
+									</button>
+								</form>
 							</div>
 						</div>
 						<form
