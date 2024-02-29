@@ -260,7 +260,7 @@
 					filter.
 				</p>
 			</div>
-			<form method="post" action="?/archiveUnit" use:enhance>
+			<form method="post" action="?/archiveTenant" use:enhance>
 				{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
 					<button
 						on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}

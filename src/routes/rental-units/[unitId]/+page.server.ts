@@ -53,7 +53,8 @@ export const load = async (event) => {
 
 	const unitDetails = await prisma.rentalUnits.findFirst({
 		where: {
-			id: Number(event.params.unitId)
+			id: Number(event.params.unitId),
+			deletedAt: null
 		},
 		include: {
 			Inspections: {
@@ -358,7 +359,6 @@ export const actions = {
 		return { deleteFile };
 	},
 	archiveUnit: async (event) => {
-		console.log('delete unit');
 		const deletedUnit = await prisma.rentalUnits.update({
 			where: { id: Number(event.params.unitId) },
 			data: {

@@ -44,7 +44,8 @@ export const load = async (event) => {
 
 	const tenant = await prisma.tenants.findFirst({
 		where: {
-			id: Number(event.params.tenantId)
+			id: Number(event.params.tenantId),
+			deletedAt: null
 		},
 		include: {
 			TenantRental: {
@@ -291,5 +292,15 @@ export const actions = {
 			});
 		});
 		return { allNewFiles };
+	},
+	archiveTenant: async (event) => {
+		const archiveTenant = await prisma.tenants.update({
+			where: {
+				id: Number(event.params.tenantId)
+			},
+			data: {
+				deletedAt: new Date()
+			}
+		});
 	}
 };
