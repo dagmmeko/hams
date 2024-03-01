@@ -119,14 +119,16 @@
 				<div class="flex flex-col gap-4 mt-4 md:mt-0">
 					<label class="w-full grid gap-2">
 						<span class="text-primary font-medium"> Price </span>
-						<input
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							name="price"
-							type="text"
-							bind:value={priceCurrency}
-							on:input={(e) => setPriceCurrency(e.currentTarget.value)}
-							{...$constraints.price}
-						/>
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600"> {$addUnitForm.inBirr ? 'ETB' : 'USD'} </span>
+							<input
+								class="border-[1px] w-full border-black/60 rounded-md p-2"
+								name="price"
+								type="text"
+								bind:value={$addUnitForm.price}
+								{...$constraints.price}
+							/>
+						</div>
 					</label>
 					<div class="flex mt-0 md:mt-8 gap-10">
 						<label class="flex items-center gap-3">

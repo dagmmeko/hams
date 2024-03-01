@@ -153,23 +153,24 @@
 						</div>
 
 						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<div class="flex flex-col gap-2 justify-center items-center h-full">
-								<form
-									id="downloadUnitFile"
-									method="post"
-									action="?/downloadUnitFile"
-									use:enhance={({ formData }) => {
-										formData.set('unitKey', `${file.File.key}`);
-									}}
-								>
-									<button on:click|stopPropagation={() => console.log('download')} type="submit">
-										<div class="h-full flex flex-col items-center justify-center">
-											<Eye class="text-primary w-7 h-7" />
-											<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
-										</div>
-									</button>
-								</form>
-							</div>
+							<form
+								id="downloadUnitFile"
+								method="post"
+								action="?/downloadUnitFile"
+								use:enhance={({ formData }) => {
+									formData.set('unitKey', `${file.File.key}`);
+								}}
+								class="flex flex-col gap-2 justify-center items-center h-full"
+							>
+								<button on:click|stopPropagation={() => console.log('download')} type="submit">
+									<div class="h-full w-full flex flex-col items-center justify-center">
+										<Eye class="text-primary w-7 h-7" />
+										<span class="text-sm mx-3 py-2 break-all">
+											{file.File.fileName}
+										</span>
+									</div>
+								</button>
+							</form>
 						</div>
 					</div>
 					<form
@@ -241,9 +242,9 @@
 				</p>
 			</div>
 			<form method="post" action="?/archiveUnit" use:enhance>
-				{#if !data.unitDetails?.active}
+				{#if data.unitDetails?.active}
 					<button
-						on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
+						on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
 						class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
 					>
 				{:else}

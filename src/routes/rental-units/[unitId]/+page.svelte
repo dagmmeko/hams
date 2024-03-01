@@ -11,7 +11,7 @@
 </script>
 
 <div class="mt-6 mx-10">
-	<p class="text-xs text-black/50 mb-5">Rental Units / Room 101</p>
+	<p class="text-xs text-black/50 mb-5">Rental Units / {data.unitDetails?.roomNumber}</p>
 	<!-- Navigation -->
 	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
 		<button on:click={() => (displayedComponent = 'room')}>
