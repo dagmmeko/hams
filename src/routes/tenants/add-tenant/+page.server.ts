@@ -2,8 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { s3 } from '$lib/utils/aws-file.js';
-import { S3_BUCKET_NAME } from '$env/static/private';
+import { uploadFileToS3 } from '$lib/utils/aws-file.js';
 import type { ContactSource } from '@prisma/client';
 
 const addTenantSchema = z.object({
@@ -115,29 +114,24 @@ export const actions = {
 				if (!(file instanceof File) || file.size === 0) {
 					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
 				}
-				console.log({ file });
 				const buffer = await file.arrayBuffer();
 				const send = Buffer.from(buffer);
 				try {
-					await s3
-						.putObject({
-							Bucket: S3_BUCKET_NAME,
-							Key: `tenantsFile/${addTenant.id}/${file.name}`,
-							Body: send
-						})
-						.promise();
+					const fileUpload = await uploadFileToS3(`tenantsFile/${addTenant.id}/${file.name}`, send);
 
-					await prisma.file.create({
-						data: {
-							key: `tenantsFile/${addTenant.id}/${file.name}`,
-							fileName: file.name,
-							TenantsFile: {
-								create: {
-									tenantsId: Number(addTenant.id)
+					if (fileUpload) {
+						await prisma.file.create({
+							data: {
+								key: `tenantsFile/${addTenant.id}/${file.name}`,
+								fileName: file.name,
+								TenantsFile: {
+									create: {
+										tenantsId: Number(addTenant.id)
+									}
 								}
 							}
-						}
-					});
+						});
+					}
 				} catch (error) {
 					console.log(error as Error);
 				}

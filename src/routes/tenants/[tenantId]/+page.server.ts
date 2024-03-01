@@ -1,9 +1,9 @@
-import { getFile } from '$lib/utils/aws-file.js';
+import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { s3 } from '$lib/utils/aws-file.js';
+// import { s3 } from '$lib/utils/aws-file.js';
 import { S3_BUCKET_NAME } from '$env/static/private';
 
 const editTenantSchema = z.object({
@@ -255,24 +255,21 @@ export const actions = {
 		const data = await event.request.formData();
 		const file = data.getAll('tenantFile');
 
-		const allNewFiles = await new Promise(async (resolve, reject) => {
+		const allNewFiles = await Promise.all(
 			file.map(async (file) => {
 				if (!(file instanceof File)) {
-					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+					throw new Error('Issue with the file uploaded.');
 				}
 
 				const buffer = await file.arrayBuffer();
 				const send = Buffer.from(buffer);
 
-				try {
-					await s3
-						.putObject({
-							Bucket: S3_BUCKET_NAME,
-							Key: `tenantsFile/${event.params.tenantId}/${file.name}`,
-							Body: send
-						})
-						.promise();
+				const fileUpload = await uploadFileToS3(
+					`tenantsFile/${event.params.tenantId}/${file.name}`,
+					send
+				);
 
+				if (fileUpload) {
 					const newFile = await prisma.file.create({
 						data: {
 							key: `tenantsFile/${event.params.tenantId}/${file.name}`,
@@ -284,13 +281,11 @@ export const actions = {
 							}
 						}
 					});
-					resolve(newFile);
-				} catch (error) {
-					reject(error);
-					console.log(error as Error);
+					return newFile;
 				}
-			});
-		});
+			})
+		);
+
 		return { allNewFiles };
 	},
 	archiveTenant: async (event) => {

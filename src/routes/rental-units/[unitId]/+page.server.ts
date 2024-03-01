@@ -1,5 +1,4 @@
-import { S3_BUCKET_NAME } from '$env/static/private';
-import { getFile, s3 } from '$lib/utils/aws-file.js';
+import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { InspectionStatus, ItemsCategory, PropertyStatus } from '@prisma/client';
 import { fail } from '@sveltejs/kit';
@@ -292,38 +291,36 @@ export const actions = {
 		const data = await event.request.formData();
 		const file = data.getAll('unitFile');
 
-		const allNewFiles = file.map(async (file) => {
-			if (!(file instanceof File)) {
-				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-			}
-			const buffer = await file.arrayBuffer();
-			const send = Buffer.from(buffer);
-			try {
-				await s3
-					.putObject({
-						Bucket: S3_BUCKET_NAME,
-						Key: `unitFile/${event.params.unitId}/${file.name}`,
-						Body: send
-					})
-					.promise();
+		const allNewFiles = await Promise.all(
+			file.map(async (file) => {
+				if (!(file instanceof File)) {
+					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				}
+				const buffer = await file.arrayBuffer();
+				const send = Buffer.from(buffer);
 
-				const newFile = await prisma.file.create({
-					data: {
-						key: `unitFile/${event.params.unitId}/${file.name}`,
-						fileName: file.name,
-						UnitsFile: {
-							create: {
-								rentalUnitId: Number(event.params.unitId)
+				const fileUpload = await uploadFileToS3(
+					`unitFile/${event.params.unitId}/${file.name}`,
+					send
+				);
+
+				if (fileUpload) {
+					const newFile = await prisma.file.create({
+						data: {
+							key: `unitFile/${event.params.unitId}/${file.name}`,
+							fileName: file.name,
+							UnitsFile: {
+								create: {
+									rentalUnitId: Number(event.params.unitId)
+								}
 							}
 						}
-					}
-				});
-			} catch (error) {
-				console.log(error as Error);
-			}
-		});
-		console.log(allNewFiles);
-		// return { allNewFiles };
+					});
+					return newFile;
+				}
+			})
+		);
+		return { allNewFiles };
 	},
 	downloadUnitFile: async (event) => {
 		const data = await event.request.formData();
@@ -336,7 +333,6 @@ export const actions = {
 		}
 
 		const fileUrl = await getFile(unitKey);
-		console.log(fileUrl);
 
 		return { fileUrl };
 	},

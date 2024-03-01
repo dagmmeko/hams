@@ -2,7 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { s3 } from '$lib/utils/aws-file.js';
+import { uploadFileToS3 } from '$lib/utils/aws-file.js';
 import { S3_BUCKET_NAME } from '$env/static/private';
 
 const addUnitSchema = z.object({
@@ -72,25 +72,21 @@ export const actions = {
 				const send = Buffer.from(buffer);
 
 				try {
-					await s3
-						.putObject({
-							Bucket: S3_BUCKET_NAME,
-							Key: `unitFile/${addUnit.id}/${file.name}`,
-							Body: send
-						})
-						.promise();
+					const fileUpload = await uploadFileToS3(`unitFile/${addUnit.id}/${file.name}`, send);
 
-					await prisma.file.create({
-						data: {
-							key: `unitFile/${addUnit.id}/${file.name}`,
-							fileName: file.name,
-							UnitsFile: {
-								create: {
-									rentalUnitId: addUnit.id
+					if (fileUpload) {
+						await prisma.file.create({
+							data: {
+								key: `unitFile/${addUnit.id}/${file.name}`,
+								fileName: file.name,
+								UnitsFile: {
+									create: {
+										rentalUnitId: addUnit.id
+									}
 								}
 							}
-						}
-					});
+						});
+					}
 				} catch (error) {
 					console.log(error as Error);
 				}

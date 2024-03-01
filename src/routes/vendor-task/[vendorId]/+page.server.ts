@@ -1,5 +1,4 @@
-import { S3_BUCKET_NAME } from '$env/static/private';
-import { getFile, s3 } from '$lib/utils/aws-file.js';
+import { getFile, uploadFileToS3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { ServiceType } from '@prisma/client';
 import { error, fail } from '@sveltejs/kit';
@@ -163,36 +162,36 @@ export const actions = {
 		const data = await event.request.formData();
 		const file = data.getAll('vendorFile');
 
-		const allNewFiles = file.map(async (file) => {
-			if (!(file instanceof File)) {
-				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-			}
-			const buffer = await file.arrayBuffer();
-			const send = Buffer.from(buffer);
+		const allNewFiles = await Promise.all(
+			file.map(async (file) => {
+				if (!(file instanceof File)) {
+					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				}
+				const buffer = await file.arrayBuffer();
+				const send = Buffer.from(buffer);
 
-			try {
-				await s3
-					.putObject({
-						Bucket: S3_BUCKET_NAME,
-						Key: `vendorFile/${event.params.vendorId}/${file.name}`,
-						Body: send
-					})
-					.promise();
+				const fileUpload = await uploadFileToS3(
+					`vendorFile/${event.params.vendorId}/${file.name}`,
+					send
+				);
 
-				const newFile = await prisma.file.create({
-					data: {
-						key: `vendorFile/${event.params.vendorId}/${file.name}`,
-						fileName: file.name,
-						VendorFile: {
-							create: {
-								vendorId: Number(event.params.vendorId)
+				if (fileUpload) {
+					const newFile = await prisma.file.create({
+						data: {
+							key: `vendorFile/${event.params.vendorId}/${file.name}`,
+							fileName: file.name,
+							VendorFile: {
+								create: {
+									vendorId: Number(event.params.vendorId)
+								}
 							}
 						}
-					}
-				});
-			} catch (error) {
-				console.log(error as Error);
-			}
-		});
+					});
+					return newFile;
+				}
+			})
+		);
+
+		return { allNewFiles };
 	}
 };

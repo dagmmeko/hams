@@ -1,5 +1,4 @@
-import { S3_BUCKET_NAME } from '$env/static/private';
-import { getFile, s3 } from '$lib/utils/aws-file.js';
+import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -52,38 +51,35 @@ export const actions = {
 		const file = data.getAll('profilePicture');
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
 
-		const allNewFiles = file.map(async (file) => {
-			console.log({ file });
-			if (!(file instanceof File)) {
-				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-			}
-			console.log({ file });
+		const allNewFiles = await Promise.all(
+			file.map(async (file) => {
+				if (!(file instanceof File)) {
+					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
+				}
 
-			const buffer = await file.arrayBuffer();
-			const send = Buffer.from(buffer);
-			try {
-				await s3
-					.putObject({
-						Bucket: S3_BUCKET_NAME,
-						Key: `profilePicture/${session?.authUser.Employee.id}`,
-						Body: send
-					})
-					.promise();
+				const buffer = await file.arrayBuffer();
+				const send = Buffer.from(buffer);
 
-				const newFile = await prisma.employee.update({
-					where: {
-						id: session?.authUser.Employee.id
-					},
-					data: {
-						image: `profilePicture/${session?.authUser.Employee.id}`
-					}
-				});
+				const fileUpload = await uploadFileToS3(
+					`profilePicture/${session?.authUser.Employee.id}/${file.name}`,
+					send
+				);
 
-				console.log({ newFile });
-			} catch (error) {
-				console.log(error as Error);
-			}
-		});
+				if (fileUpload) {
+					const newFile = await prisma.employee.update({
+						where: {
+							id: session?.authUser.Employee.id
+						},
+						data: {
+							image: `profilePicture/${session?.authUser.Employee.id}/${file.name}`
+						}
+					});
+					return newFile;
+				}
+			})
+		);
+
+		return { allNewFiles };
 	},
 	editPassword: async (event) => {
 		const data = await event.request.formData();
