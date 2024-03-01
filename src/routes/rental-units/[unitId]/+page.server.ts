@@ -14,14 +14,16 @@ const deletePropertySchema = z.object({
 });
 
 const editUnitSchema = z.object({
-	roomNumber: z.string(),
 	floor: z.string(),
 	size: z.number(),
 	price: z.number(),
+	priceSetPerKare: z.boolean().optional(),
+	roomNumber: z.string(),
 	unitType: z.enum(['COMMERCIAL', 'RESIDENTIAL']),
 	condition: z.enum(['NEEDS_REPAIR', 'OUT_OF_SERVICE', 'GOOD_CONDITION']),
 	minimumRentalDate: z.number().int(),
-	maximumTenants: z.number().int()
+	maximumTenants: z.number().int(),
+	inBirr: z.boolean().optional()
 });
 
 const addPropertySchema = z.object({
@@ -108,10 +110,12 @@ export const load = async (event) => {
 			floor: unitDetails?.floor,
 			size: unitDetails?.kareMeter,
 			price: unitDetails?.price,
+			priceSetPerKare: unitDetails?.priceSetPerKare,
 			unitType: unitDetails?.unitType,
 			condition: unitDetails?.Inspections[0].InspectionStatus,
 			minimumRentalDate: unitDetails?.minimumRentalDate,
-			maximumTenants: unitDetails?.maximumTenants
+			maximumTenants: unitDetails?.maximumTenants,
+			inBirr: unitDetails?.currency === 'ETB'
 		},
 		editUnitSchema
 	);
@@ -144,7 +148,8 @@ export const actions = {
 				kareMeter: editUnitForm.data.size,
 				price: editUnitForm.data.price,
 				unitType: editUnitForm.data.unitType,
-
+				currency: editUnitForm.data.inBirr ? 'ETB' : 'USD',
+				priceSetPerKare: editUnitForm.data.priceSetPerKare,
 				maximumTenants: editUnitForm.data.maximumTenants,
 				minimumRentalDate: editUnitForm.data.minimumRentalDate
 			}

@@ -95,7 +95,10 @@
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Price</span>
-				<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
+				<div>
+					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+					<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
+				</div>
 			</label>
 
 			<label class="grid">
@@ -119,9 +122,29 @@
 					{...$constraints.maximumTenants}
 				/>
 			</label>
+			<label class="flex items-center gap-3">
+				<input
+					type="checkbox"
+					name="priceSetPerKare"
+					bind:checked={$editUnitForm.priceSetPerKare}
+					{...$constraints.priceSetPerKare}
+					class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+				/>
+				<span class="text-primary font-medium"> Per kare </span>
+			</label>
+			<label class="flex items-center gap-3">
+				<input
+					type="checkbox"
+					name="inBirr"
+					bind:checked={$editUnitForm.inBirr}
+					{...$constraints.inBirr}
+					class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+				/>
+				<span class="text-primary font-medium"> In Birr </span>
+			</label>
 		</div>
 
-		<div class=" w-full p-4 mb-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
+		<div class=" w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
 			{#each data.unitDetails?.UnitsFile ?? [] as file}
 				<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
 					<div class="relative">
