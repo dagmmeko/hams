@@ -69,7 +69,7 @@
 					Edit Role</button
 				>
 				{#if data.role.Employees.length}<button
-						on:click|stopPropagation={() =>
+						on:click|preventDefault={() =>
 							toast.push('Can not delete a role with Employees in it.')}
 						type="submit"
 						class="bg-subtitle text-white rounded-md py-2 w-full"

@@ -50,13 +50,21 @@ export const actions = {
 		if (!editRoleForm) {
 			return fail(400, { editRoleForm });
 		}
+		console.log({ editRoleForm1: editRoleForm.data });
 
 		try {
+			console.log({ editRoleForm2: editRoleForm.data });
+
 			const roleNameExists = await prisma.role.findFirst({
 				where: {
+					id: {
+						not: Number(event.params.roleId)
+					},
 					name: editRoleForm.data.name
 				}
 			});
+
+			console.log({ editRoleForm3: editRoleForm.data });
 
 			if (roleNameExists) {
 				return fail(500, {
