@@ -233,26 +233,27 @@ model TenantsFile {
 }
 
 model Receipts {
-  id                     Int            @id @default(autoincrement())
-  createdAt              DateTime       @default(now())
-  updateAt               DateTime       @updatedAt
-  deletedAt              DateTime?
-  startDate              DateTime
-  endDate                DateTime
-  receiptReceived        Boolean        @default(false)
-  receiptReceivedOn      DateTime?
-  paymentConfirmed       Boolean        @default(false)
-  isRentPayment          Boolean        @default(false)
-  amount                 Float
-  bankName               String
-  paymentReason          String?
-  receiptReferenceNumber String?
-  usdRateAtPayment       Float?
-  tenantsId              Int?
-  payToUnitId            Int?
-  PayToUnit              RentalUnits?   @relation(fields: [payToUnitId], references: [id])
-  Tenants                Tenants?       @relation(fields: [tenantsId], references: [id])
-  ReceiptsFile           ReceiptsFile[]
+  id                      Int            @id @default(autoincrement())
+  createdAt               DateTime       @default(now())
+  updateAt                DateTime       @updatedAt
+  deletedAt               DateTime?
+  startDate               DateTime
+  endDate                 DateTime
+  receiptReceived         Boolean        @default(false)
+  receiptReceivedOn       DateTime?
+  paymentConfirmed        Boolean        @default(false)
+  isRentPayment           Boolean        @default(false)
+  isUtilityAndRentPayment Boolean        @default(false)
+  amount                  Float
+  bankName                String
+  paymentReason           String?
+  receiptReferenceNumber  String?
+  usdRateAtPayment        Float?
+  tenantsId               Int?
+  payToUnitId             Int?
+  PayToUnit               RentalUnits?   @relation(fields: [payToUnitId], references: [id])
+  Tenants                 Tenants?       @relation(fields: [tenantsId], references: [id])
+  ReceiptsFile            ReceiptsFile[]
 
   @@index([tenantsId])
   @@index([payToUnitId])

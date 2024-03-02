@@ -3,8 +3,6 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-// import { s3 } from '$lib/utils/aws-file.js';
-import { S3_BUCKET_NAME } from '$env/static/private';
 
 const editTenantSchema = z.object({
 	fullName: z.string(),
@@ -20,7 +18,8 @@ const addReceiptsSchema = z.object({
 	payToUnit: z.number().int().positive(),
 	paymentStartDate: z.date(),
 	paymentEndDate: z.date(),
-	isUtilityPayment: z.boolean().optional(),
+	isRentPayment: z.boolean().optional(),
+	isBothPayment: z.boolean().optional(),
 	amount: z.number(),
 	receiptIssueDate: z.date(),
 	receiptNumber: z.string(),
@@ -151,12 +150,17 @@ export const actions = {
 				paymentConfirmed: addReceiptsForm.data.receiptNumber ? true : false,
 				amount: addReceiptsForm.data.amount,
 				bankName: addReceiptsForm.data.depositedBank,
-				paymentReason: addReceiptsForm.data.isUtilityPayment ? 'Utility Payment' : 'Rent Payment',
+				paymentReason: addReceiptsForm.data.isBothPayment
+					? 'Rent & Utility Payment'
+					: addReceiptsForm.data.isRentPayment
+					? 'Rent Payment'
+					: 'Utility Payment',
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
-				isRentPayment: !addReceiptsForm.data.isUtilityPayment,
-				usdRateAtPayment: usdRate[0].rate
+				isRentPayment: addReceiptsForm.data.isRentPayment,
+				usdRateAtPayment: usdRate[0].rate,
+				isUtilityAndRentPayment: addReceiptsForm.data.isBothPayment
 			}
 		});
 

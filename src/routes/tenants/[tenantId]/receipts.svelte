@@ -209,7 +209,7 @@
 					{/each}
 				</select>
 			</label>
-			{#if $addReceiptForm.payToUnit && !$addReceiptForm.isUtilityPayment}
+			{#if $addReceiptForm.payToUnit && !$addReceiptForm.isRentPayment}
 				<div>
 					<div class="grid grid-cols-2">
 						<p class="text-base font-medium">Rent to Pay</p>
@@ -293,16 +293,30 @@
 					}}
 				/>
 			</label>
-			<label class="flex">
-				<input
-					type="checkbox"
-					bind:checked={$addReceiptForm.isUtilityPayment}
-					{...$constraints.isUtilityPayment}
-					name="isUtilityPayment"
-					class=" border-[1px] border-black/60 rounded-md p-2"
-				/>
-				<span class="text-primary font-medium"> Utility Payment </span>
-			</label>
+			<div class="flex gap-2">
+				<label class="flex gap-2">
+					<input
+						type="checkbox"
+						bind:checked={$addReceiptForm.isBothPayment}
+						{...$constraints.isBothPayment}
+						name="isBothPayment"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> Rent & Utility Payment </span>
+				</label>
+				{#if !$addReceiptForm.isBothPayment}
+					<label class="flex gap-2">
+						<input
+							type="checkbox"
+							bind:checked={$addReceiptForm.isRentPayment}
+							{...$constraints.isRentPayment}
+							name="isUtilityPayment"
+							class=" border-[1px] border-black/60 rounded-md p-2"
+						/>
+						<span class="text-primary font-medium"> Utility Payment </span>
+					</label>
+				{/if}
+			</div>
 			<label class="grid">
 				<span class="text-primary font-medium"> Amount </span>
 				<input
