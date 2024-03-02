@@ -306,7 +306,6 @@
 			<label class="grid">
 				<span class="text-primary font-medium"> Amount </span>
 				<input
-					type="number"
 					bind:value={$addReceiptForm.amount}
 					{...$constraints.amount}
 					name="amount"

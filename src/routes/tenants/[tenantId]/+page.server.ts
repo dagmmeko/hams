@@ -68,7 +68,7 @@ export const load = async (event) => {
 					PayToUnit: true
 				},
 				orderBy: {
-					createdAt: 'desc'
+					endDate: 'desc'
 				}
 			},
 			TenantsFile: {
