@@ -77,5 +77,14 @@
 				<Webhook /> Role
 			</div>
 		</a>
+		<a href="/tasks">
+			<div
+				class="text-white flex gap-2 m-2 {$page.url.pathname === '/tasks'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Webhook /> Tasks
+			</div>
+		</a>
 	</div>
 </div>

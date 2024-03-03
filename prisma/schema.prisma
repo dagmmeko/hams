@@ -10,18 +10,19 @@ datasource db {
 }
 
 model File {
-  id           Int           @id @default(autoincrement())
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime?
-  deletedAt    DateTime?
-  fileName     String
-  key          String
-  PaymentFile  PaymentFile?
-  TaskFile     TaskFile?
-  VendorFile   VendorFile?
-  ReceiptsFile ReceiptsFile?
-  TenantsFile  TenantsFile?
-  UnitsFile    UnitsFile?
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime?
+  deletedAt        DateTime?
+  fileName         String
+  key              String
+  PaymentFile      PaymentFile?
+  TaskFile         TaskFile?
+  VendorFile       VendorFile?
+  ReceiptsFile     ReceiptsFile?
+  TenantsFile      TenantsFile?
+  UnitsFile        UnitsFile?
+  InternalTaskFile InternalTaskFile?
 }
 
 model User {
@@ -274,34 +275,36 @@ model ReceiptsFile {
 }
 
 model Employee {
-  id              Int             @id @default(autoincrement())
-  hiredDate       DateTime
-  isSuspended     Boolean
-  userId          Int             @unique
-  roleId          Int
-  createdAt       DateTime        @default(now())
-  updateAt        DateTime        @updatedAt
-  deletedAt       DateTime?
-  isFired         Boolean         @default(false)
-  address         String
-  dateOfBirth     DateTime?
-  staffIdNumber   String
-  bloodType       String          @default("O+")
-  height          Float           @default(0)
-  image           String?
-  jobTitle        String          @default("employee")
-  isAbsent        Boolean         @default(false)
-  onLeave         Boolean         @default(false)
-  managerUserId   Int?
-  EmploymentType  EmploymentType?
-  User            User            @relation(fields: [userId], references: [id])
-  Role            Role            @relation(fields: [roleId], references: [id])
-  Manager         User?           @relation("manager", fields: [managerUserId], references: [id])
-  Suspensions     Suspended[]
-  Fired           Fired[]
-  Attendance      Attendance[]
-  ApprovedBy      Leaves[]        @relation("aprrovedBy")
-  EmployeesLeaves Leaves[]        @relation("takenBy")
+  id                     Int             @id @default(autoincrement())
+  hiredDate              DateTime
+  isSuspended            Boolean
+  userId                 Int             @unique
+  roleId                 Int
+  createdAt              DateTime        @default(now())
+  updateAt               DateTime        @updatedAt
+  deletedAt              DateTime?
+  isFired                Boolean         @default(false)
+  address                String
+  dateOfBirth            DateTime?
+  staffIdNumber          String
+  bloodType              String          @default("O+")
+  height                 Float           @default(0)
+  image                  String?
+  jobTitle               String          @default("employee")
+  isAbsent               Boolean         @default(false)
+  onLeave                Boolean         @default(false)
+  managerUserId          Int?
+  EmploymentType         EmploymentType?
+  User                   User            @relation(fields: [userId], references: [id])
+  Role                   Role            @relation(fields: [roleId], references: [id])
+  Manager                User?           @relation("manager", fields: [managerUserId], references: [id])
+  Suspensions            Suspended[]
+  Fired                  Fired[]
+  Attendance             Attendance[]
+  ApprovedBy             Leaves[]        @relation("aprrovedBy")
+  EmployeesLeaves        Leaves[]        @relation("takenBy")
+  InternalTaskCreatedBy  InternalTask[]  @relation("taskCreatedBy")
+  InternalTaskAssignedTo InternalTask[]  @relation("taskAssignedTo")
 
   @@index([roleId])
   @@index([userId])
@@ -484,6 +487,47 @@ model CurrencyRate {
   updatedAt DateTime?
   deletedAt DateTime?
   rate      Float
+}
+
+model InternalTask {
+  id                 Int                @id @default(autoincrement())
+  title              String
+  description        String
+  dueDate            DateTime
+  taskStatus         TaskStatus
+  assignedEmployeeId Int
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime?
+  deletedAt          DateTime?
+  creatorEmployeeId  Int
+  taskSeverity       SeverityStatus
+  AssignedTo         Employee           @relation("taskAssignedTo", fields: [assignedEmployeeId], references: [id])
+  CreatedBy          Employee           @relation("taskCreatedBy", fields: [creatorEmployeeId], references: [id])
+  TaskFile           InternalTaskFile[]
+
+  @@index([assignedEmployeeId])
+  @@index([creatorEmployeeId])
+}
+
+model InternalTaskFile {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime?
+  deletedAt      DateTime?
+  fileId         Int           @unique
+  File           File          @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  InternalTask   InternalTask? @relation(fields: [internalTaskId], references: [id])
+  internalTaskId Int?
+
+  @@index([fileId])
+  @@index([internalTaskId])
+}
+
+enum SeverityStatus {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 enum EmploymentType {
