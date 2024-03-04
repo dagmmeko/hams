@@ -72,10 +72,10 @@ export const load = async (event) => {
 			Manager: true
 		}
 	});
-
-	const date1 = dayjs(employee?.Attendance[0].createdAt).format('YYYY-MM-DD');
+	console.log({ employee });
+	const date1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
 	const date2 = dayjs(new Date()).format('YYYY-MM-DD');
-
+	console.log({ date1, date2 });
 	if (date1 !== date2) {
 		console.log('Not Absent Today');
 		const updateAttendance = await prisma.employee.update({
