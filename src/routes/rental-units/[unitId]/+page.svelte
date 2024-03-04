@@ -10,25 +10,44 @@
 	let displayedComponent: 'room' | 'properties' | 'amenities' | 'inspections' = 'room';
 </script>
 
-<div class="mt-6 mx-10">
+<div class="mt-6 md:mx-10 mx-5">
 	<p class="text-xs text-black/50 mb-5">Rental Units / {data.unitDetails?.roomNumber}</p>
 	<!-- Navigation -->
 	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
 		<button on:click={() => (displayedComponent = 'room')}>
-			<p class="py-2 px-3 rounded-md {displayedComponent === 'room' ? 'bg-white' : ''} ">Room</p>
+			<p
+				class="py-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'room'
+					? 'bg-white'
+					: ''} "
+			>
+				Room
+			</p>
 		</button>
 		<button on:click={() => (displayedComponent = 'properties')}
-			><p class="p-2 px-3 rounded-md {displayedComponent === 'properties' ? 'bg-white' : ''}">
+			><p
+				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'properties'
+					? 'bg-white'
+					: ''}"
+			>
 				Properties
 			</p></button
 		>
 		<button on:click={() => (displayedComponent = 'amenities')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'amenities' ? 'bg-white' : ''}">
+			<p
+				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'amenities'
+					? 'bg-white'
+					: ''}"
+			>
 				Amenities
 			</p>
 		</button>
 		<button on:click={() => (displayedComponent = 'inspections')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'inspections' ? 'bg-white' : ''}">
+			<p
+				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+				'inspections'
+					? 'bg-white'
+					: ''}"
+			>
 				Inspections
 			</p>
 		</button>

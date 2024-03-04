@@ -25,7 +25,7 @@
 	let frontFileData: string[] = [];
 </script>
 
-<div class="mt-6 mx-10">
+<div class="mt-6 md:mx-10 mx-5">
 	<p class="text-xs text-black/50">Tenants / New Tenants</p>
 	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 		<div class="">

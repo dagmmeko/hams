@@ -67,5 +67,7 @@
 			<p class="text-sm">Tenants with price change request</p>
 		</div>
 	</div>
-	<SvelteTable {columns} {rows} />
+	<div class="overflow-x-auto">
+		<SvelteTable {columns} {rows} />
+	</div>
 </div>

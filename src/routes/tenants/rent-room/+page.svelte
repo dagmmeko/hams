@@ -39,7 +39,7 @@
 	$: urlParam = $page.url.searchParams.get('searchTenant');
 </script>
 
-<div class="mt-6 mx-10">
+<div class="mt-6 md:mx-10 mx-5">
 	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 		<p class="text-xs text-black/50">Tenants / Rent Room</p>
 		<div class="">
@@ -48,7 +48,7 @@
 				Find the tenant and select. Assign room and click save when you're done.
 			</p>
 		</div>
-		<div class="grid grid-cols-2 gap-10 mt-6">
+		<div class="grid sm:grid-cols-2 grid-cols-1 gap-10 mt-6">
 			<label class="grid w-full">
 				<span class="text-primary font-medium"> Tenant </span>
 
@@ -87,7 +87,7 @@
 			</label>
 		</div>
 		<form use:rentRoomEnhance method="post" action="?/rentRoom">
-			<div class="grid grid-cols-2 gap-10">
+			<div class="grid sm:grid-cols-2 grid-cols-1 gap-10">
 				<div class="w-full">
 					{#if data.tenants && data.tenants?.length !== 0}
 						<div
@@ -167,7 +167,7 @@
 				</div>
 			</div>
 
-			<div class="grid grid-cols-2 gap-10 mt-10">
+			<div class="grid sm:grid-cols-2 grid-cols-1 gap-10 mt-10">
 				<div class="w-full grid gap-3">
 					<label class="grid gap-1">
 						<span class="text-primary font-medium"> Purpose of Rent </span>

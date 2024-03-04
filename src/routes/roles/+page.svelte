@@ -59,8 +59,8 @@
 </script>
 
 <div>
-	<div class="mx-10 my-12 bg-white rounded-sm shadow-lg border-[1px] border-black/20">
-		<div class="flex justify-between p-6">
+	<div class="md:mx-10 mx-5 my-12 bg-white rounded-sm shadow-lg border-[1px] border-black/20">
+		<div class="sm:flex justify-between p-6">
 			<div class="flex items-center space-x-4">
 				<p class="text-xl font-medium">Roles</p>
 				<p class="bg-[#F9F5FF] text-xs font-medium rounded-xl py-2 px-3">
@@ -80,7 +80,7 @@
 			</button> -->
 			<label class="grid">
 				<input
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 					type="search"
 					id="search"
 					name="search"

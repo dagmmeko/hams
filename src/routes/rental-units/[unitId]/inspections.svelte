@@ -6,7 +6,7 @@
 </script>
 
 <div class="mb-6 font-semibold text-xl">Inspections list</div>
-<div class="grid grid-cols-4 gap-4">
+<div class="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
 	{#each data.allInspections as inspection}
 		<div class="border-[1px] border-black/20 p-4">
 			<div>

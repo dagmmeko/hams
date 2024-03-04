@@ -35,7 +35,7 @@
 	<div class="my-6">
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
-	<div class=" grid grid-cols-4 gap-4">
+	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
 		<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
 			<span>Occupancy rates</span>
 			<span>{data.activeUnits} / {data.allUnits.length}</span>

@@ -51,19 +51,19 @@
 </script>
 
 <div>
-	<div class="flex justify-between">
+	<div class="sm:flex justify-between">
 		<div class="grid">
 			<p class="text-2xl">Room Amenities</p>
 		</div>
 		<button
 			type="submit"
-			class="bg-primary text-white rounded-md py-2 px-6"
+			class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-2"
 			on:click={() => (addModal = true)}
 		>
 			New Amenity</button
 		>
 	</div>
-	<div class="-mx-6 pt-5">
+	<div class="-mx-6 pt-5 overflow-y-auto">
 		<SvelteTable
 			classNameTable="unitAmenitiesTables"
 			on:clickCell={(event) => {

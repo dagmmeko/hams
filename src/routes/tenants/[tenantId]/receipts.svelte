@@ -72,7 +72,7 @@
 					<div class="grid grid-cols-1 gap-10">
 						{#each receipts.receipts ?? [] as rec}
 							<div class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md">
-								<div class="print:grid print:grid-cols-2 flex print:gap-2 gap-12">
+								<div class="print:grid print:grid-cols-2 md:flex print:gap-2 gap-12">
 									<div>
 										<div class="">
 											<span class="font-semibold">TIN Number:</span>

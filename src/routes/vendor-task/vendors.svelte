@@ -77,7 +77,7 @@
 </script>
 
 <div class=" bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
+	<div class="sm:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Vendors</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Vendors</p>
@@ -87,7 +87,7 @@
 		>
 	</div>
 
-	<div class="bg-ghost/60 p-6 flex justify-between">
+	<div class="bg-ghost/60 p-6 sm:flex justify-between">
 		<button
 			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 text-sm shadow-md bg-white"
 		>
@@ -95,7 +95,7 @@
 		</button>
 		<label class="grid">
 			<input
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				class=" border-[1px] md:mt-0 mt-3 border-black/60 rounded-md p-2"
 				type="search"
 				id="search"
 				name="search"
@@ -108,17 +108,18 @@
 			/>
 		</label>
 	</div>
+	<div class="overflow-x-auto">
+		<SvelteTable
+			classNameTable="rolesTable"
+			{columns}
+			{rows}
+			on:clickCell={(event) => {
+				const vendorId = event.detail.row.id;
 
-	<SvelteTable
-		classNameTable="rolesTable"
-		{columns}
-		{rows}
-		on:clickCell={(event) => {
-			const vendorId = event.detail.row.id;
-
-			goto(`/vendor-task/${vendorId}`);
-		}}
-	/>
+				goto(`/vendor-task/${vendorId}`);
+			}}
+		/>
+	</div>
 </div>
 {#if modal}
 	<form
@@ -129,7 +130,7 @@
 	>
 		<div
 			use:clickOutside={() => (modal = false)}
-			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			class="bg-white rounded-xl p-8 w-[480px] mx-12 grid gap-4 justify-items-stretch"
 		>
 			<div>
 				<p class="text-xl font-semibold">New Vendor</p>
@@ -137,74 +138,74 @@
 					Register new tenants here. Click save when you're done.
 				</p>
 			</div>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Vendor Name </span>
 				<input
 					bind:value={$addVendorForm.name}
 					{...$constraints.name}
 					name="name"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Phone Number </span>
 				<input
 					bind:value={$addVendorForm.phoneNumber}
 					{...$constraints.phoneNumber}
 					name="phoneNumber"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Email </span>
 				<input
 					bind:value={$addVendorForm.email}
 					{...$constraints.email}
 					name="email"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> TIN Number </span>
 				<input
 					bind:value={$addVendorForm.tinNumber}
 					{...$constraints.tinNumber}
 					name="tinNumber"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Address </span>
 				<input
 					bind:value={$addVendorForm.address}
 					{...$constraints.address}
 					name="address"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Service Description </span>
 				<input
 					bind:value={$addVendorForm.serviceDescription}
 					{...$constraints.serviceDescription}
 					name="serviceDescription"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Service Type </span>
 				<select
 					bind:value={$addVendorForm.serviceType}
 					{...$constraints.serviceType}
 					name="serviceType"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				>
 					<option selected disabled> Select Type </option>
 					<option value="CLEANING">Cleaning</option>
@@ -214,10 +215,10 @@
 					<option value="SECURITY">Security</option>
 				</select>
 			</label>
-			<label>
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Score </span>
 				<input
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 					type="number"
 					min="1"
 					max="10"

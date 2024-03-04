@@ -28,7 +28,7 @@
 
 <div class="p-6">
 	<form use:editFormEnhance method="post" action="?/editVendorInfo">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div class="grid">
 				<p class="text-2xl">Vendor Info</p>
 				<p class=" text-sm py-1 rounded-xl">Vendor details here.</p>
@@ -38,7 +38,7 @@
 			>
 		</div>
 		<hr class="my-6" />
-		<div class="grid gap-6 grid-cols-4">
+		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Vendor Name</span>
 				<input name="name" bind:value={$editVendorForm.name} {...$constraints.name} />
@@ -180,7 +180,7 @@
 	<hr class="my-6" />
 
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div>
 				<p class="text-lg">Delete Vendor</p>
 				<p class="text-black/50">

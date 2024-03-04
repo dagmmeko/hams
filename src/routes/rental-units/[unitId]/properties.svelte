@@ -97,13 +97,13 @@
 </script>
 
 <div>
-	<div class="flex justify-between">
+	<div class="md:flex justify-between">
 		<div class="grid">
 			<p class="text-2xl">Room Properties</p>
 		</div>
 		<button
 			type="submit"
-			class="bg-primary text-white rounded-md py-2 px-6"
+			class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-3"
 			on:click={() => (addModal = true)}
 		>
 			New Property</button
@@ -212,16 +212,18 @@
 	</div>
 	<div class="-mx-6 pt-5">
 		<PdfPrint class="mx-6">
-			<SvelteTable
-				classNameTable="unitPropertyTables"
-				classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
-				on:clickCell={(event) => {
-					selectedUnitId = event.detail.row.id;
-					editModal = true;
-				}}
-				{columns}
-				{rows}
-			/>
+			<div class="overflow-x-auto">
+				<SvelteTable
+					classNameTable="unitPropertyTables"
+					classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
+					on:clickCell={(event) => {
+						selectedUnitId = event.detail.row.id;
+						editModal = true;
+					}}
+					{columns}
+					{rows}
+				/>
+			</div>
 			<div class="print:block hidden p-8">
 				<p class="text-lg font-semibold">Attention</p>
 				<p class="text-sm">

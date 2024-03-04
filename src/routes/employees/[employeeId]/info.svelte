@@ -19,7 +19,7 @@
 
 <div class="p-6">
 	<form use:editFormEnhance method="post" action="?/editEmployeeInfo">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div class="grid">
 				<p class="text-2xl">Employee Info</p>
 				<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
@@ -29,7 +29,7 @@
 			>
 		</div>
 		<hr class="my-6" />
-		<div class="grid gap-6 grid-cols-4">
+		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Full Name</span>
 				<input name="userName" bind:value={$editEmployeeForm.userName} {...$constraints.userName} />
@@ -180,14 +180,14 @@
 	<hr class="my-6" />
 
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div>
 				<p class="text-lg">Suspend Employee</p>
 				<p class="text-black/50">Suspend employee from job for a given time.</p>
 			</div>
 			<button class="bg-danger text-white rounded-md py-2 px-6">Suspend</button>
 		</div>
-		<div class="flex mt-6 justify-between">
+		<div class="md:flex mt-6 justify-between">
 			<div>
 				<p class="text-lg">Archive Employee</p>
 				<p class="text-black/50">Archive employment contract with employee.</p>

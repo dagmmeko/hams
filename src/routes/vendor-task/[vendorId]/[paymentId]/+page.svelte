@@ -18,7 +18,7 @@
 	});
 </script>
 
-<div class="mx-10 my-12 bg-white rounded-sm p-12 shadow-lg border-[1px] border-black/20">
+<div class="md:mx-10 mx-5 my-12 bg-white rounded-sm p-12 shadow-lg border-[1px] border-black/20">
 	<p class="text-xl font-medium mb-6">Payment Attachment</p>
 	<PdfPrint>
 		<div class="my-6">

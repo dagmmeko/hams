@@ -23,7 +23,7 @@
 </script>
 
 <div class="p-6">
-	<div class="flex justify-between">
+	<div class="md:flex justify-between">
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Attendance</p>
 		</div>
@@ -33,7 +33,7 @@
 			>
 		</form>
 	</div>
-	<div class="grid grid-cols-3 gap-4 my-6">
+	<div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 my-6">
 		{#each data.employee.Attendance as attendance}
 			<button
 				on:click={() => {

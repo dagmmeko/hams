@@ -8,7 +8,7 @@
 	let displayedComponent: 'all_payments' | 'info' = 'info';
 </script>
 
-<div class="mx-10 my-12">
+<div class="md:mx-10 mx-5 my-12">
 	<p class="text-sm mb-5">Vendor / {data.editVendorForm.data.name}</p>
 
 	<!-- Navigation -->

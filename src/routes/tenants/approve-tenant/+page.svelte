@@ -23,19 +23,19 @@
 	$: form?.tenant ? toast.push('Tenant Rented') : null;
 </script>
 
-<div class="mt-6 mx-10">
+<div class="mt-6 md:mx-10 mx-5">
 	<p class="text-xs text-black/50">Tenants / Rent Room</p>
 	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 		<form use:approveRentEnhance method="post" action="?/rentApprovedRoom">
 			<div class="">
 				<p class="text-2xl font-medium">Approved Discount</p>
 				<p class="text-sm py-2">Fill out the details and rent the unit.</p>
-				<button class="bg-primary text-white rounded-md py-2 px-6 w-[420px] mt-6">
+				<button class="bg-primary text-white rounded-md py-2 md:px-32 sm:px-24 px-10 mt-6">
 					Rent Room</button
 				>
 			</div>
 
-			<div class="grid grid-cols-2 gap-10 mt-6">
+			<div class="grid sm:grid-cols-2 grid-cols-1 gap-10 mt-6">
 				<div class="grid gap-4">
 					{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
 						<label class="grid gap-2">

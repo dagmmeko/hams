@@ -69,7 +69,7 @@
 </script>
 
 <div class=" bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
+	<div class="sm:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Tasks</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tasks</p>
@@ -79,7 +79,7 @@
 		>
 	</div>
 
-	<div class="bg-ghost/60 p-6 flex justify-between">
+	<div class="bg-ghost/60 p-6 sm:flex justify-between">
 		<button
 			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 mx-3 text-sm shadow-md bg-white"
 		>
@@ -87,7 +87,7 @@
 		</button>
 		<label class="grid">
 			<input
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				class=" sm:mt-0 mt-3 border-[1px] border-black/60 rounded-md p-2"
 				type="search"
 				id="search"
 				name="search"
@@ -112,7 +112,7 @@
 	>
 		<div
 			use:clickOutside={() => (modal = false)}
-			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			class="bg-white rounded-xl p-8 w-[480px] grid mx-12 gap-4 justify-items-stretch"
 		>
 			<div>
 				<p class="text-xl font-semibold">New Vendor Task</p>
@@ -120,34 +120,34 @@
 					Create and Assign tasks to Vendors here. Click save when you're done.
 				</p>
 			</div>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Task Description </span>
 				<input
 					bind:value={$addVendorTaskForm.taskDescription}
 					{...$constraints.taskDescription}
 					name="taskDescription"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Payment Term </span>
 				<input
 					bind:value={$addVendorTaskForm.paymentTerm}
 					{...$constraints.paymentTerm}
 					name="paymentTerm"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Estimated Time </span>
 				<input
 					bind:value={$addVendorTaskForm.estimatedTime}
 					{...$constraints.estimatedTime}
 					name="estimatedTime"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
 			<label class="flex items-center gap-3">
@@ -160,11 +160,11 @@
 				/>
 				<span class="text-primary font-medium"> Continuous Job </span>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Due Date </span>
 				<input
 					type="date"
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput}
 					on:click={() => {
 						dateInput && dateInput.showPicker();
@@ -175,14 +175,14 @@
 					name="dueDate"
 				/>
 			</label>
-			<label class="grid">
+			<label class="grid w-full gap-2">
 				<span class="text-primary font-medium"> Vendor </span>
 				<select
 					bind:value={$addVendorTaskForm.vendorId}
 					{...$constraints.vendorId}
 					name="vendorId"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class=" border-[1px] border-black/60 rounded-md p-2"
 				>
 					{#each data.vendor as vendor}
 						<option value={vendor.id}>{vendor.name}</option>

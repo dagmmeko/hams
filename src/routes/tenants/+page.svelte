@@ -56,7 +56,7 @@
 	let filterModal = false;
 </script>
 
-<div class="mx-10 my-12">
+<div class="md:mx-10 mx-5 my-12">
 	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
 		<button
 			on:click={() => {
@@ -72,27 +72,27 @@
 	</div>
 	{#if displayTenant === 'Tenant'}
 		<div class=" bg-white rounded-md shadow-md border-[1px] border-black/20 mt-3">
-			<div class="flex justify-between p-6">
+			<div class="md:flex justify-between p-6">
 				<div class="flex space-x-4">
 					<p class="text-lg">Tenants</p>
 					<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.tenants?.length} Tenants</p>
 				</div>
-				<div>
+				<div class="sm:block grid">
 					<a
 						href="/tenants/rent-room"
-						class="border-[1px] border-primary text-primary shadow-sm mr-2 rounded-md py-2 px-6"
+						class="border-[1px] border-primary md:my-0 my-3 w-40 text-primary shadow-sm mr-2 rounded-md py-2 px-6"
 					>
 						Rent Room
 					</a>
 					<a
 						href="/tenants/add-tenant"
-						class="bg-primary text-white shadow-sm rounded-md py-2 px-6"
+						class="bg-primary text-white w-40 shadow-sm rounded-md py-2 px-6"
 					>
 						New Tenant</a
 					>
 				</div>
 			</div>
-			<div class="bg-ghost/60 p-6 flex justify-between">
+			<div class="bg-ghost/60 p-6 md:flex justify-between">
 				<button
 					class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
 					on:click={() => (filterModal = !filterModal)}
@@ -102,7 +102,7 @@
 				<label class="grid">
 					<input
 						placeholder="Search"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="border-[1px] border-black/60 rounded-md p-2 md:mt-0 mt-3"
 						type="search"
 						id="search"
 						name="search"
@@ -172,14 +172,16 @@
 					</div>
 				{/if}
 			</div>
-			<SvelteTable
-				on:clickCell={(event) => {
-					const tenantId = event.detail.row.id;
-					goto(`/tenants/${tenantId}`);
-				}}
-				{columns}
-				{rows}
-			/>
+			<div class="overflow-x-auto">
+				<SvelteTable
+					on:clickCell={(event) => {
+						const tenantId = event.detail.row.id;
+						goto(`/tenants/${tenantId}`);
+					}}
+					{columns}
+					{rows}
+				/>
+			</div>
 		</div>
 	{:else if displayTenant === 'Pending'}
 		<PendingTenants bind:data />

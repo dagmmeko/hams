@@ -82,7 +82,7 @@
 </script>
 
 <div class="">
-	<div class="flex justify-between p-6">
+	<div class="md:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Leave</p>
 		</div>
@@ -94,7 +94,9 @@
 			New Leave Permission</button
 		>
 	</div>
-	<SvelteTable classNameTable="rolesTable" on:clickCell={(event) => {}} {columns} {rows} />
+	<div class="overflow-x-auto">
+		<SvelteTable classNameTable="rolesTable" on:clickCell={(event) => {}} {columns} {rows} />
+	</div>
 </div>
 
 {#if modal}

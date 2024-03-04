@@ -69,7 +69,7 @@
 </script>
 
 <div class=" bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
+	<div class="md:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Payments</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">10 transactions</p>
@@ -83,17 +83,18 @@
 		<div class="print:block hidden">Phone: {data.vendor.phoneNumber}</div>
 		<div class="print:block hidden">Service: {data.vendor.serviceType}</div>
 		<div class="print:block hidden">TIN: {data.vendor.tinNumber}</div>
-
-		<SvelteTable
-			classNameTable="rolesTable"
-			{columns}
-			{rows}
-			on:clickCell={(event) => {
-				console.log(event);
-				const PaymentId = event.detail.row.id;
-				goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
-			}}
-		/>
+		<div class="overflow-x-auto">
+			<SvelteTable
+				classNameTable="rolesTable"
+				{columns}
+				{rows}
+				on:clickCell={(event) => {
+					console.log(event);
+					const PaymentId = event.detail.row.id;
+					goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
+				}}
+			/>
+		</div>
 	</PdfPrint>
 </div>
 

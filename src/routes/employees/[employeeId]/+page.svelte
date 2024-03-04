@@ -8,7 +8,7 @@
 	let displayedComponent: 'info' | 'attendance' | 'leaves' = 'info';
 </script>
 
-<div class="mx-10 my-12">
+<div class="md:mx-10 mx-5 my-12">
 	<p class="text-sm mb-5">Employee / {data.employee?.User.userName}</p>
 
 	<!-- Navigation -->

@@ -34,7 +34,7 @@
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 	<form use:editTenantFormEnhance method="post" action="?/editTenant">
-		<div class="grid grid-flow-col justify-items-stretch">
+		<div class="md:grid grid-flow-col justify-items-stretch">
 			<div class="grid">
 				<p class="text-2xl">Tenant Info</p>
 				<p class=" text-sm py-1 rounded-xl">Tenant details here.</p>
@@ -46,14 +46,14 @@
 			</div>
 		</div>
 		<hr class="my-6" />
-		<div class="grid gap-6 grid-cols-4">
+		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Full Name</span>
 				<input
 					name="fullName"
 					bind:value={$editTenantForm.fullName}
 					{...$constraints.fullName}
-					class="border-2"
+					class=""
 				/>
 			</label>
 			<label class="grid flex-1">
@@ -62,17 +62,12 @@
 					name="phoneNumber"
 					bind:value={$editTenantForm.phoneNumber}
 					{...$constraints.phoneNumber}
-					class="border-2"
+					class=""
 				/>
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Email </span>
-				<input
-					name="email"
-					bind:value={$editTenantForm.email}
-					{...$constraints.email}
-					class="border-2"
-				/>
+				<input name="email" bind:value={$editTenantForm.email} {...$constraints.email} class="" />
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Emergency Contact Name</span>
@@ -80,7 +75,7 @@
 					name="roomNumber"
 					bind:value={$editTenantForm.emergencyContactName}
 					{...$constraints.emergencyContactName}
-					class="border-2"
+					class=""
 				/>
 			</label>
 			<label class="grid flex-1">
@@ -89,7 +84,7 @@
 					name="emergencyContactPhoneNumber"
 					bind:value={$editTenantForm.emergencyContactPhoneNumber}
 					{...$constraints.emergencyContactPhoneNumber}
-					class="border-2"
+					class=""
 				/>
 			</label>
 			<label class="grid flex-1">
@@ -98,7 +93,7 @@
 					name="emergencyContactEmail"
 					bind:value={$editTenantForm.emergencyContactEmail}
 					{...$constraints.emergencyContactEmail}
-					class="border-2"
+					class=""
 				/>
 			</label>
 			<label class="grid flex-1">
@@ -107,12 +102,12 @@
 					name="passportNumber"
 					bind:value={$editTenantForm.passportNumber}
 					{...$constraints.passportNumber}
-					class="border-2"
+					class=""
 				/>
 			</label>
 		</div>
 	</form>
-	<div class="grid grid-cols-2 mt-6 gap-8">
+	<div class="grid md:grid-cols-2 grid-cols-1 mt-6 gap-8">
 		<div>
 			<div class="w-full font-medium text-xl mb-1">Active Rooms</div>
 			<hr class="mb-1" />
@@ -253,7 +248,7 @@
 	<hr class="my-6" />
 
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div>
 				<p class="text-lg">Archive Tenant</p>
 				<p class="text-black/50">

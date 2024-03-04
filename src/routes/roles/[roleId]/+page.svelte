@@ -30,7 +30,9 @@
 </script>
 
 <form method="post" action="?/editRole" use:editFormEnhance>
-	<div class="grid grid-flow-col mx-10 my-12 items-start space-x-12 bg-white rounded-xl p-8">
+	<div
+		class="grid lg:grid-flow-col md:mx-10 mx-5 my-12 items-start lg:space-x-12 bg-white rounded-xl p-8"
+	>
 		<div class="flex-1 grid col-span-1 gap-4 justify-items-stretch it">
 			<div>
 				<p class="text-xl font-semibold">
@@ -60,7 +62,7 @@
 				/>
 			</label>
 
-			<div class="flex gap-3">
+			<div class="sm:flex gap-3">
 				<button
 					type="submit"
 					disabled={noChange}
@@ -72,7 +74,7 @@
 						on:click|preventDefault={() =>
 							toast.push('Can not delete a role with Employees in it.')}
 						type="submit"
-						class="bg-subtitle text-white rounded-md py-2 w-full"
+						class="bg-subtitle sm:mt-0 mt-3 text-white rounded-md py-2 w-full"
 					>
 						Archive Role</button
 					>
@@ -90,8 +92,8 @@
 				{/if}
 			</div>
 		</div>
-		<div class="flex-1 col-span-2">
-			<div class="grid grid-cols-3 gap-3">
+		<div class="flex-1 col-span-2 lg:mt-0 mt-6">
+			<div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
 				{#each allScopes as scope}
 					<label class="flex space-x-2">
 						<input

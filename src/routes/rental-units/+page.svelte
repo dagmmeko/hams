@@ -70,7 +70,7 @@
 			title: 'Paid Per Kare',
 			value: (v: typeof rows[number]) => (v.priceSetPerKare ? 'Yes' : 'No' ?? 'NOT FOUND'),
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-2 bg-ghost/60 border-b-[1px] max-w-sm border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -104,12 +104,12 @@
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
+	<div class="sm:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Rental Units</p>
-			<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.units.length} Units</p>
+			<p class="bg-[#F9F5FF] h-fit w-fit text-xs rounded-xl p-2">{data.units.length} Units</p>
 		</div>
-		<a href="/rental-units/add-unit" class="bg-primary text-white rounded-md py-2 px-6">
+		<a href="/rental-units/add-unit" class="bg-primary text-white rounded-md py-2 px-6 pt-2">
 			New Rental Unit</a
 		>
 	</div>
@@ -138,10 +138,10 @@
 			</span>
 		</div>
 
-		<label class="grid">
+		<label class="grid gap-2">
 			<input
 				placeholder="Search"
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				class=" border-[1px] border-black/60 rounded-md p-2"
 				type="search"
 				id="search"
 				name="search"
@@ -240,16 +240,18 @@
 			</div>
 		{/if}
 	</div>
-	<SvelteTable
-		classNameTable="rolesTable"
-		on:clickCell={(event) => {
-			const unitId = event.detail.row.id;
+	<div class="overflow-x-auto">
+		<SvelteTable
+			classNameTable="rolesTable"
+			on:clickCell={(event) => {
+				const unitId = event.detail.row.id;
 
-			goto(`/rental-units/${unitId}`);
-		}}
-		{columns}
-		{rows}
-	/>
+				goto(`/rental-units/${unitId}`);
+			}}
+			{columns}
+			{rows}
+		/>
+	</div>
 </div>
 
 <style lang="postcss">

@@ -1,9 +1,9 @@
-<div class="mx-10 my-12">
+<div class="md:mx-10 mx-5 my-12">
 	<div class="mb-6">
 		<p class="text-2xl font-medium text-primary">GeneralFinancial Statistics</p>
 	</div>
 	<p class="text-xl font-medium text-primary mb-3">Income</p>
-	<div class=" grid grid-cols-4 gap-4">
+	<div class=" grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Room revenue - Total income from nightly/weekly rentals
 		</div>
@@ -18,7 +18,7 @@
 		</div>
 	</div>
 	<p class="text-xl font-medium text-primary mt-6 mb-3">Expenses</p>
-	<div class=" grid grid-cols-4 gap-4">
+	<div class=" grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Payroll - Salaries, wages, benefits for employees
 		</div>

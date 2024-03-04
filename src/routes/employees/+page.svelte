@@ -87,12 +87,15 @@
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
-	<div class="flex justify-between p-6">
+	<div class="sm:flex justify-between p-6">
 		<div class="flex items-center space-x-4 h-fit">
 			<p class="text-lg">Employees</p>
 			<p class="bg-[#F9F5FF] text-xs py-1 px-2 rounded-xl">{data.employees.length} Employees</p>
 		</div>
-		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+		<button
+			class="bg-primary text-white rounded-md py-2 px-6 md:mt-0 mt-3"
+			on:click={() => (modal = true)}
+		>
 			Add Employee
 		</button>
 	</div>
@@ -104,7 +107,7 @@
 		</button> -->
 		<label class="grid">
 			<input
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+				class=" border-[1px] border-black/60 rounded-md p-2"
 				type="search"
 				id="search"
 				name="search"
@@ -117,14 +120,16 @@
 			/>
 		</label>
 	</div>
-	<SvelteTable
-		classNameTable="rolesTable"
-		on:clickCell={(event) => {
-			goto(`/employees/${event.detail.row.id}`);
-		}}
-		{columns}
-		{rows}
-	/>
+	<div class="lg:overflow-x-hidden overflow-x-auto">
+		<SvelteTable
+			classNameTable="rolesTable"
+			on:clickCell={(event) => {
+				goto(`/employees/${event.detail.row.id}`);
+			}}
+			{columns}
+			{rows}
+		/>
+	</div>
 </div>
 {#if modal}
 	<form use:addEmployeeFormEnhance method="post" action="?/addEmployee">
@@ -133,7 +138,7 @@
 		>
 			<div
 				use:clickOutside={() => (modal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 mx-12 justify-items-stretch"
 			>
 				<div>
 					<p class="text-xl font-semibold">New Employee</p>
@@ -141,7 +146,7 @@
 						Register new employee here. Click save when you're done.
 					</p>
 				</div>
-				<label class="grid">
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium">
 						Full Name <span class="text-xs font-light text-danger"> * Required </span>
 					</span>
@@ -150,10 +155,10 @@
 						bind:value={$addEmployeeForm.userName}
 						{...$constraints.userName}
 						name="userName"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
-				<label class="grid">
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium">
 						Phone Number <span class="text-xs font-light text-danger"> * Required </span>
 					</span>
@@ -162,10 +167,10 @@
 						bind:value={$addEmployeeForm.phoneNumber}
 						{...$constraints.phoneNumber}
 						name="phoneNumber"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
-				<label class="grid">
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium">
 						Email <span class="text-xs font-light text-danger"> * Required </span>
 					</span>
@@ -174,20 +179,20 @@
 						bind:value={$addEmployeeForm.email}
 						{...$constraints.email}
 						name="email"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
-				<label class="grid">
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium"> Address </span>
 					<input
 						required
 						bind:value={$addEmployeeForm.address}
 						{...$constraints.address}
 						name="address"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
-				<label>
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium">
 						Role <span class="text-xs font-light text-danger"> * Required </span>
 					</span>
@@ -196,7 +201,7 @@
 						bind:value={$addEmployeeForm.roleId}
 						{...$constraints.roleId}
 						name="roleId"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					>
 						<option selected disabled value=""> Select Role </option>
 						{#each data.roles as role}
@@ -204,14 +209,14 @@
 						{/each}
 					</select>
 				</label>
-				<label>
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium"> Supervisor </span>
 					<select
 						required
 						bind:value={$addEmployeeForm.managerId}
 						{...$constraints.managerId}
 						name="managerId"
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
 					>
 						<option selected disabled> Select Manager </option>
 						{#each data.employees as employee}
@@ -219,12 +224,12 @@
 						{/each}
 					</select>
 				</label>
-				<label class="grid">
+				<label class="grid w-full gap-2">
 					<span class="text-primary font-medium"> Start Date </span>
 					<input
 						type="date"
 						name="hiredDate"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput}
 						on:click={() => {
 							dateInput && dateInput.showPicker();

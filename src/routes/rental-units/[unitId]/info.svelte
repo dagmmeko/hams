@@ -35,7 +35,7 @@
 
 <div>
 	<form use:editUnitFormEnhance method="post" action="?/editUnitInfo">
-		<div class="grid grid-flow-col justify-items-stretch">
+		<div class="md:grid grid-flow-col justify-items-stretch">
 			<div class="grid">
 				<p class="text-2xl">Rental Unit Info</p>
 				<p class=" text-sm py-1 rounded-xl">Room details here.</p>
@@ -43,7 +43,7 @@
 			<div class="justify-self-end">
 				<button
 					on:click|preventDefault={() => (modal = true)}
-					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
+					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4 md:mb-0 mb-3"
 				>
 					New Inspection
 				</button>
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<hr class="my-6" />
-		<div class="grid gap-6 grid-cols-4">
+		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Room No.</span>
 				<input
@@ -234,7 +234,7 @@
 	<hr class="my-6" />
 
 	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="flex justify-between">
+		<div class="md:flex justify-between">
 			<div>
 				<p class="text-lg">Archive Rental Unit</p>
 				<p class="text-black/50">
