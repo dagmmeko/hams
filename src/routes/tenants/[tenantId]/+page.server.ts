@@ -112,6 +112,7 @@ export const load = async (event) => {
 
 export const actions = {
 	editTenant: async (event) => {
+		console.log({ event });
 		const editTenantForm = await superValidate(event.request.clone(), editTenantSchema);
 		if (!editTenantForm) {
 			return fail(400, { editTenantForm });
@@ -127,7 +128,8 @@ export const actions = {
 				email: editTenantForm.data.email,
 				emergencyContactName: editTenantForm.data.emergencyContactName,
 				emergencyContactPhoneNumber: editTenantForm.data.emergencyContactPhoneNumber,
-				emergencyContactEmail: editTenantForm.data.emergencyContactEmail
+				emergencyContactEmail: editTenantForm.data.emergencyContactEmail,
+				passportNumber: editTenantForm.data.passportNumber
 			}
 		});
 		return { editTenantForm, editTenant };

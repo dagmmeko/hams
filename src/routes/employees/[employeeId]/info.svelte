@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import QR from '$lib/assets/qr.png';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
+	import { enhance } from '$app/forms';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
+	export let form: ActionData;
 	const {
 		form: editEmployeeForm,
 		enhance: editFormEnhance,
@@ -15,6 +19,9 @@
 	const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 	const birthDate = dateProxy(editEmployeeForm, 'dob', { format: 'date', empty: 'undefined' });
 	let frontFileData: string[] = [];
+
+	$: form?.employeeArchived ? toast.push('Employee archived successfully') : null;
+	$: form?.employeeArchived ? goto('/employees') : null;
 </script>
 
 <div class="p-6">
@@ -105,26 +112,42 @@
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Blood Type</span>
-				<input name="bloodType" bind:value={$editEmployeeForm.bloodType} />
+				<input
+					name="bloodType"
+					bind:value={$editEmployeeForm.bloodType}
+					{...$constraints.bloodType}
+				/>
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Height</span>
-				<input name="height" bind:value={$editEmployeeForm.height} />
+				<input name="height" bind:value={$editEmployeeForm.height} {...$constraints.height} />
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Job Title</span>
-				<input name="jobTitle" bind:value={$editEmployeeForm.jobTitle} />
+				<input name="jobTitle" bind:value={$editEmployeeForm.jobTitle} {...$constraints.jobTitle} />
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Emergency Contact Name</span>
-				<input name="emergencyName" />
+				<input
+					name="emergencyContactName"
+					bind:value={$editEmployeeForm.emergencyContactName}
+					{...$constraints.emergencyContactName}
+				/>
 			</label>
 			<label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Emergency Contact Email</span>
-				<input name="emergencyMail" />
+				<input
+					name="emergencyContactEmail"
+					bind:value={$editEmployeeForm.emergencyContactEmail}
+					{...$constraints.emergencyContactEmail}
+				/>
 			</label><label class="grid flex-1">
 				<span class="text-primary font-semibold py-1"> Emergency Contact Phone</span>
-				<input name="emergencyPhone" />
+				<input
+					name="emergencyContactPhoneNumber"
+					bind:value={$editEmployeeForm.emergencyContactPhoneNumber}
+					{...$constraints.emergencyContactPhoneNumber}
+				/>
 			</label>
 		</div>
 	</form>
@@ -192,7 +215,17 @@
 				<p class="text-lg">Archive Employee</p>
 				<p class="text-black/50">Archive employment contract with employee.</p>
 			</div>
-			<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+			<form
+				method="post"
+				action="?/archiveEmployee"
+				use:enhance={({ cancel }) => {
+					if (!window.confirm('Are you sure you want to Fire this Employee?')) {
+						cancel();
+					}
+				}}
+			>
+				<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+			</form>
 		</div>
 	</div>
 </div>

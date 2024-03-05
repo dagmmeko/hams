@@ -176,23 +176,24 @@ model Inspection {
 }
 
 model Tenants {
-  id                          Int            @id @default(autoincrement())
-  createdAt                   DateTime       @default(now())
-  updateAt                    DateTime       @updatedAt
+  id                          Int       @id @default(autoincrement())
+  createdAt                   DateTime  @default(now())
+  updateAt                    DateTime  @updatedAt
   deletedAt                   DateTime?
-  fullName                    String         @default("name")
+  fullName                    String    @default("name")
   phoneNumber                 String
   email                       String?
   passportNumber              String?
   emergencyContactName        String?
   emergencyContactPhoneNumber String?
-  contactSource               ContactSource?
-  tenantScore                 Int            @default(0)
   emergencyContactEmail       String?
-  Receipts                    Receipts[]
-  TenantsFile                 TenantsFile[]
-  PriceChange                 PriceChange[]
-  TenantRental                TenantRental[]
+
+  contactSource ContactSource?
+  tenantScore   Int            @default(0)
+  Receipts      Receipts[]
+  TenantsFile   TenantsFile[]
+  PriceChange   PriceChange[]
+  TenantRental  TenantRental[]
 }
 
 model TenantRental {
@@ -275,25 +276,29 @@ model ReceiptsFile {
 }
 
 model Employee {
-  id                     Int             @id @default(autoincrement())
-  hiredDate              DateTime
-  isSuspended            Boolean
-  userId                 Int             @unique
-  roleId                 Int
-  createdAt              DateTime        @default(now())
-  updateAt               DateTime        @updatedAt
-  deletedAt              DateTime?
-  isFired                Boolean         @default(false)
-  address                String
-  dateOfBirth            DateTime?
-  staffIdNumber          String
-  bloodType              String          @default("O+")
-  height                 Float           @default(0)
-  image                  String?
-  jobTitle               String          @default("employee")
-  isAbsent               Boolean         @default(false)
-  onLeave                Boolean         @default(false)
-  managerUserId          Int?
+  id                          Int       @id @default(autoincrement())
+  hiredDate                   DateTime
+  isSuspended                 Boolean
+  userId                      Int       @unique
+  roleId                      Int
+  createdAt                   DateTime  @default(now())
+  updateAt                    DateTime  @updatedAt
+  deletedAt                   DateTime?
+  isFired                     Boolean   @default(false)
+  address                     String
+  dateOfBirth                 DateTime?
+  staffIdNumber               String
+  bloodType                   String    @default("O+")
+  height                      Float     @default(0)
+  image                       String?
+  jobTitle                    String    @default("employee")
+  isAbsent                    Boolean   @default(false)
+  onLeave                     Boolean   @default(false)
+  managerUserId               Int?
+  emergencyContactName        String?
+  emergencyContactPhoneNumber String?
+  emergencyContactEmail       String?
+
   EmploymentType         EmploymentType?
   User                   User            @relation(fields: [userId], references: [id])
   Role                   Role            @relation(fields: [roleId], references: [id])

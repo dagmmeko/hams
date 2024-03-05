@@ -179,6 +179,16 @@
 							{...$constraints.purposeOfRent}
 						/>
 					</label>
+					<label class="grid gap-1">
+						<span class="text-primary font-medium"> Company Name </span>
+						<input
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							required
+							name="companyName"
+							bind:value={$rentRoomForm.companyName}
+							{...$constraints.companyName}
+						/>
+					</label>
 
 					<label class="grid gap-1">
 						<span class="text-primary font-medium"> Contract Start Date </span>

@@ -18,7 +18,10 @@ const editEmployeeSchema = z.object({
 	bloodType: z.string(),
 	height: z.number(),
 
-	jobTitle: z.string()
+	jobTitle: z.string(),
+	emergencyContactName: z.string().optional(),
+	emergencyContactPhoneNumber: z.string().optional(),
+	emergencyContactEmail: z.string().optional()
 });
 export type editEmployeeType = z.infer<typeof editEmployeeSchema>;
 
@@ -72,10 +75,8 @@ export const load = async (event) => {
 			Manager: true
 		}
 	});
-	console.log({ employee });
 	const date1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
 	const date2 = dayjs(new Date()).format('YYYY-MM-DD');
-	console.log({ date1, date2 });
 	if (date1 !== date2) {
 		console.log('Not Absent Today');
 		const updateAttendance = await prisma.employee.update({
@@ -110,7 +111,10 @@ export const load = async (event) => {
 			height: employee.height,
 			jobTitle: employee.jobTitle,
 			roleId: employee.Role.id,
-			managerId: employee.Manager?.id
+			managerId: employee.Manager?.id,
+			emergencyContactName: employee.emergencyContactName || '',
+			emergencyContactPhoneNumber: employee.emergencyContactPhoneNumber || '',
+			emergencyContactEmail: employee.emergencyContactEmail || ''
 		},
 		editEmployeeSchema
 	);
@@ -125,8 +129,6 @@ export const actions = {
 			return fail(400, { editEmployeeForm });
 		}
 
-		console.log({ editEmployeeForm });
-
 		const employee = await prisma.employee.update({
 			where: {
 				id: parseInt(event.params.employeeId)
@@ -140,7 +142,10 @@ export const actions = {
 				height: editEmployeeForm.data.height,
 				jobTitle: editEmployeeForm.data.jobTitle,
 				roleId: editEmployeeForm.data.roleId,
-				managerUserId: editEmployeeForm.data.managerId
+				managerUserId: editEmployeeForm.data.managerId,
+				emergencyContactEmail: editEmployeeForm.data.emergencyContactEmail,
+				emergencyContactName: editEmployeeForm.data.emergencyContactName,
+				emergencyContactPhoneNumber: editEmployeeForm.data.emergencyContactPhoneNumber
 			}
 		});
 
@@ -220,5 +225,23 @@ export const actions = {
 		console.log({ attendance, attendanceId, description });
 
 		return { attendance };
+	},
+	archiveEmployee: async (event) => {
+		const employeeArchived = await prisma.employee.update({
+			where: {
+				id: parseInt(event.params.employeeId)
+			},
+			data: {
+				isFired: true,
+				deletedAt: null,
+				User: {
+					update: {
+						jwtPassword: null
+					}
+				}
+			}
+		});
+
+		return { employeeArchived };
 	}
 };

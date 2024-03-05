@@ -89,6 +89,16 @@
 					</select>
 				</label>
 
+				<label class="grid flex-1">
+					<span class="text-primary font-semibold py-1"> Created By </span>
+					<input
+						type="text"
+						name="createdBy"
+						value={data.employees.find((emp) => emp.id === data.internalTask?.creatorEmployeeId)
+							?.User.userName}
+						disabled
+					/>
+				</label>
 				<label class="grid w-full gap-2 h-fit">
 					<span class="text-primary font-semibold py-1"> Assign To </span>
 					<select

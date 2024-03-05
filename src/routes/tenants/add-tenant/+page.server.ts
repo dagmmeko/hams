@@ -84,7 +84,7 @@ export const actions = {
 								purposeOfRent: addTenantForm.data.purposeOfRent,
 								contractStartDate: addTenantForm.data.contractStartDate,
 								contractEndDate: addTenantForm.data.contractEndDate,
-								companyName: addTenantForm.data.fullName,
+								companyName: addTenantForm.data.companyName,
 								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
 								active: addTenantForm.data.priceChange ? false : true,
 								tinNumber: addTenantForm.data.tinNumber,

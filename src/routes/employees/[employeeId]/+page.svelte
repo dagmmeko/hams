@@ -4,6 +4,7 @@
 	import Leaves from './leaves.svelte';
 
 	export let data;
+	export let form;
 
 	let displayedComponent: 'info' | 'attendance' | 'leaves' = 'info';
 </script>
@@ -29,7 +30,7 @@
 	<!-- main component -->
 	<div class=" bg-white rounded-sm shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'info'}
-			<Info bind:data />
+			<Info bind:data bind:form />
 		{:else if displayedComponent === 'attendance'}
 			<Attendance bind:data />
 		{:else if displayedComponent === 'leaves'}

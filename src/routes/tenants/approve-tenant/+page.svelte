@@ -110,6 +110,16 @@
 							{...$approveRentConstraints.endDate}
 						/>
 					</label>
+					<label class="w-full h-fit grid gap-2">
+						<span class=" text-primary w-full font-medium"> Company Name</span>
+						<input
+							name="companyName"
+							type="number"
+							class=" border-[1px] border-black/60 rounded-md p-2"
+							bind:value={$approveRentForm.companyName}
+							{...$approveRentConstraints.companyName}
+						/>
+					</label>
 				</div>
 			</div>
 		</form>
