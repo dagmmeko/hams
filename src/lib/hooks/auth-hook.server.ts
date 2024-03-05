@@ -77,7 +77,15 @@ export const authHook = SvelteKitAuth({
 					},
 					select: {
 						email: true,
-						Employee: true,
+						Employee: {
+							include: {
+								Role: {
+									include: {
+										Scopes: true
+									}
+								}
+							}
+						},
 						phoneNumber: true,
 						userName: true,
 						id: true

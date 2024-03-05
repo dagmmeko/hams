@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -10,6 +10,14 @@ const usdRateSchema = z.object({
 
 export const load = async (event) => {
 	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_OVERVIEW_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 
 	// Unit Data
 	const allUnits = await prisma.rentalUnits.findMany({});
@@ -68,6 +76,16 @@ export const load = async (event) => {
 
 export const actions = {
 	changeRate: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_DOLLAR_VALUE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
 		const usdRateForm = await superValidate(event.request, usdRateSchema);
 
 		if (!usdRateForm) {

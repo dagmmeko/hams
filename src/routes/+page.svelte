@@ -2,6 +2,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Pie } from 'svelte-chartjs';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { page } from '$app/stores';
 
 	import { ArcElement, CategoryScale, Chart, Legend, Title, Tooltip } from 'chart.js';
 	Chart.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -27,9 +28,11 @@
 		<label class="hidden">
 			<input name="id" bind:value={$usdRateForm.id} {...$constraints.id} />
 		</label>
-		<button type="submit" class="bg-primary h-fit text-sm p-1 rounded-md mt-2 text-white"
-			>Save</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_DOLLAR_VALUE')}
+			<button type="submit" class="bg-primary h-fit text-sm p-1 rounded-md mt-2 text-white">
+				Save
+			</button>
+		{/if}
 	</form>
 	<div class="w-fit" />
 	<div class="my-6">

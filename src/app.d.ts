@@ -1,14 +1,16 @@
 import type { Session } from '@auth/core/types';
-import { User, type Warehouse } from '@prisma/client';
-import { Employee } from '@prisma/client';
+import { User, Employee, Role, Scope } from '@prisma/client';
 
-import { Scope } from '@prisma/client';
 import type { inherits } from 'util';
 
 declare global {
 	type EnhancedSessionType = Session & {
 		authUser: User & {
-			Employee: Employee;
+			Employee: Employee & {
+				Role: Role & {
+					Scopes: Scope[];
+				};
+			};
 		};
 	};
 
