@@ -7,6 +7,7 @@
 	import PendingTenants from './pending-tenants.svelte';
 	import dayjs from 'dayjs';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data;
 
@@ -66,9 +67,11 @@
 		>
 			<p class="py-2 px-3 rounded-md {displayTenant === 'Tenant' ? 'bg-white' : ''} ">Tenant</p>
 		</button>
-		<button on:click={() => (displayTenant = 'Pending')}>
-			<p class="p-2 px-3 rounded-md {displayTenant === 'Pending' ? 'bg-white' : ''}">Pending</p>
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_PENDING_TENANTS')}
+			<button on:click={() => (displayTenant = 'Pending')}>
+				<p class="p-2 px-3 rounded-md {displayTenant === 'Pending' ? 'bg-white' : ''}">Pending</p>
+			</button>
+		{/if}
 	</div>
 	{#if displayTenant === 'Tenant'}
 		<div class=" bg-white rounded-md shadow-md border-[1px] border-black/20 mt-3">
@@ -78,18 +81,22 @@
 					<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.tenants?.length} Tenants</p>
 				</div>
 				<div class="sm:block grid">
-					<a
-						href="/tenants/rent-room"
-						class="border-[1px] border-primary md:my-0 my-3 w-40 text-primary shadow-sm mr-2 rounded-md py-2 px-6"
-					>
-						Rent Room
-					</a>
-					<a
-						href="/tenants/add-tenant"
-						class="bg-primary text-white w-40 shadow-sm rounded-md py-2 px-6"
-					>
-						New Tenant</a
-					>
+					{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_NEW_RENT')}
+						<a
+							href="/tenants/rent-room"
+							class="border-[1px] border-primary md:my-0 my-3 w-40 text-primary shadow-sm mr-2 rounded-md py-2 px-6"
+						>
+							Rent Room
+						</a>
+					{/if}
+					{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_NEW_TENANT')}
+						<a
+							href="/tenants/add-tenant"
+							class="bg-primary text-white w-40 shadow-sm rounded-md py-2 px-6"
+						>
+							New Tenant</a
+						>
+					{/if}
 				</div>
 			</div>
 			<div class="bg-ghost/60 p-6 md:flex justify-between">
@@ -176,14 +183,22 @@
 				<SvelteTable
 					on:clickCell={(event) => {
 						const tenantId = event.detail.row.id;
-						goto(`/tenants/${tenantId}`);
+						if (
+							$page.data.session?.authUser.Employee.Role.Scopes.find(
+								(s) => s.name === 'VIEW_TENANT_DETAIL_PAGE'
+							)
+						) {
+							goto(`/tenants/${tenantId}`);
+						} else {
+							toast.push('You do not have permission to view tenant');
+						}
 					}}
 					{columns}
 					{rows}
 				/>
 			</div>
 		</div>
-	{:else if displayTenant === 'Pending'}
+	{:else if displayTenant === 'Pending' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_PENDING_TENANTS')}
 		<PendingTenants bind:data />
 	{/if}
 </div>

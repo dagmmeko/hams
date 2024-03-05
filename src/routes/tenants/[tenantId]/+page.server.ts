@@ -1,6 +1,6 @@
 import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -37,6 +37,15 @@ const endRentSchema = z.object({
 });
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_TENANT_DETAIL_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const addReceiptsForm = await superValidate(addReceiptsSchema);
 	const extendRentForm = await superValidate(extendRentSchema);
 	const endRentForm = await superValidate(endRentSchema);
@@ -112,7 +121,15 @@ export const load = async (event) => {
 
 export const actions = {
 	editTenant: async (event) => {
-		console.log({ event });
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_TENANT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const editTenantForm = await superValidate(event.request.clone(), editTenantSchema);
 		if (!editTenantForm) {
 			return fail(400, { editTenantForm });
@@ -135,6 +152,15 @@ export const actions = {
 		return { editTenantForm, editTenant };
 	},
 	addReceipts: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_RECEIPT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addReceiptsForm = await superValidate(event.request.clone(), addReceiptsSchema);
 
 		if (!addReceiptsForm) {
@@ -169,6 +195,15 @@ export const actions = {
 		return { addReceiptsForm, newReceipts };
 	},
 	extendRent: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EXTEND_RENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const extendRentForm = await superValidate(event.request, extendRentSchema);
 		if (!extendRentForm) {
 			return fail(400, { extendRentForm });
@@ -187,6 +222,15 @@ export const actions = {
 		return { extendRentForm, updateEndDate };
 	},
 	initialEndContract: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'START_END_RENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const endRentForm = await superValidate(event.request, endRentSchema);
 		if (!endRentForm) {
 			return fail(400, { endRentForm });
@@ -206,6 +250,15 @@ export const actions = {
 		return { endRentForm, updateEndDate };
 	},
 	endContract: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'END_CONTRACT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const unitId = data.get('unitId');
 
@@ -242,6 +295,15 @@ export const actions = {
 		return { fileUrl };
 	},
 	deleteTenantFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_TENANT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const tenantFileId = data.get('tenantFileId');
 
@@ -258,6 +320,15 @@ export const actions = {
 		return { deleteFile };
 	},
 	editTenantFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_TENANT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const file = data.getAll('tenantFile');
 
@@ -295,6 +366,16 @@ export const actions = {
 		return { allNewFiles };
 	},
 	archiveTenant: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'DELETE_TENANT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
 		const archiveTenant = await prisma.tenants.update({
 			where: {
 				id: Number(event.params.tenantId)

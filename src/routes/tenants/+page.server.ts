@@ -1,7 +1,16 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_TENANTS_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const searchTenant = event.url.searchParams.get('searchTenant');
 
 	const tenants = await prisma.tenants.findMany({
@@ -56,6 +65,15 @@ export const load = async (event) => {
 
 export const actions = {
 	acceptPending: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'APPROVE_PENDING';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const priceChangeId = data.get('priceChangeId');
 
@@ -80,6 +98,15 @@ export const actions = {
 		}
 	},
 	denyPending: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'APPROVE_PENDING';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const priceChangeId = data.get('priceChangeId');
 

@@ -3,6 +3,7 @@
 	import Tenant from './tenant.svelte';
 	import TenantPriceChange from './tenant-price-change.svelte';
 	import EndingProcess from './ending-process.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -41,15 +42,17 @@
 				Price Change
 			</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'ending')}>
-			<p
-				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'ending'
-					? 'bg-white'
-					: ''}"
-			>
-				Ending Process
-			</p>
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
+			<button on:click={() => (displayedComponent = 'ending')}>
+				<p
+					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'ending'
+						? 'bg-white'
+						: ''}"
+				>
+					Ending Process
+				</p>
+			</button>
+		{/if}
 	</div>
 
 	{#if displayedComponent === 'tenant'}
@@ -58,7 +61,7 @@
 		<Receipts bind:data />
 	{:else if displayedComponent === 'priceChange'}
 		<TenantPriceChange bind:data bind:form />
-	{:else if displayedComponent === 'ending'}
+	{:else if displayedComponent === 'ending' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
 		<EndingProcess bind:data bind:form />
 	{:else}
 		<p>Something went wrong</p>

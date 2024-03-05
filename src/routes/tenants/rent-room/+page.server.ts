@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 
@@ -18,6 +18,15 @@ const rentRoomSchema = z.object({
 });
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'ADD_NEW_RENT';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const searchTenant = event.url.searchParams.get('searchTenant');
 	const rentRoomForm = await superValidate(rentRoomSchema);
 
@@ -59,6 +68,15 @@ export const load = async (event) => {
 
 export const actions = {
 	rentRoom: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_NEW_RENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const rentRoomForm = await superValidate(event.request, rentRoomSchema);
 
 		if (!rentRoomForm) {

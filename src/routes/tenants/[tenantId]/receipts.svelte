@@ -5,6 +5,7 @@
 	import dayjs from 'dayjs';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
+	import { page } from '$app/stores';
 
 	let modal = false;
 
@@ -30,14 +31,16 @@
 			<p class="text-2xl">Tenant Receipts</p>
 			<p class=" text-sm py-1 rounded-xl">Tenant Receipt here.</p>
 		</div>
-		<div class="justify-self-end">
-			<button
-				on:click={() => (modal = true)}
-				class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
-			>
-				Add Receipt
-			</button>
-		</div>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_RECEIPT')}
+			<div class="justify-self-end">
+				<button
+					on:click={() => (modal = true)}
+					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
+				>
+					Add Receipt
+				</button>
+			</div>
+		{/if}
 	</div>
 </div>
 <div>

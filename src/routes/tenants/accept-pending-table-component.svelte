@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 
 	export let row: any;
 	$: console.log(row);
 </script>
 
-{#if !row.approved}
+{#if !row.approved && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}
 	<div class="flex">
 		<form
 			class="w-full"

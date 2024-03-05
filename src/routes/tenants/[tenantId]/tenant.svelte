@@ -8,6 +8,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import { page } from '$app/stores';
 
 	import dayjs from 'dayjs';
 	import ExtendContract from './extend-contract.svelte';
@@ -25,7 +26,7 @@
 	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
 	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
 	$: form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
-
+	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
 	let extendContractModal = false;
 	let unitToExtend: any;
 	let endContractModal = false;
@@ -39,11 +40,13 @@
 				<p class="text-2xl">Tenant Info</p>
 				<p class=" text-sm py-1 rounded-xl">Tenant details here.</p>
 			</div>
-			<div class="justify-self-end">
-				<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
-					Update Info
-				</button>
-			</div>
+			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_TENANT')}
+				<div class="justify-self-end">
+					<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
+						Update Info
+					</button>
+				</div>
+			{/if}
 		</div>
 		<hr class="my-6" />
 		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
@@ -134,24 +137,28 @@
 							</div>
 
 							<div class="flex gap-2 mt-1">
-								<button
-									class="bg-warning rounded-md p-2 text-xs text-white"
-									on:click|preventDefault={() => {
-										extendContractModal = true;
-										unitToExtend = tenantUnit.id;
-									}}
-								>
-									Extend Contract
-								</button>
-								<button
-									class="bg-info rounded-md p-2 text-xs text-white"
-									on:click|preventDefault={() => {
-										endContractModal = true;
-										unitToEnd = tenantUnit.id;
-									}}
-								>
-									Start End Process
-								</button>
+								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
+									<button
+										class="bg-warning rounded-md p-2 text-xs text-white"
+										on:click|preventDefault={() => {
+											extendContractModal = true;
+											unitToExtend = tenantUnit.id;
+										}}
+									>
+										Extend Contract
+									</button>
+								{/if}
+								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
+									<button
+										class="bg-info rounded-md p-2 text-xs text-white"
+										on:click|preventDefault={() => {
+											endContractModal = true;
+											unitToEnd = tenantUnit.id;
+										}}
+									>
+										Start End Process
+									</button>
+								{/if}
 							</div>
 						</div>
 					{/if}
@@ -244,30 +251,33 @@
 			</div>
 		</div>
 	</div>
-	<p class="text-2xl mt-6">Danger</p>
-	<hr class="my-6" />
+	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_TENANT')}
+		<p class="text-2xl mt-6">Danger</p>
+		<hr class="my-6" />
 
-	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="md:flex justify-between">
-			<div>
-				<p class="text-lg">Archive Tenant</p>
-				<p class="text-black/50">
-					Remove all data related to the Tenant. You can access the data by using the archive
-					filter.
-				</p>
+		<div class="border-2 border-danger border-dashed rounded-md p-5">
+			<div class="md:flex justify-between">
+				<div>
+					<p class="text-lg">Archive Tenant</p>
+					<p class="text-black/50">
+						Remove all data related to the Tenant. You can access the data by using the archive
+						filter.
+					</p>
+				</div>
+				<form method="post" action="?/archiveTenant" use:enhance>
+					{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
+						<button
+							on:click|stopPropagation={() =>
+								toast.push('Can not delete a Unit with Tenant in it.')}
+							class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+						>
+					{:else}
+						<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+					{/if}
+				</form>
 			</div>
-			<form method="post" action="?/archiveTenant" use:enhance>
-				{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
-					<button
-						on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
-						class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
-					>
-				{:else}
-					<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
-				{/if}
-			</form>
 		</div>
-	</div>
+	{/if}
 </div>
 
 {#if extendContractModal}
