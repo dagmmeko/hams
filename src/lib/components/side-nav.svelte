@@ -9,6 +9,7 @@
 
 	import { page } from '$app/stores';
 	import Home from '$lib/assets/home.svg.svelte';
+	import Task from '$lib/assets/task.svg.svelte';
 </script>
 
 <div class="h-screen bg-black md:w-60 w-fit px-4">
@@ -83,7 +84,7 @@
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
-				<Webhook /> <span class="md:block hidden"> Tasks</span>
+				<Task /> <span class="md:block hidden"> Tasks</span>
 			</div>
 		</a>
 	</div>
