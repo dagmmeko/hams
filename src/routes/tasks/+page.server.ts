@@ -15,13 +15,29 @@ const addInternalTaskSchema = z.object({
 export const load = async (event) => {
 	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
 
+	const canViewAllTask = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_ALL_INTERNAL_TASK_PAGE';
+	});
+
+	console.log({ s: canViewAllTask });
+
 	const addInternalTaskForm = await superValidate(addInternalTaskSchema);
 	const internalTask = await prisma.internalTask.findMany({
 		where: {
 			deletedAt: null,
 			taskStatus: {
 				not: 'COMPLETED'
-			}
+			},
+			...(!canViewAllTask && {
+				OR: [
+					{
+						assignedEmployeeId: session?.authUser.Employee.id
+					},
+					{
+						creatorEmployeeId: session?.authUser.Employee.id
+					}
+				]
+			})
 		},
 		include: {
 			AssignedTo: {
@@ -53,6 +69,13 @@ export const actions = {
 	addInternalTask: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
 
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_INTERNAL_TASK';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addInternalTaskForm = await superValidate(event.request, addInternalTaskSchema);
 		if (!addInternalTaskForm) {
 			return fail(400, { addInternalTaskForm });

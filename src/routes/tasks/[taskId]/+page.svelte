@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { superForm, dateProxy } from 'sveltekit-superforms/client';
 
 	export let data;
@@ -70,7 +71,12 @@
 						<option selected disabled value={null}>Select Task Status</option>
 						<option value="PENDING">Pending</option>
 						<option value="IN_PROGRESS">In progress</option>
-						<option value="COMPLETED">Completed</option>
+						<option value="CHECKING">Checking</option>
+						<option
+							value="COMPLETED"
+							disabled={$page.data.session?.authUser.Employee.id !==
+								data.internalTask?.creatorEmployeeId}>Completed</option
+						>
 					</select>
 				</label>
 

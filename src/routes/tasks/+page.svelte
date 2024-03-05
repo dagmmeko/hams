@@ -83,12 +83,14 @@
 			<p class="text-lg">Tasks</p>
 			<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.internalTask?.length} Tasks</p>
 		</div>
-		<button
-			class="bg-primary text-white rounded-md py-2 px-6"
-			on:click={() => (addTaskModal = true)}
-		>
-			Add Task
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_INTERNAL_TASK')}
+			<button
+				class="bg-primary text-white rounded-md py-2 px-6"
+				on:click={() => (addTaskModal = true)}
+			>
+				Add Task
+			</button>
+		{/if}
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<button
