@@ -74,9 +74,11 @@
 			<p class="text-lg">Tasks</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Tasks</p>
 		</div>
-		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
-			New Task</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_TASK')}
+			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+				New Task</button
+			>
+		{/if}
 	</div>
 
 	<div class="bg-ghost/60 p-6 sm:flex justify-between">

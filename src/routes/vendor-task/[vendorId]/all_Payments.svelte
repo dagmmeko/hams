@@ -8,6 +8,7 @@
 	import { clickOutside } from '$lib/utils/click-outside';
 	import type { PageData } from './$types';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 	let dateInput: any;
 
 	let modal = false;
@@ -74,9 +75,11 @@
 			<p class="text-lg">Payments</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">10 transactions</p>
 		</div>
-		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
-			New Payment</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_PAYMENT')}
+			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+				New Payment</button
+			>
+		{/if}
 	</div>
 	<PdfPrint class="ml-6">
 		<div class="print:block hidden">Name: {data.vendor.name}</div>
@@ -91,7 +94,15 @@
 				on:clickCell={(event) => {
 					console.log(event);
 					const PaymentId = event.detail.row.id;
-					goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
+					if (
+						$page.data.session?.authUser.Employee.Role.Scopes.find(
+							(s) => s.name === 'VIEW_PAYMENT_DETAIL'
+						)
+					) {
+						goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
+					} else {
+						toast.push('You do not have permission to view payment details');
+					}
 				}}
 			/>
 		</div>

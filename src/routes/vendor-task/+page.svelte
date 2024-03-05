@@ -2,6 +2,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import Vendors from './vendors.svelte';
 	import Task from './task.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -20,11 +21,13 @@
 				Vendor
 			</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'task')}
-			><p class="p-2 px-3 rounded-md {displayedComponent === 'task' ? 'bg-white' : ''}">
-				Task
-			</p></button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
+			<button on:click={() => (displayedComponent = 'task')}
+				><p class="p-2 px-3 rounded-md {displayedComponent === 'task' ? 'bg-white' : ''}">
+					Task
+				</p></button
+			>
+		{/if}
 		<!-- <button on:click={() => (displayedComponent = 'pending')}>
 			<p class="p-2 px-3 rounded-md {displayedComponent === 'pending' ? 'bg-white' : ''}">
 				Pending Tasks
@@ -33,7 +36,7 @@
 	</div>
 	{#if displayedComponent === 'vendor'}
 		<Vendors bind:data />
-	{:else if displayedComponent === 'task'}
+	{:else if displayedComponent === 'task' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
 		<Task bind:data />
 	{:else if displayedComponent === 'pending'}
 		<!-- <Amenities bind:data /> --> Pending

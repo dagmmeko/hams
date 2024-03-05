@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Info from './info.svelte';
 	import Payments from './all_Payments.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -16,18 +17,20 @@
 		<button on:click={() => (displayedComponent = 'info')}>
 			<p class="py-2 px-3 rounded-md {displayedComponent === 'info' ? 'bg-white' : ''} ">Info</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'all_payments')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'all_payments' ? 'bg-white' : ''}">
-				Payments
-			</p>
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_VENDOR_PAYMENT')}
+			<button on:click={() => (displayedComponent = 'all_payments')}>
+				<p class="p-2 px-3 rounded-md {displayedComponent === 'all_payments' ? 'bg-white' : ''}">
+					Payments
+				</p>
+			</button>
+		{/if}
 	</div>
 
 	<!-- main component -->
 	<div class=" bg-white rounded-sm shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'info'}
 			<Info bind:data bind:form />
-		{:else if displayedComponent === 'all_payments'}
+		{:else if displayedComponent === 'all_payments' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_VENDOR_PAYMENT')}
 			<Payments bind:data />
 		{:else}
 			<p>Something went wrong</p>

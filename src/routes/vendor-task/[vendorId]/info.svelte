@@ -7,6 +7,8 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+
 	export let data: PageData;
 
 	export let form: ActionData;
@@ -21,6 +23,7 @@
 
 	let frontFileData: string[] = [];
 
+	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
 	$: form?.vendorFileUrl ? window.open(form.vendorFileUrl, '_blank') : null;
 
 	$: form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
@@ -33,9 +36,11 @@
 				<p class="text-2xl">Vendor Info</p>
 				<p class=" text-sm py-1 rounded-xl">Vendor details here.</p>
 			</div>
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
-				Update Info</button
-			>
+			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_VENDOR')}
+				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+					Update Info</button
+				>
+			{/if}
 		</div>
 		<hr class="my-6" />
 		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
@@ -175,21 +180,22 @@
 			</div>
 		</div>
 	</form>
+	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_VENDOR')}
+		<p class="text-2xl mt-10">Danger</p>
+		<hr class="my-6" />
 
-	<p class="text-2xl mt-10">Danger</p>
-	<hr class="my-6" />
-
-	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="md:flex justify-between">
-			<div>
-				<p class="text-lg">Delete Vendor</p>
-				<p class="text-black/50">
-					Remove all data related to vendor.Once you take this action their is no going back
-				</p>
+		<div class="border-2 border-danger border-dashed rounded-md p-5">
+			<div class="md:flex justify-between">
+				<div>
+					<p class="text-lg">Delete Vendor</p>
+					<p class="text-black/50">
+						Remove all data related to vendor.Once you take this action their is no going back
+					</p>
+				</div>
+				<button class="bg-danger flex text-white rounded-md py-2 px-6"
+					><Delete /> Delete Vendor</button
+				>
 			</div>
-			<button class="bg-danger flex text-white rounded-md py-2 px-6"
-				><Delete /> Delete Vendor</button
-			>
 		</div>
-	</div>
+	{/if}
 </div>

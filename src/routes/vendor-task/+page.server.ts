@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -24,6 +24,15 @@ const addTaskSchema = z.object({
 });
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_VENDOR_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const addVendorForm = await superValidate(addVendorSchema);
 	const addTaskForm = await superValidate(addTaskSchema);
 	const searchVendor = event.url.searchParams.get('searchVendor');
@@ -61,6 +70,15 @@ export const load = async (event) => {
 
 export const actions = {
 	addVendor: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_VENDOR';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addVendorForm = await superValidate(event.request, addVendorSchema);
 		if (!addVendorForm) {
 			return fail(400, { addVendorForm });
@@ -86,6 +104,15 @@ export const actions = {
 		};
 	},
 	addVendorTask: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_TASK';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addTaskForm = await superValidate(event.request, addTaskSchema);
 		if (!addTaskForm) {
 			return fail(400, { addTaskForm });

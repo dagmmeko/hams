@@ -1,6 +1,6 @@
 import { prisma } from '$lib/utils/prisma.js';
 import type { ServiceType } from '@prisma/client';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z, { number } from 'zod';
 
@@ -14,6 +14,15 @@ const editPaymentSchema = z.object({
 export type paymentType = z.infer<typeof editPaymentSchema>;
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_PAYMENT_DETAIL';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const payment = await prisma.payment.findFirst({
 		where: {
 			id: parseInt(event.params.paymentId)

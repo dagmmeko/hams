@@ -1,7 +1,7 @@
 import { getFile, uploadFileToS3 } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { ServiceType } from '@prisma/client';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -27,6 +27,15 @@ export type vendorType = z.infer<typeof editVendorSchema>;
 export type paymentType = z.infer<typeof addPaymentSchema>;
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_VENDOR_DETAIL_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	if (!event.params.vendorId) {
 		throw error(404, 'Vendor ID not found');
 	}
@@ -83,6 +92,15 @@ export const load = async (event) => {
 
 export const actions = {
 	editVendorInfo: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_VENDOR';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const editVendorForm = await superValidate(event.request, editVendorSchema);
 		if (!editVendorForm) {
 			return fail(400, { editVendorForm });
@@ -108,6 +126,15 @@ export const actions = {
 	},
 
 	addPayment: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_PAYMENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addPaymentForm = await superValidate(event.request, addPaymentSchema);
 		if (!addPaymentForm) {
 			return fail(400, { addPaymentForm });
@@ -143,6 +170,15 @@ export const actions = {
 		return { vendorFileUrl };
 	},
 	deleteVendorFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_VENDOR';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const deleteVendorFileId = data.get('deleteVendorFileId');
 
@@ -159,6 +195,15 @@ export const actions = {
 		return { deletedVendorFile };
 	},
 	editVendorFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_VENDOR';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const data = await event.request.formData();
 		const file = data.getAll('vendorFile');
 

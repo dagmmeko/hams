@@ -8,6 +8,7 @@
 	import SvelteTable from 'svelte-table';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let modal = false;
 	export let data: PageData;
@@ -82,9 +83,11 @@
 			<p class="text-lg">Vendors</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Vendors</p>
 		</div>
-		<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
-			New Vendor</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_VENDOR')}
+			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+				New Vendor</button
+			>
+		{/if}
 	</div>
 
 	<div class="bg-ghost/60 p-6 sm:flex justify-between">
@@ -116,7 +119,15 @@
 			on:clickCell={(event) => {
 				const vendorId = event.detail.row.id;
 
-				goto(`/vendor-task/${vendorId}`);
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'VIEW_VENDOR_DETAIL_PAGE'
+					)
+				) {
+					goto(`/vendor-task/${vendorId}`);
+				} else {
+					toast.push('You do not have permission to view this page');
+				}
 			}}
 		/>
 	</div>
