@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 
@@ -16,6 +16,15 @@ const deleteRoleSchema = z.object({
 export type editRoleType = z.infer<typeof editRoleSchema>;
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_ROLE_DETAIL_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const deleteRoleForm = await superValidate(deleteRoleSchema);
 
 	const { roleId } = event.params;
@@ -46,6 +55,15 @@ export const load = async (event) => {
 
 export const actions = {
 	editRole: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_ROLE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const editRoleForm = await superValidate(event.request, editRoleSchema);
 		if (!editRoleForm) {
 			return fail(400, { editRoleForm });

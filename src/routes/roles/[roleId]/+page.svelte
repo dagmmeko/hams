@@ -3,6 +3,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -63,14 +64,17 @@
 			</label>
 
 			<div class="sm:flex gap-3">
-				<button
-					type="submit"
-					disabled={noChange}
-					class="disabled:bg-primary/60 bg-primary text-white rounded-md py-2 w-full"
-				>
-					Edit Role</button
-				>
-				{#if data.role.Employees.length}<button
+				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ROLE')}
+					<button
+						type="submit"
+						disabled={noChange}
+						class="disabled:bg-primary/60 bg-primary text-white rounded-md py-2 w-full"
+					>
+						Edit Role</button
+					>
+				{/if}
+				{#if data.role.Employees.length && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
+					<button
 						on:click|preventDefault={() =>
 							toast.push('Can not delete a role with Employees in it.')}
 						type="submit"
@@ -78,7 +82,7 @@
 					>
 						Archive Role</button
 					>
-				{:else}
+				{:else if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
 					<form
 						use:deleteFormEnhance
 						method="post"

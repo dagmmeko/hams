@@ -73,6 +73,7 @@ export const allScopes = [
 	//roles
 	'VIEW_ROLES_PAGE',
 	'ADD_ROLE',
+
 	'DELETE_ROLE',
 	'VIEW_ROLE_DETAIL_PAGE',
 	'EDIT_ROLE',

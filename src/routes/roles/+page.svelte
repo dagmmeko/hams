@@ -67,9 +67,11 @@
 					{data.roles.length} Roles
 				</p>
 			</div>
-			<a href="/roles/add-role" class="bg-primary text-white text-sm rounded-md py-2 px-6">
-				New Role</a
-			>
+			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ROLE')}
+				<a href="/roles/add-role" class="bg-primary text-white text-sm rounded-md py-2 px-6">
+					New Role</a
+				>
+			{/if}
 		</div>
 		<div class="bg-ghost/60 p-6 flex justify-between border-b-2 border-ghost">
 			<!-- <button
@@ -97,7 +99,15 @@
 			classNameTable="rolesTable"
 			on:clickCell={(event) => {
 				const roleId = event.detail.row.id;
-				goto(`/roles/${roleId}`);
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'VIEW_ROLE_DETAIL_PAGE'
+					)
+				) {
+					goto(`/roles/${roleId}`);
+				} else {
+					toast.push('You do not have permission to delete a role');
+				}
 			}}
 			{columns}
 			{rows}
