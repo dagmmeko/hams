@@ -2,6 +2,7 @@
 	import Attendance from './attendance.svelte';
 	import Info from './info.svelte';
 	import Leaves from './leaves.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -17,23 +18,29 @@
 		<button on:click={() => (displayedComponent = 'info')}>
 			<p class="py-2 px-3 rounded-md {displayedComponent === 'info' ? 'bg-white' : ''} ">Info</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'attendance')}
-			><p class="p-2 px-3 rounded-md {displayedComponent === 'attendance' ? 'bg-white' : ''}">
-				Attendance
-			</p></button
-		>
-		<button on:click={() => (displayedComponent = 'leaves')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'leaves' ? 'bg-white' : ''}">Leaves</p>
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
+			<button on:click={() => (displayedComponent = 'attendance')}
+				><p class="p-2 px-3 rounded-md {displayedComponent === 'attendance' ? 'bg-white' : ''}">
+					Attendance
+				</p></button
+			>
+		{/if}
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
+			<button on:click={() => (displayedComponent = 'leaves')}>
+				<p class="p-2 px-3 rounded-md {displayedComponent === 'leaves' ? 'bg-white' : ''}">
+					Leaves
+				</p>
+			</button>
+		{/if}
 	</div>
 
 	<!-- main component -->
 	<div class=" bg-white rounded-sm shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'info'}
 			<Info bind:data bind:form />
-		{:else if displayedComponent === 'attendance'}
+		{:else if displayedComponent === 'attendance' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
 			<Attendance bind:data />
-		{:else if displayedComponent === 'leaves'}
+		{:else if displayedComponent === 'leaves' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
 			<Leaves bind:data />
 		{:else}
 			<p>Something went wrong</p>

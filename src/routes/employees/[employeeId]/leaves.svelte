@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { dateProxy, superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
-	import QR from '$lib/assets/qr.png';
-	import SvelteTable, { type TableColumn } from 'svelte-table';
-	import { goto } from '$app/navigation';
-	import dayjs from 'dayjs';
-	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
+	import dayjs from 'dayjs';
+	import SvelteTable, { type TableColumn } from 'svelte-table';
+	import { superForm } from 'sveltekit-superforms/client';
+	import { page } from '$app/stores';
+	import type { PageData } from './$types';
+	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
 
 	export let data: PageData;
 	let dateInput: any;
@@ -86,13 +85,15 @@
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Leave</p>
 		</div>
-		<button
-			on:click={() => (modal = true)}
-			class="bg-primary text-white rounded-md py-2 px-6"
-			on:click={() => (modal = true)}
-		>
-			New Leave Permission</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_LEAVES')}
+			<button
+				on:click={() => (modal = true)}
+				class="bg-primary text-white rounded-md py-2 px-6"
+				on:click={() => (modal = true)}
+			>
+				New Leave Permission</button
+			>
+		{/if}
 	</div>
 	<div class="overflow-x-auto">
 		<SvelteTable classNameTable="rolesTable" on:clickCell={(event) => {}} {columns} {rows} />

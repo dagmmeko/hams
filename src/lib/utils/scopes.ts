@@ -33,7 +33,6 @@ export const allScopes = [
 	'START_END_RENT',
 	'ADD_RECEIPT',
 	'EDIT_PRICE_CHANGE',
-
 	'END_CONTRACT',
 	'EDIT_RECEIPT',
 
@@ -45,6 +44,7 @@ export const allScopes = [
 	'DELETE_EMPLOYEE',
 	'VIEW_ABSENT',
 	'ADD_ABSENT',
+	'EDIT_ABSENT',
 	'VIEW_LEAVES',
 	'ADD_LEAVES',
 	'EDIT_LEAVES',

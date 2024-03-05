@@ -1,6 +1,6 @@
 import { prisma } from '$lib/utils/prisma.js';
 import type { EmploymentType } from '@prisma/client';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -32,6 +32,15 @@ const addLeaveSchema = z.object({
 });
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_EMPLOYEE_DETAIL_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const addLeaveForm = await superValidate(addLeaveSchema);
 	if (!event.params.employeeId) {
 		throw error(404, 'Employee ID not found');
@@ -124,6 +133,15 @@ export const load = async (event) => {
 
 export const actions = {
 	editEmployeeInfo: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_EMPLOYEE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const editEmployeeForm = await superValidate(event.request, editEmployeeSchema);
 		if (!editEmployeeForm) {
 			return fail(400, { editEmployeeForm });
@@ -165,6 +183,14 @@ export const actions = {
 	addLeave: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
 
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_LEAVES';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
 		const addLeaveForm = await superValidate(event.request, addLeaveSchema);
 
 		const leave = await prisma.employee.update({
@@ -187,6 +213,15 @@ export const actions = {
 		return { addLeaveForm, leave };
 	},
 	markAbsent: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_ABSENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const absent = await prisma.employee.update({
 			where: {
 				id: Number(event.params.employeeId),
@@ -205,6 +240,15 @@ export const actions = {
 		return { absent };
 	},
 	editAttendance: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_ABSENT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		console.log('event');
 		const data = await event.request.formData();
 		const attendanceId = data.get('attendanceId');
@@ -227,6 +271,15 @@ export const actions = {
 		return { attendance };
 	},
 	archiveEmployee: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'DELETE_EMPLOYEE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const employeeArchived = await prisma.employee.update({
 			where: {
 				id: parseInt(event.params.employeeId)

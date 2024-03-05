@@ -1,14 +1,10 @@
 <script lang="ts">
-	import { dateProxy, superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
-	import QR from '$lib/assets/qr.png';
-	import SvelteTable, { type TableColumn } from 'svelte-table';
-	import { goto } from '$app/navigation';
-	import dayjs from 'dayjs';
-	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
-	import { clickOutside } from '$lib/utils/click-outside';
 	import { enhance } from '$app/forms';
-	import { updated } from '$app/stores';
+	import { clickOutside } from '$lib/utils/click-outside';
+	import dayjs from 'dayjs';
+	import type { PageData } from './$types';
+	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data: PageData;
 	let dateInput: any;
@@ -27,18 +23,26 @@
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Attendance</p>
 		</div>
-		<form method="post" use:enhance action="?/markAbsent">
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
-				Mark Today absent</button
-			>
-		</form>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ABSENT')}
+			<form method="post" use:enhance action="?/markAbsent">
+				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+					Mark Today absent</button
+				>
+			</form>
+		{/if}
 	</div>
 	<div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 my-6">
 		{#each data.employee.Attendance as attendance}
 			<button
 				on:click={() => {
-					modal = true;
-					selectedAttendance = attendance;
+					if (
+						$page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ABSENT')
+					) {
+						modal = true;
+						selectedAttendance = attendance;
+					} else {
+						toast.push('You do not have permission to edit employee attendance');
+					}
 				}}
 				class="shadow-md text-left rounded bg-primary/10 p-4"
 			>

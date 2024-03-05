@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { dateProxy, superForm } from 'sveltekit-superforms/client';
 	import type { PageData, ActionData } from './$types';
-	import QR from '$lib/assets/qr.png';
+	import { page } from '$app/stores';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import { enhance } from '$app/forms';
@@ -31,9 +31,11 @@
 				<p class="text-2xl">Employee Info</p>
 				<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
 			</div>
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
-				Update Info</button
-			>
+			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_EMPLOYEE')}
+				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+					Update Info</button
+				>
+			{/if}
 		</div>
 		<hr class="my-6" />
 		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
@@ -198,34 +200,35 @@
 			</div>
 		</div>
 	</label>
+	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_EMPLOYEE')}
+		<p class="text-2xl mt-10">Danger</p>
+		<hr class="my-6" />
 
-	<p class="text-2xl mt-10">Danger</p>
-	<hr class="my-6" />
-
-	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="md:flex justify-between">
-			<div>
-				<p class="text-lg">Suspend Employee</p>
-				<p class="text-black/50">Suspend employee from job for a given time.</p>
+		<div class="border-2 border-danger border-dashed rounded-md p-5">
+			<div class="md:flex justify-between">
+				<div>
+					<p class="text-lg">Suspend Employee</p>
+					<p class="text-black/50">Suspend employee from job for a given time.</p>
+				</div>
+				<button class="bg-danger text-white rounded-md py-2 px-6">Suspend</button>
 			</div>
-			<button class="bg-danger text-white rounded-md py-2 px-6">Suspend</button>
-		</div>
-		<div class="md:flex mt-6 justify-between">
-			<div>
-				<p class="text-lg">Archive Employee</p>
-				<p class="text-black/50">Archive employment contract with employee.</p>
+			<div class="md:flex mt-6 justify-between">
+				<div>
+					<p class="text-lg">Archive Employee</p>
+					<p class="text-black/50">Archive employment contract with employee.</p>
+				</div>
+				<form
+					method="post"
+					action="?/archiveEmployee"
+					use:enhance={({ cancel }) => {
+						if (!window.confirm('Are you sure you want to Fire this Employee?')) {
+							cancel();
+						}
+					}}
+				>
+					<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+				</form>
 			</div>
-			<form
-				method="post"
-				action="?/archiveEmployee"
-				use:enhance={({ cancel }) => {
-					if (!window.confirm('Are you sure you want to Fire this Employee?')) {
-						cancel();
-					}
-				}}
-			>
-				<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
-			</form>
 		</div>
-	</div>
+	{/if}
 </div>

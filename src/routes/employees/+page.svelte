@@ -7,6 +7,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import Name from './name.svelte';
 	import StatusComponent from './status-component.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data;
 
@@ -92,12 +93,14 @@
 			<p class="text-lg">Employees</p>
 			<p class="bg-[#F9F5FF] text-xs py-1 px-2 rounded-xl">{data.employees.length} Employees</p>
 		</div>
-		<button
-			class="bg-primary text-white rounded-md py-2 px-6 md:mt-0 mt-3"
-			on:click={() => (modal = true)}
-		>
-			Add Employee
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_EMPLOYEE')}
+			<button
+				class="bg-primary text-white rounded-md py-2 px-6 md:mt-0 mt-3"
+				on:click={() => (modal = true)}
+			>
+				Add Employee
+			</button>
+		{/if}
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<!-- <button
@@ -124,7 +127,15 @@
 		<SvelteTable
 			classNameTable="rolesTable"
 			on:clickCell={(event) => {
-				goto(`/employees/${event.detail.row.id}`);
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE'
+					)
+				) {
+					goto(`/employees/${event.detail.row.id}`);
+				} else {
+					toast.push('You do not have permission to view employee details');
+				}
 			}}
 			{columns}
 			{rows}

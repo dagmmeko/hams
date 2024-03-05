@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 import bcrypt from 'bcrypt';
@@ -17,6 +17,15 @@ const addEmployeeSchema = z.object({
 const encryptedPassword = await bcrypt.hash('Pass1234', 10);
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'VIEW_EMPLOYEE_PAGE';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
 	const addEmployeeForm = await superValidate(addEmployeeSchema);
 	const search = event.url.searchParams.get('search');
 
@@ -52,6 +61,15 @@ export const load = async (event) => {
 
 export const actions = {
 	addEmployee: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_EMPLOYEE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addEmployeeForm = await superValidate(event.request, addEmployeeSchema);
 		if (!addEmployeeForm) {
 			return fail(400, { addEmployeeForm });
