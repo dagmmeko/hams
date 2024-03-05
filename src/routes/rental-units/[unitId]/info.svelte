@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { page } from '$app/stores';
 
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
@@ -20,6 +21,8 @@
 		enhance: editUnitFormEnhance,
 		constraints
 	} = superForm(data.editUnitForm);
+
+	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
 
 	let frontFileData: string[] = [];
 	$: form?.deleteFile
@@ -41,16 +44,19 @@
 				<p class=" text-sm py-1 rounded-xl">Room details here.</p>
 			</div>
 			<div class="justify-self-end">
-				<button
-					on:click|preventDefault={() => (modal = true)}
-					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4 md:mb-0 mb-3"
-				>
-					New Inspection
-				</button>
-
-				<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
-					Update Info
-				</button>
+				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_NEW_INSPECTION')}
+					<button
+						on:click|preventDefault={() => (modal = true)}
+						class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4 md:mb-0 mb-3"
+					>
+						New Inspection
+					</button>
+				{/if}
+				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_RENTAL_UNIT')}
+					<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
+						Update Info
+					</button>
+				{/if}
 			</div>
 		</div>
 		<hr class="my-6" />
@@ -229,30 +235,32 @@
 			</div>
 		</div>
 	</form>
+	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ARCHIVE_RENTAL_UNIT')}
+		<p class="text-2xl mt-6">Danger</p>
+		<hr class="my-6" />
 
-	<p class="text-2xl mt-6">Danger</p>
-	<hr class="my-6" />
-
-	<div class="border-2 border-danger border-dashed rounded-md p-5">
-		<div class="md:flex justify-between">
-			<div>
-				<p class="text-lg">Archive Rental Unit</p>
-				<p class="text-black/50">
-					Remove all data related to rental unit. Once you take this action there is no going back.
-				</p>
+		<div class="border-2 border-danger border-dashed rounded-md p-5">
+			<div class="md:flex justify-between">
+				<div>
+					<p class="text-lg">Archive Rental Unit</p>
+					<p class="text-black/50">
+						Remove all data related to rental unit. Once you take this action there is no going
+						back.
+					</p>
+				</div>
+				<form method="post" action="?/archiveUnit" use:enhance>
+					{#if data.unitDetails?.active}
+						<button
+							on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
+							class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+						>
+					{:else}
+						<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+					{/if}
+				</form>
 			</div>
-			<form method="post" action="?/archiveUnit" use:enhance>
-				{#if data.unitDetails?.active}
-					<button
-						on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
-						class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
-					>
-				{:else}
-					<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
-				{/if}
-			</form>
 		</div>
-	</div>
+	{/if}
 </div>
 
 {#if modal}

@@ -11,6 +11,7 @@
 	import PropertyConditionTable from './property-condition-table.svelte';
 	import DeletePropertyTable from './delete-property-table.svelte';
 	import { numberToCurrency } from '$lib/utils/currency';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let addModal = false;
 	let editModal = false;
@@ -101,13 +102,15 @@
 		<div class="grid">
 			<p class="text-2xl">Room Properties</p>
 		</div>
-		<button
-			type="submit"
-			class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-3"
-			on:click={() => (addModal = true)}
-		>
-			New Property</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_PROPERTY')}
+			<button
+				type="submit"
+				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-3"
+				on:click={() => (addModal = true)}
+			>
+				New Property</button
+			>
+		{/if}
 	</div>
 	<div class="">
 		<div class="flex gap-3">
@@ -217,8 +220,16 @@
 					classNameTable="unitPropertyTables"
 					classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
 					on:clickCell={(event) => {
-						selectedUnitId = event.detail.row.id;
-						editModal = true;
+						if (
+							$page.data.session?.authUser.Employee.Role.Scopes.find(
+								(s) => s.name === 'EDIT_UNIT_PROPERTY'
+							)
+						) {
+							selectedUnitId = event.detail.row.id;
+							editModal = true;
+						} else {
+							toast.push('You do not have permission to edit property');
+						}
 					}}
 					{columns}
 					{rows}

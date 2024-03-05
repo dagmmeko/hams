@@ -2,7 +2,8 @@
 	import type { PageData, ActionData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { toast } from '@zerodevx/svelte-toast';
+	import { page } from '$app/stores';
+
 	export let row: any;
 
 	export let data: PageData;
@@ -21,6 +22,8 @@
 	// $: form?.deleteProperty ? toast.push('Property deleted successfully') : null;
 </script>
 
-<form use:enhance method="post" action="?/deleteProperty">
-	<button on:click|stopPropagation={() => {}}> <Delete class="text-danger" /> </button>
-</form>
+{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_UNIT_PROPERTY')}
+	<form use:enhance method="post" action="?/deleteProperty">
+		<button on:click|stopPropagation={() => {}}> <Delete class="text-danger" /> </button>
+	</form>
+{/if}

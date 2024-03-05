@@ -1,5 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
 import { uploadFileToS3 } from '$lib/utils/aws-file.js';
@@ -19,12 +19,31 @@ const addUnitSchema = z.object({
 });
 
 export const load = async (event) => {
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+		return scope.name === 'ADD_RENTAL_UNIT';
+	});
+
+	if (!hasRole) {
+		throw redirect(302, '/no-permission');
+	}
+
 	const addUnitForm = await superValidate(addUnitSchema);
 	return { addUnitForm };
 };
 
 export const actions = {
 	addUnit: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'ADD_RENTAL_UNIT';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
 		const addUnitForm = await superValidate(event.request.clone(), addUnitSchema);
 		const data = await event.request.clone().formData();
 		const unitFile = data.getAll('unitFile');

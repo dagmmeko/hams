@@ -3,6 +3,7 @@
 	import Info from './info.svelte';
 	import Properties from './properties.svelte';
 	import Inspections from './inspections.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let form;
@@ -23,24 +24,30 @@
 				Room
 			</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'properties')}
-			><p
-				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'properties'
-					? 'bg-white'
-					: ''}"
-			>
-				Properties
-			</p></button
-		>
-		<button on:click={() => (displayedComponent = 'amenities')}>
-			<p
-				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'amenities'
-					? 'bg-white'
-					: ''}"
-			>
-				Amenities
-			</p>
-		</button>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
+			<button on:click={() => (displayedComponent = 'properties')}>
+				<p
+					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+					'properties'
+						? 'bg-white'
+						: ''}"
+				>
+					Properties
+				</p>
+			</button>
+		{/if}
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
+			<button on:click={() => (displayedComponent = 'amenities')}>
+				<p
+					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+					'amenities'
+						? 'bg-white'
+						: ''}"
+				>
+					Amenities
+				</p>
+			</button>
+		{/if}
 		<button on:click={() => (displayedComponent = 'inspections')}>
 			<p
 				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
@@ -56,9 +63,9 @@
 	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'room'}
 			<Info bind:form bind:data />
-		{:else if displayedComponent === 'properties'}
+		{:else if displayedComponent === 'properties' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
 			<Properties bind:data bind:form />
-		{:else if displayedComponent === 'amenities'}
+		{:else if displayedComponent === 'amenities' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
 			<Amenities bind:data />
 		{:else}
 			<Inspections bind:data />

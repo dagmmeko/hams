@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	import { page } from '$app/stores';
 	import UnitTableDeleteButton from './unit-table-delete-button.svelte';
@@ -109,9 +110,11 @@
 			<p class="text-lg">Rental Units</p>
 			<p class="bg-[#F9F5FF] h-fit w-fit text-xs rounded-xl p-2">{data.units.length} Units</p>
 		</div>
-		<a href="/rental-units/add-unit" class="bg-primary text-white rounded-md py-2 px-6 pt-2">
-			New Rental Unit</a
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_RENTAL_UNIT')}
+			<a href="/rental-units/add-unit" class="bg-primary text-white rounded-md py-2 px-6 pt-2">
+				New Rental Unit</a
+			>
+		{/if}
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<div class="flex gap-3">
@@ -246,7 +249,15 @@
 			on:clickCell={(event) => {
 				const unitId = event.detail.row.id;
 
-				goto(`/rental-units/${unitId}`);
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'VIEW_RENTAL_UNIT_DETAIL_PAGE'
+					)
+				) {
+					goto(`/rental-units/${unitId}`);
+				} else {
+					toast.push('You do not have permission to view this page');
+				}
 			}}
 			{columns}
 			{rows}

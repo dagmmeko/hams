@@ -4,6 +4,8 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let addModal = false;
 	let editModal = false;
@@ -55,20 +57,30 @@
 		<div class="grid">
 			<p class="text-2xl">Room Amenities</p>
 		</div>
-		<button
-			type="submit"
-			class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-2"
-			on:click={() => (addModal = true)}
-		>
-			New Amenity</button
-		>
+		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_AMENITIES')}
+			<button
+				type="submit"
+				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-2"
+				on:click={() => (addModal = true)}
+			>
+				New Amenity</button
+			>
+		{/if}
 	</div>
 	<div class="-mx-6 pt-5 overflow-y-auto">
 		<SvelteTable
 			classNameTable="unitAmenitiesTables"
 			on:clickCell={(event) => {
-				selectedUnitId = event.detail.row.id;
-				editModal = true;
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'EDIT_UNIT_AMENITIES'
+					)
+				) {
+					selectedUnitId = event.detail.row.id;
+					editModal = true;
+				} else {
+					toast.push('You do not have permission to edit amenities');
+				}
 			}}
 			{columns}
 			{rows}
