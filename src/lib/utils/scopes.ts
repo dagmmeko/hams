@@ -1,6 +1,8 @@
 export const allScopes = [
 	//dashboard
 	'VIEW_OVERVIEW_PAGE',
+	'EDIT_DOLLAR_VALUE',
+	'VIEW_OVERVIEW_STATISTICS',
 
 	//rental-units
 	'VIEW_RENTAL_UNITS_PAGE',
@@ -16,6 +18,7 @@ export const allScopes = [
 	'ADD_UNIT_AMENITIES',
 	'EDIT_UNIT_AMENITIES',
 	'DELETE_UNIT_AMENITIES',
+	'ADD_NEW_INSPECTION',
 
 	//tenants
 	'VIEW_TENANTS_PAGE',
@@ -24,6 +27,14 @@ export const allScopes = [
 	'ADD_NEW_TENANT',
 	'EDIT_TENANT',
 	'DELETE_TENANT',
+	'ADD_NEW_RENT',
+	'APPROVE_PENDING',
+	'EXTEND_RENT',
+	'START_END_RENT',
+	'ADD_RECEIPT',
+	'EDIT_PRICE_CHANGE',
+	'END_CONTRACT',
+	'EDIT_RECEIPT',
 
 	//employees
 	'VIEW_EMPLOYEE_PAGE',
@@ -37,6 +48,10 @@ export const allScopes = [
 	'ADD_LEAVES',
 	'EDIT_LEAVES',
 	'DELETE_LEAVES',
+	'DELETE_ABSENT',
+
+	//account
+	'VIEW_ACCOUNT_PAGE',
 
 	//vendor & task
 	'VIEW_VENDOR_PAGE',
@@ -50,16 +65,23 @@ export const allScopes = [
 	'DELETE_PAYMENT',
 	'VIEW_PAYMENT_DETAIL',
 	'VIEW_TASK_PAGE',
-	'VIEW_TASK_DETAIL_PAGE',
 	'ADD_TASK',
 	'EDIT_TASK',
 	'DELETE_TASK',
-	'VIEW_PENDING_TASKS',
 
 	//roles
 	'VIEW_ROLES_PAGE',
 	'ADD_ROLE',
 	'DELETE_ROLE',
 	'VIEW_ROLE_DETAIL_PAGE',
-	'EDIT_ROLE'
+	'EDIT_ROLE',
+
+	//Internal Task
+
+	'ADD_INTERNAL_TASK',
+	//can view everyone's task not just their own
+	'VIEW_ALL_INTERNAL_TASK_PAGE',
+	'VIEW__INTERNAL_TASK_DETAIL',
+	'EDIT_INTERNAL_TASK',
+	'DELETE_INTERNAL_TASK'
 ];
