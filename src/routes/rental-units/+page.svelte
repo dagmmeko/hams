@@ -66,17 +66,17 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
-		{
-			key: 'pricePerKare',
-			title: 'Paid Per Kare',
-			value: (v: typeof rows[number]) => (v.priceSetPerKare ? 'Yes' : 'No' ?? 'NOT FOUND'),
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] max-w-sm border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
+		// {
+		// 	key: 'pricePerKare',
+		// 	title: 'Paid Per Kare',
+		// 	value: (v: typeof rows[number]) => (v.price / v.kareMeter).toFixed(2) ?? 'NOT FOUND',
+		// 	headerClass:
+		// 		'text-left pl-2 bg-ghost/60 border-b-[1px] max-w-sm border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+		// 	class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		// },
 		{
 			key: 'price',
-			title: 'Price',
+			title: 'Price per Month',
 			value: (v: typeof rows[number]) =>
 				numberToCurrency(v.price, {
 					currency: v.currency,

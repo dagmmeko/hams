@@ -21,7 +21,10 @@ const editEmployeeSchema = z.object({
 	jobTitle: z.string(),
 	emergencyContactName: z.string().optional(),
 	emergencyContactPhoneNumber: z.string().optional(),
-	emergencyContactEmail: z.string().optional()
+	emergencyContactEmail: z.string().optional(),
+	suretyName: z.string().optional(),
+	suretyPhoneNumber: z.string().optional(),
+	suretyAddress: z.string().optional()
 });
 export type editEmployeeType = z.infer<typeof editEmployeeSchema>;
 
@@ -123,7 +126,10 @@ export const load = async (event) => {
 			managerId: employee.Manager?.id,
 			emergencyContactName: employee.emergencyContactName || '',
 			emergencyContactPhoneNumber: employee.emergencyContactPhoneNumber || '',
-			emergencyContactEmail: employee.emergencyContactEmail || ''
+			emergencyContactEmail: employee.emergencyContactEmail || '',
+			suretyName: employee.suretyName || '',
+			suretyPhoneNumber: employee.suretyPhoneNumber || '',
+			suretyAddress: employee.suretyAddress || ''
 		},
 		editEmployeeSchema
 	);
@@ -163,7 +169,10 @@ export const actions = {
 				managerUserId: editEmployeeForm.data.managerId,
 				emergencyContactEmail: editEmployeeForm.data.emergencyContactEmail,
 				emergencyContactName: editEmployeeForm.data.emergencyContactName,
-				emergencyContactPhoneNumber: editEmployeeForm.data.emergencyContactPhoneNumber
+				emergencyContactPhoneNumber: editEmployeeForm.data.emergencyContactPhoneNumber,
+				suretyName: editEmployeeForm.data.suretyName,
+				suretyPhoneNumber: editEmployeeForm.data.suretyPhoneNumber,
+				suretyAddress: editEmployeeForm.data.suretyAddress
 			}
 		});
 

@@ -20,7 +20,11 @@ export const load = async (event) => {
 	}
 
 	// Unit Data
-	const allUnits = await prisma.rentalUnits.findMany({});
+	const allUnits = await prisma.rentalUnits.findMany({
+		orderBy: {
+			floor: 'asc'
+		}
+	});
 	const activeUnits = allUnits.filter((unit) => unit.active).length;
 	const goodUnits = allUnits.filter(
 		(unit) => unit.latestInspectionStatus === 'GOOD_CONDITION'

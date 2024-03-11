@@ -38,11 +38,19 @@
 	<div class="my-6">
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
-	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-		<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
-			<span>Occupancy rates</span>
-			<span>{data.activeUnits} / {data.allUnits.length}</span>
+	<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
+		<span>Occupancy rates</span>
+		<div class="grid-cols-4 grid">
+			{#each data.allUnits as units, key}
+				<div class={`${units.active ? 'bg-red-100' : 'bg-green-100'} border border-1`}>
+					{units.roomNumber}
+				</div>
+			{/each}
 		</div>
+
+		<span>{data.activeUnits} / {data.allUnits.length}</span>
+	</div>
+	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			Bookings by source
 			<Pie

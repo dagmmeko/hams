@@ -16,7 +16,7 @@
 <div>
 	<button
 		class="border-primary border-[1px] text-primary rounded-md h-fit px-8 py-2 flex items-center text-sm gap-2 {className} mb-2"
-		on:click={() => {
+		on:click|stopPropagation|preventDefault={() => {
 			print = true;
 		}}
 	>

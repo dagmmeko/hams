@@ -151,6 +151,29 @@
 					{...$constraints.emergencyContactPhoneNumber}
 				/>
 			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Surety's Name</span>
+				<input
+					name="suretyName"
+					bind:value={$editEmployeeForm.suretyName}
+					{...$constraints.suretyName}
+				/>
+			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Surety's Address</span>
+				<input
+					name="suretyAddress"
+					bind:value={$editEmployeeForm.suretyAddress}
+					{...$constraints.suretyAddress}
+				/>
+			</label><label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Surety's Phone Number</span>
+				<input
+					name="suretyPhoneNumber"
+					bind:value={$editEmployeeForm.suretyPhoneNumber}
+					{...$constraints.suretyPhoneNumber}
+				/>
+			</label>
 		</div>
 	</form>
 	<p class="text-2xl mt-10">Documents</p>

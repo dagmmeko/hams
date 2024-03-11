@@ -12,11 +12,10 @@
 	import DeletePropertyTable from './delete-property-table.svelte';
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { toast } from '@zerodevx/svelte-toast';
+	import PropertiesTable from './properties-table.svelte';
+	import { ItemsCategory } from '@prisma/client';
 
 	let addModal = false;
-	let editModal = false;
-
-	let selectedUnitId: number;
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -29,6 +28,14 @@
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'description',
+			title: 'Description',
+			value: (v: typeof rows[number]) => v.description ?? 'NOT FOUND',
+			headerClass:
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] w-12 text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] w-12'
 		},
 		{
 			key: 'number',
@@ -47,7 +54,7 @@
 					currencyDisplay: 'code'
 				}) ?? 'NOT FOUND',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -57,7 +64,7 @@
 				component: PropertyConditionTable
 			},
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+				'text-left pl-4 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
@@ -79,8 +86,8 @@
 				}
 			},
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
 
@@ -95,6 +102,7 @@
 	});
 	let filterModal = false;
 	$: urlSearchParams = new URLSearchParams($page.url.search);
+	$: c = data.unitDetails?.Property.filter((prop) => prop.itemCategory === 'BEDROOM');
 </script>
 
 <div>
@@ -215,7 +223,15 @@
 	</div>
 	<div class="-mx-6 pt-5">
 		<PdfPrint class="mx-6">
-			<div class="overflow-x-auto">
+			<div class="print:grid print:grid-cols-2 print:gap-4">
+				<PropertiesTable {data} {form} itemCategory="SALON" />
+				<PropertiesTable {data} {form} itemCategory="LAUNDRY" />
+				<PropertiesTable {data} {form} itemCategory="KITCHEN" />
+				<PropertiesTable {data} {form} itemCategory="BEDROOM" />
+				<PropertiesTable {data} {form} itemCategory="BATHROOM" />
+			</div>
+
+			<!-- <div class="overflow-x-auto">
 				<SvelteTable
 					classNameTable="unitPropertyTables"
 					classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
@@ -234,7 +250,7 @@
 					{columns}
 					{rows}
 				/>
-			</div>
+			</div> -->
 			<div class="print:block hidden p-8">
 				<p class="text-lg font-semibold">Attention</p>
 				<p class="text-sm">
@@ -372,132 +388,6 @@
 
 				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
 					Save Item</button
-				>
-			</div>
-		</div>
-	</form>
-{/if}
-{#if editModal}
-	<form
-		use:enhance={({ formData }) => {
-			formData.set('propertyId', selectedUnitId.toString());
-			return async ({ update }) => {
-				await update();
-				editModal = false;
-			};
-		}}
-		method="post"
-		action="?/updateProperty"
-	>
-		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
-		>
-			<div
-				use:clickOutside={() => (editModal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
-			>
-				<div>
-					<p class="text-xl font-semibold">Property</p>
-					<p class="text-sm text-subtitle pt-2">
-						Edit room property here. Click update when you're done.
-					</p>
-				</div>
-				<label class="grid">
-					<span class="text-primary font-medium"> Item's Name </span>
-					<input
-						name="name"
-						required
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)?.name}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
-				<label class="flex items-center gap-3">
-					<input
-						type="checkbox"
-						name="available"
-						checked={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.available}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
-					/>
-					<span class="text-primary font-medium"> Available Now </span>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Description </span>
-					<textarea
-						name="description"
-						required
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.description}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
-				<label class="w-full grid gap-2">
-					<span class="text-primary font-medium"> Category </span>
-					<select
-						required
-						name="itemCategory"
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.itemCategory}
-						class=" border-[1px] border-black/60 rounded-md p-2"
-					>
-						<option selected disabled value=""> Item Category </option>
-						<option value="SALON"> Salon </option>
-						<option value="KITCHEN"> Kitchen </option>
-						<option value="BATHROOM"> Bathroom </option>
-						<option value="BEDROOM"> Bedroom </option>
-						<option value="LAUNDRY"> Laundry </option>
-					</select>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Number of the Item </span>
-					<input
-						name="numberofUnits"
-						required
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.numberofUnits}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Price </span>
-					<input
-						name="price"
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.itemsPrice}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
-				</label>
-				<label class="flex items-center gap-3">
-					<input
-						type="checkbox"
-						name="inBirr"
-						checked={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.itemsCurrency === 'ETB'}
-						{...$constraints.inBirr}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
-					/>
-					<span class="text-primary font-medium"> In Birr </span>
-				</label>
-				<label class="grid">
-					<span class="text-primary font-medium"> Property Status </span>
-					<select
-						name="propertyStatus"
-						required
-						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
-							?.propertyStatus}
-						{...$constraints.propertyStatus}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-3"
-					>
-						<option selected disabled>Select Status</option>
-						<option value="DAMAGED">Damaged</option>
-						<option value="NEEDS_REPAIR">Needs Repair</option>
-						<option value="MISSING_ITEMS">Missing Items</option>
-						<option value="GOOD_CONDITION">Good Condition</option>
-					</select>
-				</label>
-
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
-					Update Item</button
 				>
 			</div>
 		</div>

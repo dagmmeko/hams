@@ -148,6 +148,18 @@
 				/>
 				<span class="text-primary font-medium"> In Birr </span>
 			</label>
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1"> Price per kare</span>
+				<div>
+					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+					<input
+						value={((data.unitDetails?.price || 0) / (data.unitDetails?.kareMeter || 1)).toFixed(
+							2
+						) || 0}
+						disabled
+					/>
+				</div>
+			</label>
 		</div>
 
 		<div class=" w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">

@@ -1,10 +1,9 @@
 <script lang="ts">
 	export let row: any;
-	console.log({ row });
 </script>
 
 <div
-	class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.propertyStatus ===
+	class="md:text-[10px] text-[8px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.propertyStatus ===
 	'GOOD_CONDITION'
 		? 'bg-success text-white'
 		: row.propertyStatus === 'NEEDS_REPAIR'

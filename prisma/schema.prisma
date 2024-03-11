@@ -298,6 +298,9 @@ model Employee {
   emergencyContactName        String?
   emergencyContactPhoneNumber String?
   emergencyContactEmail       String?
+  suretyName                  String?
+  suretyPhoneNumber           String?
+  suretyAddress               String?
 
   EmploymentType         EmploymentType?
   User                   User            @relation(fields: [userId], references: [id])
