@@ -66,7 +66,7 @@
 		{:else if displayedComponent === 'properties' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
 			<Properties bind:data bind:form />
 		{:else if displayedComponent === 'amenities' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
-			<Amenities bind:data />
+			<Amenities bind:data bind:form />
 		{:else}
 			<Inspections bind:data />
 		{/if}

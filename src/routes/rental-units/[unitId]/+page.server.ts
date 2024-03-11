@@ -527,5 +527,29 @@ export const actions = {
 		});
 
 		return { deletePropertyForm, deleteProperty };
+	},
+	deleteAmenity: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'DELETE_UNIT_AMENITIES';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
+		const data = await event.request.formData();
+		const aminityId = data.get('amenityId');
+
+		const deleteAmenity = await prisma.unitAmenities.delete({
+			where: {
+				id: Number(aminityId)
+			}
+		});
+
+		return {
+			deleteAmenity
+		};
 	}
 };

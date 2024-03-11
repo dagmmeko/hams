@@ -1,11 +1,12 @@
 <script lang="ts">
 	import SvelteTable from 'svelte-table';
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { toast } from '@zerodevx/svelte-toast';
+	import DeleteAmenitiesTable from './delete-amenities-table.svelte';
 
 	let addModal = false;
 	let editModal = false;
@@ -13,6 +14,7 @@
 	let selectedUnitId: number;
 
 	export let data: PageData;
+	export let form: ActionData;
 
 	const {
 		form: addAmenityForm,
@@ -48,6 +50,20 @@
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		},
+		{
+			key: 'deleteAmenities',
+			title: '',
+			renderComponent: {
+				component: DeleteAmenitiesTable,
+				props: {
+					data: data,
+					form: form
+				}
+			},
+			headerClass:
+				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
 </script>
