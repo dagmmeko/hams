@@ -3,6 +3,7 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { ActionData, PageData } from './$types';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -15,8 +16,17 @@
 			<div class="bg-ghost rounded-md shadow-md p-4">
 				{#if priceChange.approved}
 					<form
-						use:enhance={({ formData }) => {
-							formData.set('priceChangeId', priceChange.id.toString());
+						use:enhance={({ formData, cancel }) => {
+							if (
+								$page.data.session?.authUser.Employee.Role.Scopes.find(
+									(s) => s.name === 'EDIT_PRICE_CHANGE'
+								)
+							) {
+								formData.set('priceChangeId', priceChange.id.toString());
+							} else {
+								toast.push('You do not have permission to edit price change');
+								cancel();
+							}
 							return async ({ update }) => {
 								await update();
 								toast.push('Price change has been changed');

@@ -65,14 +65,14 @@
 						{data.tenant?.phoneNumber}
 					</div>
 					<hr class="mt-1" />
-					<div class="text-lg font-semibold my-1 print:block hidden">
+					<div class="text-lg font-medium my-2">
 						Receipt Reference: {receipts.receiptReferenceNumber}
 					</div>
 					<div class="hidden">
 						<p class="text-lg font-medium">Name:</p>
 						<p class="text-base font-normal">{data.tenant?.fullName}</p>
 					</div>
-					<div class="grid grid-cols-1 gap-10">
+					<div class="grid grid-cols-1 gap-3">
 						{#each receipts.receipts ?? [] as rec}
 							<div class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md">
 								<div class="print:grid print:grid-cols-2 md:flex print:gap-2 gap-12">
