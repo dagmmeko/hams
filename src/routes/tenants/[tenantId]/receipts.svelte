@@ -223,7 +223,7 @@
 						<p>
 							{data.tenant?.PriceChange.find(
 								(changed) => changed.unitId === $addReceiptForm.payToUnit
-							)
+							) && data.tenant?.PriceChange.find((changed) => changed.active)
 								? numberToCurrency(
 										data.tenant?.PriceChange.find(
 											(changed) => changed.unitId === $addReceiptForm.payToUnit
@@ -250,7 +250,7 @@
 						<p>
 							{data.tenant?.PriceChange.find(
 								(changed) => changed.unitId === $addReceiptForm.payToUnit
-							)
+							) && data.tenant?.PriceChange.find((changed) => changed.active)
 								? numberToCurrency(
 										data.tenant?.TenantRental.find(
 											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit

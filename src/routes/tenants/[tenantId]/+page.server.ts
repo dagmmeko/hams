@@ -70,7 +70,11 @@ export const load = async (event) => {
 					}
 				}
 			},
-			PriceChange: true,
+			PriceChange: {
+				include: {
+					RentalUnits: true
+				}
+			},
 			Receipts: {
 				include: {
 					PayToUnit: true
@@ -384,5 +388,37 @@ export const actions = {
 				deletedAt: new Date()
 			}
 		});
+	},
+	updatePriceChange: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_PRICE_CHANGE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
+		const data = await event.request.formData();
+		const priceChangeId = data.get('priceChangeId');
+		const priceChangeToggle = data.get('priceChangeToggle');
+
+		console.log({ priceChangeToggle });
+
+		if (typeof priceChangeId !== 'string' || typeof priceChangeToggle !== 'string') {
+			return fail(500, { errorMessage: 'Issus with price change id or toggle' });
+		}
+
+		const updatePriceChange = await prisma.priceChange.update({
+			where: {
+				id: Number(priceChangeId)
+			},
+			data: {
+				active: priceChangeToggle === 'on' ? true : false
+			}
+		});
+
+		return { updatePriceChange };
 	}
 };
