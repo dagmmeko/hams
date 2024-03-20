@@ -76,6 +76,9 @@ export const load = async (event) => {
 							User: true
 						}
 					}
+				},
+				orderBy: {
+					createdAt: 'desc'
 				}
 			},
 			Attendance: {
@@ -87,9 +90,23 @@ export const load = async (event) => {
 			Manager: true
 		}
 	});
-	const date1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
-	const date2 = dayjs(new Date()).format('YYYY-MM-DD');
-	if (date1 !== date2) {
+	const attendanceDate1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
+	const attendanceDate2 = dayjs(new Date()).format('YYYY-MM-DD');
+	const leaveDate1 = dayjs(employee?.EmployeesLeaves[0]?.endDate).format('YYYY-MM-DD');
+	const leaveDate2 = dayjs(new Date()).format('YYYY-MM-DD');
+
+	if (leaveDate1 > leaveDate2) {
+		const updateLeave = await prisma.employee.update({
+			where: {
+				id: parseInt(event.params.employeeId)
+			},
+			data: {
+				onLeave: false
+			}
+		});
+	}
+
+	if (attendanceDate1 !== attendanceDate2) {
 		const updateAttendance = await prisma.employee.update({
 			where: {
 				id: parseInt(event.params.employeeId)

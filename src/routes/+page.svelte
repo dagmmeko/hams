@@ -1,11 +1,30 @@
 <script>
 	import { toast } from '@zerodevx/svelte-toast';
-	import { Pie } from 'svelte-chartjs';
+	import { Pie, Bar } from 'svelte-chartjs';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { page } from '$app/stores';
 
-	import { ArcElement, CategoryScale, Chart, Legend, Title, Tooltip } from 'chart.js';
-	Chart.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
+	import {
+		ArcElement,
+		CategoryScale,
+		Chart,
+		Legend,
+		Title,
+		Tooltip,
+		BarElement,
+		LinearScale
+	} from 'chart.js';
+	Chart.register(
+		Title,
+		Tooltip,
+		Legend,
+		ArcElement,
+		CategoryScale,
+		Title,
+		BarElement,
+
+		LinearScale
+	);
 
 	export let data;
 	export let form;
@@ -57,13 +76,13 @@
 				style="width: {((data.allUnits.length - data.activeUnits) / data.allUnits.length) * 100}%;"
 				class="bg-[#669966] text-white p-2 italic"
 			>
-				{data.allUnits.length - data.activeUnits} Occupied Units
+				{data.allUnits.length - data.activeUnits} Available Units
 			</div>
 			<div
 				style="width: {(data.activeUnits / data.allUnits.length) * 100}%;"
 				class="bg-[#F7464A] p-2 text-white italic"
 			>
-				{data.allUnits.length} Available Units
+				{data.activeUnits} Occupied Units
 			</div>
 		</div>
 	</div>
@@ -140,13 +159,62 @@
 			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			employee on leave
+			<span class="text-xl my-2"> Internal Task Status </span>
+			<Pie
+				data={{
+					labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
+					datasets: [
+						{
+							data: [
+								data.pendingTasks,
+								data.inProgressTasks,
+								data.checkingTasks,
+								data.completedTasks
+							],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+						}
+					]
+				}}
+			/>
+			<div class="flex w-full bg-[#F7464A] mt-6 p-1 justify-center text-gray-200 italic">
+				{data.expiredTasks} - tasks expired
+			</div>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			employees absent
+			<span class="text-xl my-2"> Attendance </span>
+			<Bar
+				data={{
+					labels: ['On Leave', 'Absent', 'Present', 'Is Fired'],
+					datasets: [
+						{
+							label: 'Attendance',
+							data: [
+								data.onLeaveEmployees,
+								data.absentEmployees,
+								data.activeEmployees,
+								data.firedEmployees
+							],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+						}
+					]
+				}}
+			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			employee status
+			<span class="text-xl my-2"> Employee Type </span>
+			<Bar
+				data={{
+					labels: ['Temporary', 'Part Time', 'Full Time'],
+					datasets: [
+						{
+							label: 'Types',
+							data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+						}
+					]
+				}}
+			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			vendor active tasks

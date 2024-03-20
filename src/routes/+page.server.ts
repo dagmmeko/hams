@@ -19,6 +19,47 @@ export const load = async (event) => {
 		throw redirect(302, '/no-permission');
 	}
 
+	//fetch all employees
+	const employees = await prisma.employee.findMany({
+		orderBy: {
+			createdAt: 'desc'
+		}
+	});
+
+	const activeEmployees = employees.filter((employee) => !employee.isFired).length;
+	const firedEmployees = employees.filter((employee) => employee.isFired).length;
+	const onLeaveEmployees = employees.filter(
+		(employee) => employee.onLeave && !employee.isFired
+	).length;
+	const absentEmployees = employees.filter(
+		(employee) => employee.isAbsent && !employee.isFired
+	).length;
+	const fullTimeEmployees = employees.filter(
+		(employee) => employee.EmploymentType === 'FULL_TIME' && !employee.isFired
+	).length;
+	const partTimeEmployees = employees.filter(
+		(employee) => employee.EmploymentType === 'PART_TIME' && !employee.isFired
+	).length;
+	const temporaryEmployees = employees.filter(
+		(employee) => employee.EmploymentType === 'TEMPORARY' && !employee.isFired
+	).length;
+
+	//fetch all internal tasks
+	const internalTasks = await prisma.internalTask.findMany({
+		orderBy: {
+			createdAt: 'desc'
+		}
+	});
+
+	const completedTasks = internalTasks.filter((task) => task.taskStatus === 'COMPLETED').length;
+	const pendingTasks = internalTasks.filter((task) => task.taskStatus === 'PENDING').length;
+	const inProgressTasks = internalTasks.filter((task) => task.taskStatus === 'IN_PROGRESS').length;
+	const checkingTasks = internalTasks.filter((task) => task.taskStatus === 'CHECKING').length;
+
+	const expiredTasks = internalTasks.filter(
+		(task) => task.taskStatus !== 'COMPLETED' && new Date(task.dueDate) > new Date()
+	).length;
+
 	// Unit Data
 	const allUnits = await prisma.rentalUnits.findMany({
 		orderBy: {
@@ -74,7 +115,21 @@ export const load = async (event) => {
 		tenantFromEmail,
 		tenantFromSocial,
 		tenantFromBroker,
-		tenantFromOther
+		tenantFromOther,
+		internalTasks,
+		completedTasks,
+		pendingTasks,
+		inProgressTasks,
+		checkingTasks,
+		expiredTasks,
+		employees,
+		activeEmployees,
+		firedEmployees,
+		onLeaveEmployees,
+		absentEmployees,
+		fullTimeEmployees,
+		partTimeEmployees,
+		temporaryEmployees
 	};
 };
 
