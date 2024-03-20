@@ -90,7 +90,6 @@ export const load = async (event) => {
 	const date1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
 	const date2 = dayjs(new Date()).format('YYYY-MM-DD');
 	if (date1 !== date2) {
-		console.log('Not Absent Today');
 		const updateAttendance = await prisma.employee.update({
 			where: {
 				id: parseInt(event.params.employeeId)
@@ -258,7 +257,6 @@ export const actions = {
 		if (!hasRole) {
 			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
 		}
-		console.log('event');
 		const data = await event.request.formData();
 		const attendanceId = data.get('attendanceId');
 		const description = data.get('description');
@@ -266,6 +264,7 @@ export const actions = {
 		if (typeof attendanceId !== 'string' || typeof description !== 'string') {
 			return fail(500, { errorMessage: 'Query is not a string' });
 		}
+		console.log({ attendanceId, description });
 
 		const attendance = await prisma.attendance.update({
 			where: {
@@ -275,7 +274,6 @@ export const actions = {
 				description: description
 			}
 		});
-		console.log({ attendance, attendanceId, description });
 
 		return { attendance };
 	},
@@ -305,5 +303,39 @@ export const actions = {
 		});
 
 		return { employeeArchived };
+	},
+	editLeave: async (event) => {
+		const data = await event.request.formData();
+		const leaveId = data.get('leaveId');
+		const editedDescription = data.get('editedDescription');
+		const editedStartingDate = data.get('editedStartingDate');
+		const editedEndDate = data.get('editedEndDate');
+
+		if (!leaveId || typeof leaveId !== 'string') {
+			return fail(500, { errorMessage: 'Wrong leaves id.' });
+		}
+
+		if (!editedDescription || typeof editedDescription !== 'string') {
+			return fail(500, { errorMessage: 'Wrong edited description.' });
+		}
+		if (!editedStartingDate || typeof editedStartingDate !== 'string') {
+			return fail(500, { errorMessage: 'Wrong edited starting date.' });
+		}
+		if (!editedEndDate || typeof editedEndDate !== 'string') {
+			return fail(500, { errorMessage: 'Wrong edited end date.' });
+		}
+
+		const updatedLeave = await prisma.leaves.update({
+			where: {
+				id: Number(leaveId)
+			},
+			data: {
+				description: editedDescription,
+				startingDate: new Date(editedStartingDate),
+				endDate: new Date(editedEndDate)
+			}
+		});
+
+		return { updatedLeave };
 	}
 };

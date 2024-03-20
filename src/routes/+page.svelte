@@ -38,17 +38,34 @@
 	<div class="my-6">
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
-	<div class="bg-white border-[1px] border-subtitle p-3 grid rounded-sm text-center">
-		<span>Occupancy rates</span>
+	<div class="bg-white p-3 grid rounded-sm text-center">
+		<span class="text-xl my-2">Occupancy rates</span>
 		<div class="grid-cols-4 grid">
 			{#each data.allUnits as units, key}
-				<div class={`${units.active ? 'bg-red-100' : 'bg-green-100'} border border-1`}>
+				<div
+					class={`${
+						units.active ? 'bg-[#F7464A] text-gray-200' : 'bg-[#669966] text-gray-200'
+					} border-[1px] border-white p-4`}
+				>
 					{units.roomNumber}
 				</div>
 			{/each}
 		</div>
 
-		<span>{data.activeUnits} / {data.allUnits.length}</span>
+		<div class="w-full flex mt-6">
+			<div
+				style="width: {((data.allUnits.length - data.activeUnits) / data.allUnits.length) * 100}%;"
+				class="bg-[#669966] text-white p-2 italic"
+			>
+				{data.allUnits.length - data.activeUnits} Occupied Units
+			</div>
+			<div
+				style="width: {(data.activeUnits / data.allUnits.length) * 100}%;"
+				class="bg-[#F7464A] p-2 text-white italic"
+			>
+				{data.allUnits.length} Available Units
+			</div>
+		</div>
 	</div>
 	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">

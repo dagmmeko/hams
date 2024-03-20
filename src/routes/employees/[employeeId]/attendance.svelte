@@ -7,11 +7,8 @@
 	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data: PageData;
-	let dateInput: any;
-	let dateInput2: any;
 
 	let modal = false;
-	let hasDeleteLeavesScope = true;
 
 	let selectedAttendance: any;
 
@@ -46,12 +43,14 @@
 				}}
 				class="shadow-md text-left rounded bg-primary/10 p-4"
 			>
-				<p class="font-medium">
-					Description <br /> <span class="font-normal"> {attendance.description} </span>
-				</p>
-				<p class="font-medium">
+				<p class="font-medium flex gap-2 text-primary">
 					Absent on <br />
-					<span class="font-normal"> {dayjs(attendance.createdAt).format('MMM DD, YYYY')} </span>
+					<span class="font-normal underline">
+						{dayjs(attendance.createdAt).format('MMM DD, YYYY')}
+					</span>
+				</p>
+				<p class="font-medium mt-2">
+					Description <br /> <span class="font-normal"> {attendance.description} </span>
 				</p>
 			</button>
 		{/each}
@@ -61,7 +60,7 @@
 {#if modal}
 	<form
 		use:enhance={({ formData }) => {
-			formData.set('id', selectedAttendance.id.toString());
+			formData.set('attendanceId', selectedAttendance.id.toString());
 			return (updated) => {
 				if (updated) {
 					modal = false;
@@ -79,9 +78,9 @@
 				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 			>
 				<div>
-					<p class="text-xl font-semibold">New Leave Permission</p>
+					<p class="text-xl font-semibold">Edit Attendance</p>
 					<p class="text-sm text-subtitle pt-2">
-						Register new leave here. Click save when you're done.
+						Edit attendance description here. Click save when you're done.
 					</p>
 				</div>
 				<div class="gird">
@@ -95,7 +94,7 @@
 					<span class="text-primary font-medium"> Reason </span>
 					<textarea
 						required
-						bind:value={selectedAttendance.description}
+						value={selectedAttendance.description}
 						name="description"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>

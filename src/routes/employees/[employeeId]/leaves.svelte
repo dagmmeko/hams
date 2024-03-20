@@ -3,15 +3,18 @@
 	import dayjs from 'dayjs';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { page } from '$app/stores';
+	import { page, updated } from '$app/stores';
 	import type { PageData } from './$types';
 	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
+	import { enhance } from '$app/forms';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	export let data: PageData;
 	let dateInput: any;
 	let dateInput2: any;
 
 	let modal = false;
+	let editModal = false;
 
 	let hasDeleteLeavesScope = true;
 	const {
@@ -78,6 +81,9 @@
 			  }
 			: (null as unknown as TableColumn<typeof rows[number]>)
 	];
+
+	let selectedLeave: any;
+	$: console.log({ selectedLeave });
 </script>
 
 <div class="">
@@ -96,7 +102,23 @@
 		{/if}
 	</div>
 	<div class="overflow-x-auto">
-		<SvelteTable classNameTable="rolesTable" on:clickCell={(event) => {}} {columns} {rows} />
+		<SvelteTable
+			classNameTable="rolesTable"
+			on:clickCell={(event) => {
+				if (
+					$page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE'
+					)
+				) {
+					selectedLeave = event.detail.row;
+					editModal = true;
+				} else {
+					toast.push('You do not have permission to edit leaves');
+				}
+			}}
+			{columns}
+			{rows}
+		/>
 	</div>
 </div>
 
@@ -158,6 +180,82 @@
 				</label>
 				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
 					Save Leave
+				</button>
+			</div>
+		</div>
+	</form>
+{/if}
+
+{#if editModal}
+	<form
+		use:enhance={({ formData }) => {
+			formData.set('leaveId', selectedLeave.id.toString());
+			return ({ result }) => {
+				console.log(result);
+				if (result.status === 200) {
+					editModal = false;
+					toast.push('Leave edited successfully');
+				} else {
+					toast.push('Failed to edit leave');
+				}
+			};
+		}}
+		method="post"
+		action="?/editLeave"
+	>
+		<div
+			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+		>
+			<div
+				use:clickOutside={() => (editModal = false)}
+				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			>
+				<div>
+					<p class="text-xl font-semibold">Edit Leave Permission</p>
+					<p class="text-sm text-subtitle pt-2">
+						Edit leave detail here. Click save when you're done.
+					</p>
+				</div>
+				<label class="grid">
+					<span class="text-primary font-medium"> Reason </span>
+					<textarea
+						required
+						value={selectedLeave.description}
+						name="editedDescription"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					/>
+				</label>
+
+				<label class="grid">
+					<span class="text-primary font-medium"> Start Date </span>
+					<input
+						type="date"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+						required
+						value={dayjs(selectedLeave.startingDate).format('YYYY-MM-DD')}
+						name="editedStartingDate"
+					/>
+				</label>
+				<label class="grid">
+					<span class="text-primary font-medium"> End Date </span>
+					<input
+						type="date"
+						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						bind:this={dateInput2}
+						on:click={() => {
+							dateInput2 && dateInput2.showPicker();
+						}}
+						required
+						value={dayjs(selectedLeave.endDate).format('YYYY-MM-DD')}
+						name="editedEndDate"
+					/>
+				</label>
+				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+					Edit Leave
 				</button>
 			</div>
 		</div>
