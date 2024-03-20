@@ -102,7 +102,7 @@
 					bind:value={$editEmployeeForm.managerId}
 					{...$constraints.managerId}
 				>
-					<option selected disabled> Select Role </option>
+					<option selected disabled> Select Employee </option>
 					{#each data.allEmployees as employee}
 						<option value={employee.User.id}> {employee.User.userName} </option>
 					{/each}

@@ -23,24 +23,24 @@
 			title: 'Item Name',
 			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left pl-2 font-bold  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'description',
 			title: 'Description',
 			value: (v: typeof rows[number]) => v.description ?? 'NOT FOUND',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'number',
 			title: 'No. of Units',
 			value: (v: typeof rows[number]) => v.numberofUnits ?? 'NOT FOUND',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'price',
@@ -51,8 +51,8 @@
 					currencyDisplay: 'code'
 				}) ?? 'NOT FOUND',
 			headerClass:
-				'text-left bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left mx-12 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left mx-12  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'status',
@@ -61,16 +61,16 @@
 				component: PropertyConditionTable
 			},
 			headerClass:
-				'text-left pl-4 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left pl-4 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left pl-4 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left pl-4  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'available',
 			title: 'Available',
 			value: (v: typeof rows[number]) => (v.available ? 'Yes' : 'No' ?? 'NOT FOUND'),
 			headerClass:
-				'text-left print:hidden pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'text-left print:hidden pl-2 h-12 border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left print:hidden pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left print:hidden pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'deleteProperty',
@@ -83,8 +83,8 @@
 				}
 			},
 			headerClass:
-				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs h-12',
-			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] '
+				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'print:hidden text-left pl-2  border-b-[1px] border-[#B3B4B8] '
 		}
 	];
 </script>

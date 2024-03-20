@@ -25,6 +25,6 @@
 	<PrintPdf bind:print>
 		<img src={CPHeader} class="hidden print:block mb-6" alt="cp header" />
 		<slot />
-		<img src={CPFooter} class="hidden print:block fixed bottom-0 w-full" alt="cp header" />
+		<img src={CPFooter} class="hidden print:block w-full" alt="cp header" />
 	</PrintPdf>
 </div>

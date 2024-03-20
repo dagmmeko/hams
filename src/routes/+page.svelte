@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Pie, Bar } from 'svelte-chartjs';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	import {
 		ArcElement,
@@ -29,12 +31,16 @@
 	export let data;
 	export let form;
 
-	const { form: usdRateForm, enhance, constraints } = superForm(data.usdRateForm);
+	const { form: usdRateForm, enhance: usdRateEnhance, constraints } = superForm(data.usdRateForm);
 	$: form?.updatedRate ? toast.push('Rate updated successfully') : null;
+	let filterStartDate: any;
+	let filterEndDate: any;
+	let dateInput: any;
+	let dateInput2: any;
 </script>
 
 <div class="mx-10 my-12">
-	<form use:enhance method="post" action="?/changeRate">
+	<form use:usdRateEnhance method="post" action="?/changeRate">
 		<label class="grid">
 			<span class="text-primary font-semibold py-1"> USD Rate</span>
 			<input
@@ -59,11 +65,11 @@
 	</div>
 	<div class="bg-white p-3 grid rounded-sm text-center">
 		<span class="text-xl my-2">Occupancy rates</span>
-		<div class="grid-cols-4 grid">
+		<div class="sm:grid-cols-4 grid-cols-2 grid">
 			{#each data.allUnits as units, key}
 				<div
 					class={`${
-						units.active ? 'bg-[#F7464A] text-gray-200' : 'bg-[#669966] text-gray-200'
+						units.active ? 'bg-[#FF6384] text-gray-200' : 'bg-[#36A2EB] text-gray-200'
 					} border-[1px] border-white p-4`}
 				>
 					{units.roomNumber}
@@ -74,13 +80,13 @@
 		<div class="w-full flex mt-6">
 			<div
 				style="width: {((data.allUnits.length - data.activeUnits) / data.allUnits.length) * 100}%;"
-				class="bg-[#669966] text-white p-2 italic"
+				class="bg-[#36A2EB] text-white p-2 italic"
 			>
 				{data.allUnits.length - data.activeUnits} Available Units
 			</div>
 			<div
 				style="width: {(data.activeUnits / data.allUnits.length) * 100}%;"
-				class="bg-[#F7464A] p-2 text-white italic"
+				class="bg-[#FF6384] p-2 text-white italic"
 			>
 				{data.activeUnits} Occupied Units
 			</div>
@@ -88,7 +94,8 @@
 	</div>
 	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			Bookings by source
+			<span class="text-xl my-2"> Bookings by source </span>
+
 			<Pie
 				data={{
 					datasets: [
@@ -140,10 +147,7 @@
 			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			Upcoming reservations
-		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			unit status
+			<span class="text-xl my-2"> Unit Status </span>
 
 			<Pie
 				data={{
@@ -158,6 +162,73 @@
 				}}
 			/>
 		</div>
+		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
+			<span class="text-xl my-2"> Employee Type </span>
+			<Bar
+				data={{
+					labels: ['Temporary', 'Part Time', 'Full Time'],
+					datasets: [
+						{
+							label: 'Types',
+							data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+						}
+					]
+				}}
+			/>
+		</div>
+	</div>
+
+	<form class="grid grid-cols-4 items-end mt-6 gap-4">
+		<label class="grid gap-2">
+			<span class="text-primary font-medium"> Start Date </span>
+			<input
+				type="date"
+				required={filterEndDate}
+				class=" border-[1px] border-primary/60 rounded-md p-2"
+				name="filterStartDate"
+				bind:value={filterStartDate}
+				bind:this={dateInput}
+				on:click={() => {
+					dateInput && dateInput.showPicker();
+				}}
+			/>
+		</label>
+		<label class="grid gap-2">
+			<span class="text-primary font-medium"> End Date </span>
+			<input
+				type="date"
+				required={filterStartDate}
+				class=" border-[1px] border-primary/60 rounded-md p-2"
+				name="filterEndDate"
+				bind:value={filterEndDate}
+				bind:this={dateInput2}
+				on:click={() => {
+					dateInput2 && dateInput2.showPicker();
+				}}
+			/>
+		</label>
+		<button
+			on:click|stopPropagation={async () => {
+				if (filterStartDate && filterEndDate) {
+					console.log({ filterStartDate, filterEndDate });
+					const newFilterParams = new URLSearchParams($page.url.search);
+
+					newFilterParams.set('filterStartDate', filterStartDate);
+					newFilterParams.set('filterEndDate', filterEndDate);
+					await goto(`?${newFilterParams.toString()}`);
+				} else {
+					console.log({ file: filterStartDate, filterEndDate });
+
+					await goto(`?`);
+				}
+			}}
+			class="bg-primary text-gray-200 rounded-md py-2 px-6 mr-4 h-fit"
+		>
+			Filter result
+		</button>
+	</form>
+	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Internal Task Status </span>
 			<Pie
@@ -182,6 +253,29 @@
 			</div>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
+			<span class="text-xl my-2"> Vendor Task Status </span>
+			<Pie
+				data={{
+					labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
+					datasets: [
+						{
+							data: [
+								data.pendingVendorTasks,
+								data.inProgressVendorTasks,
+								data.checkingVendorTasks,
+								data.completedVendorTasks
+							],
+							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+						}
+					]
+				}}
+			/>
+			<div class="flex w-full bg-[#F7464A] mt-6 p-1 justify-center text-gray-200 italic">
+				{data.expiredVendorTasks} - tasks expired
+			</div>
+		</div>
+		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
 			<span class="text-xl my-2"> Attendance </span>
 			<Bar
 				data={{
@@ -201,27 +295,5 @@
 				}}
 			/>
 		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			<span class="text-xl my-2"> Employee Type </span>
-			<Bar
-				data={{
-					labels: ['Temporary', 'Part Time', 'Full Time'],
-					datasets: [
-						{
-							label: 'Types',
-							data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-						}
-					]
-				}}
-			/>
-		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			vendor active tasks
-		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			vendor completed tasks
-		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">vendor types</div>
 	</div>
 </div>

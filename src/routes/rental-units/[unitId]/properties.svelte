@@ -14,6 +14,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import PropertiesTable from './properties-table.svelte';
 	import { ItemsCategory } from '@prisma/client';
+	import CPFooter from '$lib/assets/cp_footer.png';
 
 	let addModal = false;
 
@@ -27,7 +28,7 @@
 			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-6 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'description',
@@ -35,7 +36,7 @@
 			value: (v: typeof rows[number]) => v.description ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] w-12 text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] w-12'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] w-12 '
 		},
 		{
 			key: 'number',
@@ -223,7 +224,7 @@
 	</div>
 	<div class="-mx-6 pt-5">
 		<PdfPrint class="mx-6">
-			<div class="print:grid print:grid-cols-2 print:gap-4">
+			<div class="">
 				<PropertiesTable {data} {form} itemCategory="SALON" />
 				<PropertiesTable {data} {form} itemCategory="LAUNDRY" />
 				<PropertiesTable {data} {form} itemCategory="KITCHEN" />

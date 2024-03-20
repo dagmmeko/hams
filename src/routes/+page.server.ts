@@ -19,6 +19,38 @@ export const load = async (event) => {
 		throw redirect(302, '/no-permission');
 	}
 
+	const filterStartDate = event.url.searchParams.get('filterStartDate');
+	const filterEndDate = event.url.searchParams.get('filterEndDate');
+	console.log({ filterStartDate, filterEndDate });
+
+	//fetch all vendors
+	const vendors = await prisma.vendorTask.findMany({
+		orderBy: {
+			createdAt: 'desc'
+		},
+		...(filterStartDate !== null &&
+			filterStartDate !== '' &&
+			filterEndDate !== null &&
+			filterEndDate !== '' && {
+				where: {
+					createdAt: {
+						gte: new Date(filterStartDate),
+						lte: new Date(filterEndDate)
+					}
+				}
+			})
+	});
+	// filter vendors tasks where the created date is between the start and end date
+
+	const completedVendorTasks = vendors.filter((task) => task.taskStatus === 'COMPLETED').length;
+	const pendingVendorTasks = vendors.filter((task) => task.taskStatus === 'PENDING').length;
+	const inProgressVendorTasks = vendors.filter((task) => task.taskStatus === 'IN_PROGRESS').length;
+	const checkingVendorTasks = vendors.filter((task) => task.taskStatus === 'CHECKING').length;
+
+	const expiredVendorTasks = vendors.filter(
+		(task) => task.taskStatus !== 'COMPLETED' && new Date(task.dueDate) > new Date()
+	).length;
+
 	//fetch all employees
 	const employees = await prisma.employee.findMany({
 		orderBy: {
@@ -129,7 +161,13 @@ export const load = async (event) => {
 		absentEmployees,
 		fullTimeEmployees,
 		partTimeEmployees,
-		temporaryEmployees
+		temporaryEmployees,
+		vendors,
+		completedVendorTasks,
+		pendingVendorTasks,
+		inProgressVendorTasks,
+		checkingVendorTasks,
+		expiredVendorTasks
 	};
 };
 

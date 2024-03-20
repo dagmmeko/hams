@@ -1,8 +1,9 @@
+const loreumEpisome = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
 export const unitProperty = [
 	//SALON
 	{
 		name: 'sofa ( Futon)',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -10,7 +11,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Chairs',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -18,7 +19,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Side Table',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -26,7 +27,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Coffee Table',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -34,7 +35,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Tv Stand',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -42,7 +43,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Tv with accessories',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -50,7 +51,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Lamps',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -58,7 +59,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Book Shelf',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -66,7 +67,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Window Coverings',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -74,7 +75,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Throw Pillows & blankets',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -82,7 +83,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'dining table with chairs',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -90,7 +91,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'bar stools',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -101,7 +102,7 @@ export const unitProperty = [
 
 	{
 		name: 'Bed',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -109,7 +110,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Night stand',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -117,7 +118,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Table Lamp',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -125,7 +126,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Dresser',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -133,7 +134,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Pillow',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -141,7 +142,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Pillow case',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -149,7 +150,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Alarm Clock',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -157,7 +158,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Hangers (cloth)',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -165,7 +166,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Blinds',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -173,7 +174,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'under bed box',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -181,7 +182,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Blankets',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -189,7 +190,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Bed spread sheet',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -197,7 +198,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'mattress pad',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -205,7 +206,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'window coverings',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -213,7 +214,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Lamps',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -221,7 +222,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'full length mirror',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -229,7 +230,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'cloth organizar & shelfing',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -237,7 +238,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Bed frame',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -245,7 +246,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Box spring & mattress',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -255,7 +256,7 @@ export const unitProperty = [
 	//LAUNDRY
 	{
 		name: 'washing machine',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -263,7 +264,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'cloth basket',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -271,7 +272,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Laundry Pail',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -279,7 +280,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'stain Remover',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -287,7 +288,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'iron',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -295,7 +296,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'ironing board',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -303,7 +304,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Drayer sheets',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -311,7 +312,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'hangers',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -319,7 +320,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'bleach',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -327,7 +328,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Brite White',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -335,7 +336,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'bleach',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -343,7 +344,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Laundary Detergent',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -351,7 +352,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'fabric softner hamper',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -359,7 +360,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'drying rack',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -367,7 +368,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'sewing kit',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -378,7 +379,7 @@ export const unitProperty = [
 
 	{
 		name: 'Bath Towels',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -386,7 +387,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Hand Towels',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -394,7 +395,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Shower Box',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -402,7 +403,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Toilet Brush',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -410,7 +411,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Plunger',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -418,7 +419,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Glass Cleaner',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -426,7 +427,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'All Purpose Cleaner',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -434,7 +435,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Shower Organizar Or Caddy',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -442,7 +443,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Waste Basket',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -450,7 +451,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Hair Drayer',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -458,7 +459,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Wash clothes',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -466,7 +467,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Rugs',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -474,7 +475,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Soap Dispenser',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -485,7 +486,7 @@ export const unitProperty = [
 
 	{
 		name: 'Blender',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -493,7 +494,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Toaster',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -501,7 +502,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'Different taypes of Knife',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -509,7 +510,7 @@ export const unitProperty = [
 	},
 	{
 		name: '* chefs knife',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -517,7 +518,7 @@ export const unitProperty = [
 	},
 	{
 		name: '*partone knifes',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -525,7 +526,7 @@ export const unitProperty = [
 	},
 	{
 		name: '*slicing knifes',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -533,7 +534,7 @@ export const unitProperty = [
 	},
 	{
 		name: '*utility knifes',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -541,7 +542,7 @@ export const unitProperty = [
 	},
 	{
 		name: '*steak knifes',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -549,7 +550,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'knife block',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -557,7 +558,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'omelette pan ',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -565,7 +566,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'mixing bowels',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -573,7 +574,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'measuring spoons',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -581,7 +582,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'muffin pans',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -589,7 +590,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'cakes/ pie pans',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -597,7 +598,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'piza ston / sheet',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -605,7 +606,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'cookies sheet',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -613,7 +614,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'pizza cutter',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -621,7 +622,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'drawer organizar',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -629,7 +630,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'forman grill',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -637,7 +638,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'crock pot',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -645,7 +646,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'can opener',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -653,7 +654,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'tongs',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -661,7 +662,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'veggie peeler',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -669,7 +670,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'cutting board',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -677,7 +678,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'wooden spoon',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -685,7 +686,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'wire whisk',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -693,7 +694,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'spatula ',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -701,7 +702,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'fire extingusher',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -709,7 +710,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'coffee maker',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -717,7 +718,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'almunium foil & plastic wrap',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -725,7 +726,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'caps & mags',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -733,7 +734,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'dish soap',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -741,7 +742,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'hand or stand mixer',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -749,7 +750,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'forks',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -757,7 +758,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'spoons',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -765,7 +766,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'left over food storage containers',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -773,7 +774,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'micro wave',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -781,7 +782,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'pasta strainer',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -789,7 +790,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'plates & bowels',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -797,7 +798,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'pots & pans',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -805,7 +806,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'pitcher',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -813,7 +814,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'salt & peppers shaker',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -821,7 +822,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'serving utensils',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -829,7 +830,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'spice rack',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -837,7 +838,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'water glasses',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -845,7 +846,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'juice glasses',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -853,7 +854,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'dish towels',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
@@ -861,7 +862,7 @@ export const unitProperty = [
 	},
 	{
 		name: 'oven /stove',
-		description: '',
+		description: loreumEpisome,
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
