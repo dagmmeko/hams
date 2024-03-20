@@ -23,7 +23,8 @@ const addReceiptsSchema = z.object({
 	amount: z.number(),
 	receiptIssueDate: z.date(),
 	receiptNumber: z.string(),
-	depositedBank: z.string()
+	depositedBank: z.string(),
+	crvReceipt: z.boolean().optional()
 });
 
 const extendRentSchema = z.object({
@@ -192,7 +193,8 @@ export const actions = {
 				payToUnitId: addReceiptsForm.data.payToUnit,
 				isRentPayment: addReceiptsForm.data.isRentPayment,
 				usdRateAtPayment: usdRate[0].rate,
-				isUtilityAndRentPayment: addReceiptsForm.data.isBothPayment
+				isUtilityAndRentPayment: addReceiptsForm.data.isBothPayment,
+				crvReceipt: addReceiptsForm.data.crvReceipt
 			}
 		});
 

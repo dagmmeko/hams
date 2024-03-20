@@ -93,21 +93,25 @@
 									<div class="print:hidden block">
 										<p class="font-medium">
 											Amount:
-											<span class="font-normal"
-												>{numberToCurrency(rec.amount / 1.15, {
-													currency: rec.PayToUnit?.currency,
-													currencyDisplay: 'code'
-												})}</span
-											>
+											{#if !rec.crvReceipt}
+												<span class="font-normal"
+													>{numberToCurrency(rec.amount / 1.15, {
+														currency: rec.PayToUnit?.currency,
+														currencyDisplay: 'code'
+													})}</span
+												>
+											{/if}
 										</p>
 										<p class="font-medium">
 											VAT:
-											<span class="font-normal"
-												>{numberToCurrency(rec.amount - rec.amount / 1.15, {
-													currency: rec.PayToUnit?.currency,
-													currencyDisplay: 'code'
-												})}</span
-											>
+											{#if !rec.crvReceipt}
+												<span class="font-normal"
+													>{numberToCurrency(rec.amount - rec.amount / 1.15, {
+														currency: rec.PayToUnit?.currency,
+														currencyDisplay: 'code'
+													})}</span
+												>
+											{/if}
 										</p>
 										<p class="font-medium">
 											Total Amount:
@@ -320,6 +324,16 @@
 					</label>
 				{/if}
 			</div>
+			<label class="flex gap-2">
+				<input
+					type="checkbox"
+					bind:checked={$addReceiptForm.crvReceipt}
+					{...$constraints.crvReceipt}
+					name="crvReceipt"
+					class=" border-[1px] border-black/60 rounded-md p-2"
+				/>
+				<span class="text-primary font-medium"> CRV Receipt </span>
+			</label>
 			<label class="grid">
 				<span class="text-primary font-medium"> Amount </span>
 				<input

@@ -23,7 +23,8 @@ const editUnitSchema = z.object({
 	condition: z.enum(['NEEDS_REPAIR', 'OUT_OF_SERVICE', 'GOOD_CONDITION']),
 	minimumRentalDate: z.number().int(),
 	maximumTenants: z.number().int(),
-	inBirr: z.boolean().optional()
+	inBirr: z.boolean().optional(),
+	utilityPrice: z.number().optional()
 });
 
 const addPropertySchema = z.object({
@@ -124,7 +125,8 @@ export const load = async (event) => {
 			condition: unitDetails?.Inspections[0].InspectionStatus,
 			minimumRentalDate: unitDetails?.minimumRentalDate,
 			maximumTenants: unitDetails?.maximumTenants,
-			inBirr: unitDetails?.currency === 'ETB'
+			inBirr: unitDetails?.currency === 'ETB',
+			utilityPrice: unitDetails?.utilityPrice
 		},
 		editUnitSchema
 	);
@@ -169,7 +171,8 @@ export const actions = {
 				currency: editUnitForm.data.inBirr ? 'ETB' : 'USD',
 				priceSetPerKare: editUnitForm.data.priceSetPerKare,
 				maximumTenants: editUnitForm.data.maximumTenants,
-				minimumRentalDate: editUnitForm.data.minimumRentalDate
+				minimumRentalDate: editUnitForm.data.minimumRentalDate,
+				utilityPrice: editUnitForm.data.utilityPrice
 			}
 		});
 		console.log(editUnit);

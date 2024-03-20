@@ -75,6 +75,7 @@ model RentalUnits {
   floor                  String
   kareMeter              Float             @default(0)
   price                  Float             @default(0)
+  utilityPrice           Float             @default(0)
   priceSetPerKare        Boolean           @default(false)
   buildingId             Int?
   maximumTenants         Int
@@ -248,6 +249,7 @@ model Receipts {
   isUtilityAndRentPayment Boolean        @default(false)
   amount                  Float
   bankName                String
+  crvReceipt              Boolean        @default(false)
   paymentReason           String?
   receiptReferenceNumber  String?
   usdRateAtPayment        Float?

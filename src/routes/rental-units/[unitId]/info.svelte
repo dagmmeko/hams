@@ -106,7 +106,17 @@
 					<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
 				</div>
 			</label>
-
+			<label class="grid flex-1">
+				<span class="text-primary font-semibold py-1">Utility Price</span>
+				<div>
+					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+					<input
+						name="utilityPrice"
+						bind:value={$editUnitForm.utilityPrice}
+						{...$constraints.utilityPrice}
+					/>
+				</div>
+			</label>
 			<label class="grid">
 				<span class="text-primary font-semibold py-1"> Unit Type </span>
 				<select
@@ -138,6 +148,7 @@
 				/>
 				<span class="text-primary font-medium"> Per kare </span>
 			</label>
+
 			<label class="flex items-center gap-3">
 				<input
 					type="checkbox"

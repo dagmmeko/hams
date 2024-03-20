@@ -130,6 +130,19 @@
 							/>
 						</div>
 					</label>
+					<label class="w-full grid gap-2">
+						<span class="text-primary font-medium"> Utility Price </span>
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-600"> {$addUnitForm.inBirr ? 'ETB' : 'USD'} </span>
+							<input
+								class="border-[1px] w-full border-black/60 rounded-md p-2"
+								name="utilityPrice"
+								type="text"
+								bind:value={$addUnitForm.utilityPrice}
+								{...$constraints.utilityPrice}
+							/>
+						</div>
+					</label>
 					<div class="flex mt-0 md:mt-8 gap-10">
 						<label class="flex items-center gap-3">
 							<input

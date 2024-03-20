@@ -15,7 +15,8 @@ const addUnitSchema = z.object({
 	minimumRentalDate: z.number().int(),
 	maximumTenants: z.number().int(),
 	inBirr: z.boolean().optional(),
-	perKare: z.boolean().optional()
+	perKare: z.boolean().optional(),
+	utilityPrice: z.number().optional()
 });
 
 export const load = async (event) => {
@@ -77,7 +78,8 @@ export const actions = {
 							description: 'First Inspection',
 							inspectionDate: new Date()
 						}
-					}
+					},
+					utilityPrice: addUnitForm.data.utilityPrice
 				}
 			});
 
