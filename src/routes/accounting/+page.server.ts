@@ -1,3 +1,4 @@
+import { prisma } from '$lib/utils/prisma.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
@@ -10,4 +11,53 @@ export const load = async (event) => {
 	if (!hasRole) {
 		throw redirect(302, '/no-permission');
 	}
+
+	const receipts = await prisma.receipts.findMany({
+		include: {
+			PayToUnit: true,
+			Tenants: true
+		}
+	});
+
+	const tenantRentals = await prisma.tenantRental.findMany({
+		include: {
+			RentalUnits: true,
+			Tenants: true
+		}
+	});
+
+	// return the sum of amount from the receipts array if isRentalPayment is true
+	const totalRentalPayment = receipts.reduce((acc, receipt) => {
+		if (receipt.isRentPayment) {
+			return acc + receipt.amount;
+		} else if (receipt.isUtilityAndRentPayment && receipt.PayToUnit?.price) {
+			//divide receipt.PayToUnit?.price with receipt.amount and return the reminder
+
+			const num = Math.floor(receipt.amount / receipt.PayToUnit?.price);
+
+			return acc + receipt.PayToUnit?.price * num;
+		}
+		return acc;
+	}, 0);
+
+	const crvReceipts = receipts.reduce((acc, receipt) => {
+		if (receipt.crvReceipt) {
+			return acc + receipt.amount;
+		}
+		return acc;
+	}, 0);
+
+	const totalSecurityDeposit = tenantRentals.reduce((acc, tenantRental) => {
+		if (tenantRental.active && tenantRental.securityDeposit !== null) {
+			return acc + tenantRental.securityDeposit;
+		}
+		return acc;
+	}, 0);
+
+	return {
+		receipts,
+		totalRentalPayment,
+		totalSecurityDeposit,
+		crvReceipts
+	};
 };
