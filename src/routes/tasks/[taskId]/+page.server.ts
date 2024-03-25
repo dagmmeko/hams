@@ -20,13 +20,28 @@ export const load = async (event) => {
 			deletedAt: null
 		},
 		include: {
-			User: true
+			User: true,
+			Role: true
 		}
 	});
 	const internalTask = await prisma.internalTask.findFirst({
 		where: {
 			id: Number(event.params.taskId),
 			deletedAt: null
+		},
+		include: {
+			AssignedTo: {
+				include: {
+					User: true,
+					Role: true
+				}
+			},
+			CreatedBy: {
+				include: {
+					User: true,
+					Role: true
+				}
+			}
 		}
 	});
 

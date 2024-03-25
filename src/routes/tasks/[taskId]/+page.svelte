@@ -101,7 +101,11 @@
 						type="text"
 						name="createdBy"
 						value={data.employees.find((emp) => emp.id === data.internalTask?.creatorEmployeeId)
-							?.User.userName}
+							?.User.userName +
+							`  (${
+								data.employees.find((emp) => emp.id === data.internalTask?.creatorEmployeeId)?.Role
+									.name
+							})`}
 						disabled
 					/>
 				</label>
@@ -118,6 +122,7 @@
 								disabled={employee.isAbsent || employee.onLeave || employee.isSuspended}
 								value={employee.id}
 								>{employee.User.userName}
+								{` (${employee.Role.name})`}
 								{employee.isAbsent ? ' - Absent' : ''}
 								{employee.onLeave ? ' - On Leave' : ''}
 								{employee.isSuspended ? ' - Suspended' : ''}

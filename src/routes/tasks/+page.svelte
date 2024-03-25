@@ -47,7 +47,8 @@
 		{
 			key: 'assignedTo',
 			title: 'Assigned To',
-			value: (v: typeof rows[number]) => v.AssignedTo.User.userName ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) =>
+				v.AssignedTo.User.userName + ` (${v.AssignedTo.Role.name})` ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -55,7 +56,8 @@
 		{
 			key: 'createdBy',
 			title: 'Created By',
-			value: (v: typeof rows[number]) => v.CreatedBy.User.userName ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) =>
+				v.CreatedBy.User.userName + ` (${v.CreatedBy.Role.name})` ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -215,7 +217,9 @@
 							<option
 								disabled={employee.isAbsent || employee.onLeave || employee.isSuspended}
 								value={employee.id}
-								>{employee.User.userName}
+							>
+								{employee.User.userName} <span> {`( ${employee.Role.name} )`}</span>
+
 								{employee.isAbsent ? ' - Absent' : ''}
 								{employee.onLeave ? ' - On Leave' : ''}
 								{employee.isSuspended ? ' - Suspended' : ''}

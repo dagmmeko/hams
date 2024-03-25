@@ -49,6 +49,13 @@
 						{dayjs(attendance.createdAt).format('MMM DD, YYYY')}
 					</span>
 				</p>
+				<p class="font-medium flex gap-2 text-primary">
+					Approved By <br />
+					<span class="font-normal underline">
+						{attendance.ApprovedBy?.User.userName}
+						<span class="text-sm"> {` (${attendance.ApprovedBy?.Role.name})`} </span>
+					</span>
+				</p>
 				<p class="font-medium mt-2">
 					Description <br /> <span class="font-normal"> {attendance.description} </span>
 				</p>

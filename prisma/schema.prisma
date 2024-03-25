@@ -304,17 +304,20 @@ model Employee {
   suretyPhoneNumber           String?
   suretyAddress               String?
 
-  EmploymentType         EmploymentType?
-  User                   User            @relation(fields: [userId], references: [id])
-  Role                   Role            @relation(fields: [roleId], references: [id])
-  Manager                User?           @relation("manager", fields: [managerUserId], references: [id])
-  Suspensions            Suspended[]
-  Fired                  Fired[]
-  Attendance             Attendance[]
-  ApprovedBy             Leaves[]        @relation("aprrovedBy")
-  EmployeesLeaves        Leaves[]        @relation("takenBy")
-  InternalTaskCreatedBy  InternalTask[]  @relation("taskCreatedBy")
-  InternalTaskAssignedTo InternalTask[]  @relation("taskAssignedTo")
+  EmploymentType       EmploymentType?
+  User                 User            @relation(fields: [userId], references: [id])
+  Role                 Role            @relation(fields: [roleId], references: [id])
+  Manager              User?           @relation("manager", fields: [managerUserId], references: [id])
+  Suspensions          Suspended[]
+  Fired                Fired[]
+  Attendance           Attendance[]    @relation("takenBy")
+  AttendanceApprovedBy Attendance[]    @relation("aprrovedBy")
+
+  ApprovedBy             Leaves[]       @relation("aprrovedBy")
+  EmployeesLeaves        Leaves[]       @relation("takenBy")
+  InternalTaskCreatedBy  InternalTask[] @relation("taskCreatedBy")
+  InternalTaskAssignedTo InternalTask[] @relation("taskAssignedTo")
+  VendorTask             VendorTask[]   @relation("internalTaskCreatedBy")
 
   @@index([roleId])
   @@index([userId])
@@ -345,9 +348,13 @@ model Attendance {
   updateAt    DateTime  @updatedAt
   deletedAt   DateTime?
   employeeId  Int
-  Employee    Employee  @relation(fields: [employeeId], references: [id])
+  creatorId   Int?
+
+  Employee   Employee  @relation("takenBy", fields: [employeeId], references: [id])
+  ApprovedBy Employee? @relation("aprrovedBy", fields: [creatorId], references: [id])
 
   @@index([employeeId])
+  @@index([creatorId])
 }
 
 model Suspended {
@@ -441,11 +448,15 @@ model VendorTask {
   estimatedTimeToComplete String
   vendorId                Int?
   dueDate                 DateTime
-  Vendor                  Vendor?    @relation(fields: [vendorId], references: [id])
-  Payment                 Payment[]
-  TaskFile                TaskFile[]
+  creatorEmployeeId       Int?
+  CreatedBy               Employee?  @relation("internalTaskCreatedBy", fields: [creatorEmployeeId], references: [id])
+
+  Vendor   Vendor?    @relation(fields: [vendorId], references: [id])
+  Payment  Payment[]
+  TaskFile TaskFile[]
 
   @@index([vendorId])
+  @@index([creatorEmployeeId])
 }
 
 model TaskFile {

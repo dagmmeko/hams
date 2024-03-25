@@ -61,7 +61,13 @@ export const load = async (event) => {
 			}
 		},
 		include: {
-			Vendor: true
+			Vendor: true,
+			CreatedBy: {
+				include: {
+					User: true,
+					Role: true
+				}
+			}
 		}
 	});
 
@@ -126,7 +132,8 @@ export const actions = {
 				regularJob: addTaskForm.data.regularJob ?? false,
 				estimatedTimeToComplete: addTaskForm.data.estimatedTime,
 				dueDate: addTaskForm.data.dueDate,
-				vendorId: addTaskForm.data.vendorId
+				vendorId: addTaskForm.data.vendorId,
+				creatorEmployeeId: session?.authUser.Employee.id
 			}
 		});
 

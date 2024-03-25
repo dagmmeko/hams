@@ -104,7 +104,10 @@
 				>
 					<option selected disabled> Select Employee </option>
 					{#each data.allEmployees as employee}
-						<option value={employee.User.id}> {employee.User.userName} </option>
+						<option value={employee.User.id}>
+							{employee.User.userName}
+							<span class="text-xs">({employee.Role.name})</span>
+						</option>
 					{/each}
 				</select>
 			</label>

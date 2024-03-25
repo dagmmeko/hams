@@ -73,7 +73,8 @@ export const load = async (event) => {
 				include: {
 					ApprovedBy: {
 						include: {
-							User: true
+							User: true,
+							Role: true
 						}
 					}
 				},
@@ -82,6 +83,14 @@ export const load = async (event) => {
 				}
 			},
 			Attendance: {
+				include: {
+					ApprovedBy: {
+						include: {
+							User: true,
+							Role: true
+						}
+					}
+				},
 				orderBy: {
 					createdAt: 'desc'
 				}
@@ -256,7 +265,8 @@ export const actions = {
 				isAbsent: true,
 				Attendance: {
 					create: {
-						description: 'Absent'
+						description: 'Absent',
+						creatorId: session?.authUser.Employee.id || 0
 					}
 				}
 			}

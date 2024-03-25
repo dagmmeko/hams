@@ -42,12 +42,14 @@ export const load = async (event) => {
 		include: {
 			AssignedTo: {
 				include: {
-					User: true
+					User: true,
+					Role: true
 				}
 			},
 			CreatedBy: {
 				include: {
-					User: true
+					User: true,
+					Role: true
 				}
 			}
 		}
@@ -58,7 +60,8 @@ export const load = async (event) => {
 			deletedAt: null
 		},
 		include: {
-			User: true
+			User: true,
+			Role: true
 		}
 	});
 
