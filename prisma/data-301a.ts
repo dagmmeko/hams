@@ -1,0 +1,1120 @@
+import type { ItemsCategory, PropertyStatus } from '@prisma/client';
+
+export const unitProperty: {
+	name: string;
+	description: string;
+	numberofUnits: number;
+	itemsPrice: number;
+	propertyStatus: PropertyStatus;
+	available: boolean;
+	itemCategory: ItemsCategory;
+}[] = [
+	{
+		name: 'sofa  with chair ( Futon)',
+		description: 'korea set',
+		numberofUnits: 1,
+		itemsPrice: 130000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'sofa table',
+		description: 'korea pcs',
+		numberofUnits: 1,
+		itemsPrice: 46200,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Tv stand',
+		description: 'korea pcs',
+		numberofUnits: 1,
+		itemsPrice: 40700,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'TV with accessories',
+		description: 'skyworth set',
+		numberofUnits: 1,
+		itemsPrice: 38088,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'coffee table from wanza ',
+		description: 'local made set',
+		numberofUnits: 1,
+		itemsPrice: 12000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Stablizer',
+		description: 'SKD SDR 1000K pcs',
+		numberofUnits: 1,
+		itemsPrice: 5520,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'carpet for 3 bed room',
+		description: '1.5m x 2.2m pcs',
+		numberofUnits: 1,
+		itemsPrice: 25127,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Curtain 2m X 3m',
+		description: 'local made pcs',
+		numberofUnits: 1,
+		itemsPrice: 15000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'dining table with chairs',
+		description: 'korea set',
+		numberofUnits: 1,
+		itemsPrice: 150000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'sofa chair pilow',
+		description: 'local made pcs',
+		numberofUnits: 6,
+		itemsPrice: 270,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'full length mirror 100cm x 100 cm',
+		description: 'local made pcs',
+		numberofUnits: 1,
+		itemsPrice: 9000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Flower pot wood made',
+		description: 'local made pcs',
+		numberofUnits: 4,
+		itemsPrice: 5060,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Picture With Wanza frame 88 X 44cm',
+		description: ' pcs',
+		numberofUnits: 1,
+		itemsPrice: 8500,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Picture With Wanza frame 42.5 X 43cm',
+		description: ' pcs',
+		numberofUnits: 2,
+		itemsPrice: 5800,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Picture With Wanza frame 94 X 183.5 cm',
+		description: ' pcs',
+		numberofUnits: 1,
+		itemsPrice: 29500,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Picture With Wanza frame 94 X 64cm',
+		description: ' pcs',
+		numberofUnits: 1,
+		itemsPrice: 9000,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+	{
+		name: 'Picture With Wanza frame 37 X 57 cm',
+		description: ' pcs',
+		numberofUnits: 1,
+		itemsPrice: 8800,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'SALON'
+	},
+
+	//BEDROOM
+	{
+		name: 'Bed frame king size Master',
+		description: 'korea set',
+		numberofUnits: 1,
+		itemsPrice: 60500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Bed frame double singel',
+		description: 'korea set',
+		numberofUnits: 1,
+		itemsPrice: 51000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Bed frame super singel',
+		description: 'korea set',
+		numberofUnits: 1,
+		itemsPrice: 47000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Mattress Pad bonded king size',
+		description: 'kestedamena pcs',
+		numberofUnits: 1,
+		itemsPrice: 33409.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Mattress Pad bonded double singel',
+		description: 'kestedamena pcs',
+		numberofUnits: 1,
+		itemsPrice: 31103.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Mattress Pad bonded supper singel',
+		description: 'kestedamena pcs',
+		numberofUnits: 1,
+		itemsPrice: 26779.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Night stand (comodina)',
+		description: 'korea pcs',
+		numberofUnits: 6,
+		itemsPrice: 8250.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Table Lamp',
+		description: 'ceramic type pcs',
+		numberofUnits: 4,
+		itemsPrice: 3500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Pillow',
+		description: 'pcs',
+		numberofUnits: 6,
+		itemsPrice: 270.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Bed spread sheet 1.40 ,with pillow and pillow case',
+		description: 'nuredin sani pcs',
+		numberofUnits: 1,
+		itemsPrice: 3450.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Bed spread sheet 1.60 with pillow and pillow case',
+		description: 'nuredin sani pcs',
+		numberofUnits: 1,
+		itemsPrice: 4600.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Bed spread sheet 1.10 with pillow and pillow case',
+		description: 'nuredin sani pcs',
+		numberofUnits: 1,
+		itemsPrice: 2249.4,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Blankets 2m',
+		description: 'pcs',
+		numberofUnits: 3,
+		itemsPrice: 5799.45,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'bed cover master bed room 1.60 m',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 4000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'bed cover master bed room 1.40 m',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 3000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'bed cover master bed room 1.10 m',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 1956.52,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Hangers (Cloths)',
+		description: 'pcs',
+		numberofUnits: 50,
+		itemsPrice: 50.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'window coverings master bed 2.76m X 1.80m',
+		description: 'local made pcs',
+		numberofUnits: 1,
+		itemsPrice: 12500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'window coverings supper single room 2.76m X 1.80m',
+		description: 'local made pcs',
+		numberofUnits: 1,
+		itemsPrice: 12500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'full length mirror master bed room 1.40x0.60',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 4500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'full length mirror supper single bed room 1.20x0.60',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 3800.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'full length mirror  single bed room 1.20x.60',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 3750.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'cloth organizar & shelfing master bed room',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 110000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'cloth organizar & shelfing master bed room',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 110000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'cloth organizar & shelfing super single bed room',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 100000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'cloth organizar & shelfing single bed room',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 80000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*42.5 master Bed',
+		description: 'pcs',
+		numberofUnits: 2,
+		itemsPrice: 5800.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*42.5 supper singe Bed',
+		description: 'pcs',
+		numberofUnits: 2,
+		itemsPrice: 5800.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*42.5 singe Bed',
+		description: 'pcs',
+		numberofUnits: 2,
+		itemsPrice: 5800.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*62.5 master Bed',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 8450.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*62.5 supper singe Bed',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 8450.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+	{
+		name: 'Picture With Wanza Frame 42.5*62.5 singe Bed',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 8450.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BEDROOM'
+	},
+
+	//KITCHEN
+
+	{
+		name: 'Refrigrator',
+		description: 'sharp SJ-s360-SS3 pcs',
+		numberofUnits: 1,
+		itemsPrice: 64561.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Toaster',
+		description: 'Philips/TWOS pcs',
+		numberofUnits: 1,
+		itemsPrice: 4761.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'oven /stove electrical only',
+		description: 'Fiesta pcs',
+		numberofUnits: 1,
+		itemsPrice: 38801.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Blender for ,coffee,juice and spice',
+		description: 'philips & Comet SET',
+		numberofUnits: 1,
+		itemsPrice: 5221.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'micro wave oven',
+		description: '23L Digital control comet pcs',
+		numberofUnits: 1,
+		itemsPrice: 14996.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'kettel',
+		description: 'Philips/3000 series pcs',
+		numberofUnits: 1,
+		itemsPrice: 5313.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'glass kettel electric',
+		description: 'sinba pcs',
+		numberofUnits: 1,
+		itemsPrice: 1955.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'wooden spoon//Mamaseya',
+		description: 'xisos set of 5 pcs',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'water glasses',
+		description: 'Red cherry pcs',
+		numberofUnits: 6,
+		itemsPrice: 70.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Wine glasses',
+		description: 'king de pcs',
+		numberofUnits: 6,
+		itemsPrice: 184.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Bottle opener',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 794.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'veggle peeler//Melacha',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 299.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'tongs LONG',
+		description: 'HCY pcs',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'steak knifes ( YEGEBETA Bilawa',
+		description: 'Tramontina pcs',
+		numberofUnits: 6,
+		itemsPrice: 80.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Cofee spoons',
+		description: 'set',
+		numberofUnits: 6,
+		itemsPrice: 40.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Tea Spoon',
+		description: 'set',
+		numberofUnits: 6,
+		itemsPrice: 35.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'spatula //Mezakiya',
+		description: 'pcs',
+		numberofUnits: 7,
+		itemsPrice: 920.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'crok pots',
+		description: 'ya jia bao pcs d/t size',
+		numberofUnits: 5,
+		itemsPrice: 3680.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'pans (big size)',
+		description: 'huchu pcs',
+		numberofUnits: 1,
+		itemsPrice: 2500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'pans (medium size)',
+		description: 'huchu pcs',
+		numberofUnits: 1,
+		itemsPrice: 2000.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'pans (small size)',
+		description: 'huchu pcs',
+		numberofUnits: 1,
+		itemsPrice: 1480.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'bowels ceramic',
+		description: 'ceramic pcs',
+		numberofUnits: 2,
+		itemsPrice: 1610.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'saup bowels ceramic',
+		description: 'ceramic pcs',
+		numberofUnits: 6,
+		itemsPrice: 400.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Table plates',
+		description: 'ceramic pcs',
+		numberofUnits: 6,
+		itemsPrice: 400.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Pasta surving plates',
+		description: 'ceramic pcs',
+		numberofUnits: 6,
+		itemsPrice: 400.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Cake surving plates',
+		description: 'ceramic pcs',
+		numberofUnits: 6,
+		itemsPrice: 360.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'pasta strainer',
+		description: 'stainless steel pcs',
+		numberofUnits: 1,
+		itemsPrice: 920.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'left over food storage containers',
+		description: 'Nakoda set',
+		numberofUnits: 1,
+		itemsPrice: 690.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'knife block with holder',
+		description: 'bass set',
+		numberofUnits: 1,
+		itemsPrice: 3438.5,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'table spoon',
+		description: 'pcs',
+		numberofUnits: 6,
+		itemsPrice: 60.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'spoon forks( shuka mankiya)',
+		description: 'pcs',
+		numberofUnits: 6,
+		itemsPrice: 60.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'drawer organizar',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'cutting board plastic//Mektefia',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 1495.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'coffee maker//Buna Mafiya',
+		description: 'italexpress pcs',
+		numberofUnits: 1,
+		itemsPrice: 1610.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'milk cups',
+		description: 'pcs',
+		numberofUnits: 3,
+		itemsPrice: 299.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'coffee cup',
+		description: 'pcs',
+		numberofUnits: 6,
+		itemsPrice: 212.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'spice surving bottle //kememe maskemecha',
+		description: 'set',
+		numberofUnits: 1,
+		itemsPrice: 1840.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'juice glasses ( Ceramic Mug)',
+		description: 'Danny home pcs',
+		numberofUnits: 2,
+		itemsPrice: 460.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Shuger holder With spoon',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 400.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Tea Maker (የሻይ ማፍያ ጀበና)',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 1840.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Tea maker medium',
+		description: 'stainless steel pot pcs',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'ice maker plastic',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 399.05,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Ice Bowl',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 1610.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'metal sieve filter (matleya wenfit)',
+		description: 'pcs',
+		numberofUnits: 3,
+		itemsPrice: 112.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Vacume flask ( Permuz)',
+		description: 'Xichiniai pcs',
+		numberofUnits: 1,
+		itemsPrice: 1265.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Kitchen garbage collecter 30 litr',
+		description: 'best pcs',
+		numberofUnits: 1,
+		itemsPrice: 5796.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'Vegetable Plastic shelf rack',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 598,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'service tray',
+		description: 'Medium (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 690,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'service tray',
+		description: 'small (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 598,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'veggle peeler//Mefekfekiya Geater',
+		description: 'pcs',
+		numberofUnits: 1,
+		itemsPrice: 920,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+	{
+		name: 'fire extingusher',
+		description: 'Yamas international (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 5500,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'KITCHEN'
+	},
+
+	//LAUNDRY
+
+	{
+		name: 'Vegetable Plastic shelf rack',
+		description: ' (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'LAUNDRY'
+	},
+	{
+		name: 'service tray',
+		description: 'Medium (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 690.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'LAUNDRY'
+	},
+	{
+		name: 'service tray',
+		description: 'small (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 598.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'LAUNDRY'
+	},
+	{
+		name: 'veggle peeler//Mefekfekiya Geater',
+		description: ' (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 920.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'LAUNDRY'
+	},
+	{
+		name: 'fire extingusher',
+		description: 'Yamas international (pcs)',
+		numberofUnits: 1,
+		itemsPrice: 5500.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'LAUNDRY'
+	},
+
+	//BATHROOM
+	{
+		name: 'Shower Box 8mm Frosted glass master',
+		description: 'master',
+		numberofUnits: 1,
+		itemsPrice: 48100.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Shower Box 8mm Frosted glass common',
+		description: 'common',
+		numberofUnits: 1,
+		itemsPrice: 48100.0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Bath Towels',
+		description: '',
+		numberofUnits: 3,
+		itemsPrice: 699.99,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Hand Towels',
+		description: '',
+		numberofUnits: 3,
+		itemsPrice: 329.99,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Toilet Brush',
+		description: '',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Plunger',
+		description: '',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Shower Organizer Or Caddy',
+		description: '',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Soap holder',
+		description: '',
+		numberofUnits: 2,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Towel holder',
+		description: '',
+		numberofUnits: 2,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Tissue Holder',
+		description: '',
+		numberofUnits: 2,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Shutuff (water spray)',
+		description: '',
+		numberofUnits: 2,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Waste Basket master',
+		description: 'master',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Waste Basket common',
+		description: 'common',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Toilet Mirror With organizer Common',
+		description: 'Common',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Toilet Mirror with Organizer (Master)',
+		description: ' Toilet Mirror with Organizer',
+		numberofUnits: 1,
+		itemsPrice: 0,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Mirror Light (Master)',
+		description: ' Mirror Light',
+		numberofUnits: 3,
+		itemsPrice: 2500,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	},
+	{
+		name: 'Mirror Light (Common)',
+		description: ' Mirror Light',
+		numberofUnits: 1,
+		itemsPrice: 3500,
+		propertyStatus: 'GOOD_CONDITION',
+		available: true,
+		itemCategory: 'BATHROOM'
+	}
+];
