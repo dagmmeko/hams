@@ -1,8 +1,8 @@
 import { ItemsCategory, PrismaClient, PropertyStatus } from '@prisma/client';
-import { unitProperty } from './data-penthouse';
+import { unitProperty } from './data-301a';
 const prisma = new PrismaClient();
 
-const unitIds = [23];
+const unitIds = [17, 22];
 
 // const unitIds = [111, 112, 211, 222, 223, 224];
 

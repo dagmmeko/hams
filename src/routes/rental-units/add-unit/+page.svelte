@@ -152,7 +152,7 @@
 								{...$constraints.inBirr}
 								class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 							/>
-							<span class="text-primary font-medium"> In Birr </span>
+							<span class="text-primary font-medium"> Price set In Birr </span>
 						</label>
 						<label class="flex items-center gap-3">
 							<input
@@ -162,7 +162,7 @@
 								{...$constraints.perKare}
 								class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 							/>
-							<span class="text-primary font-medium"> Per kare </span>
+							<span class="text-primary font-medium"> Price set in m2 </span>
 						</label>
 					</div>
 

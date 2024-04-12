@@ -1,96 +1,17 @@
 <script lang="ts">
-	import SvelteTable from 'svelte-table';
-	import type { PageData, ActionData } from './$types';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
+	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
-	import { goto } from '$app/navigation';
-	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
-	import PropertyConditionTable from './property-condition-table.svelte';
-	import DeletePropertyTable from './delete-property-table.svelte';
-	import { numberToCurrency } from '$lib/utils/currency';
-	import { toast } from '@zerodevx/svelte-toast';
+	import type { ActionData, PageData } from './$types';
 	import PropertiesTable from './properties-table.svelte';
-	import { ItemsCategory } from '@prisma/client';
-	import CPFooter from '$lib/assets/cp_footer.png';
 
 	let addModal = false;
 
 	export let data: PageData;
 	export let form: ActionData;
-	$: rows = data.unitDetails?.Property ?? [];
-	$: columns = [
-		{
-			key: 'name',
-			title: 'Item Name',
-			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-6 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'description',
-			title: 'Description',
-			value: (v: typeof rows[number]) => v.description ?? 'NOT FOUND',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] w-12 text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] w-12 '
-		},
-		{
-			key: 'number',
-			title: 'No. of Units',
-			value: (v: typeof rows[number]) => v.numberofUnits ?? 'NOT FOUND',
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'price',
-			title: 'Price',
-			value: (v: typeof rows[number]) =>
-				numberToCurrency(v.itemsPrice, {
-					currency: v.itemsCurrency,
-					currencyDisplay: 'code'
-				}) ?? 'NOT FOUND',
-			headerClass:
-				'text-left bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'status',
-			title: 'Condition',
-			renderComponent: {
-				component: PropertyConditionTable
-			},
-			headerClass:
-				'text-left pl-4 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'available',
-			title: 'Available',
-			value: (v: typeof rows[number]) => (v.available ? 'Yes' : 'No' ?? 'NOT FOUND'),
-			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		},
-		{
-			key: 'deleteProperty',
-			title: '',
-			renderComponent: {
-				component: DeletePropertyTable,
-				props: {
-					data: data,
-					form: form
-				}
-			},
-			headerClass:
-				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		}
-	];
 
 	const {
 		form: addPropertyForm,
@@ -103,7 +24,6 @@
 	});
 	let filterModal = false;
 	$: urlSearchParams = new URLSearchParams($page.url.search);
-	$: c = data.unitDetails?.Property.filter((prop) => prop.itemCategory === 'BEDROOM');
 </script>
 
 <div>
@@ -231,27 +151,6 @@
 				<PropertiesTable {data} {form} itemCategory="BEDROOM" />
 				<PropertiesTable {data} {form} itemCategory="BATHROOM" />
 			</div>
-
-			<!-- <div class="overflow-x-auto">
-				<SvelteTable
-					classNameTable="unitPropertyTables"
-					classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
-					on:clickCell={(event) => {
-						if (
-							$page.data.session?.authUser.Employee.Role.Scopes.find(
-								(s) => s.name === 'EDIT_UNIT_PROPERTY'
-							)
-						) {
-							selectedUnitId = event.detail.row.id;
-							editModal = true;
-						} else {
-							toast.push('You do not have permission to edit property');
-						}
-					}}
-					{columns}
-					{rows}
-				/>
-			</div> -->
 			<div class="print:block hidden p-8">
 				<p class="text-lg font-semibold">Attention</p>
 				<p class="text-sm">

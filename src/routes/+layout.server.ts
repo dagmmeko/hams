@@ -1,3 +1,4 @@
+import { prisma } from '$lib/utils/prisma.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load(event) {
@@ -10,8 +11,10 @@ export async function load(event) {
 	) {
 		throw redirect(308, '/auth');
 	}
+	const usdRate = await prisma.currencyRate.findMany({});
 
 	return {
-		session: session
+		session: session,
+		usdRate
 	};
 }

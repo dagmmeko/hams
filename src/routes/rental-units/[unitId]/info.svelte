@@ -61,7 +61,7 @@
 		</div>
 		<hr class="my-6" />
 		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
-			<label class="grid flex-1">
+			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> Room No.</span>
 				<input
 					name="roomNumber"
@@ -70,7 +70,7 @@
 					class=""
 				/>
 			</label>
-			<label class="grid flex-1">
+			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> Floor</span>
 				<input name="floor" bind:value={$editUnitForm.floor} {...$constraints.floor} class="" />
 			</label>
@@ -80,7 +80,7 @@
 				<div>{data.unitDetails?.active ? 'Occupied' : 'Vacant'}</div>
 			</div>
 
-			<label class="grid">
+			<label class="grid h-fit">
 				<span class="text-primary font-semibold py-1"> Condition </span>
 				<select
 					disabled
@@ -95,18 +95,26 @@
 					<option value="OUT_OF_SERVICE"> Out of service </option>
 				</select>
 			</label>
-			<label class="grid flex-1">
+			<label class="grid flex-1 h-fit">
 				<span class="text-primary font-semibold py-1"> Size</span>
 				<input name="size" bind:value={$editUnitForm.size} {...$constraints.size} />
 			</label>
-			<label class="grid flex-1">
+			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> Price</span>
 				<div>
 					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
 					<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
 				</div>
+				<div class="text-xs mt-1">
+					<span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span>
+					<span>
+						{data.unitDetails?.currency === 'ETB'
+							? $editUnitForm.price / data.usdRate[0].rate
+							: $editUnitForm.price * data.usdRate[0].rate}
+					</span>
+				</div>
 			</label>
-			<label class="grid flex-1">
+			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1">Utility Price</span>
 				<div>
 					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
@@ -116,8 +124,16 @@
 						{...$constraints.utilityPrice}
 					/>
 				</div>
+				<div class="text-xs mt-1">
+					<span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span>
+					<span>
+						{data.unitDetails?.currency === 'ETB'
+							? $editUnitForm.utilityPrice || 0 / data.usdRate[0].rate
+							: $editUnitForm.utilityPrice || 0 * data.usdRate[0].rate}
+					</span>
+				</div>
 			</label>
-			<label class="grid">
+			<label class="grid h-fit">
 				<span class="text-primary font-semibold py-1"> Unit Type </span>
 				<select
 					required
@@ -130,7 +146,7 @@
 					<option value="COMMERCIAL"> Commercial </option>
 				</select>
 			</label>
-			<label class="grid flex-1">
+			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> No. of People Allowed</span>
 				<input
 					name="maximumTenants"
@@ -138,7 +154,7 @@
 					{...$constraints.maximumTenants}
 				/>
 			</label>
-			<label class="flex items-center gap-3">
+			<label class="flex h-fit items-center gap-3">
 				<input
 					type="checkbox"
 					name="priceSetPerKare"
@@ -146,10 +162,10 @@
 					{...$constraints.priceSetPerKare}
 					class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 				/>
-				<span class="text-primary font-medium"> Per kare </span>
+				<span class="text-primary font-medium"> Per is set in m2 </span>
 			</label>
 
-			<label class="flex items-center gap-3">
+			<label class="flex h-fit items-center gap-3">
 				<input
 					type="checkbox"
 					name="inBirr"
@@ -157,10 +173,10 @@
 					{...$constraints.inBirr}
 					class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
 				/>
-				<span class="text-primary font-medium"> In Birr </span>
+				<span class="text-primary font-medium"> In Ethiopian Birr </span>
 			</label>
-			<label class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Price per kare</span>
+			<label class="grid h-fit flex-1">
+				<span class="text-primary font-semibold py-1"> Price per m2</span>
 				<div>
 					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
 					<input
@@ -306,7 +322,7 @@
 			>
 				<div class="text-2xl text-primary font-semibold mb-1 text-center">New Inspection</div>
 				<hr />
-				<label class="grid flex-1">
+				<label class="grid h-fit flex-1">
 					<span class="text-primary font-semibold py-1"> Inspection Date </span>
 					<input
 						required
@@ -320,7 +336,7 @@
 					/>
 				</label>
 
-				<label class="grid">
+				<label class="grid h-fit">
 					<span class="text-primary font-semibold py-1"> Condition </span>
 					<select
 						required
@@ -336,7 +352,7 @@
 						<option value="OUT_OF_SERVICE"> Out of service </option>
 					</select>
 				</label>
-				<label class="grid flex-1">
+				<label class="grid h-fit flex-1">
 					<span class="text-primary font-semibold py-2"> Inspection Description </span>
 					<textarea
 						name="inspectionDescription"

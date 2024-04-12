@@ -2,8 +2,8 @@
 	export let row: any;
 </script>
 
-<div
-	class="md:text-[10px] text-[8px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.propertyStatus ===
+<span
+	class="md:text-[8px] text-[6px] text-center p-1 w-full rounded-full {row.propertyStatus ===
 	'GOOD_CONDITION'
 		? 'bg-success text-white'
 		: row.propertyStatus === 'NEEDS_REPAIR'
@@ -15,4 +15,4 @@
 		: ''}"
 >
 	{row.propertyStatus.replace(/_/g, ' ')}
-</div>
+</span>

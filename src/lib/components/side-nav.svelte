@@ -12,7 +12,7 @@
 	import Task from '$lib/assets/task.svg.svelte';
 </script>
 
-<div class="h-screen bg-black md:w-60 w-fit px-4">
+<div class="h-screen overflow-y-auto bg-black md:w-60 w-fit px-4">
 	<Logo class="h-16 w-16" />
 	<div class="grid gap-3">
 		<a href="/">

@@ -169,7 +169,7 @@
 			<div class="w-full font-medium text-xl mb-4">Tenant Files</div>
 			<div class="grid grid-cols-3 h-60 overflow-y-auto items-start gap-2">
 				{#each data.tenant?.TenantsFile ?? [] as file}
-					<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
+					<div class="border-[1px] border-primary border-dashed rounded-lg">
 						<div class="relative">
 							<div class=" relative z-10 w-full h-36">
 								<img src={FileBg} alt="bg" class="w-full h-full" />
@@ -213,7 +213,7 @@
 					</div>
 				{/each}
 				<div
-					class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
+					class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 w-full max-h-96 gap-2 items-center justify-center"
 				>
 					<form method="post" action="?/editTenantFile" use:enhance>
 						<label>

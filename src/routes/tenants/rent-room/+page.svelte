@@ -134,7 +134,7 @@
 										Current Price <span class="text-danger text-xs font-medium">
 											{data.rentalUnits.find((unit) => unit.id.toString() === selectedUnit)
 												?.priceSetPerKare
-												? 'Price Per Kare'
+												? 'Price Per m2'
 												: ''}
 										</span>
 									</span>

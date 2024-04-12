@@ -38,7 +38,7 @@
 		{
 			key: 'number',
 			title: 'Price',
-			value: (v: typeof rows[number]) => v.price ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => 'ETB ' + v.price ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -46,7 +46,7 @@
 		{
 			key: 'paid',
 			title: 'Type',
-			value: (v: typeof rows[number]) => v.paid.toString() ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => (v.paid ? 'Paid' : 'l' ?? 'NOT FOUND'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'

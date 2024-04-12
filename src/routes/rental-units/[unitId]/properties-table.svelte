@@ -55,6 +55,22 @@
 			class: 'text-left mx-12  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
+			key: 'price',
+			title: '',
+			value: (v: typeof rows[number]) =>
+				numberToCurrency(
+					v.itemsCurrency === 'ETB'
+						? v.itemsPrice / data.usdRate[0].rate
+						: v.itemsPrice * data.usdRate[0].rate,
+					{
+						currency: v.itemsCurrency === 'ETB' ? 'USD' : 'ETB',
+						currencyDisplay: 'code'
+					}
+				) ?? 'NOT FOUND',
+			headerClass: 'bg-ghost/60 border-b-[1px] border-[#B3B4B8]',
+			class: 'text-left mx-12  border-b-[1px] border-[#B3B4B8] text-xs'
+		},
+		{
 			key: 'status',
 			title: 'Condition',
 			renderComponent: {

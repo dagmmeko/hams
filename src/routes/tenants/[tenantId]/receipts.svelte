@@ -89,17 +89,31 @@
 										<p class="font-medium">
 											Reason: <span class="font-normal">{rec.paymentReason}</span>
 										</p>
+										<p class="font-medium">
+											Bank Name: <span class="font-normal"> {rec.bankName}</span>
+										</p>
 									</div>
 									<div class="print:hidden block">
 										<p class="font-medium">
 											Amount:
 											{#if !rec.crvReceipt}
-												<span class="font-normal"
+												<span class="font-normal text-sm"
 													>{numberToCurrency(rec.amount / 1.15, {
 														currency: rec.PayToUnit?.currency,
 														currencyDisplay: 'code'
-													})}</span
-												>
+													})}
+												</span>
+												<span class="font-normal text-xs"
+													>/ {numberToCurrency(
+														rec.PayToUnit?.currency === 'ETB'
+															? rec.amount / data.usdRate[0].rate / 1.15
+															: (rec.amount * data.usdRate[0].rate) / 1.15,
+														{
+															currency: rec.PayToUnit?.currency === 'ETB' ? 'USD' : 'ETB',
+															currencyDisplay: 'code'
+														}
+													)}
+												</span>
 											{/if}
 										</p>
 										<p class="font-medium">
@@ -109,8 +123,19 @@
 													>{numberToCurrency(rec.amount - rec.amount / 1.15, {
 														currency: rec.PayToUnit?.currency,
 														currencyDisplay: 'code'
-													})}</span
-												>
+													})}
+												</span>
+												<span class="font-normal text-xs"
+													>/ {numberToCurrency(
+														rec.PayToUnit?.currency === 'ETB'
+															? rec.amount / data.usdRate[0].rate
+															: (rec.amount * data.usdRate[0].rate) / 1.15,
+														{
+															currency: rec.PayToUnit?.currency === 'ETB' ? 'USD' : 'ETB',
+															currencyDisplay: 'code'
+														}
+													)}
+												</span>
 											{/if}
 										</p>
 										<p class="font-medium">
@@ -174,11 +199,6 @@
 											>
 										</p>
 									</div>
-									<div>
-										<p class="font-medium">
-											Bank Name: <span class="font-normal"> {rec.bankName}</span>
-										</p>
-									</div>
 								</div>
 							</div>
 						{/each}
@@ -194,7 +214,7 @@
 		action="?/addReceipts"
 		method="post"
 		use:addReceiptFormEnhance
-		class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+		class="bg-black/70 fixed top-0 left-0 z-50 w-full overflow-y-auto h-screen flex items-center justify-center"
 	>
 		<div
 			use:clickOutside={() => (modal = false)}
@@ -225,31 +245,35 @@
 					<hr class="my-2" />
 					<div class="grid grid-cols-2">
 						<p>
-							{data.tenant?.PriceChange.find(
-								(changed) => changed.unitId === $addReceiptForm.payToUnit
-							) && data.tenant?.PriceChange.find((changed) => changed.active)
-								? numberToCurrency(
-										data.tenant?.PriceChange.find(
-											(changed) => changed.unitId === $addReceiptForm.payToUnit
-										)?.price ?? 0,
-										{
-											currency: data.tenant?.TenantRental.find(
+							<span>
+								{data.tenant?.PriceChange.find(
+									(changed) => changed.unitId === $addReceiptForm.payToUnit
+								) && data.tenant?.PriceChange.find((changed) => changed.active)
+									? numberToCurrency(
+											data.tenant?.PriceChange.find(
+												(changed) => changed.unitId === $addReceiptForm.payToUnit
+											)?.price ?? 0,
+											{
+												currency: data.tenant?.TenantRental.find(
+													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+												)?.RentalUnits.currency,
+												currencyDisplay: 'code'
+											}
+									  )
+									: numberToCurrency(
+											data.tenant?.TenantRental.find(
 												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-											)?.RentalUnits.currency,
-											currencyDisplay: 'code'
-										}
-								  )
-								: numberToCurrency(
-										data.tenant?.TenantRental.find(
-											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-										)?.RentalUnits.price ?? 0,
-										{
-											currency: data.tenant?.TenantRental.find(
-												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-											)?.RentalUnits.currency,
-											currencyDisplay: 'code'
-										}
-								  )}
+											)?.RentalUnits.price ?? 0,
+											{
+												currency: data.tenant?.TenantRental.find(
+													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+												)?.RentalUnits.currency,
+												currencyDisplay: 'code'
+											}
+									  )}
+							</span>
+							/
+							<span class="text-xs"> ETB 50 </span>
 						</p>
 						<p>
 							{data.tenant?.PriceChange.find(

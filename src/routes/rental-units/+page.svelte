@@ -22,7 +22,7 @@
 			value: (v: typeof rows[number]) => v.roomNumber ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'floor',
@@ -30,7 +30,7 @@
 			value: (v: typeof rows[number]) => v.floor ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'status',
@@ -38,7 +38,7 @@
 			value: (v: typeof rows[number]) => (v.active ? 'Occupied' : 'Vacant'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'condition',
@@ -48,7 +48,7 @@
 			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8]  text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] '
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8] '
 		},
 		{
 			key: 'unitType',
@@ -56,7 +56,7 @@
 			value: (v: typeof rows[number]) => v.unitType ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'size',
@@ -64,16 +64,9 @@
 			value: (v: typeof rows[number]) => v.kareMeter ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
-		// {
-		// 	key: 'pricePerKare',
-		// 	title: 'Paid Per Kare',
-		// 	value: (v: typeof rows[number]) => (v.price / v.kareMeter).toFixed(2) ?? 'NOT FOUND',
-		// 	headerClass:
-		// 		'text-left pl-2 bg-ghost/60 border-b-[1px] max-w-sm border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-		// 	class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		// },
+
 		{
 			key: 'price',
 			title: 'Price per Month',
@@ -84,7 +77,7 @@
 				}) ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'second',
@@ -97,7 +90,7 @@
 			},
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
 	];
 
