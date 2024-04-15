@@ -21,7 +21,6 @@ export const load = async (event) => {
 
 	const filterStartDate = event.url.searchParams.get('filterStartDate');
 	const filterEndDate = event.url.searchParams.get('filterEndDate');
-	console.log({ filterStartDate, filterEndDate });
 
 	//fetch all vendors
 	const vendors = await prisma.vendorTask.findMany({

@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { toast } from '@zerodevx/svelte-toast';
-	import { Pie, Bar } from 'svelte-chartjs';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { page } from '$app/stores';
-	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { Bar, Pie } from 'svelte-chartjs';
+	import { superForm } from 'sveltekit-superforms/client';
 
 	import {
 		ArcElement,
+		BarElement,
 		CategoryScale,
 		Chart,
 		Legend,
+		LinearScale,
 		Title,
-		Tooltip,
-		BarElement,
-		LinearScale
+		Tooltip
 	} from 'chart.js';
 	Chart.register(
 		Title,
@@ -211,15 +210,12 @@
 		<button
 			on:click|stopPropagation={async () => {
 				if (filterStartDate && filterEndDate) {
-					console.log({ filterStartDate, filterEndDate });
 					const newFilterParams = new URLSearchParams($page.url.search);
 
 					newFilterParams.set('filterStartDate', filterStartDate);
 					newFilterParams.set('filterEndDate', filterEndDate);
 					await goto(`?${newFilterParams.toString()}`);
 				} else {
-					console.log({ file: filterStartDate, filterEndDate });
-
 					await goto(`?`);
 				}
 			}}

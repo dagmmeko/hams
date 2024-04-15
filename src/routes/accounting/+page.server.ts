@@ -12,7 +12,22 @@ export const load = async (event) => {
 		throw redirect(302, '/no-permission');
 	}
 
+	const filterStartDate = event.url.searchParams.get('filterStartDate');
+	const filterEndDate = event.url.searchParams.get('filterEndDate');
+
 	const receipts = await prisma.receipts.findMany({
+		...(filterStartDate !== null &&
+			filterStartDate !== '' &&
+			filterEndDate !== null &&
+			filterEndDate !== '' && {
+				where: {
+					createdAt: {
+						gte: new Date(filterStartDate),
+						lte: new Date(filterEndDate)
+					}
+				}
+			}),
+
 		include: {
 			PayToUnit: true,
 			Tenants: true
@@ -54,10 +69,26 @@ export const load = async (event) => {
 		return acc;
 	}, 0);
 
+	const paymentForVendor = await prisma.vendorTask.findMany({
+		where: {
+			...(filterStartDate !== null &&
+				filterStartDate !== '' &&
+				filterEndDate !== null &&
+				filterEndDate !== '' && {
+					createdAt: {
+						gte: new Date(filterStartDate),
+						lte: new Date(filterEndDate)
+					}
+				}),
+			paymentStatus: true
+		}
+	});
+
 	return {
 		receipts,
 		totalRentalPayment,
 		totalSecurityDeposit,
-		crvReceipts
+		crvReceipts,
+		paymentForVendor
 	};
 };
