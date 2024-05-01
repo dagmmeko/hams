@@ -267,12 +267,13 @@
 				<form method="post" action="?/archiveTenant" use:enhance>
 					{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
 						<button
-							on:click|stopPropagation={() =>
-								toast.push('Can not delete a Unit with Tenant in it.')}
-							class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+							type="button"
+							on:click|stopPropagation={() => toast.push('Can not delete an active Tenant.')}
+							class="bg-subtitle text-white/50 hover:cursor-default rounded-md py-2 px-6"
+							>Archive</button
 						>
 					{:else}
-						<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+						<button type="submit" class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
 					{/if}
 				</form>
 			</div>
