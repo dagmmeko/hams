@@ -6,7 +6,7 @@ const config = JSON.parse(fs.readFileSync(config_file, 'utf8'));
 config.crons = [
 	{
 		path: '/api/attendance',
-		schedule: '0 0 * * *'
+		schedule: '19 12 * * *'
 	}
 ];
 
