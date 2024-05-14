@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "prisma generate && vite build",
+		"build": "prisma generate && vite build  && node scripts/update-vercel-config",
 		"preview": "vite preview --port 5173",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -20,6 +20,7 @@
 		"@aws-sdk/client-s3": "3.525.0",
 		"@prisma/client": "5.6.0",
 		"@sveltejs/adapter-auto": "2.1.1",
+		"@sveltejs/adapter-vercel": "3.1.0",
 		"@sveltejs/kit": "1.27.6",
 		"@types/bcrypt": "5.0.2",
 		"@types/node": "20.10.0",

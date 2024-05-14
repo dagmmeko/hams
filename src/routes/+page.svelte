@@ -15,6 +15,7 @@
 		Title,
 		Tooltip
 	} from 'chart.js';
+
 	Chart.register(
 		Title,
 		Tooltip,
