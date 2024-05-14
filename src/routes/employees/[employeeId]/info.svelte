@@ -231,14 +231,14 @@
 		<hr class="my-6" />
 
 		<div class="border-2 border-danger border-dashed rounded-md p-5">
-			<div class="md:flex justify-between">
+			<!-- <div class="md:flex justify-between">
 				<div>
 					<p class="text-lg">Suspend Employee</p>
 					<p class="text-black/50">Suspend employee from job for a given time.</p>
 				</div>
 				<button class="bg-danger text-white rounded-md py-2 px-6">Suspend</button>
-			</div>
-			<div class="md:flex mt-6 justify-between">
+			</div> -->
+			<div class="md:flex justify-between">
 				<div>
 					<p class="text-lg">Archive Employee</p>
 					<p class="text-black/50">Archive employment contract with employee.</p>
