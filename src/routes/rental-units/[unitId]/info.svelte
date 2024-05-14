@@ -11,6 +11,7 @@
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { ActionData, PageData } from './$types';
+	import { numberToCurrency } from '$lib/utils/currency';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -106,11 +107,17 @@
 					<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
 				</div>
 				<div class="text-xs mt-1">
-					<span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span>
+					<!-- <span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span> -->
 					<span>
 						{data.unitDetails?.currency === 'ETB'
-							? $editUnitForm.price / data.usdRate[0].rate
-							: $editUnitForm.price * data.usdRate[0].rate}
+							? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
+									currency: 'USD',
+									currencyDisplay: 'code'
+							  })
+							: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
+									currency: 'ETB',
+									currencyDisplay: 'code'
+							  })}
 					</span>
 				</div>
 			</label>
@@ -125,11 +132,16 @@
 					/>
 				</div>
 				<div class="text-xs mt-1">
-					<span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span>
 					<span>
 						{data.unitDetails?.currency === 'ETB'
-							? $editUnitForm.utilityPrice || 0 / data.usdRate[0].rate
-							: $editUnitForm.utilityPrice || 0 * data.usdRate[0].rate}
+							? numberToCurrency(($editUnitForm.utilityPrice || 0) / data.usdRate[0].rate, {
+									currency: 'USD',
+									currencyDisplay: 'code'
+							  })
+							: numberToCurrency(($editUnitForm.utilityPrice || 0) * data.usdRate[0].rate, {
+									currency: 'ETB',
+									currencyDisplay: 'code'
+							  })}
 					</span>
 				</div>
 			</label>
