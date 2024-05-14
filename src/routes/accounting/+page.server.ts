@@ -81,14 +81,54 @@ export const load = async (event) => {
 					}
 				}),
 			paymentStatus: true
+		},
+		include: {
+			Vendor: true,
+			Payment: true
 		}
 	});
+
+	const totalSecurityFee = paymentForVendor.reduce((acc, vendorTask) => {
+		if (vendorTask.Vendor?.serviceType === 'SECURITY') {
+			return acc + (vendorTask.Payment?.amount || 0);
+		}
+		return acc;
+	}, 0);
+
+	const totalPlumbingFee = paymentForVendor.reduce((acc, vendorTask) => {
+		if (vendorTask.Vendor?.serviceType === 'PLUMBING') {
+			return acc + (vendorTask.Payment?.amount || 0);
+		}
+		return acc;
+	}, 0);
+	const totalElectricityFee = paymentForVendor.reduce((acc, vendorTask) => {
+		if (vendorTask.Vendor?.serviceType === 'ELECTRICITY') {
+			return acc + (vendorTask.Payment?.amount || 0);
+		}
+		return acc;
+	}, 0);
+	const totalCleaningFee = paymentForVendor.reduce((acc, vendorTask) => {
+		if (vendorTask.Vendor?.serviceType === 'PAINTING') {
+			return acc + (vendorTask.Payment?.amount || 0);
+		}
+		return acc;
+	}, 0);
+	const totalPaintingFee = paymentForVendor.reduce((acc, vendorTask) => {
+		if (vendorTask.Vendor?.serviceType === 'PAINTING') {
+			return acc + (vendorTask.Payment?.amount || 0);
+		}
+		return acc;
+	}, 0);
 
 	return {
 		receipts,
 		totalRentalPayment,
 		totalSecurityDeposit,
 		crvReceipts,
-		paymentForVendor
+		totalCleaningFee,
+		totalElectricityFee,
+		totalPaintingFee,
+		totalPlumbingFee,
+		totalSecurityFee
 	};
 };

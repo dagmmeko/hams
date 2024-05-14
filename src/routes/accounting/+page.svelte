@@ -155,6 +155,18 @@
 	<div class=" grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4">
 		<div class="bg-white border-[1px] col-span-2 border-subtitle p-3 rounded-sm text-center">
 			Utility bills - Electricity, water, gas, internet, phone bills
+			{numberToCurrency(
+				data.receipts.reduce((acc, receipt) => {
+					if (!receipt.crvReceipt && !receipt.isRentPayment && !receipt.isUtilityAndRentPayment) {
+						return acc + receipt.amount;
+					}
+					return acc;
+				}, 0),
+				{
+					currency: 'ETB',
+					currencyDisplay: 'code'
+				}
+			)}
 			<Line
 				data={{
 					labels: data.receipts.map((receipt) => {
@@ -162,7 +174,7 @@
 					}),
 					datasets: [
 						{
-							label: 'Total revenue',
+							label: '',
 							data: data.receipts.map((receipt) => {
 								if (
 									!receipt.crvReceipt &&
@@ -193,23 +205,37 @@
 
 		<div class="bg-white border-[1px] col-span-2 border-subtitle p-3 rounded-sm text-center">
 			Repairs and maintenance - Costs for upkeep, repairs of property
-			<!-- <Bar
+			<p>
+				{numberToCurrency(
+					data.totalCleaningFee +
+						data.totalElectricityFee +
+						data.totalPlumbingFee +
+						data.totalPaintingFee +
+						data.totalSecurityFee,
+					{
+						currency: 'ETB',
+						currencyDisplay: 'code'
+					}
+				)}
+			</p>
+			<Bar
 				data={{
 					labels: ['Cleaning', 'Electricity', 'Pluming', 'Painting', 'Security'],
 					datasets: [
 						{
-							label: 'Types',
-							data: data.paymentForVendor.map((payment) => {
-								return payment;
-							}),
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+							label: '',
+							data: [
+								data.totalCleaningFee,
+								data.totalElectricityFee,
+								data.totalPlumbingFee,
+								data.totalPaintingFee,
+								data.totalSecurityFee
+							],
+							backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360']
 						}
 					]
 				}}
-			/> -->
-		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			Staff costs - Expenses for hiring, training new staff
+			/>
 		</div>
 	</div>
 </div>

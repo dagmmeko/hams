@@ -452,8 +452,8 @@ model VendorTask {
   CreatedBy               Employee?  @relation("internalTaskCreatedBy", fields: [creatorEmployeeId], references: [id])
 
   Vendor   Vendor?    @relation(fields: [vendorId], references: [id])
-  Payment  Payment[]
   TaskFile TaskFile[]
+  Payment  Payment?
 
   @@index([vendorId])
   @@index([creatorEmployeeId])
@@ -481,8 +481,8 @@ model Payment {
   amount          Float
   depositedToBank String?
   paidOn          DateTime?
-  vendorTaskId    Int?
-  VendorTask      VendorTask?   @relation(fields: [vendorTaskId], references: [id])
+  vendorTaskId    Int           @unique
+  VendorTask      VendorTask    @relation(fields: [vendorTaskId], references: [id])
   PaymentFile     PaymentFile[]
 
   @@index([vendorTaskId])
