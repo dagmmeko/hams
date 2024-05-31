@@ -15,8 +15,9 @@ export async function GET() {
 	return json({
 		pentHousePrice: pentHouse?.price,
 		pentHouseCurrency: pentHouse?.currency,
+		pentHouseUtilityPrice: pentHouse?.utilityPrice,
 		roomPrice: room?.price,
-		utilityPrice: room?.utilityPrice,
+		roomUtilityPrice: room?.utilityPrice,
 		roomCurrency: room?.currency
 	});
 }
