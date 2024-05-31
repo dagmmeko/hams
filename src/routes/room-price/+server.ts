@@ -16,6 +16,7 @@ export async function GET() {
 		pentHousePrice: pentHouse?.price,
 		pentHouseCurrency: pentHouse?.currency,
 		roomPrice: room?.price,
+		utilityPrice: room?.utilityPrice,
 		roomCurrency: room?.currency
 	});
 }
