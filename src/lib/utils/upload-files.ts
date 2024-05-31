@@ -1,5 +1,5 @@
 export async function uploadFiles(file: File, key: string) {
-	const getURLRes = await fetch('http://localhost:5173/api/getUploadUrl', {
+	const getURLRes = await fetch('https://hams-one.vercel.app/api/getUploadUrl', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
