@@ -99,20 +99,9 @@
 											{#if !rec.crvReceipt}
 												<span class="font-normal text-sm"
 													>{numberToCurrency(rec.amount / 1.15, {
-														currency: rec.PayToUnit?.currency,
+														currency: 'ETB',
 														currencyDisplay: 'code'
 													})}
-												</span>
-												<span class="font-normal text-xs"
-													>/ {numberToCurrency(
-														rec.PayToUnit?.currency === 'ETB'
-															? rec.amount / data.usdRate[0].rate / 1.15
-															: (rec.amount * data.usdRate[0].rate) / 1.15,
-														{
-															currency: rec.PayToUnit?.currency === 'ETB' ? 'USD' : 'ETB',
-															currencyDisplay: 'code'
-														}
-													)}
 												</span>
 											{/if}
 										</p>
@@ -121,20 +110,9 @@
 											{#if !rec.crvReceipt}
 												<span class="font-normal"
 													>{numberToCurrency(rec.amount - rec.amount / 1.15, {
-														currency: rec.PayToUnit?.currency,
+														currency: 'ETB',
 														currencyDisplay: 'code'
 													})}
-												</span>
-												<span class="font-normal text-xs"
-													>/ {numberToCurrency(
-														rec.PayToUnit?.currency === 'ETB'
-															? rec.amount / data.usdRate[0].rate
-															: (rec.amount * data.usdRate[0].rate) / 1.15,
-														{
-															currency: rec.PayToUnit?.currency === 'ETB' ? 'USD' : 'ETB',
-															currencyDisplay: 'code'
-														}
-													)}
 												</span>
 											{/if}
 										</p>
@@ -142,7 +120,7 @@
 											Total Amount:
 											<span class="font-normal"
 												>{numberToCurrency(rec.amount, {
-													currency: rec.PayToUnit?.currency,
+													currency: 'ETB',
 													currencyDisplay: 'code'
 												})}</span
 											>
@@ -359,7 +337,9 @@
 				<span class="text-primary font-medium"> CRV Receipt </span>
 			</label>
 			<label class="grid">
-				<span class="text-primary font-medium"> Amount </span>
+				<span class="text-primary font-medium">
+					Amount <span class="text-xs"> (In ETB) </span>
+				</span>
 				<input
 					bind:value={$addReceiptForm.amount}
 					{...$constraints.amount}

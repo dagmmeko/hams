@@ -23,8 +23,8 @@
 			title: 'Item Name',
 			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
-			class: 'text-left pl-2 font-bold  border-b-[1px] border-[#B3B4B8] text-xs'
+				'text-left w-44 pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left w-44 pl-2 font-bold  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
 			key: 'description',
