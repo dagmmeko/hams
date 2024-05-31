@@ -259,6 +259,7 @@
 					action="?/editUnitFile"
 					use:enhance={({ formData }) => {
 						formData.set('fileNames', fileNames.join(','));
+						formData.set('unitFile', 'Files');
 					}}
 				>
 					<label>

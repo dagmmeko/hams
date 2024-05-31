@@ -153,6 +153,7 @@
 					action="?/editVendorFile"
 					use:enhance={({ formData }) => {
 						formData.set('fileNames', fileNames.join(','));
+						formData.set('vendorFile', 'Files');
 					}}
 				>
 					<label>
