@@ -222,6 +222,7 @@
 						action="?/editTenantFile"
 						use:enhance={({ formData }) => {
 							formData.set('fileNames', fileNames.join(','));
+							formData.set('tenantFile', 'Files');
 						}}
 					>
 						<label>
