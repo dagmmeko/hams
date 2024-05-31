@@ -205,18 +205,18 @@ export const actions = {
 			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
 		}
 		const data = await event.request.formData();
-		const file = data.getAll('vendorFile');
+		const fileNames = data.get('fileNames');
+		if (typeof fileNames !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file upload' });
+		}
+		const names = fileNames.split(',');
 
 		const allNewFiles = await Promise.all(
-			file.map(async (file) => {
-				if (!(file instanceof File)) {
-					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-				}
-
+			names.map(async (file) => {
 				const newFile = await prisma.file.create({
 					data: {
-						key: `vendorFile/${event.params.vendorId}/${file.name}`,
-						fileName: file.name,
+						key: `vendorFile/${event.params.vendorId}/${file}`,
+						fileName: file,
 						VendorFile: {
 							create: {
 								vendorId: Number(event.params.vendorId)

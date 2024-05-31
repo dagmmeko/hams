@@ -32,6 +32,7 @@
 	let unitToExtend: any;
 	let endContractModal = false;
 	let unitToEnd: any;
+	let fileNames: string[] = [];
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -216,7 +217,13 @@
 				<div
 					class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 w-full max-h-96 gap-2 items-center justify-center"
 				>
-					<form method="post" action="?/editTenantFile" use:enhance>
+					<form
+						method="post"
+						action="?/editTenantFile"
+						use:enhance={({ formData }) => {
+							formData.set('fileNames', fileNames.join(','));
+						}}
+					>
 						<label>
 							<input
 								class="hidden"
@@ -230,6 +237,7 @@
 										uploadPromises.push(
 											(async function () {
 												if (data.tenant) {
+													fileNames = [...fileNames, file.name];
 													return await uploadFiles(
 														file,
 														`tenantsFile/${data.tenant.id}/${file.name}`

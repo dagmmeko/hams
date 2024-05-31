@@ -28,6 +28,7 @@
 	$: form?.vendorFileUrl ? window.open(form.vendorFileUrl, '_blank') : null;
 
 	$: form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
+	let fileNames: string[] = [];
 </script>
 
 <div class="p-6">
@@ -146,7 +147,14 @@
 			<div
 				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 			>
-				<form id="editVendorFile" method="post" action="?/editVendorFile" use:enhance>
+				<form
+					id="editVendorFile"
+					method="post"
+					action="?/editVendorFile"
+					use:enhance={({ formData }) => {
+						formData.set('fileNames', fileNames.join(','));
+					}}
+				>
 					<label>
 						<input
 							class="hidden"
@@ -160,6 +168,8 @@
 									uploadPromises.push(
 										(async function () {
 											if (data.vendor) {
+												fileNames = [...fileNames, file.name];
+
 												return await uploadFiles(file, `vendorFile/${data.vendor.id}/${file.name}`);
 											}
 										})()

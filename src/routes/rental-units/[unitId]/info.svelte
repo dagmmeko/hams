@@ -17,6 +17,7 @@
 	export let data: PageData;
 	export let form: ActionData;
 	let dateInput: any;
+	let fileNames: string[] = [];
 
 	const {
 		form: editUnitForm,
@@ -252,7 +253,14 @@
 			<div
 				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 			>
-				<form id="editUnitFile" method="post" action="?/editUnitFile" use:enhance>
+				<form
+					id="editUnitFile"
+					method="post"
+					action="?/editUnitFile"
+					use:enhance={({ formData }) => {
+						formData.set('fileNames', fileNames.join(','));
+					}}
+				>
 					<label>
 						<input
 							class="hidden"
@@ -266,6 +274,7 @@
 									uploadPromises.push(
 										(async function () {
 											if (data.unitDetails) {
+												fileNames = [...fileNames, file.name];
 												return await uploadFiles(
 													file,
 													`unitFile/${data.unitDetails.id}/${file.name}`
