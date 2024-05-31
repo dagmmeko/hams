@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import FileUp from '$lib/assets/file-up.svg.svelte';
-	import type { ActionData, PageData } from './$types';
-	import FileBg from '$lib/assets/file-bg.png';
-	import Eye from '$lib/assets/eye.svg.svelte';
+	import { page } from '$app/stores';
 	import Delete from '$lib/assets/delete.svg.svelte';
+	import Eye from '$lib/assets/eye.svg.svelte';
+	import FileBg from '$lib/assets/file-bg.png';
+	import FileUp from '$lib/assets/file-up.svg.svelte';
+	import { clickOutside } from '$lib/utils/click-outside';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { page } from '$app/stores';
+	import type { ActionData, PageData } from './$types';
 
 	import dayjs from 'dayjs';
-	import ExtendContract from './extend-contract.svelte';
 	import EndContract from './end-contract.svelte';
+	import ExtendContract from './extend-contract.svelte';
+	import { uploadFiles } from '$lib/utils/upload-files';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -137,18 +138,18 @@
 							</div>
 
 							<div class="flex gap-2 mt-1">
-								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
+								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
 									<button
-										class="bg-warning rounded-md p-2 text-xs text-white"
+										class="bg-orange-600 rounded-md p-2 text-xs text-white"
 										on:click|preventDefault={() => {
 											extendContractModal = true;
 											unitToExtend = tenantUnit.id;
 										}}
 									>
-										Extend Contract
+										Start End Process
 									</button>
 								{/if}
-								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
+								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
 									<button
 										class="bg-info rounded-md p-2 text-xs text-white"
 										on:click|preventDefault={() => {
@@ -156,7 +157,7 @@
 											unitToEnd = tenantUnit.id;
 										}}
 									>
-										Start End Process
+										Extend Contract
 									</button>
 								{/if}
 							</div>
@@ -222,16 +223,28 @@
 								type="file"
 								name="tenantFile"
 								multiple
-								on:change={(e) => {
-									const data = e.currentTarget.files;
-									if (data) {
-										for (let i = 0; i <= data?.length; i++) {
-											if (data.item(i)) {
-												frontFileData = [...frontFileData, data[i].name];
-											}
-										}
+								on:change={async (e) => {
+									const uploadPromises = [];
+									const cal = e.currentTarget.form;
+									for (const file of e.currentTarget.files ?? []) {
+										uploadPromises.push(
+											(async function () {
+												if (data.tenant) {
+													return await uploadFiles(
+														file,
+														`tenantsFile/${data.tenant.id}/${file.name}`
+													);
+												}
+											})()
+										);
 									}
-									e.currentTarget.form?.requestSubmit();
+									const successes = await Promise.all(uploadPromises);
+
+									if (!successes.find((s) => s !== true)) {
+										console.log('submitting');
+										// @ts-ignore
+										cal.requestSubmit();
+									}
 								}}
 							/>
 

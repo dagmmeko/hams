@@ -12,6 +12,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { ActionData, PageData } from './$types';
 	import { numberToCurrency } from '$lib/utils/currency';
+	import { uploadFiles } from '$lib/utils/upload-files';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -258,16 +259,28 @@
 							type="file"
 							name="unitFile"
 							multiple
-							on:change={(e) => {
-								const data = e.currentTarget.files;
-								if (data) {
-									for (let i = 0; i <= data?.length; i++) {
-										if (data.item(i)) {
-											frontFileData = [...frontFileData, data[i].name];
-										}
-									}
+							on:change={async (e) => {
+								const uploadPromises = [];
+								const cal = e.currentTarget.form;
+								for (const file of e.currentTarget.files ?? []) {
+									uploadPromises.push(
+										(async function () {
+											if (data.unitDetails) {
+												return await uploadFiles(
+													file,
+													`unitFile/${data.unitDetails.id}/${file.name}`
+												);
+											}
+										})()
+									);
 								}
-								e.currentTarget.form?.requestSubmit();
+								const successes = await Promise.all(uploadPromises);
+
+								if (!successes.find((s) => s !== true)) {
+									console.log('submitting');
+									// @ts-ignore
+									cal.requestSubmit();
+								}
 							}}
 						/>
 

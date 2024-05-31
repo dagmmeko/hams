@@ -2,7 +2,7 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { uploadFileToS3 } from '$lib/utils/aws-file.js';
+import { getFile, uploadFileToS3 } from '$lib/utils/aws-file.js';
 import type { ContactSource } from '@prisma/client';
 
 const addTenantSchema = z.object({

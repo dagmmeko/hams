@@ -8,6 +8,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { uploadFiles } from '$lib/utils/upload-files';
 
 	export let data: PageData;
 
@@ -152,16 +153,25 @@
 							type="file"
 							name="vendorFile"
 							multiple
-							on:change={(e) => {
-								const data = e.currentTarget.files;
-								if (data) {
-									for (let i = 0; i <= data?.length; i++) {
-										if (data.item(i)) {
-											frontFileData = [...frontFileData, data[i].name];
-										}
-									}
+							on:change={async (e) => {
+								const uploadPromises = [];
+								const cal = e.currentTarget.form;
+								for (const file of e.currentTarget.files ?? []) {
+									uploadPromises.push(
+										(async function () {
+											if (data.vendor) {
+												return await uploadFiles(file, `vendorFile/${data.vendor.id}/${file.name}`);
+											}
+										})()
+									);
 								}
-								e.currentTarget.form?.requestSubmit();
+								const successes = await Promise.all(uploadPromises);
+
+								if (!successes.find((s) => s !== true)) {
+									console.log('submitting');
+									// @ts-ignore
+									cal.requestSubmit();
+								}
 							}}
 						/>
 

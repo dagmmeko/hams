@@ -367,28 +367,19 @@ export const actions = {
 				if (!(file instanceof File)) {
 					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
 				}
-				const buffer = await file.arrayBuffer();
-				const send = Buffer.from(buffer);
 
-				const fileUpload = await uploadFileToS3(
-					`unitFile/${event.params.unitId}/${file.name}`,
-					send
-				);
-
-				if (fileUpload) {
-					const newFile = await prisma.file.create({
-						data: {
-							key: `unitFile/${event.params.unitId}/${file.name}`,
-							fileName: file.name,
-							UnitsFile: {
-								create: {
-									rentalUnitId: Number(event.params.unitId)
-								}
+				const newFile = await prisma.file.create({
+					data: {
+						key: `unitFile/${event.params.unitId}/${file.name}`,
+						fileName: file.name,
+						UnitsFile: {
+							create: {
+								rentalUnitId: Number(event.params.unitId)
 							}
 						}
-					});
-					return newFile;
-				}
+					}
+				});
+				return newFile;
 			})
 		);
 		return { allNewFiles };

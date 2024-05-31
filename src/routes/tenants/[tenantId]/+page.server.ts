@@ -344,28 +344,20 @@ export const actions = {
 					throw new Error('Issue with the file uploaded.');
 				}
 
-				const buffer = await file.arrayBuffer();
-				const send = Buffer.from(buffer);
+				console.log({ file });
 
-				const fileUpload = await uploadFileToS3(
-					`tenantsFile/${event.params.tenantId}/${file.name}`,
-					send
-				);
-
-				if (fileUpload) {
-					const newFile = await prisma.file.create({
-						data: {
-							key: `tenantsFile/${event.params.tenantId}/${file.name}`,
-							fileName: file.name,
-							TenantsFile: {
-								create: {
-									tenantsId: Number(event.params.tenantId)
-								}
+				const newFile = await prisma.file.create({
+					data: {
+						key: `tenantsFile/${event.params.tenantId}/${file.name}`,
+						fileName: file.name,
+						TenantsFile: {
+							create: {
+								tenantsId: Number(event.params.tenantId)
 							}
 						}
-					});
-					return newFile;
-				}
+					}
+				});
+				return newFile;
 			})
 		);
 
