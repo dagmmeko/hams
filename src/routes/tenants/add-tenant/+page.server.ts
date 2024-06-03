@@ -61,13 +61,7 @@ export const actions = {
 			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
 		}
 		const data = await event.request.clone().formData();
-		const tenantFile = data.getAll('tenantFile');
 
-		tenantFile.map(async (file) => {
-			if (!(file instanceof File)) {
-				return fail(500, { addTenantForm, errorMessage: 'Issue with the file uploaded.' });
-			}
-		});
 		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);
 
 		if (!addTenantForm) {
@@ -115,47 +109,21 @@ export const actions = {
 
 			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
 
-			//update unit status
-			if (!addTenantForm.data.priceChange) {
-				await prisma.rentalUnits.update({
-					where: {
-						id: addTenantForm.data.rentalUnitsId
-					},
-					data: {
-						active: true
-					}
-				});
-			}
+			// if (!addTenantForm.data.priceChange) {
+			// 	await prisma.rentalUnits.update({
+			// 		where: {
+			// 			id: addTenantForm.data.rentalUnitsId
+			// 		},
+			// 		data: {
+			// 			active: true
+			// 		}
+			// 	});
+			// }
 
-			//upload files
-			tenantFile.map(async (file) => {
-				if (!(file instanceof File) || file.size === 0) {
-					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-				}
-				const buffer = await file.arrayBuffer();
-				const send = Buffer.from(buffer);
-				try {
-					const fileUpload = await uploadFileToS3(`tenantsFile/${addTenant.id}/${file.name}`, send);
-
-					if (fileUpload) {
-						await prisma.file.create({
-							data: {
-								key: `tenantsFile/${addTenant.id}/${file.name}`,
-								fileName: file.name,
-								TenantsFile: {
-									create: {
-										tenantsId: Number(addTenant.id)
-									}
-								}
-							}
-						});
-					}
-				} catch (error) {
-					console.log(error as Error);
-				}
-			});
-
-			return { addTenantForm, addTenant };
+			return {
+				addTenantForm,
+				addTenant
+			};
 		} catch (error) {
 			return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
 		}

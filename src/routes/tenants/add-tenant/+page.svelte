@@ -5,23 +5,73 @@
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import { numberToCurrency } from '$lib/utils/currency';
+	import { uploadFiles } from '$lib/utils/upload-files';
 
 	export let form;
 	export let data;
+
+	let filesSelected: File[] = [];
 
 	const {
 		form: addTenantForm,
 		enhance: addTenantEnhance,
 		constraints
-	} = superForm(data.addTenantForm);
+	} = superForm(data.addTenantForm, {
+		onSubmit: ({ formElement, formData }) => {
+			formData.set('tenantFile', 'Tenant Files');
+			filesSelected = formElement.tenantFile.files;
+		},
+		onResult: async ({ result }) => {
+			if (result.type === 'success') {
+				const uploadPromises = [];
+
+				for (const file of filesSelected) {
+					uploadPromises.push(
+						(async function () {
+							const uploadStatus = await uploadFiles(
+								file,
+								`tenantsFile/${result.data?.addTenant.id}/${file.name}`
+							);
+							if (uploadStatus) {
+								const fileDataRes = await fetch('https://hams-one.vercel.app/api/postFileData', {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify({
+										key: `tenantsFile/${result.data?.addTenant.id}/${file.name}`,
+										fileName: file.name,
+										type: 'tenants',
+										id: result.data?.addTenant.id
+									})
+								});
+								const fileData = await fileDataRes.json();
+								if (fileData.type === 'ERROR') {
+									toast.push(`Error writing file data for: ${file.name}`);
+									return false;
+								}
+								return true;
+							} else {
+								toast.push(`Error uploading: ${file.name}`);
+								return false;
+							}
+						})()
+					);
+				}
+				const successes = await Promise.all(uploadPromises);
+
+				if (!successes.find((s) => s !== true)) {
+					toast.push('Tenant added successfully');
+					goto('/tenants');
+				}
+			}
+		}
+	});
 
 	let dateInput: any;
 	let dateInput2: any;
 
 	let selectedUnit: any;
-
-	$: form?.addTenant && goto('/tenants');
-	$: form?.addTenant && toast.push('Tenant added successfully');
 	let frontFileData: string[] = [];
 </script>
 
