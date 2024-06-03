@@ -62,7 +62,9 @@
 
 				if (!successes.find((s) => s !== true)) {
 					toast.push('Tenant added successfully');
-					goto('/tenants');
+					setTimeout(() => {
+						window.location.href = '/tenants';
+					}, 1500);
 				}
 			}
 		}

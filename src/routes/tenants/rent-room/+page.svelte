@@ -222,6 +222,7 @@
 							{...$constraints.duration}
 							class="border-[1px] border-black/60 rounded-md p-2"
 							name="duration"
+							type="number"
 						/>
 					</label>
 					<label class="grid gap-1">
