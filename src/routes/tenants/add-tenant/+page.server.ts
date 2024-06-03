@@ -60,7 +60,6 @@ export const actions = {
 		if (!hasRole) {
 			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
 		}
-		const data = await event.request.clone().formData();
 
 		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);
 

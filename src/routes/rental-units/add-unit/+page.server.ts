@@ -46,14 +46,6 @@ export const actions = {
 			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
 		}
 		const addUnitForm = await superValidate(event.request.clone(), addUnitSchema);
-		const data = await event.request.clone().formData();
-		const unitFile = data.getAll('unitFile');
-
-		unitFile.map(async (file) => {
-			if (!(file instanceof File)) {
-				return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-			}
-		});
 
 		if (!addUnitForm) {
 			return fail(400, { addUnitForm });
@@ -85,33 +77,6 @@ export const actions = {
 
 			if (!addUnit) return fail(500, { errorMessage: 'Unit not created.' });
 
-			unitFile.map(async (file) => {
-				if (!(file instanceof File) || file.size === 0) {
-					return fail(500, { errorMessage: 'Issue with the file uploaded.' });
-				}
-				const buffer = await file.arrayBuffer();
-				const send = Buffer.from(buffer);
-
-				try {
-					const fileUpload = await uploadFileToS3(`unitFile/${addUnit.id}/${file.name}`, send);
-
-					if (fileUpload) {
-						await prisma.file.create({
-							data: {
-								key: `unitFile/${addUnit.id}/${file.name}`,
-								fileName: file.name,
-								UnitsFile: {
-									create: {
-										rentalUnitId: addUnit.id
-									}
-								}
-							}
-						});
-					}
-				} catch (error) {
-					console.log(error as Error);
-				}
-			});
 			return { addUnitForm, addUnit };
 		} catch (error) {
 			console.log(error as Error);

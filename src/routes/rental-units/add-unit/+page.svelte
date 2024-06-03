@@ -5,8 +5,12 @@
 	import { currencyToNumber, numberToCurrency } from '$lib/utils/currency';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
+	import { uploadFiles } from '$lib/utils/upload-files';
+
 	export let data;
 	export let form;
+	let filesSelected: File[] = [];
+
 	$: form?.addUnitForm && goto('/rental-units');
 	$: form?.addUnitForm && toast.push('Unit added successfully');
 	const {
@@ -14,8 +18,57 @@
 		enhance: addFormEnhance,
 		constraints
 	} = superForm(data.addUnitForm, {
-		onSubmit: ({ formData }) => {
+		onSubmit: ({ formData, formElement }) => {
 			formData.set('price', currencyToNumber(priceCurrency).toString());
+			formData.set('unitFile', 'Unit Files');
+			filesSelected = formElement.unitFile.files;
+		},
+		onResult: async ({ result }) => {
+			if (result.type === 'success') {
+				const uploadPromises = [];
+				for (const file of filesSelected) {
+					uploadPromises.push(
+						(async function () {
+							console.log(result);
+							const uploadStatus = await uploadFiles(
+								file,
+								`unitFile/${result.data?.addUnit.id}/${file.name}`
+							);
+							if (uploadStatus) {
+								const fileDataRes = await fetch('https://hams-one.vercel.app/api/postFileData', {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify({
+										key: `unitFile/${result.data?.addUnit.id}/${file.name}`,
+										fileName: file.name,
+										type: 'units',
+										id: result.data?.addUnit.id
+									})
+								});
+								const fileData = await fileDataRes.json();
+								if (fileData.type === 'ERROR') {
+									toast.push(`Error writing file data for: ${file.name}`);
+									return false;
+								}
+								return true;
+							} else {
+								toast.push(`Error uploading: ${file.name}`);
+								return false;
+							}
+						})()
+					);
+				}
+				const successes = await Promise.all(uploadPromises);
+
+				if (!successes.find((s) => s !== true)) {
+					toast.push('Unit added successfully');
+					setTimeout(() => {
+						window.location.href = '/rental-units';
+					}, 1500);
+				}
+			}
 		}
 	});
 
@@ -23,14 +76,6 @@
 		currency: $addUnitForm.inBirr ? 'ETB' : 'USD',
 		currencyDisplay: 'code'
 	});
-	function setPriceCurrency(currency: string) {
-		$addUnitForm.price = currencyToNumber(currency);
-		priceCurrency =
-			numberToCurrency(currencyToNumber(currency), {
-				currency: $addUnitForm.inBirr ? 'ETB' : 'USD',
-				currencyDisplay: 'code'
-			}) + (currency.endsWith('.') ? '.' : '');
-	}
 
 	let frontFileData: string[] = [];
 </script>
