@@ -220,7 +220,10 @@
 					id="deleteEmployeeFile"
 					method="post"
 					action="?/deleteEmployeeFile"
-					use:enhance={({ formData }) => {
+					use:enhance={({ formData, cancel }) => {
+						if (!window.confirm('Are you sure you want to delete this file?')) {
+							cancel();
+						}
 						formData.set('employeeFileId', `${file.fileId}`);
 					}}
 				>
