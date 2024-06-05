@@ -27,7 +27,6 @@
 
 	$: form?.employeeArchived ? toast.push('Employee archived successfully') : null;
 	$: form?.employeeArchived ? goto('/employees') : null;
-	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
 </script>
 
 <div class="p-6">
@@ -202,6 +201,12 @@
 							action="?/downloadEmployeeFile"
 							use:enhance={({ formData }) => {
 								formData.set('employeeKey', `${file.File.key}`);
+								return async ({ result }) => {
+									if (result.type === 'success') {
+										// @ts-ignore
+										window.open(result.data.fileUrl, '_blank');
+									}
+								};
 							}}
 							class="flex flex-col gap-2 justify-center items-center h-full"
 						>

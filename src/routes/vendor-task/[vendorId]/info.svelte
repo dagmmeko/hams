@@ -25,7 +25,6 @@
 	let frontFileData: string[] = [];
 
 	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
-	$: form?.vendorFileUrl ? window.open(form.vendorFileUrl, '_blank') : null;
 
 	$: form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
 	let fileNames: string[] = [];
@@ -132,6 +131,12 @@
 						action="?/deleteVendorFile"
 						use:enhance={({ formData }) => {
 							formData.set('deleteVendorFileId', `${file.fileId}`);
+							return async ({ result, update }) => {
+								if (result.type === 'success') {
+									// @ts-ignore
+									window.open(result.data.fileUrl, '_blank');
+								}
+							};
 						}}
 					>
 						<button

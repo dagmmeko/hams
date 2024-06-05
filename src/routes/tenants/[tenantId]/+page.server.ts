@@ -292,12 +292,13 @@ export const actions = {
 		const data = await event.request.formData();
 		const tenantKey = data.get('tenantKey');
 
+		console.log({ tenantKey });
 		if (typeof tenantKey !== 'string') {
 			return fail(500, { errorMessage: 'Issus with file download' });
 		}
 
 		const fileUrl = await getFile(tenantKey);
-
+		console.log({ fileUrl });
 		return { fileUrl };
 	},
 	deleteTenantFile: async (event) => {

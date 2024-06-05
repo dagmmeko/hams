@@ -23,19 +23,16 @@
 		form: editUnitForm,
 		enhance: editUnitFormEnhance,
 		constraints
-	} = superForm(data.editUnitForm);
+	} = superForm(data.editUnitForm, {
+		onResult: ({ result }) => {
+			if (result.type === 'success') {
+				toast.push('Unit updated successfully');
+			}
+		}
+	});
 
 	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
 
-	let frontFileData: string[] = [];
-	$: form?.deleteFile
-		? toast.push('File deleted successfully', { theme: { '--toastBackground': '#059669' } })
-		: null;
-	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
-	// $: newFiles = form?.allNewFiles;
-	$: form?.deletedUnit ? goto('/rental-units') : null;
-	$: form?.addInspection ? toast.push('Inspection added successfully') : null;
-	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
 	let modal = false;
 </script>
 
@@ -218,6 +215,11 @@
 								action="?/downloadUnitFile"
 								use:enhance={({ formData }) => {
 									formData.set('unitKey', `${file.File.key}`);
+									return async ({ result }) => {
+										if (result.type === 'success') {
+											window.open(form?.fileUrl, '_blank');
+										}
+									};
 								}}
 								class="flex flex-col gap-2 justify-center items-center h-full"
 							>
@@ -238,6 +240,11 @@
 						action="?/deleteUnitFile"
 						use:enhance={({ formData }) => {
 							formData.set('unitFileId', `${file.fileId}`);
+							return async ({ result }) => {
+								if (result.type === 'success') {
+									toast.push('File deleted successfully');
+								}
+							};
 						}}
 					>
 						<button
@@ -322,7 +329,18 @@
 						back.
 					</p>
 				</div>
-				<form method="post" action="?/archiveUnit" use:enhance>
+				<form
+					method="post"
+					action="?/archiveUnit"
+					use:enhance={() => {
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								toast.push('Unit archived successfully');
+								goto('/rental-units');
+							}
+						};
+					}}
+				>
 					{#if data.unitDetails?.active}
 						<button
 							on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
@@ -342,9 +360,12 @@
 		method="post"
 		action="?/addInspection"
 		use:enhance={() => {
-			return async ({ update }) => {
+			return async ({ update, result }) => {
 				await update();
 				modal = false;
+				if (result.type === 'success') {
+					toast.push('Inspection added successfully');
+				}
 			};
 		}}
 	>

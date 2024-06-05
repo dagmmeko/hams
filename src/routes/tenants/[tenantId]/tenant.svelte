@@ -22,9 +22,7 @@
 		enhance: editTenantFormEnhance,
 		constraints
 	} = superForm(data.editTenantForm);
-	let frontFileData: string[] = [];
 	$: form?.editTenant ? toast.push('Tenant updated successfully') : null;
-	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
 	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
 	$: form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
 	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
@@ -183,6 +181,12 @@
 									action="?/downloadTenantFile"
 									use:enhance={({ formData }) => {
 										formData.set('tenantKey', `${file.File.key}`);
+										return async ({ result, update }) => {
+											if (result.type === 'success') {
+												// @ts-ignore
+												window.open(result.data.fileUrl, '_blank');
+											}
+										};
 									}}
 									class="flex flex-col gap-2 justify-center items-center h-full"
 								>
