@@ -15,6 +15,7 @@
 		Title,
 		Tooltip
 	} from 'chart.js';
+	import dayjs from 'dayjs';
 
 	Chart.register(
 		Title,
@@ -37,24 +38,38 @@
 	let filterEndDate: any;
 	let dateInput: any;
 	let dateInput2: any;
+	let disableChangeDollar: boolean = true;
 </script>
 
 <div class="mx-10 my-12">
 	<form use:usdRateEnhance method="post" action="?/changeRate">
 		<label class="grid">
-			<span class="text-primary font-semibold py-1"> USD Rate</span>
+			<span class="text-primary font-semibold"> USD Rate</span>
+			<span class="text-xs flex gap-2 py-1">
+				<p class="font-semibold">Last Updated:</p>
+				{dayjs(data.usdRate[0].createdAt).format('MMM DD/YY')}
+			</span>
 			<input
 				class="w-24 border-[1px] border-black/60 rounded-md p-1"
 				name="usdRate"
 				bind:value={$usdRateForm.usdRate}
 				{...$constraints.usdRate}
+				on:input={() => {
+					disableChangeDollar = false;
+				}}
 			/>
 		</label>
 		<label class="hidden">
 			<input name="id" bind:value={$usdRateForm.id} {...$constraints.id} />
 		</label>
 		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_DOLLAR_VALUE')}
-			<button type="submit" class="bg-primary h-fit text-sm p-1 rounded-md mt-2 text-white">
+			<button
+				disabled={disableChangeDollar}
+				type="submit"
+				class=" {disableChangeDollar
+					? 'bg-primary/50'
+					: 'bg-primary'} h-fit text-sm p-1 rounded-md mt-2 text-white"
+			>
 				Save
 			</button>
 		{/if}

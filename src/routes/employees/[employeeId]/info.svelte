@@ -7,6 +7,10 @@
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { goto } from '$app/navigation';
+	import FileBg from '$lib/assets/file-bg.png';
+	import { uploadFiles } from '$lib/utils/upload-files';
+	import Eye from '$lib/assets/eye.svg.svelte';
+	import Delete from '$lib/assets/delete.svg.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -19,9 +23,11 @@
 	const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 	const birthDate = dateProxy(editEmployeeForm, 'dob', { format: 'date', empty: 'undefined' });
 	let frontFileData: string[] = [];
+	let fileNames: string[] = [];
 
 	$: form?.employeeArchived ? toast.push('Employee archived successfully') : null;
 	$: form?.employeeArchived ? goto('/employees') : null;
+	$: form?.fileUrl ? window.open(form.fileUrl, '_blank') : null;
 </script>
 
 <div class="p-6">
@@ -181,51 +187,107 @@
 	</form>
 	<p class="text-2xl mt-10">Documents</p>
 	<hr class="my-6" />
-	<label>
-		<input
-			class="hidden"
-			type="file"
-			name="unitFile"
-			multiple
-			on:change={(e) => {
-				const data = e.currentTarget.files;
-				if (data) {
-					for (let i = 0; i <= data?.length; i++) {
-						if (data.item(i)) {
-							frontFileData = [...frontFileData, data[i].name];
-						}
-					}
-				}
-			}}
-		/>
-		<div class=" flex-1 flex-shrink-0 grid grid-cols-4 items-start gap-2">
-			{#each frontFileData as file}
-				<div
-					class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
-				>
-					<div class=" relative z-10 w-32 h-36" />
+	<div class="  w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
+		{#each data.employee.EmployeeFile ?? [] as file}
+			<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
+				<div class="relative">
+					<div class=" relative z-10 w-full h-36">
+						<img src={FileBg} alt="bg" class="w-full h-full" />
+					</div>
 
 					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<form
+							id="downloadEmployeeFile"
+							method="post"
+							action="?/downloadEmployeeFile"
+							use:enhance={({ formData }) => {
+								formData.set('employeeKey', `${file.File.key}`);
+							}}
+							class="flex flex-col gap-2 justify-center items-center h-full"
+						>
+							<button on:click|stopPropagation={() => console.log('download')} type="submit">
+								<div class="h-full w-full flex flex-col items-center justify-center">
+									<Eye class="text-primary w-7 h-7" />
+									<span class="text-sm mx-3 py-2 break-all">
+										{file.File.fileName}
+									</span>
+								</div>
+							</button>
+						</form>
+					</div>
+				</div>
+				<form
+					id="deleteEmployeeFile"
+					method="post"
+					action="?/deleteEmployeeFile"
+					use:enhance={({ formData }) => {
+						formData.set('employeeFileId', `${file.fileId}`);
+					}}
+				>
+					<button
+						on:click|stopPropagation={() => console.log('hello')}
+						class="flex gap-1 items-center justify-center w-full p-2"
+					>
+						<Delete class="h-5 w-5 text-danger" />
+						<span class="text-danger text-sm">Delete</span>
+					</button>
+				</form>
+			</div>
+		{/each}
+		<div
+			class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] items-center justify-center"
+		>
+			<form
+				method="post"
+				action="?/editEmployeeFile"
+				use:enhance={({ formData }) => {
+					formData.set('fileNames', fileNames.join(','));
+					formData.set('employeeFiles', 'Files');
+				}}
+			>
+				<label>
+					<input
+						class="hidden"
+						type="file"
+						name="employeeFiles"
+						multiple
+						on:change={async (e) => {
+							const uploadPromises = [];
+							const cal = e.currentTarget.form;
+							for (const file of e.currentTarget.files ?? []) {
+								uploadPromises.push(
+									(async function () {
+										if (data.employee) {
+											fileNames = [...fileNames, file.name];
+											return await uploadFiles(
+												file,
+												`employeeFiles/${data.employee.id}/${file.name}`
+											);
+										}
+									})()
+								);
+							}
+							const successes = await Promise.all(uploadPromises);
+
+							if (!successes.find((s) => s !== true)) {
+								console.log('submitting');
+								// @ts-ignore
+								cal.requestSubmit();
+							}
+						}}
+					/>
+
+					<div class=" relative z-10 w-32 h-44" />
+					<div class="absolute top-0 w-full h-full left-0 z-30">
 						<div class="flex flex-col gap-2 justify-center items-center h-full">
-							<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
-							<p class="text-sm ml-2 py-2">{file}</p>
+							<FileUp class="text-primary w-7 h-7" />
+							<span class="text-xs">Upload File</span>
 						</div>
 					</div>
-				</div>
-			{/each}
-			<div
-				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
-			>
-				<div class=" relative z-10 w-32 h-36" />
-				<div class="absolute top-0 w-full h-full left-0 z-30">
-					<div class="flex flex-col gap-2 justify-center items-center h-full">
-						<FileUp class="text-primary w-7 h-7" />
-						<span class="text-xs">Upload File</span>
-					</div>
-				</div>
-			</div>
+				</label>
+			</form>
 		</div>
-	</label>
+	</div>
 	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_EMPLOYEE')}
 		<p class="text-2xl mt-10">Danger</p>
 		<hr class="my-6" />

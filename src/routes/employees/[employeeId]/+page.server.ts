@@ -1,3 +1,4 @@
+import { getFile } from '$lib/utils/aws-file.js';
 import { prisma } from '$lib/utils/prisma.js';
 import type { EmploymentType } from '@prisma/client';
 import { error, fail, redirect } from '@sveltejs/kit';
@@ -96,7 +97,12 @@ export const load = async (event) => {
 				}
 			},
 			User: true,
-			Manager: true
+			Manager: true,
+			EmployeeFile: {
+				include: {
+					File: true
+				}
+			}
 		}
 	});
 	const attendanceDate1 = dayjs(employee?.Attendance[0]?.createdAt).format('YYYY-MM-DD');
@@ -364,5 +370,76 @@ export const actions = {
 		});
 
 		return { updatedLeave };
+	},
+	editEmployeeFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_EMPLOYEE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
+		const data = await event.request.formData();
+		const fileNames = data.get('fileNames');
+		if (typeof fileNames !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file upload' });
+		}
+		const names = fileNames.split(',');
+		const allNewFiles = await Promise.all(
+			names.map(async (file) => {
+				const newFile = await prisma.file.create({
+					data: {
+						key: `employeeFiles/${event.params.employeeId}/${file}`,
+						fileName: file,
+						EmployeeFile: {
+							create: {
+								employeeId: Number(event.params.employeeId)
+							}
+						}
+					}
+				});
+				return newFile;
+			})
+		);
+
+		return { allNewFiles };
+	},
+	downloadEmployeeFile: async (event) => {
+		const data = await event.request.formData();
+		const employeeKey = data.get('employeeKey');
+
+		if (typeof employeeKey !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file download' });
+		}
+
+		const fileUrl = await getFile(employeeKey);
+
+		return { fileUrl };
+	},
+	deleteEmployeeFile: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'EDIT_EMPLOYEE';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+		const data = await event.request.formData();
+		const employeeFileId = data.get('employeeFileId');
+
+		if (typeof employeeFileId !== 'string') {
+			return fail(500, { errorMessage: 'Issus with file deletion' });
+		}
+		const deleteFile = await prisma.file.delete({
+			where: {
+				id: Number(employeeFileId)
+			}
+		});
+
+		return { deleteFile };
 	}
 };

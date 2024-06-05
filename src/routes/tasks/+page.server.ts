@@ -19,8 +19,6 @@ export const load = async (event) => {
 		return scope.name === 'VIEW_ALL_INTERNAL_TASK_PAGE';
 	});
 
-	console.log({ s: canViewAllTask });
-
 	const addInternalTaskForm = await superValidate(addInternalTaskSchema);
 	const internalTask = await prisma.internalTask.findMany({
 		where: {

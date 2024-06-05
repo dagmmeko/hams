@@ -23,6 +23,7 @@ model File {
   TenantsFile      TenantsFile?
   UnitsFile        UnitsFile?
   InternalTaskFile InternalTaskFile?
+  EmployeeFile     EmployeeFile?
 }
 
 model User {
@@ -125,6 +126,20 @@ model UnitsFile {
   File         File        @relation(fields: [fileId], references: [id], onDelete: Cascade)
 
   @@index([rentalUnitId])
+  @@index([fileId])
+}
+
+model EmployeeFile {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+  fileId     Int       @unique
+  employeeId Int
+  Employee   Employee  @relation(fields: [employeeId], references: [id])
+  File       File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId])
   @@index([fileId])
 }
 
@@ -318,6 +333,7 @@ model Employee {
   InternalTaskCreatedBy  InternalTask[] @relation("taskCreatedBy")
   InternalTaskAssignedTo InternalTask[] @relation("taskAssignedTo")
   VendorTask             VendorTask[]   @relation("internalTaskCreatedBy")
+  EmployeeFile           EmployeeFile[]
 
   @@index([roleId])
   @@index([userId])
