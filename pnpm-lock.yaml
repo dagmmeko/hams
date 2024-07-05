@@ -6,10 +6,10 @@ settings:
 
 dependencies:
   '@aws-sdk/s3-request-presigner':
-    specifier: ^3.525.0
+    specifier: 3.525.0
     version: 3.525.0
   resend:
-    specifier: ^3.4.0
+    specifier: 3.4.0
     version: 3.4.0
 
 devDependencies:
