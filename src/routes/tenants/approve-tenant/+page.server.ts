@@ -1,4 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
+import { sendEmail } from '$lib/utils/send-email.js';
 import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
@@ -48,14 +49,10 @@ export const actions = {
 				RentalUnits: true
 			}
 		});
-		console.log({ priceChangeRequest });
 
 		if (!priceChangeRequest) {
 			return fail(400, { approveRentForm, errorMessage: 'Invalid price change request.' });
 		}
-		console.log('hello');
-
-		console.log({ approveRentForm });
 
 		if (!approveRentForm) {
 			return fail(400, { approveRentForm });
@@ -94,7 +91,7 @@ export const actions = {
 
 		if (!tenant) return fail(500, { approveRentForm, errorMessage: 'Tenant not rented.' });
 
-		await prisma.rentalUnits.update({
+		const unit = await prisma.rentalUnits.update({
 			where: {
 				id: priceChangeRequest?.RentalUnits?.id
 			},
@@ -102,6 +99,13 @@ export const actions = {
 				active: true
 			}
 		});
+
+		await sendEmail(
+			['dagixmeko@gmail.com'],
+			'Approved Tenant',
+			`${tenant.fullName} has been approved to rent room ${unit.roomNumber}. With price change from ${unit.price} to ${priceChangeRequest.price}.`
+		);
+
 		return { approveRentForm, tenant };
 	}
 };

@@ -164,6 +164,7 @@
 									name="newPrice"
 									type="number"
 									placeholder="Amended Price"
+									required={$addTenantForm.priceChange}
 									bind:value={$addTenantForm.newPrice}
 									{...$constraints.newPrice}
 								/>

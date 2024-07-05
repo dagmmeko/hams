@@ -2,8 +2,8 @@ import { prisma } from '$lib/utils/prisma.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import z from 'zod';
-import { getFile, uploadFileToS3 } from '$lib/utils/aws-file.js';
 import type { ContactSource } from '@prisma/client';
+import { sendEmail } from '$lib/utils/send-email.js';
 
 const addTenantSchema = z.object({
 	fullName: z.string(),
@@ -108,16 +108,22 @@ export const actions = {
 
 			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
 
-			// if (!addTenantForm.data.priceChange) {
-			// 	await prisma.rentalUnits.update({
-			// 		where: {
-			// 			id: addTenantForm.data.rentalUnitsId
-			// 		},
-			// 		data: {
-			// 			active: true
-			// 		}
-			// 	});
-			// }
+			const unit = await prisma.rentalUnits.findFirst({
+				where: {
+					id: addTenantForm.data.rentalUnitsId
+				}
+			});
+			//send email about the new tenant
+
+			await sendEmail(
+				['dagixmeko@gmail.com'],
+				'New Tenant',
+				`A new tenant has been added to the system. Name: ${addTenantForm.data.fullName}. ${
+					addTenantForm.data.priceChange
+						? `Price change has been requested for: ${unit?.roomNumber} from ${unit?.price} to ${addTenantForm.data.newPrice} `
+						: `Room number: ${unit?.roomNumber} has been rented.`
+				}`
+			);
 
 			return {
 				addTenantForm,

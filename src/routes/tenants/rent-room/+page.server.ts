@@ -1,4 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
+import { sendEmail } from '$lib/utils/send-email.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -83,8 +84,6 @@ export const actions = {
 			return fail(400, { rentRoomForm });
 		}
 
-		console.log({ rentRoomForm: rentRoomForm.data });
-
 		const rentTenant = await prisma.tenants
 			.update({
 				where: {
@@ -124,6 +123,28 @@ export const actions = {
 			.catch((e) => console.error(e));
 
 		if (!rentTenant) return fail(500, { errorMessage: 'Tenant not rented.' });
+
+		const unit = await prisma.rentalUnits.findFirst({
+			where: {
+				id: Number(rentRoomForm.data.selectedUnitId)
+			}
+		});
+
+		const tenant = await prisma.tenants.findFirst({
+			where: {
+				id: Number(rentRoomForm.data.selectedTenantId)
+			}
+		});
+
+		await sendEmail(
+			['dagixmeko@gmail.com'],
+			'New Rental Deal',
+			`Our customer ${tenant?.fullName} wants to rent a room. ${
+				rentRoomForm.data.priceChange
+					? `Price change has been requested for: ${unit?.roomNumber} from ${unit?.price} to ${rentRoomForm.data.newPrice} `
+					: `Room number: ${unit?.roomNumber} has been rented.`
+			}`
+		);
 
 		await prisma.rentalUnits.update({
 			where: {

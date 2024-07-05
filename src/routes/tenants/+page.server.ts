@@ -1,4 +1,5 @@
 import { prisma } from '$lib/utils/prisma.js';
+import { sendEmail } from '$lib/utils/send-email.js';
 import { fail, redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
@@ -88,8 +89,18 @@ export const actions = {
 				},
 				data: {
 					approved: true
+				},
+				include: {
+					RentalUnits: true,
+					Tenant: true
 				}
 			});
+
+			await sendEmail(
+				['dagixmeko@gmail.com'],
+				'Price change request approved',
+				`Tenant ${priceChange.Tenant.fullName}'s price change request for ${priceChange.RentalUnits.roomNumber} from ${priceChange.RentalUnits.price} to ${priceChange.price} has been approved.`
+			);
 
 			return { priceChange };
 		} catch (error) {
@@ -121,8 +132,17 @@ export const actions = {
 				data: {
 					approved: false,
 					active: false
+				},
+				include: {
+					RentalUnits: true,
+					Tenant: true
 				}
 			});
+			await sendEmail(
+				['dagixmeko@gmail.com'],
+				'Price change request denied',
+				`Tenant ${priceChange.Tenant.fullName}'s price change request for ${priceChange.RentalUnits.roomNumber} from ${priceChange.RentalUnits.price} to ${priceChange.price} has been denied.`
+			);
 			return { priceChange };
 		} catch (error) {
 			console.log(error);

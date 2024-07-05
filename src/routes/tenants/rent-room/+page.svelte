@@ -189,21 +189,21 @@
 							{...$constraints.companyName}
 						/>
 					</label>
-
 					<label class="grid gap-1">
-						<span class="text-primary font-medium"> Contract Start Date </span>
+						<span class="text-primary font-medium"> End Date </span>
 						<input
 							type="date"
-							name="startDate"
+							name="endDate"
 							class="border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput}
+							bind:this={dateInput2}
 							on:click={() => {
-								dateInput && dateInput.showPicker();
+								dateInput2 && dateInput2.showPicker();
 							}}
-							bind:value={$rentRoomForm.startDate}
-							{...$constraints.startDate}
+							bind:value={$rentRoomForm.endDate}
+							{...$constraints.endDate}
 						/>
 					</label>
+
 					<label class="w-full grid gap-2">
 						<span class="text-primary font-medium"> TIN Number </span>
 						<input
@@ -226,17 +226,17 @@
 						/>
 					</label>
 					<label class="grid gap-1">
-						<span class="text-primary font-medium"> End Date </span>
+						<span class="text-primary font-medium"> Start Date </span>
 						<input
 							type="date"
-							name="endDate"
+							name="startDate"
 							class="border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput2}
+							bind:this={dateInput}
 							on:click={() => {
-								dateInput2 && dateInput2.showPicker();
+								dateInput && dateInput.showPicker();
 							}}
-							bind:value={$rentRoomForm.endDate}
-							{...$constraints.endDate}
+							bind:value={$rentRoomForm.startDate}
+							{...$constraints.startDate}
 						/>
 					</label>
 					<label class="w-full grid gap-2">
