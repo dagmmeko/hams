@@ -19,7 +19,6 @@
 		constraints
 	} = superForm(data.addUnitForm, {
 		onSubmit: ({ formData, formElement }) => {
-			formData.set('price', currencyToNumber(priceCurrency).toString());
 			formData.set('unitFile', 'Unit Files');
 			filesSelected = formElement.unitFile.files;
 		},
@@ -29,7 +28,6 @@
 				for (const file of filesSelected) {
 					uploadPromises.push(
 						(async function () {
-							console.log(result);
 							const uploadStatus = await uploadFiles(
 								file,
 								`unitFile/${result.data?.addUnit.id}/${file.name}`
@@ -70,11 +68,6 @@
 				}
 			}
 		}
-	});
-
-	let priceCurrency = numberToCurrency($addUnitForm.price, {
-		currency: $addUnitForm.inBirr ? 'ETB' : 'USD',
-		currencyDisplay: 'code'
 	});
 
 	let frontFileData: string[] = [];
@@ -163,13 +156,15 @@
 				</div>
 				<div class="flex flex-col gap-4 mt-4 md:mt-0">
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Price </span>
+						<span class="text-primary font-medium"> Price <span class="text-xs font-light text-danger"> * Required </span> </span>
 						<div class="flex items-center gap-2">
 							<span class="text-sm text-gray-600"> {$addUnitForm.inBirr ? 'ETB' : 'USD'} </span>
 							<input
 								class="border-[1px] w-full border-black/60 rounded-md p-2"
 								name="price"
-								type="text"
+								required
+								step="0.01"
+								type="number"
 								bind:value={$addUnitForm.price}
 								{...$constraints.price}
 							/>
@@ -182,7 +177,8 @@
 							<input
 								class="border-[1px] w-full border-black/60 rounded-md p-2"
 								name="utilityPrice"
-								type="text"
+								type="number"
+								step="0.01"
 								bind:value={$addUnitForm.utilityPrice}
 								{...$constraints.utilityPrice}
 							/>

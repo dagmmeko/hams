@@ -144,6 +144,7 @@ export const load = async (event) => {
 export const actions = {
 	editUnitInfo: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
 			return scope.name === 'EDIT_RENTAL_UNIT';
@@ -158,6 +159,7 @@ export const actions = {
 			return fail(400, { editUnitForm });
 		}
 
+		console.log({ editUnitForm: editUnitForm.data });
 		const editUnit = await prisma.rentalUnits.update({
 			where: {
 				id: Number(event.params.unitId)

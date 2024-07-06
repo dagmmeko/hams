@@ -99,11 +99,52 @@
 				<span class="text-primary font-semibold py-1"> Size</span>
 				<input name="size" bind:value={$editUnitForm.size} {...$constraints.size} />
 			</label>
+			{#if data.unitDetails?.priceSetPerKare}
 			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> Price</span>
 				<div>
 					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
-					<input name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
+					<input 	value={((data.unitDetails?.price || 0) * (data.unitDetails?.kareMeter || 1)).toFixed(
+						2
+					) || 0}
+					disabled />
+				</div>
+				<div class="text-xs mt-1">
+					<!-- <span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span> -->
+					 {#if data.unitDetails?.priceSetPerKare }
+					 <span>
+						{data.unitDetails?.currency === 'ETB'
+							? numberToCurrency((data.unitDetails?.price * data.unitDetails?.kareMeter) / data.usdRate[0].rate, {
+									currency: 'USD',
+									currencyDisplay: 'code'
+							  })
+							: numberToCurrency((data.unitDetails?.price * data.unitDetails?.kareMeter) * data.usdRate[0].rate, {
+									currency: 'ETB',
+									currencyDisplay: 'code'
+							  })}
+					</span>
+					 {:else}
+					 <span>
+						{data.unitDetails?.currency === 'ETB'
+							? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
+									currency: 'USD',
+									currencyDisplay: 'code'
+							  })
+							: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
+									currency: 'ETB',
+									currencyDisplay: 'code'
+							  })}
+					</span>
+					 {/if}
+					
+				</div>
+			</label>
+			{:else}
+			<label class="grid h-fit flex-1">
+				<span class="text-primary font-semibold py-1"> Price</span>
+				<div>
+					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+					<input type="number" step="0.01" name="price" bind:value={$editUnitForm.price} {...$constraints.price} />
 				</div>
 				<div class="text-xs mt-1">
 					<!-- <span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span> -->
@@ -120,6 +161,8 @@
 					</span>
 				</div>
 			</label>
+			{/if}
+			
 			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1">Utility Price</span>
 				<div>
@@ -131,6 +174,7 @@
 					/>
 				</div>
 				<div class="text-xs mt-1">
+					<!-- {data.unitDetails?.currency} -->
 					<span>
 						{data.unitDetails?.currency === 'ETB'
 							? numberToCurrency(($editUnitForm.utilityPrice || 0) / data.usdRate[0].rate, {
@@ -188,15 +232,41 @@
 			</label>
 			<label class="grid h-fit flex-1">
 				<span class="text-primary font-semibold py-1"> Price per m2</span>
-				<div>
-					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
-					<input
-						value={((data.unitDetails?.price || 0) / (data.unitDetails?.kareMeter || 1)).toFixed(
-							2
-						) || 0}
-						disabled
-					/>
-				</div>
+				{#if data.unitDetails?.priceSetPerKare }
+					<div>
+						<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+						<input
+						type="number"
+						step="0.01"
+							name="price"
+							bind:value={$editUnitForm.price}
+							{...$constraints.price}
+						/>
+					</div>
+					<div class="text-xs mt-1">
+						<span>
+							{data.unitDetails?.currency === 'ETB'
+								? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
+										currency: 'USD',
+										currencyDisplay: 'code'
+								  })
+								: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
+										currency: 'ETB',
+										currencyDisplay: 'code'
+								  })}
+						</span>
+					</div>
+				{:else}
+					<div>
+						<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
+						<input
+							value={((data.unitDetails?.price || 0) / (data.unitDetails?.kareMeter || 1)).toFixed(
+								2
+							) || 0}
+							disabled
+						/>
+					</div>
+				{/if}
 			</label>
 		</div>
 

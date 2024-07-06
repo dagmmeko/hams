@@ -9,7 +9,7 @@ const addUnitSchema = z.object({
 	roomNumber: z.string(),
 	floor: z.string(),
 	size: z.number().default('' as unknown as number),
-	price: z.number(),
+	price: z.number().optional(),
 	unitType: z.enum(['COMMERCIAL', 'RESIDENTIAL']),
 	condition: z.enum(['NEEDS_REPAIR', 'OUT_OF_SERVICE', 'GOOD_CONDITION']),
 	minimumRentalDate: z.number().int(),
@@ -50,6 +50,8 @@ export const actions = {
 		if (!addUnitForm) {
 			return fail(400, { addUnitForm });
 		}
+
+		console.log({a: addUnitForm.data});
 
 		try {
 			const addUnit = await prisma.rentalUnits.create({

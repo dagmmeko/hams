@@ -44,10 +44,15 @@ export const load = async (event) => {
 				include: {
 					RentalUnits: true
 				}
+			},
+			Receipts: {
+				orderBy: { createdAt: 'desc' },
+				take: 1
 			}
 		}
 	});
 
+	console.log({ tenants: tenants[0].Receipts });
 	const priceChangeRequest = await prisma.priceChange.findMany({
 		where: {
 			active: null,
