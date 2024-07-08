@@ -19,8 +19,6 @@
 	$: receipt = data.tenant?.Receipts.find((receipt) => {
 		return receipt.id === receiptId;
 	});
-
-	$: form?.updatedReceipt && toast.push('Receipt updated successfully');
 </script>
 
 <form
@@ -31,6 +29,8 @@
 		formData.set('receiptId', receiptId);
 		return async ({ update }) => {
 			await update();
+			toast.push('Receipt updated successfully');
+
 			editModal = false;
 		};
 	}}

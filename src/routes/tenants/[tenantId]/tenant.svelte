@@ -14,6 +14,7 @@
 	import EndContract from './end-contract.svelte';
 	import ExtendContract from './extend-contract.svelte';
 	import { uploadFiles } from '$lib/utils/upload-files';
+	import EditRentedUnit from './edit-rented-unit.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -31,6 +32,8 @@
 	let endContractModal = false;
 	let unitToEnd: any;
 	let fileNames: string[] = [];
+	let editRentedUnitModal = false;
+	let selectedRentedUnitId: any;
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -117,24 +120,38 @@
 			<div class="h-60 overflow-y-auto">
 				{#each data.tenant?.TenantRental ?? [] as tenantUnit}
 					{#if tenantUnit.active && tenantUnit.exitingTenant === false}
-						<div class="bg-primary/10 shadow-md p-2 mb-3 rounded-md">
-							<div class="">
-								<span class="font-medium">Company Name:</span>
-								{tenantUnit.companyName}
-							</div>
-							<div class="font-light">
-								<span class="font-medium">Room No: </span>{tenantUnit.RentalUnits.roomNumber}
-							</div>
+						<div class="bg-primary/10 w-full shadow-md p-2 mb-3 rounded-md">
+							<button
+								on:click={() => {
+									editRentedUnitModal = true;
+									selectedRentedUnitId = tenantUnit.id;
+								}}
+								class="text-left border-[1px] rounded-md w-full border-black p-2"
+							>
+								<div class="">
+									<span class="font-medium">Company Name:</span>
+									{tenantUnit.companyName}
+								</div>
+								<div class="">
+									<span class="font-medium">Purpose of Rent:</span>
+									{tenantUnit.purposeOfRent}
+								</div>
+								<div class="font-light">
+									<span class="font-medium">Room No: </span>{tenantUnit.RentalUnits.roomNumber}
+								</div>
 
-							<div><span class="font-medium">TIN:</span> {tenantUnit.tinNumber ?? 'N/A'}</div>
-							<div>
-								<span class="font-medium">Security Deposit:</span>
-								{tenantUnit.securityDeposit}
-							</div>
-							<div>
-								<span class="font-medium">Contract End:</span>
-								{dayjs(tenantUnit.contractEndDate).format('MMM DD/YY')}
-							</div>
+								<div><span class="font-medium">TIN:</span> {tenantUnit.tinNumber ?? 'N/A'}</div>
+								<div>
+									<span class="font-medium">Security Deposit:</span>
+									{tenantUnit.securityDeposit}
+								</div>
+								<div>
+									<span class="font-medium">Contract Start - End:</span>
+									{dayjs(tenantUnit.contractStartDate).format('MMM DD/YY')} - {dayjs(
+										tenantUnit.contractEndDate
+									).format('MMM DD/YY')}
+								</div>
+							</button>
 
 							<div class="flex gap-2 mt-1">
 								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
@@ -325,6 +342,17 @@
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
 			<EndContract {form} {data} unitId={unitToEnd} />
+		</div>
+	</div>
+{/if}
+
+{#if editRentedUnitModal}
+	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+		<div
+			use:clickOutside={() => (editRentedUnitModal = false)}
+			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+		>
+			<EditRentedUnit {form} {data} {selectedRentedUnitId} bind:editRentedUnitModal />
 		</div>
 	</div>
 {/if}

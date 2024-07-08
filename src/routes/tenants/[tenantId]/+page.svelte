@@ -58,7 +58,7 @@
 	{#if displayedComponent === 'tenant'}
 		<Tenant bind:form bind:data />
 	{:else if displayedComponent === 'receipts'}
-		<Receipts bind:data />
+		<Receipts bind:data bind:form />
 	{:else if displayedComponent === 'priceChange'}
 		<TenantPriceChange bind:data bind:form />
 	{:else if displayedComponent === 'ending' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}

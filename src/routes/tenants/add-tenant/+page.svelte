@@ -245,10 +245,11 @@
 							/>
 						</label>
 						<label class="w-full grid gap-2">
-							<span class="text-primary font-medium"> Duration of Stay In Country </span>
+							<span class="text-primary font-medium"> Duration of Stay In Country (in days) </span>
 							<input
 								class=" border-[1px] border-black/60 rounded-md p-2"
 								name="price"
+								type="number"
 								bind:value={$addTenantForm.durationOfStayInCountry}
 								{...$constraints.durationOfStayInCountry}
 							/>

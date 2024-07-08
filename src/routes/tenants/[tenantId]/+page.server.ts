@@ -471,5 +471,42 @@ export const actions = {
 		});
 
 		return { updatePriceChange };
+	},
+	editRentedUnit: async (event) => {
+		const data = await event.request.formData();
+		const startDate = data.get('editStartDate');
+		const endDate = data.get('editEndDate');
+		const companyName = data.get('editCompanyName');
+		const securityDeposit = data.get('editSecurityDeposit');
+		const purposeOfRent = data.get('editPurposeOfRent');
+		const TIN = data.get('editTIN');
+		const rentedUnitId = data.get('rentedUnitId');
+
+		if (
+			typeof startDate !== 'string' ||
+			typeof endDate !== 'string' ||
+			typeof companyName !== 'string' ||
+			typeof securityDeposit !== 'string' ||
+			typeof purposeOfRent !== 'string' ||
+			typeof TIN !== 'string'
+		) {
+			return fail(500, { errorMessage: 'Query is not a string' });
+		}
+
+		const updateRentedUnit = await prisma.tenantRental.update({
+			where: {
+				id: Number(rentedUnitId)
+			},
+			data: {
+				contractStartDate: new Date(startDate),
+				contractEndDate: new Date(endDate),
+				companyName,
+				securityDeposit: Number(securityDeposit),
+				purposeOfRent,
+				tinNumber: TIN
+			}
+		});
+
+		return { updateRentedUnit };
 	}
 };

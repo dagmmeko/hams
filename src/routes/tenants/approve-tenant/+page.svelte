@@ -52,7 +52,7 @@
 				{/if}
 				{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
 					<label class="grid gap-2">
-						<span class="text-primary font-medium"> Duration of stay </span>
+						<span class="text-primary font-medium"> Duration of stay (in days) </span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
 							type="number"

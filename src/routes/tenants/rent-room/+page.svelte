@@ -231,7 +231,7 @@
 					/>
 				</label>
 				<label class="grid gap-1">
-					<span class="text-primary font-medium"> Duration of stay </span>
+					<span class="text-primary font-medium"> Duration of stay (in days) </span>
 					<input
 						bind:value={$rentRoomForm.duration}
 						{...$constraints.duration}
