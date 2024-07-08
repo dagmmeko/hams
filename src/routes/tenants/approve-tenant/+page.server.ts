@@ -39,7 +39,6 @@ export const actions = {
 	rentApprovedRoom: async (event) => {
 		const approveRentForm = await superValidate(event.request, approveRentSchema);
 
-		console.log({ s: event.url.searchParams.get('priceChangeId') });
 		const priceChangeRequest = await prisma.priceChange.findFirst({
 			where: {
 				id: approveRentForm.data.priceChangeId

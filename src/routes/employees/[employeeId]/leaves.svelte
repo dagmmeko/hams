@@ -84,7 +84,6 @@
 	];
 
 	let selectedLeave: any;
-	$: console.log({ selectedLeave });
 </script>
 
 <div class="">
@@ -192,7 +191,6 @@
 		use:enhance={({ formData }) => {
 			formData.set('leaveId', selectedLeave.id.toString());
 			return ({ result }) => {
-				console.log(result);
 				if (result.status === 200) {
 					editModal = false;
 					toast.push('Leave edited successfully');

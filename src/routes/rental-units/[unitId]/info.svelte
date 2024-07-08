@@ -361,7 +361,7 @@
 								}}
 								class="flex flex-col gap-2 justify-center items-center h-full"
 							>
-								<button on:click|stopPropagation={() => console.log('download')} type="submit">
+								<button on:click|stopPropagation type="submit">
 									<div class="h-full w-full flex flex-col items-center justify-center">
 										<Eye class="text-primary w-7 h-7" />
 										<span class="text-sm mx-3 py-2 break-all">
@@ -386,7 +386,7 @@
 						}}
 					>
 						<button
-							on:click|stopPropagation={() => console.log('hello')}
+							on:click|stopPropagation
 							class="flex gap-1 items-center justify-center w-full p-2"
 						>
 							<Delete class="h-5 w-5 text-danger" />
@@ -432,7 +432,6 @@
 								const successes = await Promise.all(uploadPromises);
 
 								if (!successes.find((s) => s !== true)) {
-									console.log('submitting');
 									// @ts-ignore
 									cal.requestSubmit();
 								}

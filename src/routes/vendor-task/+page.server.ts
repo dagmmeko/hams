@@ -103,7 +103,6 @@ export const actions = {
 			}
 		});
 
-		console.log({ vendor, data: addVendorForm.data });
 		return {
 			addVendorForm,
 			vendor

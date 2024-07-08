@@ -297,7 +297,6 @@ export const actions = {
 		if (typeof attendanceId !== 'string' || typeof description !== 'string') {
 			return fail(500, { errorMessage: 'Query is not a string' });
 		}
-		console.log({ attendanceId, description });
 
 		const attendance = await prisma.attendance.update({
 			where: {

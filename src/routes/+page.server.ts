@@ -188,7 +188,6 @@ export const actions = {
 			return fail(400, { usdRateForm });
 		}
 
-		console.log({ usdRateForm });
 		const updatedRate = await prisma.currencyRate.update({
 			where: {
 				id: usdRateForm.data.id

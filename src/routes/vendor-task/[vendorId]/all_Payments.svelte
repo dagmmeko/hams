@@ -97,7 +97,6 @@
 				{columns}
 				{rows}
 				on:clickCell={(event) => {
-					console.log(event);
 					const PaymentId = event.detail.row.id;
 					if (
 						$page.data.session?.authUser.Employee.Role.Scopes.find(

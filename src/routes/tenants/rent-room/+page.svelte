@@ -29,7 +29,7 @@
 		unitData = data.rentalUnits.find((unit) => unit.id === Number(selectedUnit));
 	}
 
-	$: form?.rentTenant ? goto('/tenants') : null;
+	$: form?.rentTenant ? goto(`/tenants/${form.rentTenant.id}?display=receipts`) : null;
 	$: form?.rentTenant ? toast.push('Tenant Rented') : null;
 	let urlParam: any;
 	$: urlParam = $page.url.searchParams.get('searchTenant');

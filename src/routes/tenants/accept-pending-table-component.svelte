@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 
 	export let row: any;
-	$: console.log(row);
 </script>
 
 {#if !row.approved && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}

@@ -45,44 +45,6 @@ export async function getFile(key: string) {
 	return url;
 }
 
-// export async function deleteFile(key: string) {
-// 	try {
-// 		await s3Client
-// 			.headObject({
-// 				Bucket: S3_BUCKET_NAME,
-// 				Key: key
-// 			})
-// 			.promise();
-
-// 		try {
-// 			const url = await new Promise((resolve, reject) => {
-// 				s3Client.deleteObject(
-// 					{
-// 						Bucket: S3_BUCKET_NAME,
-// 						Key: key
-// 					},
-// 					(err, res) => {
-// 						if (err) {
-// 							reject(err);
-// 							// console.log({ FileDelErr: err });
-// 						} else {
-// 							resolve(res);
-// 							// console.log({ FileDelSuc: res });
-// 						}
-// 					}
-// 				);
-// 			});
-// 			return url;
-// 		} catch (err) {
-// 			console.log(`Deleting S3 subject failed with error: ${err}`);
-// 			return `Deleting S3 subject failed with error: ${err}`;
-// 		}
-// 	} catch (err) {
-// 		console.log(`S3 subject not found with error: ${err}`);
-// 		return `S3 subject not found with error: ${err}`;
-// 	}
-// }
-
 export async function uploadFileToS3(fileKey: string, fileData: Buffer) {
 	let uploadId;
 	const numberOfParts = Math.floor(fileData.length / (5 * 1024 * 1024));

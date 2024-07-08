@@ -7,7 +7,7 @@
 
 	export let data: PageData;
 	export let form: ActionData;
-	console.log({ data });
+
 	$: form?.updateEnd ? toast.push('Rent ended successfully') : null;
 </script>
 

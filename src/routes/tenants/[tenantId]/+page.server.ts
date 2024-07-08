@@ -175,8 +175,6 @@ export const actions = {
 			return fail(400, { addReceiptsForm });
 		}
 
-		console.log({ addReceiptsForm: addReceiptsForm.data });
-
 		const usdRate = await prisma.currencyRate.findMany({});
 
 		const newReceipts = await prisma.receipts.create({
@@ -273,7 +271,6 @@ export const actions = {
 			return fail(400, { extendRentForm });
 		}
 
-		console.log({ extendRentForm: extendRentForm.data });
 		const updateEndDate = await prisma.tenantRental.update({
 			where: {
 				id: extendRentForm.data.unitRenalId
@@ -300,7 +297,6 @@ export const actions = {
 			return fail(400, { endRentForm });
 		}
 
-		console.log({ endRentForm: endRentForm.data });
 		const updateEndDate = await prisma.tenantRental.update({
 			where: {
 				id: endRentForm.data.unitRenalId
@@ -350,13 +346,11 @@ export const actions = {
 		const data = await event.request.formData();
 		const tenantKey = data.get('tenantKey');
 
-		console.log({ tenantKey });
 		if (typeof tenantKey !== 'string') {
 			return fail(500, { errorMessage: 'Issus with file download' });
 		}
 
 		const fileUrl = await getFile(tenantKey);
-		console.log({ fileUrl });
 		return { fileUrl };
 	},
 	deleteTenantFile: async (event) => {
@@ -454,8 +448,6 @@ export const actions = {
 		const data = await event.request.formData();
 		const priceChangeId = data.get('priceChangeId');
 		const priceChangeToggle = data.get('priceChangeToggle');
-
-		console.log({ priceChangeToggle });
 
 		if (typeof priceChangeId !== 'string' || typeof priceChangeToggle !== 'string') {
 			return fail(500, { errorMessage: 'Issus with price change id or toggle' });

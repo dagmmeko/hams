@@ -63,7 +63,7 @@
 				if (!successes.find((s) => s !== true)) {
 					toast.push('Tenant added successfully');
 					setTimeout(() => {
-						window.location.href = '/tenants';
+						window.location.href = `/tenants/${result.data?.addTenant.id}?display=receipts`;
 					}, 1500);
 				}
 			}

@@ -52,7 +52,6 @@ export const load = async (event) => {
 		}
 	});
 
-	console.log({ tenants: tenants[0].Receipts });
 	const priceChangeRequest = await prisma.priceChange.findMany({
 		where: {
 			active: null,

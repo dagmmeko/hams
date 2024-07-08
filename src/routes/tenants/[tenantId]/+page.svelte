@@ -7,7 +7,15 @@
 
 	export let data;
 	export let form;
-	let displayedComponent: 'tenant' | 'receipts' | 'priceChange' | 'ending' = 'tenant';
+	const paramsDisplay = $page.url.searchParams.get('display') as
+		| 'tenant'
+		| 'receipts'
+		| 'priceChange'
+		| 'ending'
+		| null;
+
+	let displayedComponent: 'tenant' | 'receipts' | 'priceChange' | 'ending' =
+		paramsDisplay || 'tenant';
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">

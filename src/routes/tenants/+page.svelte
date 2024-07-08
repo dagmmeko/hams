@@ -62,7 +62,6 @@
 		<button
 			on:click={() => {
 				displayTenant = 'Tenant';
-				console.log({ displayTenant });
 			}}
 		>
 			<p class="py-2 px-3 rounded-md {displayTenant === 'Tenant' ? 'bg-white' : ''} ">Tenant</p>

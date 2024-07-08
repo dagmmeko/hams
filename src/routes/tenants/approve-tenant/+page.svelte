@@ -19,7 +19,7 @@
 		}
 	});
 	data.approveRentForm;
-	$: form?.tenant ? goto('/tenants') : null;
+	$: form?.tenant ? goto(`/tenants/${form.tenant.id}?display=receipts`) : null;
 	$: form?.tenant ? toast.push('Tenant Rented') : null;
 </script>
 

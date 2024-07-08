@@ -107,8 +107,6 @@ export const actions = {
 				});
 		}
 
-		console.log({ addEmployeeForm, user, employee });
-
 		return { addEmployeeForm, user, employee };
 	}
 };

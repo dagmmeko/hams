@@ -51,8 +51,6 @@ export const actions = {
 			return fail(400, { addUnitForm });
 		}
 
-		console.log({a: addUnitForm.data});
-
 		try {
 			const addUnit = await prisma.rentalUnits.create({
 				data: {

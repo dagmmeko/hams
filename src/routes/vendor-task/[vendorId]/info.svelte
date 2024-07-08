@@ -184,7 +184,6 @@
 								const successes = await Promise.all(uploadPromises);
 
 								if (!successes.find((s) => s !== true)) {
-									console.log('submitting');
 									// @ts-ignore
 									cal.requestSubmit();
 								}

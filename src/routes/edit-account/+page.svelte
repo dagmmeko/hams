@@ -40,7 +40,6 @@
 					on:change={(e) => {
 						const data = e.currentTarget.files;
 						if (data) {
-							console.log({ data });
 							frontFileData = data[0].name;
 						}
 						e.currentTarget.form?.submit();
@@ -65,7 +64,6 @@
 					on:change={(e) => {
 						const data = e.currentTarget.files;
 						if (data) {
-							console.log({ data });
 							frontFileData = data[0].name;
 						}
 						e.currentTarget.form?.submit();

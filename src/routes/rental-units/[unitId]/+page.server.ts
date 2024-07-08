@@ -158,7 +158,6 @@ export const actions = {
 			return fail(400, { editUnitForm });
 		}
 
-		console.log({ editUnitForm: editUnitForm.data });
 		const editUnit = await prisma.rentalUnits.update({
 			where: {
 				id: Number(event.params.unitId)
@@ -176,7 +175,6 @@ export const actions = {
 				utilityPrice: editUnitForm.data.utilityPrice
 			}
 		});
-		console.log(editUnit);
 
 		return { editUnitForm, editUnit };
 	},
@@ -195,8 +193,6 @@ export const actions = {
 		if (!addPropertyForm) {
 			return fail(400, { addPropertyForm });
 		}
-
-		console.log({ addPropertyForm: addPropertyForm.data });
 
 		const addProperty = await prisma.rentalUnits.update({
 			where: {
@@ -389,8 +385,6 @@ export const actions = {
 		const data = await event.request.formData();
 		const unitKey = data.get('unitKey');
 
-		console.log({ unitKey });
-
 		if (typeof unitKey !== 'string') {
 			return fail(500, { errorMessage: 'Issus with file download' });
 		}
@@ -411,7 +405,6 @@ export const actions = {
 		}
 		const data = await event.request.formData();
 		const unitFileId = data.get('unitFileId');
-		console.log(unitFileId);
 		if (typeof unitFileId !== 'string') {
 			return fail(500, { errorMessage: 'Issus with file deletion' });
 		}
@@ -421,8 +414,6 @@ export const actions = {
 				id: Number(unitFileId)
 			}
 		});
-
-		console.log(deleteFile);
 
 		return { deleteFile };
 	},
