@@ -23,6 +23,9 @@ export const authHook = SvelteKitAuth({
 					const user = await prisma.user.findFirst({
 						where: {
 							email: credentials.email
+						},
+						include: {
+							Employee: true
 						}
 					});
 
@@ -31,6 +34,10 @@ export const authHook = SvelteKitAuth({
 					}
 					if (!user.jwtPassword) {
 						throw new Error('User password not set.');
+					}
+
+					if (user.Employee?.onLeave) {
+						throw new Error('User not active.');
 					}
 
 					const authorized = await bcrypt.compare(credentials.password, user.jwtPassword);
