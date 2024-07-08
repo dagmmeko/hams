@@ -6,15 +6,19 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
 	import { page } from '$app/stores';
+	import EditReceipt from './edit-receipt.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let modal = false;
 
 	export let data: PageData;
-	// export let form: ActionData;
+	export let form: ActionData;
 
 	let dateInput: any;
 	let dateInput2: any;
 	let dateInput3: any;
+	let editReceiptModal = false;
+	let selectedReceiptId: number;
 
 	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
 
@@ -22,7 +26,12 @@
 		form: addReceiptForm,
 		enhance: addReceiptFormEnhance,
 		constraints
-	} = superForm(data.addReceiptsForm);
+	} = superForm(data.addReceiptsForm, {
+		onUpdate: () => {
+			modal = false;
+		}
+	});
+	$: form?.newReceipts ? toast.push('Receipt added successfully') : null;
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -74,15 +83,21 @@
 					</div>
 					<div class="grid grid-cols-1 gap-3">
 						{#each receipts.receipts ?? [] as rec}
-							<div class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md">
-								<div class="print:grid print:grid-cols-2 md:flex print:gap-2 gap-12">
+							<button
+								on:click={() => {
+									selectedReceiptId = rec.id;
+									editReceiptModal = true;
+								}}
+								class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md"
+							>
+								<div class="print:grid print:grid-cols-2 md:flex print:gap-2 gap-12 text-left">
 									<div>
-										<div class="">
+										<p>
 											<span class="font-semibold">TIN Number:</span>
 											{data.tenant?.TenantRental.find(
 												(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId
 											)?.tinNumber ?? 'N/A'}
-										</div>
+										</p>
 										<p class="font-medium">
 											Room No: <span class="font-normal">{rec.PayToUnit?.roomNumber}</span>
 										</p>
@@ -93,7 +108,7 @@
 											Bank Name: <span class="font-normal"> {rec.bankName}</span>
 										</p>
 									</div>
-									<div class="print:hidden block">
+									<div class="">
 										<p class="font-medium">
 											Amount:
 											{#if !rec.crvReceipt}
@@ -126,7 +141,7 @@
 											>
 										</p>
 									</div>
-									<div class="print:block hidden">
+									<!-- <div class="print:block hidden">
 										<p class="font-medium">
 											Amount:
 											<span class="font-normal"
@@ -158,7 +173,7 @@
 												})}</span
 											>
 										</p>
-									</div>
+									</div> -->
 									<div>
 										<p class="italic font-light">
 											Issued Date: <span class=""
@@ -178,7 +193,7 @@
 										</p>
 									</div>
 								</div>
-							</div>
+							</button>
 						{/each}
 					</div>
 				</div>
@@ -251,7 +266,7 @@
 									  )}
 							</span>
 							/
-							<span class="text-xs"> ETB 50 </span>
+							<span class="text-xs"> ETB {data.usdRate[0].rate} </span>
 						</p>
 						<p>
 							{data.tenant?.PriceChange.find(
@@ -319,7 +334,7 @@
 							type="checkbox"
 							bind:checked={$addReceiptForm.isRentPayment}
 							{...$constraints.isRentPayment}
-							name="isUtilityPayment"
+							name="isRentPayment"
 							class=" border-[1px] border-black/60 rounded-md p-2"
 						/>
 						<span class="text-primary font-medium"> Utility Payment </span>
@@ -344,6 +359,8 @@
 					bind:value={$addReceiptForm.amount}
 					{...$constraints.amount}
 					name="amount"
+					step="0.01"
+					type="number"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 				/>
 			</label>
@@ -380,4 +397,17 @@
 			<button class="bg-primary text-white rounded-md py-2"> Generate Attachment</button>
 		</div>
 	</form>
+{/if}
+
+{#if editReceiptModal}
+	<div
+		class="bg-black/70 fixed top-0 left-0 z-50 w-full overflow-y-auto h-screen flex items-center justify-center"
+	>
+		<div
+			use:clickOutside={() => (editReceiptModal = false)}
+			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+		>
+			<EditReceipt {data} {form} receiptId={selectedReceiptId} bind:editModal={editReceiptModal} />
+		</div>
+	</div>
 {/if}

@@ -93,9 +93,12 @@ export const load = async (event) => {
 	});
 
 	const allReceipts = await prisma.receipts.groupBy({
-		by: ['receiptReferenceNumber'],
+		by: ['receiptReferenceNumber', 'startDate'],
 		where: {
 			tenantsId: Number(event.params.tenantId)
+		},
+		orderBy: {
+			startDate: 'desc'
 		}
 	});
 
@@ -172,6 +175,8 @@ export const actions = {
 			return fail(400, { addReceiptsForm });
 		}
 
+		console.log({ addReceiptsForm: addReceiptsForm.data });
+
 		const usdRate = await prisma.currencyRate.findMany({});
 
 		const newReceipts = await prisma.receipts.create({
@@ -183,15 +188,17 @@ export const actions = {
 				paymentConfirmed: addReceiptsForm.data.receiptNumber ? true : false,
 				amount: addReceiptsForm.data.amount,
 				bankName: addReceiptsForm.data.depositedBank,
-				paymentReason: addReceiptsForm.data.isBothPayment
+				paymentReason: addReceiptsForm.data.crvReceipt
+					? 'CRV Receipt'
+					: addReceiptsForm.data.isBothPayment
 					? 'Rent & Utility Payment'
-					: addReceiptsForm.data.isRentPayment
+					: !addReceiptsForm.data.isRentPayment
 					? 'Rent Payment'
 					: 'Utility Payment',
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
-				isRentPayment: addReceiptsForm.data.isRentPayment,
+				isRentPayment: !addReceiptsForm.data.isRentPayment,
 				usdRateAtPayment: usdRate[0].rate,
 				isUtilityAndRentPayment: addReceiptsForm.data.isBothPayment,
 				crvReceipt: addReceiptsForm.data.crvReceipt
@@ -199,6 +206,57 @@ export const actions = {
 		});
 
 		return { addReceiptsForm, newReceipts };
+	},
+	editReceipts: async (event) => {
+		const data = await event.request.formData();
+		const startDate = data.get('editPaymentStartDate');
+		const endDate = data.get('editPaymentEndDate');
+		const isBothPayment = data.get('editIsBothPayment');
+		const isUtilityPayment = data.get('editIsUtilityPayment');
+		const isCRVReceipt = data.get('editCRVReceipt');
+		const amount = data.get('editAmount');
+		const bankName = data.get('editBankName');
+		const refNumber = data.get('editRefNumber');
+		const receiptId = data.get('receiptId');
+
+		if (
+			typeof startDate !== 'string' ||
+			typeof endDate !== 'string' ||
+			typeof amount !== 'string' ||
+			typeof bankName !== 'string' ||
+			typeof refNumber !== 'string' ||
+			typeof receiptId !== 'string'
+		) {
+			return fail(500, { errorMessage: 'Query is not a string' });
+		}
+
+		const updatedReceipt = await prisma.receipts.update({
+			where: {
+				id: Number(receiptId)
+			},
+			data: {
+				startDate: new Date(startDate),
+				endDate: new Date(endDate),
+				amount: Number(amount),
+				bankName,
+				paymentReason: isCRVReceipt
+					? 'CRV Receipt'
+					: isBothPayment
+					? 'Rent & Utility Payment'
+					: !isUtilityPayment
+					? 'Rent Payment'
+					: 'Utility Payment',
+				isRentPayment: !isUtilityPayment,
+				isUtilityAndRentPayment: isBothPayment === 'on' ? true : false,
+				crvReceipt: isCRVReceipt === 'on' ? true : false,
+				receiptReferenceNumber: refNumber
+			}
+		});
+
+		if (!updatedReceipt) {
+			return fail(500, { errorMessage: 'Could not update receipt' });
+		}
+		return { updatedReceipt };
 	},
 	extendRent: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
