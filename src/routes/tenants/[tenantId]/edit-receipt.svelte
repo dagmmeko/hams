@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { Receipts } from '@prisma/client';
-	import type { ActionData } from './$types';
-	import type { PageData } from './$types';
-	import dayjs from 'dayjs';
 	import { enhance } from '$app/forms';
+	import { Receipts } from '@prisma/client';
 	import { toast } from '@zerodevx/svelte-toast';
-	import { updated } from '$app/stores';
+	import dayjs from 'dayjs';
+	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
 	export let receiptId;
