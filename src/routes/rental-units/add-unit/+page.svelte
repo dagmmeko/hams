@@ -12,7 +12,7 @@
 	let filesSelected: File[] = [];
 
 	$: form?.addUnitForm && goto('/rental-units');
-	$: form?.addUnitForm && toast.push('Unit added successfully');
+
 	const {
 		form: addUnitForm,
 		enhance: addFormEnhance,
@@ -156,7 +156,9 @@
 				</div>
 				<div class="flex flex-col gap-4 mt-4 md:mt-0">
 					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Price <span class="text-xs font-light text-danger"> * Required </span> </span>
+						<span class="text-primary font-medium">
+							Price <span class="text-xs font-light text-danger"> * Required </span>
+						</span>
 						<div class="flex items-center gap-2">
 							<span class="text-sm text-gray-600"> {$addUnitForm.inBirr ? 'ETB' : 'USD'} </span>
 							<input

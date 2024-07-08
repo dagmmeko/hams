@@ -81,7 +81,7 @@
 	<div class="sm:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Tasks</p>
-			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">{data.tasks.length} Task</p>
+			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.tasks.length} Task</p>
 		</div>
 		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_TASK')}
 			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
@@ -132,7 +132,9 @@
 				</p>
 			</div>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Task Description </span>
+				<span class="text-primary font-medium">
+					Task Description <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorTaskForm.taskDescription}
 					{...$constraints.taskDescription}
@@ -142,7 +144,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Payment Term </span>
+				<span class="text-primary font-medium">
+					Payment Term <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorTaskForm.paymentTerm}
 					{...$constraints.paymentTerm}
@@ -152,7 +156,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Estimated Time </span>
+				<span class="text-primary font-medium">
+					Estimated Time <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorTaskForm.estimatedTime}
 					{...$constraints.estimatedTime}
@@ -172,7 +178,9 @@
 				<span class="text-primary font-medium"> Continuous Job </span>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Due Date </span>
+				<span class="text-primary font-medium">
+					Due Date <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					type="date"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
@@ -187,7 +195,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Vendor </span>
+				<span class="text-primary font-medium">
+					Vendor <span class="text-xs font-light text-danger"> * Required </span></span
+				>
 				<select
 					bind:value={$addVendorTaskForm.vendorId}
 					{...$constraints.vendorId}

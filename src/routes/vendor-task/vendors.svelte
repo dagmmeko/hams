@@ -15,12 +15,20 @@
 
 	$: rows = data.vendor ?? [];
 	$: columns = [
+		// {
+		// 	key: 'Name',
+		// 	title: '',
+		// 	renderComponent: {
+		// 		component: Name
+		// 	},
+		// 	headerClass:
+		// 		'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+		// 	class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+		// },
 		{
-			key: 'Name',
-			title: '',
-			renderComponent: {
-				component: Name
-			},
+			key: 'name',
+			title: 'Name',
+			value: (v: typeof rows[number]) => v.name || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -81,7 +89,7 @@
 	<div class="sm:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Vendors</p>
-			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">100 Vendors</p>
+			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.vendor.length} Vendors</p>
 		</div>
 		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_VENDOR')}
 			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
@@ -150,7 +158,9 @@
 				</p>
 			</div>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Vendor Name </span>
+				<span class="text-primary font-medium">
+					Vendor Name <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorForm.name}
 					{...$constraints.name}
@@ -160,7 +170,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Phone Number </span>
+				<span class="text-primary font-medium">
+					Phone Number <span class="text-xs font-light text-danger"> * Required </span></span
+				>
 				<input
 					bind:value={$addVendorForm.phoneNumber}
 					{...$constraints.phoneNumber}
@@ -175,12 +187,13 @@
 					bind:value={$addVendorForm.email}
 					{...$constraints.email}
 					name="email"
-					required
 					class=" border-[1px] border-black/60 rounded-md p-2"
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> TIN Number </span>
+				<span class="text-primary font-medium">
+					TIN Number <span class="text-xs font-light text-danger"> * Required </span></span
+				>
 				<input
 					bind:value={$addVendorForm.tinNumber}
 					{...$constraints.tinNumber}
@@ -190,7 +203,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Address </span>
+				<span class="text-primary font-medium">
+					Address <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorForm.address}
 					{...$constraints.address}
@@ -200,7 +215,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Service Description </span>
+				<span class="text-primary font-medium">
+					Service Description <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addVendorForm.serviceDescription}
 					{...$constraints.serviceDescription}
@@ -210,7 +227,9 @@
 				/>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Service Type </span>
+				<span class="text-primary font-medium">
+					Service Type <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<select
 					bind:value={$addVendorForm.serviceType}
 					{...$constraints.serviceType}
@@ -227,7 +246,9 @@
 				</select>
 			</label>
 			<label class="grid w-full gap-2">
-				<span class="text-primary font-medium"> Score </span>
+				<span class="text-primary font-medium">
+					Score <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					class=" border-[1px] border-black/60 rounded-md p-2"
 					type="number"

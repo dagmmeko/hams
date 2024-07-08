@@ -221,7 +221,7 @@ model TenantRental {
   unitId                  Int
   contractEndDate         DateTime?
   contractStartDate       DateTime?
-  companyName             String      @default("company Name")
+  companyName             String      @default("N/A")
   active                  Boolean     @default(false)
   securityDeposit         Float?
   durationOfStayInCountry Int?
@@ -427,7 +427,7 @@ model Vendor {
   deletedAt          DateTime?
   name               String
   phoneNumber        String
-  email              String
+  email              String @default("N/A")
   address            String
   tinNumber          String?
   serviceDescription String
@@ -612,6 +612,7 @@ enum ItemsCategory {
   BATHROOM
   BEDROOM
   LAUNDRY
+  COMMERCIAL
 }
 
 enum Currency {

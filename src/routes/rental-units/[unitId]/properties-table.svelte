@@ -14,6 +14,7 @@
 	export let itemCategory: string;
 
 	let selectedUnitId: number;
+
 	let editModal = false;
 
 	$: rows = data.unitDetails?.Property.filter((prop) => prop.itemCategory === itemCategory) || [];
@@ -44,7 +45,7 @@
 		},
 		{
 			key: 'price',
-			title: 'Price',
+			title: 'Full Price',
 			value: (v: typeof rows[number]) =>
 				numberToCurrency(v.itemsPrice, {
 					currency: v.itemsCurrency,
@@ -68,7 +69,7 @@
 					}
 				) ?? 'NOT FOUND',
 			headerClass: 'bg-ghost/60 border-b-[1px] border-[#B3B4B8]',
-			class: 'text-left mx-12  border-b-[1px] border-[#B3B4B8] text-xs'
+			class: 'text-left mx-12  border-b-[1px] border-[#B3B4B8] text-xs print:text-xss'
 		},
 		{
 			key: 'status',
@@ -89,6 +90,22 @@
 			class: 'text-left print:hidden pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
 		},
 		{
+			key: 'available',
+			title: 'Available',
+			value: (v: typeof rows[number]) => '_',
+			headerClass:
+				'text-left  pl-2 hidden print:table-cell  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left  mx-12 hidden print:table-cell  border-[1px] border-[#B3B4B8] text-xs'
+		},
+		{
+			key: 'available',
+			title: 'N/A',
+			value: (v: typeof rows[number]) => '_',
+			headerClass:
+				'text-left  pl-2 hidden print:table-cell  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
+			class: 'text-left hidden print:table-cell mx-12   border-[1px] border-[#B3B4B8] text-xs'
+		},
+		{
 			key: 'deleteProperty',
 			title: '',
 			renderComponent: {
@@ -105,7 +122,7 @@
 	];
 </script>
 
-<div class=" my-4">
+<div class="my-4">
 	<p class="my-4 ml-4 font-semibold">{itemCategory}</p>
 	<SvelteTable
 		classNameTable="unitPropertyTables"

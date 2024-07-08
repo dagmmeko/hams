@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { numberToCurrency } from '$lib/utils/currency.js';
@@ -10,9 +9,8 @@
 
 	let selectedUnit: any;
 	let selectedTenant: any;
-	let priceChange: any;
-	let newPrice: any;
 	let id: number;
+
 	const {
 		form: rentRoomForm,
 		enhance: rentRoomEnhance,
@@ -23,8 +21,6 @@
 			formData.set('selectedUnitId', selectedUnit);
 		}
 	});
-
-	$: console.log({ selectedUnit, selectedTenant, priceChange, newPrice });
 
 	let dateInput: any;
 	let dateInput2: any;
@@ -159,6 +155,7 @@
 									type="number"
 									placeholder="Amended Price"
 									bind:value={$rentRoomForm.newPrice}
+									required={$rentRoomForm.priceChange}
 									{...$constraints.newPrice}
 								/>
 							</label>
@@ -167,90 +164,95 @@
 				</div>
 			</div>
 
-			<div class="grid sm:grid-cols-2 grid-cols-1 gap-10 mt-10">
-				<div class="w-full grid gap-3">
-					<label class="grid gap-1">
-						<span class="text-primary font-medium"> Purpose of Rent </span>
-						<input
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							required
-							name="purposeOfRent"
-							bind:value={$rentRoomForm.purposeOfRent}
-							{...$constraints.purposeOfRent}
-						/>
-					</label>
-					<label class="grid gap-1">
-						<span class="text-primary font-medium"> Company Name </span>
-						<input
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							required
-							name="companyName"
-							bind:value={$rentRoomForm.companyName}
-							{...$constraints.companyName}
-						/>
-					</label>
-					<label class="grid gap-1">
-						<span class="text-primary font-medium"> End Date </span>
-						<input
-							type="date"
-							name="endDate"
-							class="border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput2}
-							on:click={() => {
-								dateInput2 && dateInput2.showPicker();
-							}}
-							bind:value={$rentRoomForm.endDate}
-							{...$constraints.endDate}
-						/>
-					</label>
+			<div class="grid sm:grid-cols-2 grid-cols-1 gap-x-12 gap-y-4 mt-10">
+				<label class="grid gap-1">
+					<span class="text-primary font-medium">
+						Purpose of Rent <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
+					<input
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						required
+						name="purposeOfRent"
+						bind:value={$rentRoomForm.purposeOfRent}
+						{...$constraints.purposeOfRent}
+					/>
+				</label>
+				<label class="grid gap-1">
+					<span class="text-primary font-medium"> Company Name </span>
+					<input
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						name="companyName"
+						bind:value={$rentRoomForm.companyName}
+						{...$constraints.companyName}
+					/>
+				</label>
+				<label class="grid gap-1">
+					<span class="text-primary font-medium">
+						Start Date <span class="text-xs font-light text-danger"> * Required </span></span
+					>
+					<input
+						type="date"
+						name="startDate"
+						class="border-[1px] border-black/60 rounded-md p-2"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+						bind:value={$rentRoomForm.startDate}
+						{...$constraints.startDate}
+						required
+					/>
+				</label>
+				<label class="grid gap-1">
+					<span class="text-primary font-medium">
+						End Date <span class="text-xs font-light text-danger"> * Required </span>
+					</span>
+					<input
+						type="date"
+						name="endDate"
+						class="border-[1px] border-black/60 rounded-md p-2"
+						bind:this={dateInput2}
+						on:click={() => {
+							dateInput2 && dateInput2.showPicker();
+						}}
+						bind:value={$rentRoomForm.endDate}
+						{...$constraints.endDate}
+						required
+					/>
+				</label>
 
-					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> TIN Number </span>
-						<input
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							name="tinNumber"
-							bind:value={$rentRoomForm.tinNumber}
-							{...$constraints.tinNumber}
-						/>
-					</label>
-				</div>
-				<div class="w-full h-fit grid gap-3">
-					<label class="grid gap-1">
-						<span class="text-primary font-medium"> Duration of stay </span>
-						<input
-							bind:value={$rentRoomForm.duration}
-							{...$constraints.duration}
-							class="border-[1px] border-black/60 rounded-md p-2"
-							name="duration"
-							type="number"
-						/>
-					</label>
-					<label class="grid gap-1">
-						<span class="text-primary font-medium"> Start Date </span>
-						<input
-							type="date"
-							name="startDate"
-							class="border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput}
-							on:click={() => {
-								dateInput && dateInput.showPicker();
-							}}
-							bind:value={$rentRoomForm.startDate}
-							{...$constraints.startDate}
-						/>
-					</label>
-					<label class="w-full grid gap-2">
-						<span class=" text-primary w-full font-medium"> Security Deposit</span>
-						<input
-							name="securityDeposit"
-							type="number"
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							bind:value={$rentRoomForm.securityDeposit}
-							{...$constraints.securityDeposit}
-						/>
-					</label>
-				</div>
-				<button class="bg-primary text-white rounded-md py-2 px-6"> Rent Room</button>
+				<label class="w-full grid gap-2">
+					<span class="text-primary font-medium"> TIN Number </span>
+					<input
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						name="tinNumber"
+						bind:value={$rentRoomForm.tinNumber}
+						{...$constraints.tinNumber}
+					/>
+				</label>
+				<label class="grid gap-1">
+					<span class="text-primary font-medium"> Duration of stay </span>
+					<input
+						bind:value={$rentRoomForm.duration}
+						{...$constraints.duration}
+						class="border-[1px] border-black/60 rounded-md p-2"
+						name="duration"
+						type="number"
+					/>
+				</label>
+
+				<label class="w-full grid gap-2">
+					<span class=" text-primary w-full font-medium"> Security Deposit</span>
+					<input
+						name="securityDeposit"
+						type="number"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						bind:value={$rentRoomForm.securityDeposit}
+						{...$constraints.securityDeposit}
+					/>
+				</label>
+				<div />
+				<button class="bg-primary text-white rounded-md py-2 px-6 h-fit mt-6"> Rent Room</button>
 			</div>
 		</form>
 	</div>

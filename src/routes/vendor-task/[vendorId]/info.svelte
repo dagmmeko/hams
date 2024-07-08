@@ -218,9 +218,9 @@
 						Remove all data related to vendor.Once you take this action their is no going back
 					</p>
 				</div>
-				<button class="bg-danger flex text-white rounded-md py-2 px-6"
-					><Delete /> Delete Vendor</button
-				>
+				<button class="bg-danger flex text-white rounded-md items-center px-4">
+					<Delete /> Delete Vendor
+				</button>
 			</div>
 		</div>
 	{/if}

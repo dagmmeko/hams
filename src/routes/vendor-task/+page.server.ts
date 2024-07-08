@@ -6,7 +6,7 @@ import z from 'zod';
 const addVendorSchema = z.object({
 	name: z.string(),
 	phoneNumber: z.string(),
-	email: z.string(),
+	email: z.string().optional(),
 	address: z.string(),
 	serviceDescription: z.string(),
 	serviceType: z.enum(['CLEANING', 'ELECTRICITY', 'PLUMBING', 'PAINTING', 'SECURITY']),

@@ -19,8 +19,8 @@ const addPaymentSchema = z.object({
 	amount: z.number(),
 	depositedToBank: z.string(),
 	paidOn: z.date(),
-	taskId: z.number()
-	//needs to have account Number
+	taskId: z.number(),
+	continuousTask: z.boolean().optional()
 });
 
 export type vendorType = z.infer<typeof editVendorSchema>;
@@ -106,7 +106,6 @@ export const actions = {
 			return fail(400, { editVendorForm });
 		}
 
-		console.log({ editVendorForm });
 		const vendor = await prisma.vendor.update({
 			where: {
 				id: parseInt(event.params.vendorId)

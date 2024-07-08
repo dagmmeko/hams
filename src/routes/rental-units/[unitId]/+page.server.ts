@@ -35,7 +35,7 @@ const addPropertySchema = z.object({
 	price: z.number(),
 	available: z.boolean().optional(),
 	inBirr: z.boolean().optional(),
-	itemCategory: z.enum(['SALON', 'KITCHEN', 'BATHROOM', 'BEDROOM', 'LAUNDRY'])
+	itemCategory: z.enum(['SALON', 'KITCHEN', 'BATHROOM', 'BEDROOM', 'LAUNDRY', 'COMMERCIAL'])
 });
 
 const addAmenitySchema = z.object({
@@ -144,7 +144,6 @@ export const load = async (event) => {
 export const actions = {
 	editUnitInfo: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
-		
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
 			return scope.name === 'EDIT_RENTAL_UNIT';

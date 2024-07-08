@@ -63,6 +63,11 @@
 		enhance: addPaymentFormEnhance,
 		constraints
 	} = superForm(data.addPaymentForm, {
+		onSubmit: ({ formData }) => {
+			const selectedTask = data.vendor.VendorTask.find(
+				(task) => task.id === $addPaymentForm.taskId
+			);
+		},
 		onUpdate: () => {
 			modal = false;
 		}
@@ -73,7 +78,7 @@
 	<div class="md:flex justify-between p-6">
 		<div class="flex space-x-4">
 			<p class="text-lg">Payments</p>
-			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2">10 transactions</p>
+			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.payments.length} transactions</p>
 		</div>
 		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_PAYMENT')}
 			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
@@ -125,44 +130,61 @@
 				<p class="text-sm text-subtitle pt-2">Record New payment here. Click save when your done</p>
 			</div>
 
-			<select
-				bind:value={$addPaymentForm.taskId}
-				name="taskId"
-				required
-				class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-			>
-				<option selected disabled>Select Task</option>
-				{#each data.vendor.VendorTask as task}
-					{#if task.taskStatus !== 'COMPLETED' && task.paymentStatus === false}
-						<option value={task.id}>{task.taskDescription}</option>
-					{/if}
-				{/each}
-			</select>
+			<label>
+				<span class="text-primary font-medium">
+					Select Task To Pay For <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
+				<select
+					bind:value={$addPaymentForm.taskId}
+					name="taskId"
+					required
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+				>
+					<option selected disabled>Select Task</option>
+					{#each data.vendor.VendorTask as task}
+						{#if task.taskStatus !== 'COMPLETED' && task.paymentStatus === false}
+							<option value={task.id}>{task.taskDescription}</option>
+						{/if}
+					{/each}
+				</select>
+			</label>
 			{#if data.vendor.VendorTask.find((task) => task.id === $addPaymentForm.taskId)}
-				{data.vendor.VendorTask.find((task) => task.id === $addPaymentForm.taskId)?.paymentTerms}
+				<div class="grid gap-1 border-[1px] border-danger rounded-md p-2">
+					<span class="text-primary font-medium"> Payment Terms </span>
+					<span>
+						{data.vendor.VendorTask.find((task) => task.id === $addPaymentForm.taskId)
+							?.paymentTerms}
+					</span>
+				</div>
 			{/if}
 
 			<label class="grid">
-				<span class="text-primary font-medium"> Amount</span>
+				<span class="text-primary font-medium">
+					Paid amount <span class="text-xs font-light text-danger"> * Required </span>
+				</span>
 				<input
 					bind:value={$addPaymentForm.amount}
 					name="amount"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 				/>
 			</label>
 
 			<label class="grid">
-				<span class="text-primary font-medium"> Via Bank</span>
+				<span class="text-primary font-medium">
+					Via Bank <span class="text-xs font-light text-danger"> * Required </span></span
+				>
 				<input
 					bind:value={$addPaymentForm.depositedToBank}
 					name="depositedToBank"
 					required
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 				/>
 			</label>
 			<label class="grid">
-				<span class="text-primary font-medium"> Paid on </span>
+				<span class="text-primary font-medium">
+					Paid on <span class="text-xs font-light text-danger"> * Required </span></span
+				>
 				<input
 					type="date"
 					name="paidOn"

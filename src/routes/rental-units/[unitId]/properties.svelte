@@ -145,11 +145,15 @@
 	<div class="-mx-6 pt-5">
 		<PdfPrint class="mx-6">
 			<div class="">
-				<PropertiesTable {data} {form} itemCategory="SALON" />
-				<PropertiesTable {data} {form} itemCategory="LAUNDRY" />
-				<PropertiesTable {data} {form} itemCategory="KITCHEN" />
-				<PropertiesTable {data} {form} itemCategory="BEDROOM" />
-				<PropertiesTable {data} {form} itemCategory="BATHROOM" />
+				{#if data.unitDetails?.unitType === 'RESIDENTIAL'}
+					<PropertiesTable {data} {form} itemCategory="SALON" />
+					<PropertiesTable {data} {form} itemCategory="LAUNDRY" />
+					<PropertiesTable {data} {form} itemCategory="KITCHEN" />
+					<PropertiesTable {data} {form} itemCategory="BEDROOM" />
+					<PropertiesTable {data} {form} itemCategory="BATHROOM" />
+				{:else}
+					<PropertiesTable {data} {form} itemCategory="COMMERCIAL" />
+				{/if}
 			</div>
 			<div class="print:block hidden p-8">
 				<p class="text-lg font-semibold">Attention</p>
@@ -237,6 +241,7 @@
 						<option value="BATHROOM"> Bathroom </option>
 						<option value="BEDROOM"> Bedroom </option>
 						<option value="LAUNDRY"> Laundry </option>
+						<option value="COMMERCIAL"> Commercial </option>
 					</select>
 				</label>
 				<label class="grid">
@@ -250,7 +255,7 @@
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Price </span>
+					<span class="text-primary font-medium"> Full Price </span>
 					<input
 						name="price"
 						required

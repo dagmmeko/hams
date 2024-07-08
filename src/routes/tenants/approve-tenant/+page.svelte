@@ -35,91 +35,94 @@
 				>
 			</div>
 
-			<div class="grid sm:grid-cols-2 grid-cols-1 gap-10 mt-6">
-				<div class="grid gap-4">
-					{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
-						<label class="grid gap-2">
-							<span class="text-primary font-medium"> Purpose of Rent </span>
-							<input
-								class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-								name="purposeOfRent"
-								bind:value={$approveRentForm.purposeOfRent}
-								{...$approveRentConstraints.purposeOfRent}
-							/>
-						</label>
-					{/if}
-
-					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> Start Date </span>
+			<div class="grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-4 mt-6">
+				{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
+					<label class="grid gap-2">
+						<span class="text-primary font-medium">
+							Purpose of Rent <span class="text-xs font-light text-danger"> * Required </span></span
+						>
 						<input
-							type="date"
-							name="startDate"
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput}
-							on:click={() => {
-								dateInput && dateInput.showPicker();
-							}}
-							bind:value={$approveRentForm.startDate}
-							{...$approveRentConstraints.startDate}
+							class="w-full border-[1px] border-black/60 rounded-md p-2"
+							name="purposeOfRent"
+							bind:value={$approveRentForm.purposeOfRent}
+							{...$approveRentConstraints.purposeOfRent}
+							required
 						/>
 					</label>
-					<label class="w-full grid gap-2">
-						<span class="text-primary font-medium"> TIN number </span>
+				{/if}
+				{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
+					<label class="grid gap-2">
+						<span class="text-primary font-medium"> Duration of stay </span>
 						<input
 							class=" border-[1px] border-black/60 rounded-md p-2"
-							name="tinNumber"
-							bind:value={$approveRentForm.tinNumber}
-							{...$approveRentConstraints.tinNumber}
-						/>
-					</label>
-					<label class="w-full grid gap-2">
-						<span class=" text-primary w-full font-medium"> Security Deposit</span>
-						<input
-							name="securityDeposit"
 							type="number"
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							bind:value={$approveRentForm.securityDeposit}
-							{...$approveRentConstraints.securityDeposit}
+							name="durationOfStay"
+							bind:value={$approveRentForm.durationOfStay}
+							{...$approveRentConstraints.durationOfStay}
 						/>
 					</label>
-				</div>
-				<div class="grid gap-4">
-					{#if data.priceChange?.RentalUnits.unitType !== 'COMMERCIAL'}
-						<label class="grid gap-2">
-							<span class="text-primary font-medium"> Duration of stay </span>
-							<input
-								class=" border-[1px] border-black/60 rounded-md p-2"
-								type="number"
-								name="durationOfStay"
-								bind:value={$approveRentForm.durationOfStay}
-								{...$approveRentConstraints.durationOfStay}
-							/>
-						</label>
-					{/if}
-					<label class="w-full h-fit gap-2 grid">
-						<span class="text-primary font-medium"> End Date </span>
-						<input
-							type="date"
-							name="endDate"
-							class="border-[1px] border-black/60 rounded-md p-2"
-							bind:this={dateInput2}
-							on:click={() => {
-								dateInput2 && dateInput2.showPicker();
-							}}
-							bind:value={$approveRentForm.endDate}
-							{...$approveRentConstraints.endDate}
-						/>
-					</label>
-					<label class="w-full h-fit grid gap-2">
-						<span class=" text-primary w-full font-medium"> Company Name</span>
-						<input
-							name="companyName"
-							class=" border-[1px] border-black/60 rounded-md p-2"
-							bind:value={$approveRentForm.companyName}
-							{...$approveRentConstraints.companyName}
-						/>
-					</label>
-				</div>
+				{/if}
+				<label class="w-full grid gap-2">
+					<span class="text-primary font-medium">
+						Start Date <span class="text-xs font-light text-danger"> * Required </span></span
+					>
+					<input
+						type="date"
+						name="startDate"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						bind:this={dateInput}
+						on:click={() => {
+							dateInput && dateInput.showPicker();
+						}}
+						bind:value={$approveRentForm.startDate}
+						{...$approveRentConstraints.startDate}
+					/>
+				</label>
+				<label class="w-full h-fit gap-2 grid">
+					<span class="text-primary font-medium">
+						End Date <span class="text-xs font-light text-danger"> * Required </span></span
+					>
+					<input
+						type="date"
+						name="endDate"
+						class="border-[1px] border-black/60 rounded-md p-2"
+						bind:this={dateInput2}
+						on:click={() => {
+							dateInput2 && dateInput2.showPicker();
+						}}
+						bind:value={$approveRentForm.endDate}
+						{...$approveRentConstraints.endDate}
+					/>
+				</label>
+				<label class="w-full grid gap-2">
+					<span class="text-primary font-medium"> TIN number </span>
+					<input
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						name="tinNumber"
+						bind:value={$approveRentForm.tinNumber}
+						{...$approveRentConstraints.tinNumber}
+					/>
+				</label>
+				<label class="w-full grid gap-2">
+					<span class=" text-primary w-full font-medium"> Security Deposit</span>
+					<input
+						name="securityDeposit"
+						type="number"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						bind:value={$approveRentForm.securityDeposit}
+						{...$approveRentConstraints.securityDeposit}
+					/>
+				</label>
+
+				<label class="w-full h-fit grid gap-2">
+					<span class=" text-primary w-full font-medium"> Company Name</span>
+					<input
+						name="companyName"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+						bind:value={$approveRentForm.companyName}
+						{...$approveRentConstraints.companyName}
+					/>
+				</label>
 			</div>
 		</form>
 	</div>

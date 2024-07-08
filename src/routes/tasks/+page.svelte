@@ -65,7 +65,7 @@
 	];
 
 	let filterModal = false;
-	let addTaskModal = false;
+	let addTaskModal = true;
 	let dateInput: any;
 
 	const {
@@ -96,7 +96,7 @@
 	</div>
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<button
-			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-1 text-sm shadow-md bg-white"
 			on:click={() => (filterModal = !filterModal)}
 		>
 			<FiltersLines class="h-4 w-4" /> Add filters
@@ -155,17 +155,18 @@
 					<p class="text-sm text-subtitle pt-2">Create new Task here and assign to Employee.</p>
 				</div>
 
-				<label class="w-full grid gap-2">
+				<label class="w-full grid gap-1">
 					<span class="text-primary font-medium"> Task Title </span>
 					<input
 						class=" border-[1px] border-black/60 rounded-md p-2"
 						name="taskTitle"
+						required
 						bind:value={$addInternalTaskForm.taskTitle}
 						{...$constraints.taskTitle}
 					/>
 				</label>
 
-				<label class="w-full grid gap-2">
+				<label class="w-full grid gap-1">
 					<span class="text-primary font-medium"> Task Description </span>
 					<textarea
 						name="taskDescription"
@@ -175,13 +176,14 @@
 						class=" border-[1px] border-black/60 rounded-md p-2"
 					/>
 				</label>
-				<label class="grid gap-2">
+				<label class="grid gap-1">
 					<span class="text-primary w-full font-medium"> Task Due Date </span>
 					<input
 						type="date"
 						name="taskDueDate"
-						class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
 						bind:this={dateInput}
+						required
 						on:click={() => {
 							dateInput && dateInput.showPicker();
 						}}
@@ -189,13 +191,14 @@
 						{...$constraints.taskDueDate}
 					/>
 				</label>
-				<label class="w-full grid gap-2">
+				<label class="w-full grid gap-1">
 					<span class="text-primary font-medium"> Task Severity </span>
 					<select
 						name="taskSeverity"
 						bind:value={$addInternalTaskForm.taskSeverity}
 						{...$constraints.taskSeverity}
-						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
+						required
+						class="mt-1 border-[1px] border-black/60 rounded-md p-2"
 					>
 						<option selected disabled> Select Severity </option>
 						<option value="LOW"> Low</option>
@@ -204,13 +207,14 @@
 						<option value="URGENT"> Urgent</option>
 					</select>
 				</label>
-				<label class="grid w-full gap-2 h-fit">
+				<label class="grid w-full gap-1 h-fit">
 					<span class="text-primary font-medium"> Assign To </span>
 					<select
 						name="assignedTo"
 						bind:value={$addInternalTaskForm.assignedTo}
 						{...$constraints.assignedTo}
-						class="mt-2 border-[1px] border-black/60 rounded-md p-2"
+						class="mt-1 border-[1px] border-black/60 rounded-md p-2"
+						required
 					>
 						<option selected disabled> Pick an Employee </option>
 						{#each data.employees as employee}
