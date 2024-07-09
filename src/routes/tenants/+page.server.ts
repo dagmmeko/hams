@@ -1,6 +1,8 @@
 import { prisma } from '$lib/utils/prisma.js';
 import { sendEmail } from '$lib/utils/send-email.js';
 import { fail, redirect } from '@sveltejs/kit';
+import dayjs from 'dayjs';
+import { boolean } from 'zod';
 
 export const load = async (event) => {
 	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
@@ -40,14 +42,12 @@ export const load = async (event) => {
 		include: {
 			TenantRental: {
 				orderBy: { createdAt: 'desc' },
-				take: 1,
 				include: {
 					RentalUnits: true
 				}
 			},
 			Receipts: {
-				orderBy: { createdAt: 'desc' },
-				take: 1
+				orderBy: { createdAt: 'desc' }
 			}
 		}
 	});
@@ -62,10 +62,67 @@ export const load = async (event) => {
 			RentalUnits: true
 		}
 	});
+
 	if (!tenants) {
 		return fail(400, { tenants });
 	}
-	return { tenants, priceChangeRequest };
+
+	const fullDataTenant = await Promise.all(
+		tenants?.map(async (t) => {
+			let someContractExpiresSoon: boolean = false;
+			let someContractsExpired: boolean = false;
+			let paymentDueSoon: boolean = false;
+			let paymentExpired: boolean = false;
+
+			for (const tr of t.TenantRental) {
+				if (
+					dayjs(tr.contractEndDate).isBefore(dayjs().add(10, 'days')) &&
+					dayjs(tr.contractEndDate).isAfter(dayjs())
+				) {
+					someContractExpiresSoon = true;
+				}
+				if (dayjs(tr.contractEndDate).isBefore(dayjs())) {
+					someContractsExpired = true;
+				}
+
+				const arrayReceipts = t.Receipts.filter((r) => r.payToUnitId === tr.unitId).sort(
+					(a, b) => b.endDate.getTime() - a.endDate.getTime()
+				);
+
+				for (const r of arrayReceipts) {
+					if (!r.isRentPayment && !r.isUtilityAndRentPayment) {
+						console.log('receipt not rent', r.paymentReason);
+					} else {
+						if (r.crvReceipt) {
+							console.log('crv receipt', r.crvReceipt);
+						} else {
+							if (
+								dayjs(r.endDate).isBefore(dayjs().add(10, 'days')) &&
+								dayjs(r.endDate).isAfter(dayjs())
+							) {
+								paymentDueSoon = true;
+								break;
+							}
+							if (dayjs(r.endDate).isBefore(dayjs())) {
+								paymentExpired = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			return {
+				tenant: t,
+				contractSoonExpires: someContractExpiresSoon,
+				contractExpired: someContractsExpired,
+				paymentDueSoon: paymentDueSoon,
+				paymentExpired: paymentExpired
+			};
+		})
+	);
+
+	return { tenants, priceChangeRequest, fullDataTenant };
 };
 
 export const actions = {

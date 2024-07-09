@@ -1,19 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast';
 	import SvelteTable from 'svelte-table';
 	import Name from './name.svelte';
 	import PendingTenants from './pending-tenants.svelte';
-	import dayjs from 'dayjs';
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { toast } from '@zerodevx/svelte-toast';
+	import Status from './status.svelte';
 
 	export let data;
 
 	let displayTenant: 'Tenant' | 'Pending' = 'Tenant';
 
-	$: rows = data.tenants || [];
+	$: rows = data.fullDataTenant || [];
 	$: columns = [
 		{
 			key: 'tenant',
@@ -22,13 +20,13 @@
 				component: Name
 			},
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+				'text-left pl-3 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left pl-3 h-12 relative border-b-[1px] border-[#B3B4B8]'
 		},
 		{
 			key: 'phoneNumber',
 			title: 'Phone Number',
-			value: (v: typeof rows[number]) => v.phoneNumber ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => v.tenant.phoneNumber ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -36,25 +34,22 @@
 		{
 			key: 'email',
 			title: 'Email',
-			value: (v: typeof rows[number]) => v.email ?? 'NOT FOUND',
+			value: (v: typeof rows[number]) => v.tenant.email ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		},
 		{
-			key: 'contractEndDate',
-			title: 'Contract End',
-			value: (v: typeof rows[number]) =>
-				v.TenantRental[0]?.contractEndDate
-					? dayjs(v.TenantRental[0]?.contractEndDate).format('MMM DD, YYYY')
-					: '',
+			key: 'tenant',
+			title: 'Tenant',
+			renderComponent: {
+				component: Status
+			},
 			headerClass:
-				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+				'text-left pl-3 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
+			class: 'text-left h-12 relative border-b-[1px] border-[#B3B4B8]'
 		}
 	];
-
-	let filterModal = false;
 </script>
 
 <div class="md:mx-10 mx-5 my-12">
@@ -98,17 +93,11 @@
 					{/if}
 				</div>
 			</div>
-			<div class="bg-ghost/60 p-6 md:flex justify-between">
-				<button
-					class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
-					on:click={() => (filterModal = !filterModal)}
-				>
-					<FiltersLines class="h-4 w-4" /> Add filters
-				</button>
+			<div class="bg-ghost/60 p-6">
 				<label class="grid">
 					<input
 						placeholder="Search"
-						class="border-[1px] border-black/60 rounded-md p-2 md:mt-0 mt-3"
+						class="border-[1px] w-full max-w-[420px] border-black/60 h-fit rounded-md p-2 md:mt-0 mt-3"
 						type="search"
 						id="search"
 						name="search"
@@ -119,69 +108,11 @@
 						}}
 					/>
 				</label>
-				{#if filterModal}
-					<div class="fixed mt-12 z-50">
-						<div
-							use:clickOutside={() => (filterModal = false)}
-							class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
-						>
-							<button
-								on:click={async () => {
-									await goto(`?`);
-								}}
-								class="hover:underline hover:text-primary"
-							>
-								All
-							</button>
-
-							<button
-								on:click={async () => {
-									const newSearchParams = new URLSearchParams($page.url.search);
-									newSearchParams.set('unitType', 'COMMERCIAL');
-									await goto(`?${newSearchParams.toString()}`);
-								}}
-								class="hover:underline hover:text-primary"
-							>
-								Rent Payment Expired
-							</button>
-							<button
-								on:click={async () => {
-									const newSearchParams = new URLSearchParams($page.url.search);
-									newSearchParams.set('unitType', 'COMMERCIAL');
-									await goto(`?${newSearchParams.toString()}`);
-								}}
-								class="hover:underline hover:text-primary"
-							>
-								Rent Payment Due in a month
-							</button>
-							<button
-								on:click={async () => {
-									const newSearchParams = new URLSearchParams($page.url.search);
-									newSearchParams.set('unitType', 'COMMERCIAL');
-									await goto(`?${newSearchParams.toString()}`);
-								}}
-								class="hover:underline hover:text-primary"
-							>
-								Contract Expired
-							</button>
-							<button
-								on:click={async () => {
-									const newSearchParams = new URLSearchParams($page.url.search);
-									newSearchParams.set('unitType', 'COMMERCIAL');
-									await goto(`?${newSearchParams.toString()}`);
-								}}
-								class="hover:underline hover:text-primary"
-							>
-								Contract Expired in a month
-							</button>
-						</div>
-					</div>
-				{/if}
 			</div>
 			<div class="overflow-x-auto">
 				<SvelteTable
 					on:clickCell={(event) => {
-						const tenantId = event.detail.row.id;
+						const tenantId = event.detail.row.tenant.id;
 						if (
 							$page.data.session?.authUser.Employee.Role.Scopes.find(
 								(s) => s.name === 'VIEW_TENANT_DETAIL_PAGE'
