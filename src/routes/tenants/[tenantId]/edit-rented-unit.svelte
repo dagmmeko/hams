@@ -6,8 +6,8 @@
 
 	export let data: PageData;
 	export let form: ActionData;
-	export let selectedRentedUnitId;
-	export let editRentedUnitModal;
+	export let selectedRentedUnitId: number;
+	export let editRentedUnitModal: boolean;
 
 	let dateInput: any;
 	let dateInput2: any;
@@ -22,7 +22,7 @@
 		if (!selectedRentedUnitId) {
 			toast.push('No rented unit found');
 		}
-		formData.set('rentedUnitId', selectedRentedUnitId);
+		formData.set('rentedUnitId', selectedRentedUnitId.toString());
 		return async ({ update }) => {
 			await update();
 			toast.push('Rented unit updated successfully');

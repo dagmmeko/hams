@@ -56,6 +56,17 @@
 						on:input={() => (noChange = false)}
 					/>
 				</label>
+				<label class="flex items-center gap-3">
+					<input
+						type="checkbox"
+						name="sendEmailTo"
+						bind:checked={$editRoleForm.sendEmailTo}
+						{...$constraints.sendEmailTo}
+						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						on:input={() => (noChange = false)}
+					/>
+					<span class="text-primary font-medium"> Send Email </span>
+				</label>
 				<label class="grid">
 					<span class="text-primary font-medium"> Description </span>
 					<textarea

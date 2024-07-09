@@ -99,8 +99,21 @@ export const actions = {
 			}
 		});
 
+		const emailsTpSendTo = await prisma.user.findMany({
+			where: {
+				Employee: {
+					Role: {
+						sendToEmail: true
+					}
+				}
+			},
+			select: {
+				email: true
+			}
+		});
+
 		await sendEmail(
-			['dagixmeko@gmail.com'],
+			emailsTpSendTo,
 			'Approved Tenant',
 			`${tenant.fullName} has been approved to rent room ${unit.roomNumber}. With price change from ${unit.price} to ${priceChangeRequest.price}.`
 		);

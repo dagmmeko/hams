@@ -157,8 +157,21 @@ export const actions = {
 				}
 			});
 
+			const emailsTpSendTo = await prisma.user.findMany({
+				where: {
+					Employee: {
+						Role: {
+							sendToEmail: true
+						}
+					}
+				},
+				select: {
+					email: true
+				}
+			});
+
 			await sendEmail(
-				['dagixmeko@gmail.com'],
+				emailsTpSendTo,
 				'Price change request approved',
 				`Tenant ${priceChange.Tenant.fullName}'s price change request for ${priceChange.RentalUnits.roomNumber} from ${priceChange.RentalUnits.price} to ${priceChange.price} has been approved.`
 			);
@@ -199,8 +212,22 @@ export const actions = {
 					Tenant: true
 				}
 			});
+
+			const emailsTpSendTo = await prisma.user.findMany({
+				where: {
+					Employee: {
+						Role: {
+							sendToEmail: true
+						}
+					}
+				},
+				select: {
+					email: true
+				}
+			});
+
 			await sendEmail(
-				['dagixmeko@gmail.com'],
+				emailsTpSendTo,
 				'Price change request denied',
 				`Tenant ${priceChange.Tenant.fullName}'s price change request for ${priceChange.RentalUnits.roomNumber} from ${priceChange.RentalUnits.price} to ${priceChange.price} has been denied.`
 			);

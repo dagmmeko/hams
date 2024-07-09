@@ -136,8 +136,21 @@ export const actions = {
 			}
 		});
 
+		const emailsTpSendTo = await prisma.user.findMany({
+			where: {
+				Employee: {
+					Role: {
+						sendToEmail: true
+					}
+				}
+			},
+			select: {
+				email: true
+			}
+		});
+
 		await sendEmail(
-			['dagixmeko@gmail.com'],
+			emailsTpSendTo,
 			'New Rental Deal',
 			`Our customer ${tenant?.fullName} wants to rent a room. ${
 				rentRoomForm.data.priceChange

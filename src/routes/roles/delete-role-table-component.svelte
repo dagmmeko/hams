@@ -2,7 +2,6 @@
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { PageData } from './$types';
-	import { goto } from '$app/navigation';
 	import { superForm } from 'sveltekit-superforms/client';
 	export let row: any;
 	export let data: PageData;

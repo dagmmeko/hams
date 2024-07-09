@@ -3,10 +3,10 @@ import { Resend } from 'resend';
 
 const resend = new Resend(RESEND_API);
 
-export const sendEmail = async (to: string[], subject: string, html: string) => {
+export const sendEmail = async (to: { email: string }[], subject: string, html: string) => {
 	const resendRes = await resend.emails.send({
 		from: 'managmentApp@centerpointaddis.com',
-		to: to,
+		to: to.map((email) => email.email),
 		subject: subject,
 		html: `<p> ${html} <p>`
 	});

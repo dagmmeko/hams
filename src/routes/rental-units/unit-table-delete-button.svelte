@@ -27,11 +27,14 @@
 		{#if unitRow && unitRow.active}
 			<button
 				on:click|stopPropagation={() => toast.push('Can not delete a Unit with Tenant in it.')}
-				><Delete class="text-subtitle" />
+			>
+				<Delete class="text-subtitle" />
 			</button>
 		{:else}
 			<form use:enhance method="post" action="?/archiveUnit">
-				<button on:click|stopPropagation={() => {}}> <Delete class="text-danger" /> </button>
+				<button on:click|stopPropagation={() => {}}>
+					<Delete class="text-danger" />
+				</button>
 			</form>
 		{/if}
 	</div>

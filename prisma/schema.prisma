@@ -406,6 +406,7 @@ model Role {
   description String     @db.VarChar(500)
   createdAt   DateTime   @default(now())
   updateAt    DateTime   @updatedAt
+  sendToEmail Boolean    @default(false)
   deletedAt   DateTime?
   Employees   Employee[]
   Scopes      Scope[]

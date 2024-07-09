@@ -114,9 +114,20 @@ export const actions = {
 				}
 			});
 			//send email about the new tenant
-
+			const emailsTpSendTo = await prisma.user.findMany({
+				where: {
+					Employee: {
+						Role: {
+							sendToEmail: true
+						}
+					}
+				},
+				select: {
+					email: true
+				}
+			});
 			await sendEmail(
-				['dagixmeko@gmail.com'],
+				emailsTpSendTo,
 				'New Tenant',
 				`A new tenant has been added to the system. Name: ${addTenantForm.data.fullName}. ${
 					addTenantForm.data.priceChange

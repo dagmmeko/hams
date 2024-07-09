@@ -6,7 +6,8 @@ import z from 'zod';
 const editRoleSchema = z.object({
 	name: z.string(),
 	description: z.string(),
-	scopes: z.string().array()
+	scopes: z.string().array(),
+	sendEmailTo: z.boolean().optional()
 });
 
 const deleteRoleSchema = z.object({
@@ -45,7 +46,8 @@ export const load = async (event) => {
 		{
 			name: role.name,
 			description: role.description,
-			scopes: role.Scopes.map((scope) => scope.name)
+			scopes: role.Scopes.map((scope) => scope.name),
+			sendEmailTo: role.sendToEmail
 		} satisfies editRoleType,
 		editRoleSchema
 	);
@@ -92,6 +94,7 @@ export const actions = {
 					name: editRoleForm.data.name,
 					description: editRoleForm.data.description,
 					updateAt: new Date(),
+					sendToEmail: editRoleForm.data.sendEmailTo,
 					Scopes: {
 						deleteMany: {
 							roleId: Number(event.params.roleId)

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Receipts } from '@prisma/client';
+	import type { Receipts } from '@prisma/client';
 	import { toast } from '@zerodevx/svelte-toast';
 	import dayjs from 'dayjs';
 	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
-	export let receiptId;
+	export let receiptId: number;
 	export let form: ActionData;
 
 	let receipt: Receipts | undefined;
@@ -24,7 +24,7 @@
 		if (!receiptId) {
 			toast.push('No receipt found');
 		}
-		formData.set('receiptId', receiptId);
+		formData.set('receiptId', receiptId.toString());
 		return async ({ update }) => {
 			await update();
 			toast.push('Receipt updated successfully');
