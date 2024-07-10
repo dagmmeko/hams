@@ -71,7 +71,7 @@
 			key: 'price',
 			title: 'Price per Month',
 			value: (v: typeof rows[number]) =>
-				numberToCurrency(v.price, {
+				numberToCurrency(v.priceSetPerKare ? v.price * v.kareMeter : v.price, {
 					currency: v.currency,
 					currencyDisplay: 'code'
 				}) ?? 'NOT FOUND',
