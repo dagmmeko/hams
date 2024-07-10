@@ -65,7 +65,7 @@
 	];
 
 	let filterModal = false;
-	let addTaskModal = true;
+	let addTaskModal = false;
 	let dateInput: any;
 
 	const {
