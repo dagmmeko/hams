@@ -11,6 +11,7 @@
 	export let data;
 
 	let filesSelected: File[] = [];
+	let fileUploading = false;
 
 	const {
 		form: addTenantForm,
@@ -23,6 +24,7 @@
 		},
 		onResult: async ({ result }) => {
 			if (result.type === 'success') {
+				fileUploading = true;
 				const uploadPromises = [];
 
 				for (const file of filesSelected) {
@@ -33,7 +35,7 @@
 								`tenantsFile/${result.data?.addTenant.id}/${file.name}`
 							);
 							if (uploadStatus) {
-								const fileDataRes = await fetch('https://hams-one.vercel.app/api/postFileData', {
+								const fileDataRes = await fetch('http://localhost:5173/api/postFileData', {
 									method: 'POST',
 									headers: {
 										'Content-Type': 'application/json'
@@ -60,8 +62,11 @@
 				}
 				const successes = await Promise.all(uploadPromises);
 
+				console.log({ successes });
+
 				if (!successes.find((s) => s !== true)) {
 					toast.push('Tenant added successfully');
+					fileUploading = false;
 					setTimeout(() => {
 						window.location.href = `/tenants/${result.data?.addTenant.id}?display=receipts`;
 					}, 1500);
@@ -423,3 +428,11 @@
 		</form>
 	</div>
 </div>
+
+<!-- {#if fileUploading}
+	<div class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center">
+		<div class="bg-white rounded-xl p-8 w-[480px] grid gap-4 mx-12 justify-items-stretch">
+			Uploading file wait
+		</div>
+	</div>
+{/if} -->

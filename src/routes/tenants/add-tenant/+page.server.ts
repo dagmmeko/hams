@@ -107,12 +107,15 @@ export const actions = {
 			});
 
 			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
-
-			const unit = await prisma.rentalUnits.findFirst({
+			const unit = await prisma.rentalUnits.update({
 				where: {
 					id: addTenantForm.data.rentalUnitsId
+				},
+				data: {
+					active: !addTenantForm.data.priceChange
 				}
 			});
+
 			//send email about the new tenant
 			const emailsTpSendTo = await prisma.user.findMany({
 				where: {

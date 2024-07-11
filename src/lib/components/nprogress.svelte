@@ -75,7 +75,7 @@
 
 <style lang="postcss">
 	:global(#nprogress .bar) {
-		@apply h-2 bg-primary;
+		@apply h-2 bg-danger;
 	}
 	:global(#nprogress .bar .peg) {
 		@apply hidden;
