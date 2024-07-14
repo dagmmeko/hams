@@ -35,7 +35,7 @@
 								`tenantsFile/${result.data?.addTenant.id}/${file.name}`
 							);
 							if (uploadStatus) {
-								const fileDataRes = await fetch('http://localhost:5173/api/postFileData', {
+								const fileDataRes = await fetch('https://hams-one.vercel.app/api/postFileData', {
 									method: 'POST',
 									headers: {
 										'Content-Type': 'application/json'

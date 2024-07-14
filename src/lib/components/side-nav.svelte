@@ -87,5 +87,14 @@
 				<Task /> <span class="md:block hidden"> Tasks</span>
 			</div>
 		</a>
+		<!-- <a href="/cms">
+			<div
+				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/cms'
+					? 'bg-primary rounded-md p-1'
+					: ''}"
+			>
+				<Task /> <span class="md:block hidden"> CMS</span>
+			</div>
+		</a> -->
 	</div>
 </div>
