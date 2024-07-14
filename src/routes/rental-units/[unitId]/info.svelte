@@ -19,6 +19,7 @@
 	let dateInput: any;
 	let fileNames: string[] = [];
 
+	$: form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
 	const {
 		form: editUnitForm,
 		enhance: editUnitFormEnhance,
@@ -353,9 +354,10 @@
 								action="?/downloadUnitFile"
 								use:enhance={({ formData }) => {
 									formData.set('unitKey', `${file.File.key}`);
-									return async ({ result }) => {
+									return async ({ result, update }) => {
+										await update();
+
 										if (result.type === 'success') {
-											window.open(form?.fileUrl, '_blank');
 										}
 									};
 								}}

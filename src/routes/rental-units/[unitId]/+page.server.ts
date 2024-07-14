@@ -390,6 +390,7 @@ export const actions = {
 		}
 
 		const fileUrl = await getFile(unitKey);
+		console.log(fileUrl);
 
 		return { fileUrl };
 	},
