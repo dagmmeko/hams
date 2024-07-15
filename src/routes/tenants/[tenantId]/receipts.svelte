@@ -237,7 +237,7 @@
 					</div>
 					<hr class="my-2" />
 					<div class="grid grid-cols-2">
-						<p>
+						<div>
 							<span>
 								{data.tenant?.PriceChange.find(
 									(changed) => changed.unitId === $addReceiptForm.payToUnit
@@ -265,9 +265,23 @@
 											}
 									  )}
 							</span>
-							/
-							<span class="text-xs"> ETB {data.usdRate[0].rate} </span>
-						</p>
+
+							<br />
+							<hr class="my-1" />
+							<span class="italic text-sm"
+								>Utility Price: {numberToCurrency(
+									data.tenant?.TenantRental.find(
+										(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+									)?.RentalUnits.utilityPrice ?? 0,
+									{
+										currency: data.tenant?.TenantRental.find(
+											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+										)?.RentalUnits.currency,
+										currencyDisplay: 'code'
+									}
+								)}</span
+							>
+						</div>
 						<p>
 							{data.tenant?.PriceChange.find(
 								(changed) => changed.unitId === $addReceiptForm.payToUnit

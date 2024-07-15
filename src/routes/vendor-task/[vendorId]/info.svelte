@@ -28,6 +28,8 @@
 
 	$: form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
 	let fileNames: string[] = [];
+	$: form?.vendorArchived ? toast.push('Vendor deleted successfully') : null;
+	$: form?.vendorArchived ? (window.location.href = '/vendor-task') : null;
 </script>
 
 <div class="p-6">
@@ -217,9 +219,19 @@
 						Remove all data related to vendor.Once you take this action their is no going back
 					</p>
 				</div>
-				<button class="bg-danger flex text-white rounded-md items-center px-4">
-					<Delete /> Delete Vendor
-				</button>
+				<form
+					method="post"
+					action="?/archiveVendor"
+					use:enhance={({ cancel }) => {
+						if (!window.confirm('Are you sure you want to delete this Vendor?')) {
+							cancel();
+						}
+					}}
+				>
+					<button class="bg-danger flex text-white rounded-md items-center p-4">
+						<Delete /> Delete Vendor
+					</button>
+				</form>
 			</div>
 		</div>
 	{/if}

@@ -123,7 +123,6 @@ export const actions = {
 
 		return { editVendorForm, vendor };
 	},
-
 	addPayment: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
 
@@ -228,5 +227,27 @@ export const actions = {
 		);
 
 		return { allNewFiles };
+	},
+	archiveVendor: async (event) => {
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+
+		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
+			return scope.name === 'DELETE_VENDOR';
+		});
+
+		if (!hasRole) {
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+		}
+
+		const vendorArchived = await prisma.vendor.update({
+			where: {
+				id: Number(event.params.vendorId)
+			},
+			data: {
+				deletedAt: new Date()
+			}
+		});
+
+		return { vendorArchived };
 	}
 };

@@ -27,24 +27,45 @@
 			<div>
 				<p>
 					<span class="font-medium text-lg pr-1">Paid To:</span>
-					{data.payment.VendorTask?.Vendor?.name}
+					<span class="underline">{data.payment.VendorTask?.Vendor?.name}</span>
 				</p>
 				<p>
 					<span class="font-medium text-lg pr-1">Paid for task: </span>
-					{data.payment.VendorTask?.taskDescription}
+					<span class="underline">{data.payment.VendorTask?.taskDescription}</span>
+				</p>
+				<p>
+					<span class="font-medium text-lg pr-1">Payment Term: </span>
+					<span class="underline">{data.payment.VendorTask?.paymentTerms}</span>
 				</p>
 			</div>
 			<hr class="my-2" />
-			<div>
-				<p>
+			<div class="grid grid-cols-3">
+				<p class="grid">
 					<span class="font-medium text-lg pr-1">Paid Via: </span>
-					{data.payment.depositedToBank ?? 'N/A'}
+					<span>{data.payment.depositedToBank ?? 'N/A'}</span>
 				</p>
-				<p><span class="font-medium text-lg pr-1">Paid Amount: </span>{data.payment.amount}</p>
-				<p>
-					<span class="font-medium text-lg pr-1">Paid on: </span>{dayjs(data.payment.paidOn).format(
-						'MMM DD/YY'
-					)}
+				<p class="grid">
+					<span class="font-medium text-lg pr-1">Paid Amount: </span>
+					<span>{data.payment.amount}</span>
+				</p>
+				<p class="grid">
+					<span class="font-medium text-lg pr-1">Paid on: </span>
+					<span>{dayjs(data.payment.paidOn).format('MMM DD/YY')}</span>
+				</p>
+			</div>
+			<hr class="my-12" />
+			<div class="grid grid-cols-3">
+				<p class="grid justify-items-stretch">
+					<span> ___________________</span>
+					<span> Prepared By</span>
+				</p>
+				<p class="grid justify-items-stretch">
+					<span> ___________________</span>
+					<span> Approved By</span>
+				</p>
+				<p class="grid justify-items-stretch">
+					<span> ___________________</span>
+					<span> Received By</span>
 				</p>
 			</div>
 		</div>

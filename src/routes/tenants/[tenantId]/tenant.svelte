@@ -27,6 +27,9 @@
 	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
 	$: form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
 	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
+	$: form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
+	$: console.log(form?.fileUrl);
+
 	let extendContractModal = false;
 	let unitToExtend: any;
 	let endContractModal = false;
@@ -199,9 +202,10 @@
 									use:enhance={({ formData }) => {
 										formData.set('tenantKey', `${file.File.key}`);
 										return async ({ result, update }) => {
+											await update();
 											if (result.type === 'success') {
 												// @ts-ignore
-												window.open(result.data.fileUrl, '_blank');
+												// window.open(result.data.fileUrl, '_blank');
 											}
 										};
 									}}
