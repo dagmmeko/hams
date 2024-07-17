@@ -13,6 +13,7 @@
 	{#if data.session === null}
 		<slot />
 	{:else}
+		<div class="bg-green-500 w-full h-6 text-center tracking-widest">Test</div>
 		<div class="flex relative print:h-auto h-screen bg-ghost/60 shadow-md">
 			<!-- <div class="md:block hidden"> -->
 			<SideNav />
