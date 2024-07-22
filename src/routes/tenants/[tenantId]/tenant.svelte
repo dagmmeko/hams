@@ -161,7 +161,7 @@
 									<button
 										class="bg-orange-600 rounded-md p-2 text-xs text-white"
 										on:click|preventDefault={() => {
-											extendContractModal = true;
+											endContractModal = true;
 											unitToExtend = tenantUnit.id;
 										}}
 									>
@@ -172,7 +172,7 @@
 									<button
 										class="bg-info rounded-md p-2 text-xs text-white"
 										on:click|preventDefault={() => {
-											endContractModal = true;
+											extendContractModal = true;
 											unitToEnd = tenantUnit.id;
 										}}
 									>
