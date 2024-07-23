@@ -122,6 +122,8 @@ export const load = async (event) => {
 		})
 	);
 
+	// console.log({ fullDataTenant: fullDataTenant[0] });
+
 	return { tenants, priceChangeRequest, fullDataTenant };
 };
 

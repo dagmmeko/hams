@@ -224,7 +224,7 @@
 							<div class="text-xs mt-1">
 								{numberToCurrency(
 									((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
-										(data.unitDetails.utilityPrice || 0)) /
+										(data.unitDetails.utilityPrice || 0)) *
 										data.usdRate[0].rate,
 									{
 										currency: data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB',
@@ -243,7 +243,7 @@
 							</div>
 							<div class="text-xs mt-1">
 								{numberToCurrency(
-									(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) *
+									(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) /
 										data.usdRate[0].rate,
 									{
 										currency: data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB',
