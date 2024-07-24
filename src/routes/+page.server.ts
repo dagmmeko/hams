@@ -1,3 +1,4 @@
+import { updated } from '$app/stores';
 import { prisma } from '$lib/utils/prisma.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -190,7 +191,8 @@ export const actions = {
 
 		const updatedRate = await prisma.currencyRate.update({
 			where: {
-				id: usdRateForm.data.id
+				id: usdRateForm.data.id,
+				updatedAt: new Date()
 			},
 			data: {
 				rate: usdRateForm.data.usdRate

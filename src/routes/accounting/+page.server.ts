@@ -40,6 +40,7 @@ export const load = async (event) => {
 			Tenants: true
 		}
 	});
+	console.log({ tenantRentals });
 
 	// return the sum of amount from the receipts array if isRentalPayment is true
 	const totalRentalPayment = receipts.reduce((acc, receipt) => {
@@ -62,9 +63,13 @@ export const load = async (event) => {
 		return acc;
 	}, 0);
 
+	console.log({ tenantRentals });
+
 	const totalSecurityDeposit = tenantRentals.reduce((acc, tenantRental) => {
+		console.log({ tenantRental });
+
 		if (tenantRental.active && tenantRental.securityDeposit !== null) {
-			return acc + tenantRental.securityDeposit;
+			return acc + tenantRental?.securityDeposit;
 		}
 		return acc;
 	}, 0);

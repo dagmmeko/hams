@@ -222,15 +222,25 @@
 								)}
 							</div>
 							<div class="text-xs mt-1">
-								{numberToCurrency(
-									((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
-										(data.unitDetails.utilityPrice || 0)) *
-										data.usdRate[0].rate,
-									{
-										currency: data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB',
-										currencyDisplay: 'code'
-									}
-								)}
+								{#if data.unitDetails?.currency === 'ETB'}
+									{numberToCurrency(
+										((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
+											(data.unitDetails.utilityPrice || 0)) /
+											data.usdRate[0].rate,
+										{
+											currency: 'USD',
+											currencyDisplay: 'code'
+										}
+									)}{:else}
+									{numberToCurrency(
+										((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
+											(data.unitDetails.utilityPrice || 0)) *
+											data.usdRate[0].rate,
+										{
+											currency: 'ETB',
+											currencyDisplay: 'code'
+										}
+									)}{/if}
 							</div>
 						</span>
 					{:else}
@@ -242,14 +252,25 @@
 								})}
 							</div>
 							<div class="text-xs mt-1">
-								{numberToCurrency(
-									(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) /
-										data.usdRate[0].rate,
-									{
-										currency: data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB',
-										currencyDisplay: 'code'
-									}
-								)}
+								{#if data.unitDetails?.currency === 'ETB'}
+									{numberToCurrency(
+										(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) /
+											data.usdRate[0].rate,
+										{
+											currency: 'USD',
+											currencyDisplay: 'code'
+										}
+									)}
+								{:else}
+									{numberToCurrency(
+										(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) *
+											data.usdRate[0].rate,
+										{
+											currency: 'ETB',
+											currencyDisplay: 'code'
+										}
+									)}
+								{/if}
 							</div>
 						</span>
 					{/if}

@@ -12,6 +12,7 @@ export async function load(event) {
 		throw redirect(308, '/auth');
 	}
 	const usdRate = await prisma.currencyRate.findMany({});
+	console.log({ usdRate });
 
 	return {
 		session: session,
