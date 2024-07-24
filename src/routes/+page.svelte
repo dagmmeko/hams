@@ -47,7 +47,7 @@
 			<span class="text-primary font-semibold"> USD Rate</span>
 			<span class="text-xs flex gap-2 py-1">
 				<p class="font-semibold">Last Updated:</p>
-				{dayjs(data.usdRate[0].createdAt).format('MMM DD/YY')}
+				{dayjs(data.usdRate[0].updatedAt).format('MMM DD/YY')}
 			</span>
 			<input
 				class="w-24 border-[1px] border-black/60 rounded-md p-1"
