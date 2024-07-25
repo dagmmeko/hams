@@ -25,6 +25,9 @@ export const load = async (event) => {
 
 	//fetch all vendors
 	const vendors = await prisma.vendorTask.findMany({
+		where: {
+			deletedAt: null
+		},
 		orderBy: {
 			createdAt: 'desc'
 		},
@@ -53,6 +56,9 @@ export const load = async (event) => {
 
 	//fetch all employees
 	const employees = await prisma.employee.findMany({
+		where: {
+			deletedAt: null
+		},
 		orderBy: {
 			createdAt: 'desc'
 		}
@@ -78,6 +84,9 @@ export const load = async (event) => {
 
 	//fetch all internal tasks
 	const internalTasks = await prisma.internalTask.findMany({
+		where: {
+			deletedAt: null
+		},
 		orderBy: {
 			createdAt: 'desc'
 		}
@@ -94,6 +103,9 @@ export const load = async (event) => {
 
 	// Unit Data
 	const allUnits = await prisma.rentalUnits.findMany({
+		where: {
+			deletedAt: null
+		},
 		orderBy: {
 			floor: 'asc'
 		}
@@ -120,7 +132,11 @@ export const load = async (event) => {
 	);
 
 	// Tenant Data
-	const tenants = await prisma.tenants.findMany({});
+	const tenants = await prisma.tenants.findMany({
+		where: {
+			deletedAt: null
+		}
+	});
 
 	const tenantFromWebsite = tenants.filter((tenant) => tenant.contactSource === 'WEBSITE').length;
 	const tenantFromReferral = tenants.filter((tenant) => tenant.contactSource === 'REFERRAL').length;

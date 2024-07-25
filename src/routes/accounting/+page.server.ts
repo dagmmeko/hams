@@ -16,6 +16,9 @@ export const load = async (event) => {
 	const filterEndDate = event.url.searchParams.get('filterEndDate');
 
 	const receipts = await prisma.receipts.findMany({
+		where: {
+			deletedAt: null
+		},
 		...(filterStartDate !== null &&
 			filterStartDate !== '' &&
 			filterEndDate !== null &&
@@ -35,6 +38,9 @@ export const load = async (event) => {
 	});
 
 	const tenantRentals = await prisma.tenantRental.findMany({
+		where: {
+			deletedAt: null
+		},
 		include: {
 			RentalUnits: true,
 			Tenants: true
@@ -56,23 +62,13 @@ export const load = async (event) => {
 		return acc;
 	}, 0);
 
-	const crvReceipts = receipts.reduce((acc, receipt) => {
-		if (receipt.crvReceipt) {
-			return acc + receipt.amount;
-		}
-		return acc;
-	}, 0);
+	const crvReceipts = receipts.filter((receipt) => receipt.crvReceipt);
 
-	console.log({ tenantRentals });
+	console.log({ crvReceipts });
 
-	const totalSecurityDeposit = tenantRentals.reduce((acc, tenantRental) => {
-		console.log({ tenantRental });
-
-		if (tenantRental.active && tenantRental.securityDeposit !== null) {
-			return acc + tenantRental?.securityDeposit;
-		}
-		return acc;
-	}, 0);
+	const totalSecurityDeposit = tenantRentals.filter(
+		(tenantRental) => tenantRental.active && tenantRental.securityDeposit
+	);
 
 	const paymentForVendor = await prisma.vendorTask.findMany({
 		where: {
@@ -85,7 +81,8 @@ export const load = async (event) => {
 						lte: new Date(filterEndDate)
 					}
 				}),
-			paymentStatus: true
+			paymentStatus: true,
+			deletedAt: null
 		},
 		include: {
 			Vendor: true,

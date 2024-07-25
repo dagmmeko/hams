@@ -39,6 +39,20 @@
 	let filterEndDate: any;
 	let dateInput: any;
 	let dateInput2: any;
+
+	let crvSum = data.crvReceipts.reduce((acc, receipt) => {
+		if (receipt.crvReceipt) {
+			return acc + receipt.amount;
+		}
+		return acc;
+	}, 0);
+
+	const depositsSum = data.totalSecurityDeposit.reduce((acc, tenantRental) => {
+		if (tenantRental.active && tenantRental.securityDeposit !== null) {
+			return acc + tenantRental?.securityDeposit;
+		}
+		return acc;
+	}, 0);
 </script>
 
 <div class="md:mx-10 mx-5 my-12">
@@ -133,22 +147,65 @@
 		</div>
 
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			Deposits income - Advance deposits collected from guests
+			<div class="font-semibold">Deposits income - Advance deposits collected from guests</div>
+			<hr class="p-1" />
 			<p>
-				{numberToCurrency(data.totalSecurityDeposit, {
+				<span class="font-semibold"> Total </span>
+				{numberToCurrency(depositsSum, {
 					currency: 'ETB',
 					currencyDisplay: 'code'
 				})}
 			</p>
+			<div
+				class="overflow-y-auto flex-1 max-h-96 p-3"
+				style:-webkit-mask-image={`linear-gradient(to top, hsla(0,0%,0%,0) 0, hsla(0,0%,0%,1) 16px, hsla(0,0%,0%,1) 100%)`}
+				style:mask-image={`linear-gradient(to top, hsla(0,0%,0%,0) 0, hsla(0,0%,0%,1) 16px, hsla(0,0%,0%,1) 100%)`}
+			>
+				{#each data.totalSecurityDeposit as deposit}
+					<div class="text-left mt-2 p-2 rounded bg-ghost">
+						<p class="font-semibold">{deposit.Tenants?.fullName}</p>
+						<p class="text-sm">
+							<span class="font-semibold">Amount</span>
+							{numberToCurrency(deposit.securityDeposit || 0, {
+								currency: 'ETB',
+								currencyDisplay: 'code'
+							})}
+						</p>
+					</div>
+				{:else}
+					<p>No Deposits</p>
+				{/each}
+			</div>
 		</div>
-		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
-			CRV Receipts
+		<div class="bg-white flex flex-col border-[1px] border-subtitle rounded-sm text-center pt-2">
+			<div class="text-lg font-semibold">CRV Receipts</div>
 			<p>
-				{numberToCurrency(data.crvReceipts, {
+				<span class="font-semibold">Total: </span>
+				{numberToCurrency(crvSum, {
 					currency: 'ETB',
 					currencyDisplay: 'code'
 				})}
 			</p>
+			<div
+				class="overflow-y-auto flex-1 max-h-96 p-3"
+				style:-webkit-mask-image={`linear-gradient(to top, hsla(0,0%,0%,0) 0, hsla(0,0%,0%,1) 16px, hsla(0,0%,0%,1) 100%)`}
+				style:mask-image={`linear-gradient(to top, hsla(0,0%,0%,0) 0, hsla(0,0%,0%,1) 16px, hsla(0,0%,0%,1) 100%)`}
+			>
+				{#each data.crvReceipts as receipt}
+					<div class="text-left mt-2 p-2 rounded bg-primary/20">
+						<p class="font-semibold">{receipt.Tenants?.fullName}</p>
+						<p class="text-sm">
+							<span class="font-semibold">Amount</span>
+							{numberToCurrency(receipt.amount, {
+								currency: 'ETB',
+								currencyDisplay: 'code'
+							})}
+						</p>
+					</div>
+				{:else}
+					<p>No CRV Receipts</p>
+				{/each}
+			</div>
 		</div>
 	</div>
 	<p class="text-xl font-medium text-primary mt-6 mb-3">Expenses</p>
