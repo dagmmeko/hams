@@ -88,22 +88,23 @@ export const load = async (event) => {
 				const arrayReceipts = t.Receipts.filter((r) => r.payToUnitId === tr.unitId).sort(
 					(a, b) => b.endDate.getTime() - a.endDate.getTime()
 				);
-
-				for (const r of arrayReceipts) {
-					if (!r.isRentPayment && !r.isUtilityAndRentPayment) {
-						console.log('receipt not rent', r.paymentReason);
+				console.log({ arrayReceipts });
+				for (let i = 0; i < arrayReceipts.length; i++) {
+					if (!arrayReceipts[i].isRentPayment && !arrayReceipts[i].isUtilityAndRentPayment) {
+						console.log('receipt not rent', arrayReceipts[i].paymentReason);
 					} else {
-						if (r.crvReceipt) {
-							console.log('crv receipt', r.crvReceipt);
+						if (arrayReceipts[i].crvReceipt) {
+							console.log('crv receipt', arrayReceipts[i].crvReceipt);
 						} else {
 							if (
-								dayjs(r.endDate).isBefore(dayjs().add(10, 'days')) &&
-								dayjs(r.endDate).isAfter(dayjs())
+								dayjs(arrayReceipts[i].endDate).isBefore(dayjs().add(10, 'days')) &&
+								dayjs(arrayReceipts[i].endDate).isAfter(dayjs())
 							) {
 								paymentDueSoon = true;
 								break;
 							}
-							if (dayjs(r.endDate).isBefore(dayjs())) {
+							if (dayjs(arrayReceipts[0].endDate).isBefore(dayjs())) {
+								console.log('payment expired', arrayReceipts[0]);
 								paymentExpired = true;
 								break;
 							}
@@ -111,6 +112,13 @@ export const load = async (event) => {
 					}
 				}
 			}
+			console.log({
+				tenant: t.id,
+				contractSoonExpires: someContractExpiresSoon,
+				contractExpired: someContractsExpired,
+				paymentDueSoon: paymentDueSoon,
+				paymentExpired: paymentExpired
+			});
 
 			return {
 				tenant: t,
