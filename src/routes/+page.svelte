@@ -79,7 +79,7 @@
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
 	<div class="bg-white p-3 grid rounded-sm text-center">
-		<span class="text-xl my-2">Occupancy rates</span>
+		<span class="text-xl font-semibold my-2">Occupied Rooms</span>
 		<div class="sm:grid-cols-4 grid-cols-2 grid">
 			{#each data.allUnits as units, key}
 				<div
@@ -92,18 +92,37 @@
 			{/each}
 		</div>
 
-		<div class="w-full flex mt-6">
+		<div class="mt-6 mb-3 text-left">
+			<span class="text-lg font-semibold">Occupancy Rate</span>
+			{(
+				(data.allUnits.reduce((acc, unit) => (unit.active ? unit.kareMeter + acc : acc), 0) /
+					data.allUnits.reduce((acc, unit) => unit.kareMeter + acc, 0)) *
+				100
+			).toFixed(2)} %
+		</div>
+		<div class="w-full flex">
 			<div
-				style="width: {((data.allUnits.length - data.activeUnits) / data.allUnits.length) * 100}%;"
+				style="width: {((data.allUnits.reduce((acc, unit) => unit.kareMeter + acc, 0) -
+					data.allUnits.reduce((acc, unit) => (unit.active ? unit.kareMeter + acc : acc), 0)) /
+					data.allUnits.reduce((acc, unit) => unit.kareMeter + acc, 0)) *
+					100}%;"
 				class="bg-[#36A2EB] text-white p-2 italic"
 			>
-				{data.allUnits.length - data.activeUnits} Available Units
+				{data.allUnits.reduce((acc, unit) => unit.kareMeter + acc, 0) -
+					data.allUnits.reduce((acc, unit) => (unit.active ? unit.kareMeter + acc : acc), 0)} Available
+				Square Meters
 			</div>
 			<div
-				style="width: {(data.activeUnits / data.allUnits.length) * 100}%;"
+				style="width: {(data.allUnits.reduce(
+					(acc, unit) => (unit.active ? unit.kareMeter + acc : acc),
+					0
+				) /
+					data.allUnits.reduce((acc, unit) => unit.kareMeter + acc, 0)) *
+					100}%;"
 				class="bg-[#FF6384] p-2 text-white italic"
 			>
-				{data.activeUnits} Occupied Units
+				{data.allUnits.reduce((acc, unit) => (unit.active ? unit.kareMeter + acc : acc), 0)}
+				Occupied Square Meter
 			</div>
 		</div>
 	</div>
