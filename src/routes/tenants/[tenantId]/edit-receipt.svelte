@@ -66,16 +66,16 @@
 		<label class="flex gap-2">
 			<input
 				type="checkbox"
-				checked={receipt?.isUtilityAndRentPayment}
-				name="editIsBothPayment"
+				checked={receipt?.isRentPayment}
+				name="editIsRentPayment"
 				class=" border-[1px] border-black/60 rounded-md p-2"
 			/>
-			<span class="text-primary font-medium"> Rent & Utility Payment </span>
+			<span class="text-primary font-medium"> Rent Payment </span>
 		</label>
 		<label class="flex gap-2">
 			<input
 				type="checkbox"
-				checked={!receipt?.isRentPayment}
+				checked={receipt?.isUtilityPayment}
 				name="editIsUtilityPayment"
 				class=" border-[1px] border-black/60 rounded-md p-2"
 			/>

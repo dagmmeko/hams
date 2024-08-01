@@ -214,7 +214,7 @@ export const actions = {
 		const data = await event.request.formData();
 		const startDate = data.get('editPaymentStartDate');
 		const endDate = data.get('editPaymentEndDate');
-		const isBothPayment = data.get('editIsBothPayment');
+		const isRentPayment = data.get('editIsRentPayment');
 		const isUtilityPayment = data.get('editIsUtilityPayment');
 		const isCRVReceipt = data.get('editCRVReceipt');
 		const amount = data.get('editAmount');
@@ -244,13 +244,16 @@ export const actions = {
 				bankName,
 				paymentReason: isCRVReceipt
 					? 'CRV Receipt'
-					: isBothPayment
-					? 'Rent & Utility Payment'
-					: !isUtilityPayment
+					: isRentPayment && !isUtilityPayment
 					? 'Rent Payment'
-					: 'Utility Payment',
-				isRentPayment: !isUtilityPayment,
-				isUtilityAndRentPayment: isBothPayment === 'on' ? true : false,
+					: isUtilityPayment && !isRentPayment
+					? 'Utility Payment'
+					: isRentPayment && isUtilityPayment
+					? 'Rent & Utility Payment'
+					: 'Payment Issue!',
+				isRentPayment: isRentPayment === 'on' ? true : false,
+				isUtilityPayment: isUtilityPayment === 'on' ? true : false,
+				isUtilityAndRentPayment: isRentPayment === 'on' && isUtilityPayment === 'on' ? true : false,
 				crvReceipt: isCRVReceipt === 'on' ? true : false,
 				receiptReferenceNumber: refNumber
 			}
