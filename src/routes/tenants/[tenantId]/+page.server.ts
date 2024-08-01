@@ -19,7 +19,8 @@ const addReceiptsSchema = z.object({
 	paymentStartDate: z.date(),
 	paymentEndDate: z.date(),
 	isRentPayment: z.boolean().optional(),
-	isBothPayment: z.boolean().optional(),
+	isUtilityPayment: z.boolean().optional(),
+	// isBothPayment: z.boolean().optional(),
 	amount: z.number(),
 	receiptIssueDate: z.date(),
 	receiptNumber: z.string(),
@@ -188,17 +189,21 @@ export const actions = {
 				bankName: addReceiptsForm.data.depositedBank,
 				paymentReason: addReceiptsForm.data.crvReceipt
 					? 'CRV Receipt'
-					: addReceiptsForm.data.isBothPayment
-					? 'Rent & Utility Payment'
-					: !addReceiptsForm.data.isRentPayment
+					: addReceiptsForm.data.isRentPayment && !addReceiptsForm.data.isUtilityPayment
 					? 'Rent Payment'
-					: 'Utility Payment',
+					: addReceiptsForm.data.isUtilityPayment && !addReceiptsForm.data.isRentPayment
+					? 'Utility Payment'
+					: addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment
+					? 'Rent & Utility Payment'
+					: 'Payment Issue!',
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
-				isRentPayment: !addReceiptsForm.data.isRentPayment,
+				isRentPayment: addReceiptsForm.data.isRentPayment,
+				isUtilityPayment: addReceiptsForm.data.isUtilityPayment,
 				usdRateAtPayment: usdRate[0].rate,
-				isUtilityAndRentPayment: addReceiptsForm.data.isBothPayment,
+				isUtilityAndRentPayment:
+					addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment,
 				crvReceipt: addReceiptsForm.data.crvReceipt
 			}
 		});

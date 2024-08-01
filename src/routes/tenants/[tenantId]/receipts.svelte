@@ -213,6 +213,40 @@
 			use:clickOutside={() => (modal = false)}
 			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
 		>
+			<div class="flex gap-2">
+				<label class="flex gap-2">
+					<input
+						type="checkbox"
+						bind:checked={$addReceiptForm.isRentPayment}
+						{...$constraints.isRentPayment}
+						name="isRentPayment"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> Rent Payment </span>
+				</label>
+				<label class="flex gap-2">
+					<input
+						type="checkbox"
+						bind:checked={$addReceiptForm.isUtilityPayment}
+						{...$constraints.isUtilityPayment}
+						name="isUtilityPayment"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> Utility Payment </span>
+				</label>
+			</div>
+			{#if !$addReceiptForm.isRentPayment && !$addReceiptForm.isUtilityPayment}
+				<label class="flex gap-2">
+					<input
+						type="checkbox"
+						bind:checked={$addReceiptForm.crvReceipt}
+						{...$constraints.crvReceipt}
+						name="crvReceipt"
+						class=" border-[1px] border-black/60 rounded-md p-2"
+					/>
+					<span class="text-primary font-medium"> CRV Receipt </span>
+				</label>
+			{/if}
 			<label class="grid">
 				<span class="text-primary font-medium"> Pay for Unit </span>
 				<select
@@ -229,31 +263,49 @@
 					{/each}
 				</select>
 			</label>
-			{#if $addReceiptForm.payToUnit && !$addReceiptForm.isRentPayment}
-				<div>
-					<div class="grid grid-cols-2">
-						<p class="text-base font-medium">Rent to Pay</p>
-						<p class="text-base font-medium">Negotiated from</p>
-					</div>
-					<hr class="my-2" />
-					<div class="grid grid-cols-2">
-						<div>
-							<span>
+			{#if $addReceiptForm.payToUnit && ($addReceiptForm.isRentPayment || $addReceiptForm.isUtilityPayment)}
+				{#if $addReceiptForm.isRentPayment}
+					<div>
+						<div class="grid grid-cols-2">
+							<p class="text-base font-medium">Rent to Pay</p>
+							<p class="text-base font-medium">Negotiated from</p>
+						</div>
+						<hr class="my-2" />
+						<div class="grid grid-cols-2">
+							<div>
+								<span>
+									{data.tenant?.PriceChange.find(
+										(changed) => changed.unitId === $addReceiptForm.payToUnit
+									) && data.tenant?.PriceChange.find((changed) => changed.active)
+										? numberToCurrency(
+												data.tenant?.PriceChange.find(
+													(changed) => changed.unitId === $addReceiptForm.payToUnit
+												)?.price ?? 0,
+												{
+													currency: data.tenant?.TenantRental.find(
+														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+													)?.RentalUnits.currency,
+													currencyDisplay: 'code'
+												}
+										  )
+										: numberToCurrency(
+												data.tenant?.TenantRental.find(
+													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+												)?.RentalUnits.price ?? 0,
+												{
+													currency: data.tenant?.TenantRental.find(
+														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+													)?.RentalUnits.currency,
+													currencyDisplay: 'code'
+												}
+										  )}
+								</span>
+							</div>
+							<p>
 								{data.tenant?.PriceChange.find(
 									(changed) => changed.unitId === $addReceiptForm.payToUnit
 								) && data.tenant?.PriceChange.find((changed) => changed.active)
 									? numberToCurrency(
-											data.tenant?.PriceChange.find(
-												(changed) => changed.unitId === $addReceiptForm.payToUnit
-											)?.price ?? 0,
-											{
-												currency: data.tenant?.TenantRental.find(
-													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-												)?.RentalUnits.currency,
-												currencyDisplay: 'code'
-											}
-									  )
-									: numberToCurrency(
 											data.tenant?.TenantRental.find(
 												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
 											)?.RentalUnits.price ?? 0,
@@ -263,44 +315,29 @@
 												)?.RentalUnits.currency,
 												currencyDisplay: 'code'
 											}
-									  )}
-							</span>
-
-							<br />
-							<hr class="my-1" />
-							<span class="italic text-sm"
-								>Utility Price: {numberToCurrency(
-									data.tenant?.TenantRental.find(
-										(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-									)?.RentalUnits.utilityPrice ?? 0,
-									{
-										currency: data.tenant?.TenantRental.find(
-											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-										)?.RentalUnits.currency,
-										currencyDisplay: 'code'
-									}
-								)}</span
-							>
+									  )
+									: 'No Negotiation'}
+							</p>
 						</div>
-						<p>
-							{data.tenant?.PriceChange.find(
-								(changed) => changed.unitId === $addReceiptForm.payToUnit
-							) && data.tenant?.PriceChange.find((changed) => changed.active)
-								? numberToCurrency(
-										data.tenant?.TenantRental.find(
-											(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-										)?.RentalUnits.price ?? 0,
-										{
-											currency: data.tenant?.TenantRental.find(
-												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
-											)?.RentalUnits.currency,
-											currencyDisplay: 'code'
-										}
-								  )
-								: 'No Negotiation'}
-						</p>
 					</div>
-				</div>
+				{/if}
+				{#if $addReceiptForm.isUtilityPayment}
+					<hr />
+
+					<span>
+						Utility Price: {numberToCurrency(
+							data.tenant?.TenantRental.find(
+								(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+							)?.RentalUnits.utilityPrice ?? 0,
+							{
+								currency: data.tenant?.TenantRental.find(
+									(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+								)?.RentalUnits.currency,
+								currencyDisplay: 'code'
+							}
+						)}
+					</span>
+				{/if}
 			{/if}
 
 			<label class="grid">
@@ -331,40 +368,7 @@
 					}}
 				/>
 			</label>
-			<div class="flex gap-2">
-				<label class="flex gap-2">
-					<input
-						type="checkbox"
-						bind:checked={$addReceiptForm.isBothPayment}
-						{...$constraints.isBothPayment}
-						name="isBothPayment"
-						class=" border-[1px] border-black/60 rounded-md p-2"
-					/>
-					<span class="text-primary font-medium"> Rent & Utility Payment </span>
-				</label>
-				{#if !$addReceiptForm.isBothPayment}
-					<label class="flex gap-2">
-						<input
-							type="checkbox"
-							bind:checked={$addReceiptForm.isRentPayment}
-							{...$constraints.isRentPayment}
-							name="isRentPayment"
-							class=" border-[1px] border-black/60 rounded-md p-2"
-						/>
-						<span class="text-primary font-medium"> Utility Payment </span>
-					</label>
-				{/if}
-			</div>
-			<label class="flex gap-2">
-				<input
-					type="checkbox"
-					bind:checked={$addReceiptForm.crvReceipt}
-					{...$constraints.crvReceipt}
-					name="crvReceipt"
-					class=" border-[1px] border-black/60 rounded-md p-2"
-				/>
-				<span class="text-primary font-medium"> CRV Receipt </span>
-			</label>
+
 			<label class="grid">
 				<span class="text-primary font-medium">
 					Amount <span class="text-xs"> (In ETB) </span>

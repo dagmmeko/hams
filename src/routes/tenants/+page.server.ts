@@ -73,8 +73,11 @@ export const load = async (event) => {
 			let someContractsExpired: boolean = false;
 			let paymentDueSoon: boolean = false;
 			let paymentExpired: boolean = false;
+			console.log({ t: t.TenantRental.length, tt: t.id });
 
 			for (const tr of t.TenantRental) {
+				console.log({ t: t.TenantRental.length, tt: t.id });
+
 				if (
 					dayjs(tr.contractEndDate).isBefore(dayjs().add(10, 'days')) &&
 					dayjs(tr.contractEndDate).isAfter(dayjs())
@@ -85,40 +88,71 @@ export const load = async (event) => {
 					someContractsExpired = true;
 				}
 
-				const arrayReceipts = t.Receipts.filter((r) => r.payToUnitId === tr.unitId).sort(
-					(a, b) => b.endDate.getTime() - a.endDate.getTime()
+				const arrayReceiptsPerUnit = t.Receipts.filter((r) => r.payToUnitId === tr.unitId).sort(
+					(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
 				);
-				console.log({ arrayReceipts });
-				for (let i = 0; i < arrayReceipts.length; i++) {
-					if (!arrayReceipts[i].isRentPayment && !arrayReceipts[i].isUtilityAndRentPayment) {
-						console.log('receipt not rent', arrayReceipts[i].paymentReason);
+
+				for (let i = 0; i < arrayReceiptsPerUnit.length; i++) {
+					console.log({
+						id: tr.unitId,
+						trid: tr.id,
+						tenant: t.id,
+						arrayLength: arrayReceiptsPerUnit
+					});
+					if (
+						!arrayReceiptsPerUnit[i].isRentPayment &&
+						!arrayReceiptsPerUnit[i].isUtilityAndRentPayment
+					) {
+						console.log('receipt not rent', arrayReceiptsPerUnit[i].paymentReason);
+						console.log({
+							id: tr.unitId,
+							trid: tr.id,
+							tenant: t.id,
+							arrayLength: arrayReceiptsPerUnit.length
+						});
 					} else {
-						if (arrayReceipts[i].crvReceipt) {
-							console.log('crv receipt', arrayReceipts[i].crvReceipt);
+						console.log({
+							id: tr.unitId,
+							tenant: t.id,
+							arrayLength: arrayReceiptsPerUnit,
+							i
+						});
+						if (arrayReceiptsPerUnit[i].crvReceipt) {
+							console.log('crv receipt');
 						} else {
-							if (
-								dayjs(arrayReceipts[i].endDate).isBefore(dayjs().add(10, 'days')) &&
-								dayjs(arrayReceipts[i].endDate).isAfter(dayjs())
-							) {
-								paymentDueSoon = true;
+							console.log({
+								id: tr.unitId,
+								tenant: t.id,
+								arrayLength: arrayReceiptsPerUnit[i],
+								i
+							});
+							if (dayjs(arrayReceiptsPerUnit[i].endDate).isBefore(dayjs())) {
+								console.log('payment expired', tr.unitId, i, arrayReceiptsPerUnit[i]);
+
+								paymentExpired = true;
 								break;
 							}
-							if (dayjs(arrayReceipts[0].endDate).isBefore(dayjs())) {
-								console.log('payment expired', arrayReceipts[0]);
-								paymentExpired = true;
+							if (
+								dayjs(arrayReceiptsPerUnit[i].endDate).isBefore(dayjs().add(10, 'days')) &&
+								dayjs(arrayReceiptsPerUnit[i].endDate).isAfter(dayjs())
+							) {
+								console.log('payment due soon', tr.unitId);
+
+								paymentDueSoon = true;
 								break;
 							}
 						}
 					}
 				}
 			}
-			console.log({
-				tenant: t.id,
-				contractSoonExpires: someContractExpiresSoon,
-				contractExpired: someContractsExpired,
-				paymentDueSoon: paymentDueSoon,
-				paymentExpired: paymentExpired
-			});
+
+			// console.log({
+			// 	tenant: t.id,
+			// 	contractSoonExpires: someContractExpiresSoon,
+			// 	contractExpired: someContractsExpired,
+			// 	paymentDueSoon: paymentDueSoon,
+			// 	paymentExpired: paymentExpired
+			// });
 
 			return {
 				tenant: t,
