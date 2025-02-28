@@ -9,7 +9,7 @@ export async function load(event) {
 		event.url.pathname !== '/auth' &&
 		event.url.pathname !== '/auth/signup-error'
 	) {
-		throw redirect(308, '/auth');
+		redirect(308, '/auth');
 	}
 	const usdRate = await prisma.currencyRate.findMany({});
 

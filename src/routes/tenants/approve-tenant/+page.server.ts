@@ -27,7 +27,7 @@ export const load = async (event) => {
 	});
 
 	if (!priceChange) {
-		throw error(500, 'Invalid price change request..');
+		error(500, 'Invalid price change request..');
 	}
 
 	return {

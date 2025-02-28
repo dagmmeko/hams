@@ -43,11 +43,11 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const addLeaveForm = await superValidate(addLeaveSchema);
 	if (!event.params.employeeId) {
-		throw error(404, 'Employee ID not found');
+		error(404, 'Employee ID not found');
 	}
 
 	const allEmployees = await prisma.employee.findMany({
@@ -133,7 +133,7 @@ export const load = async (event) => {
 	}
 
 	if (!employee) {
-		throw error(404, 'Employee not found');
+		error(404, 'Employee not found');
 	}
 	const roles = await prisma.role.findMany({
 		where: {

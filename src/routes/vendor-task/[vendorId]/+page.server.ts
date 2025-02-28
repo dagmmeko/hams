@@ -34,10 +34,10 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	if (!event.params.vendorId) {
-		throw error(404, 'Vendor ID not found');
+		error(404, 'Vendor ID not found');
 	}
 
 	const vendor = await prisma.vendor.findFirst({
@@ -55,7 +55,7 @@ export const load = async (event) => {
 	});
 
 	if (!vendor) {
-		throw error(404, 'Vendor not found');
+		error(404, 'Vendor not found');
 	}
 
 	const payments = await prisma.payment.findMany({

@@ -17,7 +17,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 
 	const filterStartDate = event.url.searchParams.get('filterStartDate');

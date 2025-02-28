@@ -24,7 +24,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const deleteRoleForm = await superValidate(deleteRoleSchema);
 
@@ -40,7 +40,7 @@ export const load = async (event) => {
 	});
 
 	if (!role) {
-		throw error(500, 'Role information not found');
+		error(500, 'Role information not found');
 	}
 	const editRoleForm = await superValidate(
 		{

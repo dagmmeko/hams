@@ -15,7 +15,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const deleteRoleForm = await superValidate(deleteRoleSchema);
 	const search = event.url.searchParams.get('search');

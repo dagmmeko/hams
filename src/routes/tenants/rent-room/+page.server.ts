@@ -26,7 +26,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const searchTenant = event.url.searchParams.get('searchTenant');
 	const rentRoomForm = await superValidate(rentRoomSchema);

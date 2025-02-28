@@ -21,7 +21,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const payment = await prisma.payment.findFirst({
 		where: {
@@ -37,7 +37,7 @@ export const load = async (event) => {
 	});
 
 	if (!payment) {
-		throw error(404, 'payment not found');
+		error(404, 'payment not found');
 	}
 
 	const editPaymentForm = await superValidate(

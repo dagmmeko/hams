@@ -24,7 +24,7 @@ export const load = async (event) => {
 	});
 
 	if (!hasRole) {
-		throw redirect(302, '/no-permission');
+		redirect(302, '/no-permission');
 	}
 	const addEmployeeForm = await superValidate(addEmployeeSchema);
 	const search = event.url.searchParams.get('search');
