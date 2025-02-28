@@ -12,7 +12,8 @@ export default {
 				warning: '#FFCB3D',
 				info: '#4E4FEB'
 			}
-		}
+		},
+		
 	},
 	plugins: []
 };
