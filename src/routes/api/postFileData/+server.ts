@@ -1,8 +1,8 @@
-import { prisma } from '$lib/utils/prisma.js';
-import { json } from '@sveltejs/kit';
+import { prisma } from '$lib/utils/prisma.js'
+import { json } from '@sveltejs/kit'
 
 export async function POST({ request }) {
-	const { key, fileName, type, id } = await request.json();
+	const { key, fileName, type, id } = await request.json()
 
 	try {
 		const fileAdded = await prisma.file.create({
@@ -12,57 +12,57 @@ export async function POST({ request }) {
 				...(type === 'payment' && {
 					PaymentFile: {
 						create: {
-							paymentId: Number(id)
-						}
-					}
+							paymentId: Number(id),
+						},
+					},
 				}),
 				...(type === 'task' && {
 					TaskFile: {
 						create: {
-							taskId: Number(id)
-						}
-					}
+							taskId: Number(id),
+						},
+					},
 				}),
 				...(type === 'vendor' && {
 					VendorFile: {
 						create: {
-							vendorId: Number(id)
-						}
-					}
+							vendorId: Number(id),
+						},
+					},
 				}),
 				...(type === 'Receipts' && {
 					ReceiptsFile: {
 						create: {
-							receiptsId: Number(id)
-						}
-					}
+							receiptsId: Number(id),
+						},
+					},
 				}),
 				...(type === 'tenants' && {
 					TenantsFile: {
 						create: {
-							tenantsId: Number(id)
-						}
-					}
+							tenantsId: Number(id),
+						},
+					},
 				}),
 				...(type === 'units' && {
 					UnitsFile: {
 						create: {
-							rentalUnitId: Number(id)
-						}
-					}
+							rentalUnitId: Number(id),
+						},
+					},
 				}),
 				...(type === 'internalTask' && {
 					InternalTaskFile: {
 						create: {
-							internalTaskId: Number(id)
-						}
-					}
-				})
-			}
-		});
+							internalTaskId: Number(id),
+						},
+					},
+				}),
+			},
+		})
 
-		return json({ fileAdded, type: 'SUCCESS' });
+		return json({ fileAdded, type: 'SUCCESS' })
 	} catch (error) {
-		return json({ error, type: 'ERROR' });
+		return json({ error, type: 'ERROR' })
 	}
 }

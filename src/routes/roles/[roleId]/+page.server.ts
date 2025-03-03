@@ -1,91 +1,91 @@
-import { prisma } from '$lib/utils/prisma.js';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
+import { prisma } from '$lib/utils/prisma.js'
+import { error, fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
 
 const editRoleSchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	scopes: z.string().array(),
-	sendEmailTo: z.boolean().optional()
-});
+	sendEmailTo: z.boolean().optional(),
+})
 
 const deleteRoleSchema = z.object({
-	deleteRoleId: z.number()
-});
+	deleteRoleId: z.number(),
+})
 
-export type editRoleType = z.infer<typeof editRoleSchema>;
+export type editRoleType = z.infer<typeof editRoleSchema>
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'VIEW_ROLE_DETAIL_PAGE';
-	});
+		return scope.name === 'VIEW_ROLE_DETAIL_PAGE'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
-	const deleteRoleForm = await superValidate(deleteRoleSchema);
+	const deleteRoleForm = await superValidate(deleteRoleSchema)
 
-	const { roleId } = event.params;
+	const { roleId } = event.params
 	const role = await prisma.role.findUnique({
 		where: {
-			id: Number(roleId)
+			id: Number(roleId),
 		},
 		include: {
 			Scopes: true,
-			Employees: true
-		}
-	});
+			Employees: true,
+		},
+	})
 
 	if (!role) {
-		error(500, 'Role information not found');
+		error(500, 'Role information not found')
 	}
 	const editRoleForm = await superValidate(
 		{
 			name: role.name,
 			description: role.description,
 			scopes: role.Scopes.map((scope) => scope.name),
-			sendEmailTo: role.sendToEmail
+			sendEmailTo: role.sendToEmail,
 		} satisfies editRoleType,
-		editRoleSchema
-	);
+		editRoleSchema,
+	)
 
-	return { deleteRoleForm, editRoleForm, role };
-};
+	return { deleteRoleForm, editRoleForm, role }
+}
 
 export const actions = {
 	editRole: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EDIT_ROLE';
-		});
+			return scope.name === 'EDIT_ROLE'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const editRoleForm = await superValidate(event.request, editRoleSchema);
+		const editRoleForm = await superValidate(event.request, editRoleSchema)
 		if (!editRoleForm) {
-			return fail(400, { editRoleForm });
+			return fail(400, { editRoleForm })
 		}
 
 		try {
 			const roleNameExists = await prisma.role.findFirst({
 				where: {
 					id: {
-						not: Number(event.params.roleId)
+						not: Number(event.params.roleId),
 					},
-					name: editRoleForm.data.name
-				}
-			});
+					name: editRoleForm.data.name,
+				},
+			})
 
 			if (roleNameExists) {
 				return fail(500, {
 					editRoleForm,
-					errorMessage: `Role Name ${editRoleForm.data.name} is taken. Use a different name.`
-				});
+					errorMessage: `Role Name ${editRoleForm.data.name} is taken. Use a different name.`,
+				})
 			}
 
 			const editedRole = await prisma.role.update({
@@ -97,41 +97,41 @@ export const actions = {
 					sendToEmail: editRoleForm.data.sendEmailTo,
 					Scopes: {
 						deleteMany: {
-							roleId: Number(event.params.roleId)
+							roleId: Number(event.params.roleId),
 						},
 						createMany: {
 							data: editRoleForm.data.scopes.map((scope) => {
 								return {
-									name: scope
-								};
-							})
-						}
-					}
-				}
-			});
+									name: scope,
+								}
+							}),
+						},
+					},
+				},
+			})
 			if (!editedRole) {
-				return fail(400, { editRoleForm, errorMessage: 'Role could not be updated' });
+				return fail(400, { editRoleForm, errorMessage: 'Role could not be updated' })
 			}
 			return {
 				editedRole,
-				editRoleForm
-			};
+				editRoleForm,
+			}
 		} catch (e) {
-			console.error(e);
+			console.error(e)
 		}
 	},
 	archiveRole: async (event) => {
-		const deleteRoleForm = await superValidate(event.request, deleteRoleSchema);
+		const deleteRoleForm = await superValidate(event.request, deleteRoleSchema)
 
 		const deleteRole = await prisma.role.update({
 			where: {
-				id: Number(deleteRoleForm.data.deleteRoleId)
+				id: Number(deleteRoleForm.data.deleteRoleId),
 			},
 			data: {
-				deletedAt: new Date()
-			}
-		});
+				deletedAt: new Date(),
+			},
+		})
 
-		return { deleteRoleForm, deleteRole };
-	}
-};
+		return { deleteRoleForm, deleteRole }
+	},
+}

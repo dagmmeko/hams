@@ -1,55 +1,55 @@
 <script lang="ts">
-	import { superForm } from 'sveltekit-superforms/client';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
-	import dayjs from 'dayjs';
+	import { superForm } from 'sveltekit-superforms/client'
+	import PdfPrint from '$lib/components/pdf-print.svelte'
+	import dayjs from 'dayjs'
 
-	let { data } = $props();
+	let { data } = $props()
 
-	let modal = false;
+	let modal = false
 
 	const {
 		form: editPaymentForm,
 		enhance: editPaymentFormEnhance,
-		constraints
+		constraints,
 	} = superForm(data.editPaymentForm, {
 		onUpdate: () => {
-			modal = false;
-		}
-	});
+			modal = false
+		},
+	})
 </script>
 
-<div class="md:mx-10 mx-5 my-12 bg-white rounded-sm p-12 shadow-lg border-[1px] border-black/20">
-	<p class="text-xl font-medium mb-6">Payment Attachment</p>
+<div class="mx-5 my-12 rounded-sm border-[1px] border-black/20 bg-white p-12 shadow-lg md:mx-10">
+	<p class="mb-6 text-xl font-medium">Payment Attachment</p>
 	<PdfPrint>
 		<div class="my-6">
-			<p class="text-xl print:block hidden font-medium mb-6">Payment Attachment</p>
+			<p class="mb-6 hidden text-xl font-medium print:block">Payment Attachment</p>
 
 			<div>
 				<p>
-					<span class="font-medium text-lg pr-1">Paid To:</span>
+					<span class="pr-1 text-lg font-medium">Paid To:</span>
 					<span class="underline">{data.payment.VendorTask?.Vendor?.name}</span>
 				</p>
 				<p>
-					<span class="font-medium text-lg pr-1">Paid for task: </span>
+					<span class="pr-1 text-lg font-medium">Paid for task: </span>
 					<span class="underline">{data.payment.VendorTask?.taskDescription}</span>
 				</p>
 				<p>
-					<span class="font-medium text-lg pr-1">Payment Term: </span>
+					<span class="pr-1 text-lg font-medium">Payment Term: </span>
 					<span class="underline">{data.payment.VendorTask?.paymentTerms}</span>
 				</p>
 			</div>
 			<hr class="my-2" />
 			<div class="grid grid-cols-3">
 				<p class="grid">
-					<span class="font-medium text-lg pr-1">Paid Via: </span>
+					<span class="pr-1 text-lg font-medium">Paid Via: </span>
 					<span>{data.payment.depositedToBank ?? 'N/A'}</span>
 				</p>
 				<p class="grid">
-					<span class="font-medium text-lg pr-1">Paid Amount: </span>
+					<span class="pr-1 text-lg font-medium">Paid Amount: </span>
 					<span>{data.payment.amount}</span>
 				</p>
 				<p class="grid">
-					<span class="font-medium text-lg pr-1">Paid on: </span>
+					<span class="pr-1 text-lg font-medium">Paid on: </span>
 					<span>{dayjs(data.payment.paidOn).format('MMM DD/YY')}</span>
 				</p>
 			</div>

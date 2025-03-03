@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from './$types'
 
 	interface Props {
 		// export let data: PageData
-		row: Exclude<PageData['fullDataTenant'], undefined>[number];
+		row: Exclude<PageData['fullDataTenant'], undefined>[number]
 	}
 
-	let { row }: Props = $props();
+	let { row }: Props = $props()
 </script>
 
 <div
-	class={`grid grid-flow-col gap-6 items-center h-full px-3 w-full ${
+	class={`grid h-full w-full grid-flow-col items-center gap-6 px-3 ${
 		row.paymentExpired
 			? 'bg-red-300 text-red-900'
 			: row.paymentDueSoon

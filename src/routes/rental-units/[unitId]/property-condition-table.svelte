@@ -1,13 +1,13 @@
 <script lang="ts">
 	interface Props {
-		row: any;
+		row: any
 	}
 
-	let { row }: Props = $props();
+	let { row }: Props = $props()
 </script>
 
 <span
-	class="md:text-[8px] text-[6px] text-center p-1 w-full rounded-full {row.propertyStatus ===
+	class="w-full rounded-full p-1 text-center text-[6px] md:text-[8px] {row.propertyStatus ===
 	'GOOD_CONDITION'
 		? 'bg-success text-white'
 		: row.propertyStatus === 'NEEDS_REPAIR'

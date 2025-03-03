@@ -1,56 +1,56 @@
 <script lang="ts">
-	import PdfPrint from '$lib/components/pdf-print.svelte';
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { numberToCurrency } from '$lib/utils/currency';
-	import dayjs from 'dayjs';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { ActionData, PageData } from './$types';
-	import { page } from '$app/state';
-	import EditReceipt from './edit-receipt.svelte';
-	import { toast } from '@zerodevx/svelte-toast';
+	import PdfPrint from '$lib/components/pdf-print.svelte'
+	import { clickOutside } from '$lib/utils/click-outside'
+	import { numberToCurrency } from '$lib/utils/currency'
+	import dayjs from 'dayjs'
+	import { superForm } from 'sveltekit-superforms/client'
+	import type { ActionData, PageData } from './$types'
+	import { page } from '$app/state'
+	import EditReceipt from './edit-receipt.svelte'
+	import { toast } from '@zerodevx/svelte-toast'
 
-	let modal = $state(false);
+	let modal = $state(false)
 
 	interface Props {
-		data: PageData;
-		form: ActionData;
+		data: PageData
+		form: ActionData
 	}
 
-	let { data = $bindable(), form = $bindable() }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props()
 
-	let dateInput: any = $state();
-	let dateInput2: any = $state();
-	let dateInput3: any = $state();
-	let editReceiptModal = $state(false);
-	let selectedReceiptId: number | undefined = $state();
+	let dateInput: any = $state()
+	let dateInput2: any = $state()
+	let dateInput3: any = $state()
+	let editReceiptModal = $state(false)
+	let selectedReceiptId: number | undefined = $state()
 
-	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
+	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? []
 
 	const {
 		form: addReceiptForm,
 		enhance: addReceiptFormEnhance,
-		constraints
+		constraints,
 	} = superForm(data.addReceiptsForm, {
 		onUpdate: () => {
-			modal = false;
-		}
-	});
+			modal = false
+		},
+	})
 	$effect.pre(() => {
-		form?.newReceipts ? toast.push('Receipt added successfully') : null;
-	});
+		form?.newReceipts ? toast.push('Receipt added successfully') : null
+	})
 </script>
 
-<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
+<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
 	<div class="grid grid-flow-col justify-items-stretch">
 		<div class="grid">
 			<p class="text-2xl">Tenant Receipts</p>
-			<p class=" text-sm py-1 rounded-xl">Tenant Receipt here.</p>
+			<p class=" rounded-xl py-1 text-sm">Tenant Receipt here.</p>
 		</div>
 		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_RECEIPT')}
 			<div class="justify-self-end">
 				<button
 					onclick={() => (modal = true)}
-					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
+					class="mr-4 rounded-md bg-warning px-6 py-2 text-black/70"
 				>
 					Add Receipt
 				</button>
@@ -60,10 +60,10 @@
 </div>
 <div>
 	{#each data.groupedReceipts as receipts}
-		<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
+		<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
 			<PdfPrint>
 				<div>
-					<div class="print:block hidden">
+					<div class="hidden print:block">
 						<p><span class="font-semibold">Address: </span> A.A. Bole Wereda 03 H.No 567</p>
 						<p><span class="font-semibold">VAT Reg. No:</span> 11296</p>
 						<p><span class="font-semibold">VAT Reg Date:</span> 03-Oct-2023</p>
@@ -71,16 +71,16 @@
 					</div>
 					<hr class="my-1" />
 
-					<div class="print:block hidden">
+					<div class="hidden print:block">
 						<span class="font-semibold">Tenants Name:</span>
 						{data.tenant?.fullName}
 					</div>
-					<div class="print:block hidden">
+					<div class="hidden print:block">
 						<span class="font-semibold">Tenants phone:</span>
 						{data.tenant?.phoneNumber}
 					</div>
 					<hr class="mt-1" />
-					<div class="text-lg font-medium my-2">
+					<div class="my-2 text-lg font-medium">
 						Receipt Reference: {receipts.receiptReferenceNumber}
 					</div>
 					<div class="hidden">
@@ -91,17 +91,17 @@
 						{#each receipts.receipts ?? [] as rec}
 							<button
 								onclick={() => {
-									selectedReceiptId = rec.id;
-									editReceiptModal = true;
+									selectedReceiptId = rec.id
+									editReceiptModal = true
 								}}
-								class="bg-white shadow-sm border-[1px] border-black/10 p-2 rounded-md"
+								class="rounded-md border-[1px] border-black/10 bg-white p-2 shadow-sm"
 							>
-								<div class="print:grid print:grid-cols-2 md:flex print:gap-2 gap-12 text-left">
+								<div class="gap-12 text-left md:flex print:grid print:grid-cols-2 print:gap-2">
 									<div>
 										<p>
 											<span class="font-semibold">TIN Number:</span>
 											{data.tenant?.TenantRental.find(
-												(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId
+												(tenantRental) => tenantRental.RentalUnits.id === rec.payToUnitId,
 											)?.tinNumber ?? 'N/A'}
 										</p>
 										<p class="font-medium">
@@ -118,10 +118,10 @@
 										<p class="font-medium">
 											Amount:
 											{#if !rec.crvReceipt}
-												<span class="font-normal text-sm"
+												<span class="text-sm font-normal"
 													>{numberToCurrency(rec.amount / 1.15, {
 														currency: 'ETB',
-														currencyDisplay: 'code'
+														currencyDisplay: 'code',
 													})}
 												</span>
 											{/if}
@@ -132,7 +132,7 @@
 												<span class="font-normal"
 													>{numberToCurrency(rec.amount - rec.amount / 1.15, {
 														currency: 'ETB',
-														currencyDisplay: 'code'
+														currencyDisplay: 'code',
 													})}
 												</span>
 											{/if}
@@ -142,7 +142,7 @@
 											<span class="font-normal"
 												>{numberToCurrency(rec.amount, {
 													currency: 'ETB',
-													currencyDisplay: 'code'
+													currencyDisplay: 'code',
 												})}</span
 											>
 										</p>
@@ -181,7 +181,7 @@
 										</p>
 									</div> -->
 									<div>
-										<p class="italic font-light">
+										<p class="font-light italic">
 											Issued Date: <span class=""
 												>{dayjs(rec.receiptReceivedOn).format('MMM DD/YY')}</span
 											>
@@ -213,11 +213,11 @@
 		action="?/addReceipts"
 		method="post"
 		use:addReceiptFormEnhance
-		class="bg-black/70 fixed top-0 left-0 z-50 w-full overflow-y-auto h-screen flex items-center justify-center"
+		class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center overflow-y-auto bg-black/70"
 	>
 		<div
 			use:clickOutside={() => (modal = false)}
-			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 		>
 			<div class="flex gap-2">
 				<label class="flex gap-2">
@@ -226,9 +226,9 @@
 						bind:checked={$addReceiptForm.isRentPayment}
 						{...$constraints.isRentPayment}
 						name="isRentPayment"
-						class=" border-[1px] border-black/60 rounded-md p-2"
+						class=" rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Rent Payment </span>
+					<span class="font-medium text-primary"> Rent Payment </span>
 				</label>
 				<label class="flex gap-2">
 					<input
@@ -236,9 +236,9 @@
 						bind:checked={$addReceiptForm.isUtilityPayment}
 						{...$constraints.isUtilityPayment}
 						name="isUtilityPayment"
-						class=" border-[1px] border-black/60 rounded-md p-2"
+						class=" rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Utility Payment </span>
+					<span class="font-medium text-primary"> Utility Payment </span>
 				</label>
 			</div>
 			{#if !$addReceiptForm.isRentPayment && !$addReceiptForm.isUtilityPayment}
@@ -248,18 +248,18 @@
 						bind:checked={$addReceiptForm.crvReceipt}
 						{...$constraints.crvReceipt}
 						name="crvReceipt"
-						class=" border-[1px] border-black/60 rounded-md p-2"
+						class=" rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> CRV Receipt </span>
+					<span class="font-medium text-primary"> CRV Receipt </span>
 				</label>
 			{/if}
 			<label class="grid">
-				<span class="text-primary font-medium"> Pay for Unit </span>
+				<span class="font-medium text-primary"> Pay for Unit </span>
 				<select
 					bind:value={$addReceiptForm.payToUnit}
 					{...$constraints.payToUnit}
 					name="payToUnit"
-					class="mt-2 border-[1px] border-black/60 rounded-md p-2"
+					class="mt-2 rounded-md border-[1px] border-black/60 p-2"
 				>
 					<option selected disabled> Select Unit to pay for </option>
 					{#each tenantRentalActiveUnits as tenantRental}
@@ -281,46 +281,46 @@
 							<div>
 								<span>
 									{data.tenant?.PriceChange.find(
-										(changed) => changed.unitId === $addReceiptForm.payToUnit
+										(changed) => changed.unitId === $addReceiptForm.payToUnit,
 									) && data.tenant?.PriceChange.find((changed) => changed.active)
 										? numberToCurrency(
 												data.tenant?.PriceChange.find(
-													(changed) => changed.unitId === $addReceiptForm.payToUnit
+													(changed) => changed.unitId === $addReceiptForm.payToUnit,
 												)?.price ?? 0,
 												{
 													currency: data.tenant?.TenantRental.find(
-														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 													)?.RentalUnits.currency,
-													currencyDisplay: 'code'
-												}
+													currencyDisplay: 'code',
+												},
 											)
 										: numberToCurrency(
 												data.tenant?.TenantRental.find(
-													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 												)?.RentalUnits.price ?? 0,
 												{
 													currency: data.tenant?.TenantRental.find(
-														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+														(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 													)?.RentalUnits.currency,
-													currencyDisplay: 'code'
-												}
+													currencyDisplay: 'code',
+												},
 											)}
 								</span>
 							</div>
 							<p>
 								{data.tenant?.PriceChange.find(
-									(changed) => changed.unitId === $addReceiptForm.payToUnit
+									(changed) => changed.unitId === $addReceiptForm.payToUnit,
 								) && data.tenant?.PriceChange.find((changed) => changed.active)
 									? numberToCurrency(
 											data.tenant?.TenantRental.find(
-												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+												(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 											)?.RentalUnits.price ?? 0,
 											{
 												currency: data.tenant?.TenantRental.find(
-													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 												)?.RentalUnits.currency,
-												currencyDisplay: 'code'
-											}
+												currencyDisplay: 'code',
+											},
 										)
 									: 'No Negotiation'}
 							</p>
@@ -333,50 +333,50 @@
 					<span>
 						Utility Price: {numberToCurrency(
 							data.tenant?.TenantRental.find(
-								(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+								(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 							)?.RentalUnits.utilityPrice ?? 0,
 							{
 								currency: data.tenant?.TenantRental.find(
-									(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
+									(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit,
 								)?.RentalUnits.currency,
-								currencyDisplay: 'code'
-							}
+								currencyDisplay: 'code',
+							},
 						)}
 					</span>
 				{/if}
 			{/if}
 
 			<label class="grid">
-				<span class="text-primary font-medium"> Payment Start Date </span>
+				<span class="font-medium text-primary"> Payment Start Date </span>
 				<input
 					type="date"
 					bind:value={$addReceiptForm.paymentStartDate}
 					{...$constraints.paymentStartDate}
 					name="paymentStartDate"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 					bind:this={dateInput}
 					onclick={() => {
-						dateInput && dateInput.showPicker();
+						dateInput && dateInput.showPicker()
 					}}
 				/>
 			</label>
 			<label class="grid">
-				<span class="text-primary font-medium"> Payment End Date </span>
+				<span class="font-medium text-primary"> Payment End Date </span>
 				<input
 					type="date"
 					bind:value={$addReceiptForm.paymentEndDate}
 					{...$constraints.paymentEndDate}
 					name="paymentEndDate"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 					bind:this={dateInput2}
 					onclick={() => {
-						dateInput2 && dateInput2.showPicker();
+						dateInput2 && dateInput2.showPicker()
 					}}
 				/>
 			</label>
 
 			<label class="grid">
-				<span class="text-primary font-medium">
+				<span class="font-medium text-primary">
 					Amount <span class="text-xs"> (In ETB) </span>
 				</span>
 				<input
@@ -385,51 +385,51 @@
 					name="amount"
 					step="0.01"
 					type="number"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 				/>
 			</label>
 			<label class="grid">
-				<span class="text-primary font-medium"> Receipt Issue Date </span>
+				<span class="font-medium text-primary"> Receipt Issue Date </span>
 				<input
 					type="date"
 					bind:value={$addReceiptForm.paymentStartDate}
 					{...$constraints.paymentStartDate}
 					name="receiptIssueDate"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 					bind:this={dateInput3}
 				/>
 			</label>
 			<label class="grid">
-				<span class="text-primary font-medium"> Receipt No. </span>
+				<span class="font-medium text-primary"> Receipt No. </span>
 				<input
 					bind:value={$addReceiptForm.receiptNumber}
 					{...$constraints.receiptNumber}
 					name="receiptNumber"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 				/>
 			</label>
 
 			<label class="grid">
-				<span class="text-primary font-medium"> Deposited Bank Name </span>
+				<span class="font-medium text-primary"> Deposited Bank Name </span>
 				<input
 					bind:value={$addReceiptForm.depositedBank}
 					{...$constraints.depositedBank}
 					name="depositedBank"
-					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 				/>
 			</label>
-			<button class="bg-primary text-white rounded-md py-2"> Generate Attachment</button>
+			<button class="rounded-md bg-primary py-2 text-white"> Generate Attachment</button>
 		</div>
 	</form>
 {/if}
 
 {#if editReceiptModal}
 	<div
-		class="bg-black/70 fixed top-0 left-0 z-50 w-full overflow-y-auto h-screen flex items-center justify-center"
+		class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center overflow-y-auto bg-black/70"
 	>
 		<div
 			use:clickOutside={() => (editReceiptModal = false)}
-			class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+			class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 		>
 			<EditReceipt {data} {form} receiptId={selectedReceiptId} bind:editModal={editReceiptModal} />
 		</div>

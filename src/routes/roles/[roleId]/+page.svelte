@@ -1,60 +1,56 @@
 <script lang="ts">
-	import { allScopes } from '$lib/utils/scopes.js';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { toast } from '@zerodevx/svelte-toast';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
+	import { allScopes } from '$lib/utils/scopes.js'
+	import { superForm } from 'sveltekit-superforms/client'
+	import { toast } from '@zerodevx/svelte-toast'
+	import { goto } from '$app/navigation'
+	import { page } from '$app/state'
+	import PdfPrint from '$lib/components/pdf-print.svelte'
 
-	let { data, form } = $props();
+	let { data, form } = $props()
 
-	let noChange = $state(true);
+	let noChange = $state(true)
 
-	const {
-		form: editRoleForm,
-		enhance: editFormEnhance,
-		constraints
-	} = superForm(data.editRoleForm);
+	const { form: editRoleForm, enhance: editFormEnhance, constraints } = superForm(data.editRoleForm)
 
 	const { form: deleteRoleForm, enhance: deleteFormEnhance } = superForm(data.deleteRoleForm, {
 		onSubmit: ({ formData, cancel }) => {
 			if (!window.confirm('Are you sure you want to delete this role?')) {
-				cancel();
+				cancel()
 			}
-			formData.set('deleteRoleId', data.role.id.toString());
-		}
-	});
+			formData.set('deleteRoleId', data.role.id.toString())
+		},
+	})
 
 	$effect.pre(() => {
-		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
-	});
+		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null
+	})
 	$effect.pre(() => {
-		form?.deleteRoleForm ? goto('/roles') : null;
-	});
+		form?.deleteRoleForm ? goto('/roles') : null
+	})
 	$effect.pre(() => {
-		form?.editRoleForm ? toast.push('Role edited successfully') : null;
-	});
+		form?.editRoleForm ? toast.push('Role edited successfully') : null
+	})
 </script>
 
 <form method="post" action="?/editRole" use:editFormEnhance>
-	<PdfPrint class="md:mx-10 mx-5 mt-12">
+	<PdfPrint class="mx-5 mt-12 md:mx-10">
 		<div
-			class="grid lg:grid-flow-col md:mx-10 mx-5 items-start lg:space-x-12 bg-white rounded-xl p-8"
+			class="mx-5 grid items-start rounded-xl bg-white p-8 md:mx-10 lg:grid-flow-col lg:space-x-12"
 		>
-			<div class="flex-1 grid col-span-1 gap-4 justify-items-stretch it">
+			<div class="it col-span-1 grid flex-1 justify-items-stretch gap-4">
 				<div>
 					<p class="text-xl font-semibold">
 						<span class="font-bold text-primary"> {data.role.name} </span> Role
 					</p>
-					<p class="text-sm text-subtitle pt-2 print:hidden">
+					<p class="pt-2 text-sm text-subtitle print:hidden">
 						Edit role here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Role </span>
+					<span class="font-medium text-primary"> Role </span>
 					<input
 						required
-						class="w-full border-[1px] border-black/60 rounded-md p-2"
+						class="w-full rounded-md border-[1px] border-black/60 p-2"
 						name="name"
 						bind:value={$editRoleForm.name}
 						{...$constraints.name}
@@ -67,15 +63,15 @@
 						name="sendEmailTo"
 						bind:checked={$editRoleForm.sendEmailTo}
 						{...$constraints.sendEmailTo}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 						oninput={() => (noChange = false)}
 					/>
-					<span class="text-primary font-medium"> Send Email </span>
+					<span class="font-medium text-primary"> Send Email </span>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Description </span>
+					<span class="font-medium text-primary"> Description </span>
 					<textarea
-						class="w-full border-[1px] border-black/60 rounded-md p-2"
+						class="w-full rounded-md border-[1px] border-black/60 p-2"
 						name="description"
 						bind:value={$editRoleForm.description}
 						{...$constraints.description}
@@ -83,12 +79,12 @@
 					></textarea>
 				</label>
 
-				<div class="sm:flex gap-3">
+				<div class="gap-3 sm:flex">
 					{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ROLE')}
 						<button
 							type="submit"
 							disabled={noChange}
-							class="disabled:bg-primary/60 bg-primary text-white rounded-md py-2 w-full"
+							class="w-full rounded-md bg-primary py-2 text-white disabled:bg-primary/60"
 						>
 							Edit Role</button
 						>
@@ -96,11 +92,11 @@
 					{#if data.role.Employees.length && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
 						<button
 							onclick={(e) => {
-								e.preventDefault();
-								toast.push('Can not delete a role with Employees in it.');
+								e.preventDefault()
+								toast.push('Can not delete a role with Employees in it.')
 							}}
 							type="submit"
-							class="bg-subtitle sm:mt-0 mt-3 text-white rounded-md py-2 w-full"
+							class="mt-3 w-full rounded-md bg-subtitle py-2 text-white sm:mt-0"
 						>
 							Archive Role</button
 						>
@@ -109,14 +105,14 @@
 							use:deleteFormEnhance
 							method="post"
 							action="?/archiveRole"
-							class="w-full bg-danger text-white flex justify-center rounded-md py-2"
+							class="flex w-full justify-center rounded-md bg-danger py-2 text-white"
 						>
 							<button
 								onclick={(e) => {
-									e.stopPropagation();
+									e.stopPropagation()
 								}}
 								type="submit"
-								class="w-full h-full"
+								class="h-full w-full"
 							>
 								Archive Role</button
 							>
@@ -124,8 +120,8 @@
 					{/if}
 				</div>
 			</div>
-			<div class="flex-1 col-span-2 lg:mt-0 mt-6">
-				<div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+			<div class="col-span-2 mt-6 flex-1 lg:mt-0">
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
 					{#each allScopes as scope}
 						<label class="flex space-x-2">
 							<input
@@ -135,13 +131,13 @@
 								name="scopes"
 								bind:group={$editRoleForm.scopes}
 							/>
-							<div class="text-xs flex-1">
+							<div class="flex-1 text-xs">
 								{scope
 									.replace(/_/g, ' ')
 									.replace(
 										/^(.)(.*)$/,
 										(_, firstLetter, restOfString) =>
-											firstLetter.toUpperCase() + restOfString.toLowerCase()
+											firstLetter.toUpperCase() + restOfString.toLowerCase(),
 									)}
 							</div>
 						</label>

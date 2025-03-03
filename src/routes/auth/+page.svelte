@@ -1,32 +1,32 @@
 <script lang="ts">
-	import Logo from '$lib/assets/Logo.svg.svelte';
-	import { signIn } from '@auth/sveltekit/client';
+	import Logo from '$lib/assets/Logo.svg.svelte'
+	import { signIn } from '@auth/sveltekit/client'
 
-	let email: string | undefined = $state();
-	let password: string | undefined = $state();
+	let email: string | undefined = $state()
+	let password: string | undefined = $state()
 	const login = async () => {
 		const auth = await signIn('credentials', {
 			callbackUrl: '/',
 			email: email,
-			password: password
-		});
-	};
+			password: password,
+		})
+	}
 </script>
 
-<div class="bg-ghost h-screen w-full grid items-center justify-center">
+<div class="grid h-screen w-full items-center justify-center bg-ghost">
 	<div class="bg-white p-6">
-		<div class="grid justify-center mb-6"><Logo /></div>
+		<div class="mb-6 grid justify-center"><Logo /></div>
 		<div>
 			<p class="text-xl font-semibold">Login</p>
-			<p class="text-sm text-subtitle pt-2">Login to you company account</p>
+			<p class="pt-2 text-sm text-subtitle">Login to you company account</p>
 		</div>
 		<form
-			class="grid gap-6 mt-6"
+			class="mt-6 grid gap-6"
 			method="post"
 			action="#"
 			onsubmit={(e) => {
-				e.preventDefault();
-				login();
+				e.preventDefault()
+				login()
 			}}
 		>
 			<label class="grid">
@@ -34,7 +34,7 @@
 				<input
 					required
 					bind:value={email}
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					name="email"
 					type="email"
 				/>
@@ -44,12 +44,12 @@
 				<input
 					required
 					bind:value={password}
-					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+					class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					type="password"
 					name="password"
 				/>
 			</label>
-			<button type="submit" class="bg-primary w-full text-white rounded-md py-2"> Login</button>
+			<button type="submit" class="w-full rounded-md bg-primary py-2 text-white"> Login</button>
 		</form>
 	</div>
 </div>

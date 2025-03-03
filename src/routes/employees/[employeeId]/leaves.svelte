@@ -1,39 +1,39 @@
 <script lang="ts">
-	import { clickOutside } from '$lib/utils/click-outside';
-	import dayjs from 'dayjs';
-	import SvelteTable, { type TableColumn } from 'svelte-table';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { page, updated } from '$app/state';
-	import type { PageData } from './$types';
-	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
-	import { enhance } from '$app/forms';
-	import { toast } from '@zerodevx/svelte-toast';
+	import { clickOutside } from '$lib/utils/click-outside'
+	import dayjs from 'dayjs'
+	import SvelteTable, { type TableColumn } from 'svelte-table'
+	import { superForm } from 'sveltekit-superforms/client'
+	import { page, updated } from '$app/state'
+	import type { PageData } from './$types'
+	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte'
+	import { enhance } from '$app/forms'
+	import { toast } from '@zerodevx/svelte-toast'
 
 	interface Props {
-		data: PageData;
+		data: PageData
 	}
 
-	let { data = $bindable() }: Props = $props();
-	let dateInput: any = $state();
-	let dateInput2: any = $state();
+	let { data = $bindable() }: Props = $props()
+	let dateInput: any = $state()
+	let dateInput2: any = $state()
 
-	let modal = $state(false);
-	let editModal = $state(false);
+	let modal = $state(false)
+	let editModal = $state(false)
 
-	let hasDeleteLeavesScope = true;
+	let hasDeleteLeavesScope = true
 	const {
 		form: addLeaveForm,
 		enhance: addLeaveFormEnhance,
-		constraints
+		constraints,
 	} = superForm(data.addLeaveForm, {
 		onUpdate: () => {
-			modal = false;
-		}
-	});
+			modal = false
+		},
+	})
 
 	// const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 
-	let rows = $derived(data.employee.EmployeesLeaves);
+	let rows = $derived(data.employee.EmployeesLeaves)
 	let columns = $derived([
 		{
 			key: 'title',
@@ -41,7 +41,7 @@
 			value: (v: (typeof rows)[number]) => v?.description ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'from',
@@ -50,7 +50,7 @@
 				dayjs(v?.startingDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'to',
@@ -59,7 +59,7 @@
 				dayjs(v?.endDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'by',
@@ -68,7 +68,7 @@
 				v.ApprovedBy.User.userName + ` (${v.ApprovedBy.Role.name})`,
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 
 		hasDeleteLeavesScope
@@ -78,26 +78,26 @@
 					renderComponent: {
 						component: DeleteLeavesTableComponent,
 						props: {
-							data: data
-						}
+							data: data,
+						},
 					},
 					headerClass:
 						'bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-					class: 'border-b-[1px] border-[#B3B4B8]'
+					class: 'border-b-[1px] border-[#B3B4B8]',
 				}
-			: (null as unknown as TableColumn<(typeof rows)[number]>)
-	]);
+			: (null as unknown as TableColumn<(typeof rows)[number]>),
+	])
 
-	let selectedLeave: any = $state();
+	let selectedLeave: any = $state()
 </script>
 
 <div class="">
-	<div class="md:flex justify-between p-6">
+	<div class="justify-between p-6 md:flex">
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Leave</p>
 		</div>
 		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_LEAVES')}
-			<button onclick={() => (modal = true)} class="bg-primary text-white rounded-md py-2 px-6">
+			<button onclick={() => (modal = true)} class="rounded-md bg-primary px-6 py-2 text-white">
 				New Leave Permission</button
 			>
 		{/if}
@@ -108,13 +108,13 @@
 			on:clickCell={(event) => {
 				if (
 					page.data.session?.authUser.Employee.Role.Scopes.find(
-						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE'
+						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE',
 					)
 				) {
-					selectedLeave = event.detail.row;
-					editModal = true;
+					selectedLeave = event.detail.row
+					editModal = true
 				} else {
-					toast.push('You do not have permission to edit leaves');
+					toast.push('You do not have permission to edit leaves')
 				}
 			}}
 			{columns}
@@ -126,37 +126,37 @@
 {#if modal}
 	<form use:addLeaveFormEnhance method="post" action="?/addLeave">
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (modal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
 				<div>
 					<p class="text-xl font-semibold">New Leave Permission</p>
-					<p class="text-sm text-subtitle pt-2">
+					<p class="pt-2 text-sm text-subtitle">
 						Register new leave here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Reason </span>
+					<span class="font-medium text-primary"> Reason </span>
 					<textarea
 						required
 						bind:value={$addLeaveForm.description}
 						{...$constraints.description}
 						name="description"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					></textarea>
 				</label>
 
 				<label class="grid">
-					<span class="text-primary font-medium"> Start Date </span>
+					<span class="font-medium text-primary"> Start Date </span>
 					<input
 						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 						bind:this={dateInput}
 						onclick={() => {
-							dateInput && dateInput.showPicker();
+							dateInput && dateInput.showPicker()
 						}}
 						required
 						bind:value={$addLeaveForm.startingDate}
@@ -165,13 +165,13 @@
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> End Date </span>
+					<span class="font-medium text-primary"> End Date </span>
 					<input
 						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 						bind:this={dateInput2}
 						onclick={() => {
-							dateInput2 && dateInput2.showPicker();
+							dateInput2 && dateInput2.showPicker()
 						}}
 						required
 						bind:value={$addLeaveForm.endDate}
@@ -181,9 +181,9 @@
 				</label>
 				<button
 					onclick={(e) => {
-						e.stopPropagation();
+						e.stopPropagation()
 					}}
-					class="bg-primary text-white rounded-md py-2"
+					class="rounded-md bg-primary py-2 text-white"
 				>
 					Save Leave
 				</button>
@@ -195,50 +195,50 @@
 {#if editModal}
 	<form
 		use:enhance={({ formData }) => {
-			formData.set('leaveId', selectedLeave.id.toString());
+			formData.set('leaveId', selectedLeave.id.toString())
 			return ({ result }) => {
 				if (result.status === 200) {
-					editModal = false;
-					toast.push('Leave edited successfully');
+					editModal = false
+					toast.push('Leave edited successfully')
 				} else {
-					toast.push('Failed to edit leave');
+					toast.push('Failed to edit leave')
 				}
-			};
+			}
 		}}
 		method="post"
 		action="?/editLeave"
 	>
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (editModal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
 				<div>
 					<p class="text-xl font-semibold">Edit Leave Permission</p>
-					<p class="text-sm text-subtitle pt-2">
+					<p class="pt-2 text-sm text-subtitle">
 						Edit leave detail here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Reason </span>
+					<span class="font-medium text-primary"> Reason </span>
 					<textarea
 						required
 						value={selectedLeave.description}
 						name="editedDescription"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					></textarea>
 				</label>
 
 				<label class="grid">
-					<span class="text-primary font-medium"> Start Date </span>
+					<span class="font-medium text-primary"> Start Date </span>
 					<input
 						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 						bind:this={dateInput}
 						onclick={() => {
-							dateInput && dateInput.showPicker();
+							dateInput && dateInput.showPicker()
 						}}
 						required
 						value={dayjs(selectedLeave.startingDate).format('YYYY-MM-DD')}
@@ -246,13 +246,13 @@
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> End Date </span>
+					<span class="font-medium text-primary"> End Date </span>
 					<input
 						type="date"
-						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 						bind:this={dateInput2}
 						onclick={() => {
-							dateInput2 && dateInput2.showPicker();
+							dateInput2 && dateInput2.showPicker()
 						}}
 						required
 						value={dayjs(selectedLeave.endDate).format('YYYY-MM-DD')}
@@ -261,9 +261,9 @@
 				</label>
 				<button
 					onclick={(e) => {
-						e.stopPropagation();
+						e.stopPropagation()
 					}}
-					class="bg-primary text-white rounded-md py-2"
+					class="rounded-md bg-primary py-2 text-white"
 				>
 					Edit Leave
 				</button>

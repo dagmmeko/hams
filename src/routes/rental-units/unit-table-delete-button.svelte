@@ -1,28 +1,28 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import Delete from '$lib/assets/delete.svg.svelte';
-	import { toast } from '@zerodevx/svelte-toast';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { page } from '$app/state';
+	import type { PageData } from './$types'
+	import Delete from '$lib/assets/delete.svg.svelte'
+	import { toast } from '@zerodevx/svelte-toast'
+	import { superForm } from 'sveltekit-superforms/client'
+	import { page } from '$app/state'
 
 	interface Props {
-		row: any;
-		data: PageData;
+		row: any
+		data: PageData
 	}
 
-	let { row, data }: Props = $props();
+	let { row, data }: Props = $props()
 
 	const { enhance } = superForm(data.deleteUnitForm, {
 		id: row.id,
 		onSubmit: ({ formData, cancel }) => {
 			if (!window.confirm('Are you sure you want to delete this Unit?')) {
-				cancel();
+				cancel()
 			}
-			formData.set('deleteUnitId', row.id);
-		}
-	});
+			formData.set('deleteUnitId', row.id)
+		},
+	})
 
-	let unitRow = $derived(data.units.find((unit) => unit.id === row.id));
+	let unitRow = $derived(data.units.find((unit) => unit.id === row.id))
 </script>
 
 {#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ARCHIVE_RENTAL_UNIT')}
@@ -30,8 +30,8 @@
 		{#if unitRow && unitRow.active}
 			<button
 				onclick={(e) => {
-					e.stopPropagation();
-					toast.push('Can not delete a Unit with Tenant in it.');
+					e.stopPropagation()
+					toast.push('Can not delete a Unit with Tenant in it.')
 				}}
 			>
 				<Delete class="text-subtitle" />
@@ -40,7 +40,7 @@
 			<form use:enhance method="post" action="?/archiveUnit">
 				<button
 					onclick={(e) => {
-						e.stopPropagation();
+						e.stopPropagation()
 					}}
 				>
 					<Delete class="text-danger" />

@@ -1,44 +1,44 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
-	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { ActionData, PageData } from './$types';
-	import PropertiesTable from './properties-table.svelte';
+	import { goto } from '$app/navigation'
+	import { page } from '$app/state'
+	import FiltersLines from '$lib/assets/filters-lines.svg.svelte'
+	import PdfPrint from '$lib/components/pdf-print.svelte'
+	import { clickOutside } from '$lib/utils/click-outside'
+	import { superForm } from 'sveltekit-superforms/client'
+	import type { ActionData, PageData } from './$types'
+	import PropertiesTable from './properties-table.svelte'
 
-	let addModal = $state(false);
+	let addModal = $state(false)
 
 	interface Props {
-		data: PageData;
-		form: ActionData;
+		data: PageData
+		form: ActionData
 	}
 
-	let { data = $bindable(), form = $bindable() }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props()
 
 	const {
 		form: addPropertyForm,
 		enhance: addPropertyEnhance,
-		constraints
+		constraints,
 	} = superForm(data.addPropertyForm, {
 		onSubmit: () => {
-			addModal = false;
-		}
-	});
-	let filterModal = $state(false);
-	let urlSearchParams = $derived(new URLSearchParams(page.url.search));
+			addModal = false
+		},
+	})
+	let filterModal = $state(false)
+	let urlSearchParams = $derived(new URLSearchParams(page.url.search))
 </script>
 
 <div>
-	<div class="md:flex justify-between">
+	<div class="justify-between md:flex">
 		<div class="grid">
 			<p class="text-2xl">Room Properties</p>
 		</div>
 		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_PROPERTY')}
 			<button
 				type="submit"
-				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-3"
+				class="my-3 rounded-md bg-primary px-6 py-2 text-white md:my-0"
 				onclick={() => (addModal = true)}
 			>
 				New Property</button
@@ -48,17 +48,17 @@
 	<div class="">
 		<div class="flex gap-3">
 			<button
-				class="grid border-[1px] border-black/20 grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
+				class="grid grid-flow-col items-center gap-2 rounded-md border-[1px] border-black/20 bg-white px-4 py-2 text-sm shadow-md"
 				onclick={() => (filterModal = !filterModal)}
 			>
 				<FiltersLines class="h-4 w-4" /> Add filters
 			</button>
-			<span class=" items-center flex">
+			<span class=" flex items-center">
 				{urlSearchParams.get('propertyCondition')
 					? urlSearchParams.get('propertyCondition')?.replace(/_/g, ' ')
 					: ''}
 			</span>
-			<span class=" items-center flex">
+			<span class=" flex items-center">
 				{urlSearchParams.get('propertyAvailability') === 'true'
 					? 'AVAILABLE'
 					: urlSearchParams.get('propertyAvailability') === 'false'
@@ -68,77 +68,77 @@
 		</div>
 
 		{#if filterModal}
-			<div class="fixed mt-4 z-50">
+			<div class="fixed z-50 mt-4">
 				<div
 					use:clickOutside={() => (filterModal = false)}
-					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
+					class="grid justify-items-start gap-4 rounded-xl border-[1px] border-black/20 bg-white p-6 shadow-md"
 				>
 					<button
 						onclick={async () => {
-							await goto(`?`);
+							await goto(`?`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						All
 					</button>
 
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyCondition', 'DAMAGED');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyCondition', 'DAMAGED')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Damaged
 					</button>
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyCondition', 'NEEDS_REPAIR');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyCondition', 'NEEDS_REPAIR')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Needs Repair
 					</button>
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyCondition', 'MISSING_ITEMS');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyCondition', 'MISSING_ITEMS')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Missing Items
 					</button>
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyCondition', 'GOOD_CONDITION');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyCondition', 'GOOD_CONDITION')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Good Condition
 					</button>
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyAvailability', 'true');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyAvailability', 'true')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Available
 					</button>
 					<button
 						onclick={async () => {
-							const newSearchParams = new URLSearchParams(page.url.search);
-							newSearchParams.set('propertyAvailability', 'false');
-							await goto(`?${newSearchParams.toString()}`);
+							const newSearchParams = new URLSearchParams(page.url.search)
+							newSearchParams.set('propertyAvailability', 'false')
+							await goto(`?${newSearchParams.toString()}`)
 						}}
-						class="hover:underline hover:text-primary"
+						class="hover:text-primary hover:underline"
 					>
 						Not Available
 					</button>
@@ -159,7 +159,7 @@
 					<PropertiesTable {data} {form} itemCategory="COMMERCIAL" />
 				{/if}
 			</div>
-			<div class="print:block hidden p-8">
+			<div class="hidden p-8 print:block">
 				<p class="text-lg font-semibold">Attention</p>
 				<p class="text-sm">
 					I, [____________________________________], acknowledge that I have received and carefully
@@ -172,12 +172,12 @@
 					equipment. By signing below, I acknowledge my understanding and acceptance of this clause.
 				</p>
 			</div>
-			<div class="print:block hidden">
-				<p class="mt-2 text-xl font-semibold pl-6">Sign here</p>
+			<div class="hidden print:block">
+				<p class="mt-2 pl-6 text-xl font-semibold">Sign here</p>
 				<p class="mt-2 pl-8"><span> Name: </span> _________________________________</p>
 				<p class="mt-2 pl-8"><span> Date: </span> _________________________________</p>
 
-				<p class="mt-2 ml-8 pl-2 pt-10 pb-1 border-[1px] border-black">
+				<p class="ml-8 mt-2 border-[1px] border-black pb-1 pl-2 pt-10">
 					<span> Signature: </span> _________________________________
 				</p>
 			</div>
@@ -188,26 +188,26 @@
 {#if addModal}
 	<form use:addPropertyEnhance method="post" action="?/addProperty">
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (addModal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
 				<div>
 					<p class="text-xl font-semibold">New Property</p>
-					<p class="text-sm text-subtitle pt-2">
+					<p class="pt-2 text-sm text-subtitle">
 						Register new room property here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Item's Name </span>
+					<span class="font-medium text-primary"> Item's Name </span>
 					<input
 						name="name"
 						required
 						bind:value={$addPropertyForm.name}
 						{...$constraints.name}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 				</label>
 				<label class="flex items-center gap-3">
@@ -216,28 +216,28 @@
 						name="available"
 						bind:checked={$addPropertyForm.available}
 						{...$constraints.available}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Available now </span>
+					<span class="font-medium text-primary"> Available now </span>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Description </span>
+					<span class="font-medium text-primary"> Description </span>
 					<textarea
 						name="description"
 						required
 						bind:value={$addPropertyForm.description}
 						{...$constraints.description}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					></textarea>
 				</label>
-				<label class="w-full grid gap-2">
-					<span class="text-primary font-medium"> Category </span>
+				<label class="grid w-full gap-2">
+					<span class="font-medium text-primary"> Category </span>
 					<select
 						required
 						name="itemCategory"
 						bind:value={$addPropertyForm.itemCategory}
 						{...$constraints.itemCategory}
-						class=" border-[1px] border-black/60 rounded-md p-2"
+						class=" rounded-md border-[1px] border-black/60 p-2"
 					>
 						<option selected disabled value=""> Item Category </option>
 						<option value="SALON"> Salon </option>
@@ -249,23 +249,23 @@
 					</select>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Number of the Item </span>
+					<span class="font-medium text-primary"> Number of the Item </span>
 					<input
 						name="numberofUnits"
 						required
 						bind:value={$addPropertyForm.numberofUnits}
 						{...$constraints.numberofUnits}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Full Price </span>
+					<span class="font-medium text-primary"> Full Price </span>
 					<input
 						name="price"
 						required
 						bind:value={$addPropertyForm.price}
 						{...$constraints.price}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 				</label>
 				<label class="flex items-center gap-3">
@@ -274,18 +274,18 @@
 						name="inBirr"
 						bind:checked={$addPropertyForm.inBirr}
 						{...$constraints.inBirr}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> In Birr </span>
+					<span class="font-medium text-primary"> In Birr </span>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Property Status </span>
+					<span class="font-medium text-primary"> Property Status </span>
 					<select
 						name="propertyStatus"
 						required
 						bind:value={$addPropertyForm.propertyStatus}
 						{...$constraints.propertyStatus}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-3"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-3"
 					>
 						<option selected disabled>Select Status</option>
 						<option value="DAMAGED">Damaged</option>
@@ -297,9 +297,9 @@
 
 				<button
 					onclick={(e) => {
-						e.stopPropagation();
+						e.stopPropagation()
 					}}
-					class="bg-primary text-white rounded-md py-2 mt-6"
+					class="mt-6 rounded-md bg-primary py-2 text-white"
 				>
 					Save Item</button
 				>

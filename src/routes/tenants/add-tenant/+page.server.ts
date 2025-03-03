@@ -1,9 +1,9 @@
-import { prisma } from '$lib/utils/prisma.js';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
-import type { ContactSource } from '@prisma/client';
-import { sendEmail } from '$lib/utils/send-email.js';
+import { prisma } from '$lib/utils/prisma.js'
+import { fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
+import type { ContactSource } from '@prisma/client'
+import { sendEmail } from '$lib/utils/send-email.js'
 
 const addTenantSchema = z.object({
 	fullName: z.string(),
@@ -24,47 +24,47 @@ const addTenantSchema = z.object({
 	passportNumber: z.string().optional(),
 	tinNumber: z.string().optional(),
 	contactSource: z.string().optional(),
-	securityDeposit: z.number().optional()
-});
+	securityDeposit: z.number().optional(),
+})
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'ADD_NEW_TENANT';
-	});
+		return scope.name === 'ADD_NEW_TENANT'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
-	const addTenantForm = await superValidate(addTenantSchema);
+	const addTenantForm = await superValidate(addTenantSchema)
 
 	const rentalUnits = await prisma.rentalUnits.findMany({
 		where: {
 			deletedAt: null,
-			active: false
-		}
-	});
+			active: false,
+		},
+	})
 
-	return { addTenantForm, rentalUnits };
-};
+	return { addTenantForm, rentalUnits }
+}
 
 export const actions = {
 	addTenant: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_NEW_TENANT';
-		});
+			return scope.name === 'ADD_NEW_TENANT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
 
-		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema);
+		const addTenantForm = await superValidate(event.request.clone(), addTenantSchema)
 
 		if (!addTenantForm) {
-			return fail(400, { addTenantForm });
+			return fail(400, { addTenantForm })
 		}
 
 		try {
@@ -84,9 +84,9 @@ export const actions = {
 							PriceChange: {
 								create: {
 									price: addTenantForm.data.newPrice,
-									unitId: addTenantForm.data.rentalUnitsId
-								}
-							}
+									unitId: addTenantForm.data.rentalUnitsId,
+								},
+							},
 						}),
 					...(!addTenantForm.data.priceChange && {
 						TenantRental: {
@@ -99,36 +99,36 @@ export const actions = {
 								durationOfStayInCountry: addTenantForm.data.durationOfStayInCountry,
 								active: addTenantForm.data.priceChange ? false : true,
 								tinNumber: addTenantForm.data.tinNumber,
-								securityDeposit: addTenantForm.data.securityDeposit
-							}
-						}
-					})
-				}
-			});
+								securityDeposit: addTenantForm.data.securityDeposit,
+							},
+						},
+					}),
+				},
+			})
 
-			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
+			if (!addTenant) return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' })
 			const unit = await prisma.rentalUnits.update({
 				where: {
-					id: addTenantForm.data.rentalUnitsId
+					id: addTenantForm.data.rentalUnitsId,
 				},
 				data: {
-					active: !addTenantForm.data.priceChange
-				}
-			});
+					active: !addTenantForm.data.priceChange,
+				},
+			})
 
 			//send email about the new tenant
 			const emailsTpSendTo = await prisma.user.findMany({
 				where: {
 					Employee: {
 						Role: {
-							sendToEmail: true
-						}
-					}
+							sendToEmail: true,
+						},
+					},
 				},
 				select: {
-					email: true
-				}
-			});
+					email: true,
+				},
+			})
 			await sendEmail(
 				emailsTpSendTo,
 				'New Tenant',
@@ -136,15 +136,15 @@ export const actions = {
 					addTenantForm.data.priceChange
 						? `Price change has been requested for: ${unit?.roomNumber} from ${unit?.price} to ${addTenantForm.data.newPrice} `
 						: `Room number: ${unit?.roomNumber} has been rented.`
-				}`
-			);
+				}`,
+			)
 
 			return {
 				addTenantForm,
-				addTenant
-			};
+				addTenant,
+			}
 		} catch (error) {
-			return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' });
+			return fail(500, { addTenantForm, errorMessage: 'Tenant not created.' })
 		}
-	}
-};
+	},
+}

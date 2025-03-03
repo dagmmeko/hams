@@ -1,8 +1,8 @@
-import { prisma } from '$lib/utils/prisma';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
-import bcrypt from 'bcrypt';
+import { prisma } from '$lib/utils/prisma'
+import { fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
+import bcrypt from 'bcrypt'
 
 const addEmployeeSchema = z.object({
 	userName: z.string(),
@@ -11,23 +11,23 @@ const addEmployeeSchema = z.object({
 	address: z.string(),
 	roleId: z.number(),
 	managerId: z.number(),
-	hiredDate: z.date()
-});
+	hiredDate: z.date(),
+})
 
-const encryptedPassword = await bcrypt.hash('Pass1234', 10);
+const encryptedPassword = await bcrypt.hash('Pass1234', 10)
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'VIEW_EMPLOYEE_PAGE';
-	});
+		return scope.name === 'VIEW_EMPLOYEE_PAGE'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
-	const addEmployeeForm = await superValidate(addEmployeeSchema);
-	const search = event.url.searchParams.get('search');
+	const addEmployeeForm = await superValidate(addEmployeeSchema)
+	const search = event.url.searchParams.get('search')
 
 	const employees = await prisma.employee.findMany({
 		where: {
@@ -38,41 +38,41 @@ export const load = async (event) => {
 					OR: [
 						{ userName: { contains: search } },
 						{ phoneNumber: { contains: search } },
-						{ email: { contains: search } }
-					]
-				}
-			})
+						{ email: { contains: search } },
+					],
+				},
+			}),
 		},
 		include: {
 			User: true,
 			Role: true,
-			Manager: true
-		}
-	});
+			Manager: true,
+		},
+	})
 
 	const roles = await prisma.role.findMany({
 		where: {
-			deletedAt: null
-		}
-	});
+			deletedAt: null,
+		},
+	})
 
-	return { roles, employees, addEmployeeForm };
-};
+	return { roles, employees, addEmployeeForm }
+}
 
 export const actions = {
 	addEmployee: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_EMPLOYEE';
-		});
+			return scope.name === 'ADD_EMPLOYEE'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const addEmployeeForm = await superValidate(event.request, addEmployeeSchema);
+		const addEmployeeForm = await superValidate(event.request, addEmployeeSchema)
 		if (!addEmployeeForm) {
-			return fail(400, { addEmployeeForm });
+			return fail(400, { addEmployeeForm })
 		}
 
 		const user = await prisma.user
@@ -81,13 +81,13 @@ export const actions = {
 					userName: addEmployeeForm.data.userName,
 					phoneNumber: addEmployeeForm.data.phoneNumber,
 					email: addEmployeeForm.data.email,
-					jwtPassword: encryptedPassword
-				}
+					jwtPassword: encryptedPassword,
+				},
 			})
 			.catch((e) => {
-				return fail(400, { addEmployeeForm, e });
-			});
-		let employee;
+				return fail(400, { addEmployeeForm, e })
+			})
+		let employee
 		if ('id' in user) {
 			employee = await prisma.employee
 				.create({
@@ -99,14 +99,14 @@ export const actions = {
 						isSuspended: false,
 						staffIdNumber: `HAMS/${addEmployeeForm.data.roleId}/${user.id}`,
 						address: addEmployeeForm.data.address,
-						managerUserId: addEmployeeForm.data.managerId
-					}
+						managerUserId: addEmployeeForm.data.managerId,
+					},
 				})
 				.catch((e) => {
-					return fail(400, { addEmployeeForm, e });
-				});
+					return fail(400, { addEmployeeForm, e })
+				})
 		}
 
-		return { addEmployeeForm, user, employee };
-	}
-};
+		return { addEmployeeForm, user, employee }
+	},
+}

@@ -1,13 +1,13 @@
 <script lang="ts">
 	interface Props {
-		row: any;
+		row: any
 	}
 
-	let { row }: Props = $props();
+	let { row }: Props = $props()
 </script>
 
 <div
-	class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {row.Inspections[0]
+	class="min-w-max max-w-[120px] rounded-full p-1 text-center text-[10px] {row.Inspections[0]
 		.InspectionStatus === 'GOOD_CONDITION'
 		? 'bg-success text-white'
 		: row.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'

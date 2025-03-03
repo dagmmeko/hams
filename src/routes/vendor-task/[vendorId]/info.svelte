@@ -15,7 +15,7 @@
 		form: ActionData
 	}
 
-	let { data, form }: Props = $props()
+	let { data = $bindable(), form = $bindable() }: Props = $props()
 
 	const {
 		form: editVendorForm,

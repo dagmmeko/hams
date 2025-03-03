@@ -1,4 +1,4 @@
-const loreumEpisome = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+const loreumEpisome = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
 export const unitProperty = [
 	//SALON
 	{
@@ -7,7 +7,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Chairs',
@@ -15,7 +15,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Side Table',
@@ -23,7 +23,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Coffee Table',
@@ -31,7 +31,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Tv Stand',
@@ -39,7 +39,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Tv with accessories',
@@ -47,7 +47,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Lamps',
@@ -55,7 +55,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Book Shelf',
@@ -63,7 +63,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Window Coverings',
@@ -71,7 +71,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Throw Pillows & blankets',
@@ -79,7 +79,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'dining table with chairs',
@@ -87,7 +87,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'bar stools',
@@ -95,7 +95,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 
 	//BEDROOM
@@ -106,7 +106,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Night stand',
@@ -114,7 +114,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Table Lamp',
@@ -122,7 +122,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Dresser',
@@ -130,7 +130,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Pillow',
@@ -138,7 +138,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Pillow case',
@@ -146,7 +146,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Alarm Clock',
@@ -154,7 +154,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Hangers (cloth)',
@@ -162,7 +162,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Blinds',
@@ -170,7 +170,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'under bed box',
@@ -178,7 +178,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Blankets',
@@ -186,7 +186,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed spread sheet',
@@ -194,7 +194,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'mattress pad',
@@ -202,7 +202,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'window coverings',
@@ -210,7 +210,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Lamps',
@@ -218,7 +218,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'full length mirror',
@@ -226,7 +226,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'cloth organizar & shelfing',
@@ -234,7 +234,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed frame',
@@ -242,7 +242,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Box spring & mattress',
@@ -250,7 +250,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 
 	//LAUNDRY
@@ -260,7 +260,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'cloth basket',
@@ -268,7 +268,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'Laundry Pail',
@@ -276,7 +276,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'stain Remover',
@@ -284,7 +284,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'iron',
@@ -292,7 +292,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'ironing board',
@@ -300,7 +300,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'Drayer sheets',
@@ -308,7 +308,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'hangers',
@@ -316,7 +316,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'bleach',
@@ -324,7 +324,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'Brite White',
@@ -332,7 +332,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'bleach',
@@ -340,7 +340,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'Laundary Detergent',
@@ -348,7 +348,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'fabric softner hamper',
@@ -356,7 +356,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'drying rack',
@@ -364,7 +364,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'sewing kit',
@@ -372,7 +372,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 
 	//BATHROOM
@@ -383,7 +383,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Hand Towels',
@@ -391,7 +391,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Shower Box',
@@ -399,7 +399,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Toilet Brush',
@@ -407,7 +407,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Plunger',
@@ -415,7 +415,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Glass Cleaner',
@@ -423,7 +423,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'All Purpose Cleaner',
@@ -431,7 +431,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Shower Organizar Or Caddy',
@@ -439,7 +439,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Waste Basket',
@@ -447,7 +447,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Hair Drayer',
@@ -455,7 +455,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Wash clothes',
@@ -463,7 +463,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Rugs',
@@ -471,7 +471,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Soap Dispenser',
@@ -479,7 +479,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 
 	//KITCHEN
@@ -490,7 +490,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Toaster',
@@ -498,7 +498,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Different taypes of Knife',
@@ -506,7 +506,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: '* chefs knife',
@@ -514,7 +514,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: '*partone knifes',
@@ -522,7 +522,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: '*slicing knifes',
@@ -530,7 +530,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: '*utility knifes',
@@ -538,7 +538,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: '*steak knifes',
@@ -546,7 +546,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'knife block',
@@ -554,7 +554,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'omelette pan ',
@@ -562,7 +562,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'mixing bowels',
@@ -570,7 +570,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'measuring spoons',
@@ -578,7 +578,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'muffin pans',
@@ -586,7 +586,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'cakes/ pie pans',
@@ -594,7 +594,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'piza ston / sheet',
@@ -602,7 +602,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'cookies sheet',
@@ -610,7 +610,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pizza cutter',
@@ -618,7 +618,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'drawer organizar',
@@ -626,7 +626,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'forman grill',
@@ -634,7 +634,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'crock pot',
@@ -642,7 +642,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'can opener',
@@ -650,7 +650,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'tongs',
@@ -658,7 +658,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'veggie peeler',
@@ -666,7 +666,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'cutting board',
@@ -674,7 +674,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'wooden spoon',
@@ -682,7 +682,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'wire whisk',
@@ -690,7 +690,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spatula ',
@@ -698,7 +698,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'fire extingusher',
@@ -706,7 +706,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'coffee maker',
@@ -714,7 +714,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'almunium foil & plastic wrap',
@@ -722,7 +722,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'caps & mags',
@@ -730,7 +730,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'dish soap',
@@ -738,7 +738,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'hand or stand mixer',
@@ -746,7 +746,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'forks',
@@ -754,7 +754,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spoons',
@@ -762,7 +762,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'left over food storage containers',
@@ -770,7 +770,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'micro wave',
@@ -778,7 +778,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pasta strainer',
@@ -786,7 +786,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'plates & bowels',
@@ -794,7 +794,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pots & pans',
@@ -802,7 +802,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pitcher',
@@ -810,7 +810,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'salt & peppers shaker',
@@ -818,7 +818,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'serving utensils',
@@ -826,7 +826,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spice rack',
@@ -834,7 +834,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'water glasses',
@@ -842,7 +842,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'juice glasses',
@@ -850,7 +850,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'dish towels',
@@ -858,7 +858,7 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'oven /stove',
@@ -866,6 +866,6 @@ export const unitProperty = [
 		numberofUnits: 1,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
-	}
-];
+		itemCategory: 'KITCHEN',
+	},
+]

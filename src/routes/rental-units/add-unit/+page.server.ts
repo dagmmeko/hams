@@ -1,9 +1,9 @@
-import { prisma } from '$lib/utils/prisma.js';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
-import { uploadFileToS3 } from '$lib/utils/aws-file.js';
-import { S3_BUCKET_NAME } from '$env/static/private';
+import { prisma } from '$lib/utils/prisma.js'
+import { fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
+import { uploadFileToS3 } from '$lib/utils/aws-file.js'
+import { S3_BUCKET_NAME } from '$env/static/private'
 
 const addUnitSchema = z.object({
 	roomNumber: z.string(),
@@ -16,39 +16,39 @@ const addUnitSchema = z.object({
 	maximumTenants: z.number().int(),
 	inBirr: z.boolean().optional(),
 	perKare: z.boolean().optional(),
-	utilityPrice: z.number().optional()
-});
+	utilityPrice: z.number().optional(),
+})
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'ADD_RENTAL_UNIT';
-	});
+		return scope.name === 'ADD_RENTAL_UNIT'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
 
-	const addUnitForm = await superValidate(addUnitSchema);
-	return { addUnitForm };
-};
+	const addUnitForm = await superValidate(addUnitSchema)
+	return { addUnitForm }
+}
 
 export const actions = {
 	addUnit: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_RENTAL_UNIT';
-		});
+			return scope.name === 'ADD_RENTAL_UNIT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const addUnitForm = await superValidate(event.request.clone(), addUnitSchema);
+		const addUnitForm = await superValidate(event.request.clone(), addUnitSchema)
 
 		if (!addUnitForm) {
-			return fail(400, { addUnitForm });
+			return fail(400, { addUnitForm })
 		}
 
 		try {
@@ -68,22 +68,22 @@ export const actions = {
 						create: {
 							InspectionStatus: addUnitForm.data.condition,
 							description: 'First Inspection',
-							inspectionDate: new Date()
-						}
+							inspectionDate: new Date(),
+						},
 					},
-					utilityPrice: addUnitForm.data.utilityPrice
-				}
-			});
+					utilityPrice: addUnitForm.data.utilityPrice,
+				},
+			})
 
-			if (!addUnit) return fail(500, { errorMessage: 'Unit not created.' });
+			if (!addUnit) return fail(500, { errorMessage: 'Unit not created.' })
 
-			return { addUnitForm, addUnit };
+			return { addUnitForm, addUnit }
 		} catch (error) {
-			console.log(error as Error);
+			console.log(error as Error)
 			return fail(500, {
 				addUnitForm,
-				errorMessage: (error as Error)?.message ?? 'Unknown error'
-			});
+				errorMessage: (error as Error)?.message ?? 'Unknown error',
+			})
 		}
-	}
-};
+	},
+}

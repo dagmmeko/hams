@@ -1,68 +1,68 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { Receipts } from '@prisma/client';
-	import { toast } from '@zerodevx/svelte-toast';
-	import dayjs from 'dayjs';
-	import type { ActionData, PageData } from './$types';
+	import { enhance } from '$app/forms'
+	import type { Receipts } from '@prisma/client'
+	import { toast } from '@zerodevx/svelte-toast'
+	import dayjs from 'dayjs'
+	import type { ActionData, PageData } from './$types'
 
 	interface Props {
-		data: PageData;
-		receiptId: number | undefined;
-		form: ActionData;
-		editModal: any;
+		data: PageData
+		receiptId: number | undefined
+		form: ActionData
+		editModal: any
 	}
 
-	let { data, receiptId, form, editModal = $bindable() }: Props = $props();
+	let { data, receiptId, form, editModal = $bindable() }: Props = $props()
 
 	let receipt: Receipts | undefined = $derived(
 		data.tenant?.Receipts.find((receipt) => {
-			return receipt.id === receiptId;
-		})
-	);
-	let dateInput: any = $state();
-	let dateInput2: any = $state();
+			return receipt.id === receiptId
+		}),
+	)
+	let dateInput: any = $state()
+	let dateInput2: any = $state()
 </script>
 
 <form
 	use:enhance={({ formData }) => {
 		if (!receiptId) {
-			toast.push('No receipt found');
+			toast.push('No receipt found')
 		}
-		formData.set('receiptId', receiptId?.toString() ?? '');
+		formData.set('receiptId', receiptId?.toString() ?? '')
 		return async ({ update }) => {
-			await update();
-			toast.push('Receipt updated successfully');
+			await update()
+			toast.push('Receipt updated successfully')
 
-			editModal = false;
-		};
+			editModal = false
+		}
 	}}
 	class="grid gap-4"
 	method="post"
 	action="?/editReceipts"
 >
 	<label class="grid">
-		<span class="text-primary font-medium"> Payment Start Date </span>
+		<span class="font-medium text-primary"> Payment Start Date </span>
 		<input
 			type="date"
 			value={dayjs(receipt?.startDate).format('YYYY-MM-DD')}
 			name="editPaymentStartDate"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 			bind:this={dateInput}
 			onclick={() => {
-				dateInput && dateInput.showPicker();
+				dateInput && dateInput.showPicker()
 			}}
 		/>
 	</label>
 	<label class="grid">
-		<span class="text-primary font-medium"> Payment End Date </span>
+		<span class="font-medium text-primary"> Payment End Date </span>
 		<input
 			type="date"
 			value={dayjs(receipt?.endDate).format('YYYY-MM-DD')}
 			name="editPaymentEndDate"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 			bind:this={dateInput2}
 			onclick={() => {
-				dateInput2 && dateInput2.showPicker();
+				dateInput2 && dateInput2.showPicker()
 			}}
 		/>
 	</label>
@@ -72,18 +72,18 @@
 				type="checkbox"
 				checked={receipt?.isRentPayment}
 				name="editIsRentPayment"
-				class=" border-[1px] border-black/60 rounded-md p-2"
+				class=" rounded-md border-[1px] border-black/60 p-2"
 			/>
-			<span class="text-primary font-medium"> Rent Payment </span>
+			<span class="font-medium text-primary"> Rent Payment </span>
 		</label>
 		<label class="flex gap-2">
 			<input
 				type="checkbox"
 				checked={receipt?.isUtilityPayment}
 				name="editIsUtilityPayment"
-				class=" border-[1px] border-black/60 rounded-md p-2"
+				class=" rounded-md border-[1px] border-black/60 p-2"
 			/>
-			<span class="text-primary font-medium"> Utility Payment </span>
+			<span class="font-medium text-primary"> Utility Payment </span>
 		</label>
 	</div>
 	<label class="flex gap-2">
@@ -91,13 +91,13 @@
 			type="checkbox"
 			checked={receipt?.crvReceipt}
 			name="editCRVReceipt"
-			class=" border-[1px] border-black/60 rounded-md p-2"
+			class=" rounded-md border-[1px] border-black/60 p-2"
 		/>
-		<span class="text-primary font-medium"> CRV Receipt </span>
+		<span class="font-medium text-primary"> CRV Receipt </span>
 	</label>
 
 	<label class="grid">
-		<span class="text-primary font-medium">
+		<span class="font-medium text-primary">
 			Amount <span class="text-xs"> (In ETB) </span>
 		</span>
 		<input
@@ -105,27 +105,27 @@
 			name="editAmount"
 			step="0.01"
 			type="number"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
 	<label class="grid">
-		<span class="text-primary font-medium"> Deposited Bank Name </span>
+		<span class="font-medium text-primary"> Deposited Bank Name </span>
 
 		<input
 			value={receipt?.bankName}
 			name="editBankName"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
 
 	<label class="grid">
-		<span class="text-primary font-medium"> Receipt No. </span>
+		<span class="font-medium text-primary"> Receipt No. </span>
 
 		<input
 			value={receipt?.receiptReferenceNumber}
 			name="editRefNumber"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
-	<button type="submit" class="bg-primary text-white rounded-md py-2"> Edit Receipt </button>
+	<button type="submit" class="rounded-md bg-primary py-2 text-white"> Edit Receipt </button>
 </form>
