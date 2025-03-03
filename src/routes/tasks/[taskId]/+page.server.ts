@@ -1,8 +1,8 @@
-import { prisma } from '$lib/utils/prisma.js';
-import type { SeverityStatus, TaskStatus } from '@prisma/client';
-import { fail } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
+import { prisma } from '$lib/utils/prisma.js'
+import type { SeverityStatus, TaskStatus } from '@prisma/client'
+import { fail } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
 
 const editInternalTaskSchema = z.object({
 	taskTitle: z.string(),
@@ -10,40 +10,40 @@ const editInternalTaskSchema = z.object({
 	taskDueDate: z.date(),
 	taskStatus: z.string(),
 	assignedTo: z.number(),
-	taskSeverity: z.string()
-});
+	taskSeverity: z.string(),
+})
 
 export const load = async (event) => {
 	const employees = await prisma.employee.findMany({
 		where: {
 			isFired: false,
-			deletedAt: null
+			deletedAt: null,
 		},
 		include: {
 			User: true,
-			Role: true
-		}
-	});
+			Role: true,
+		},
+	})
 	const internalTask = await prisma.internalTask.findFirst({
 		where: {
 			id: Number(event.params.taskId),
-			deletedAt: null
+			deletedAt: null,
 		},
 		include: {
 			AssignedTo: {
 				include: {
 					User: true,
-					Role: true
-				}
+					Role: true,
+				},
 			},
 			CreatedBy: {
 				include: {
 					User: true,
-					Role: true
-				}
-			}
-		}
-	});
+					Role: true,
+				},
+			},
+		},
+	})
 
 	const editInternalTaskForm = await superValidate(
 		{
@@ -52,23 +52,23 @@ export const load = async (event) => {
 			taskDueDate: internalTask?.dueDate,
 			taskStatus: internalTask?.taskStatus,
 			assignedTo: internalTask?.assignedEmployeeId,
-			taskSeverity: internalTask?.taskSeverity
+			taskSeverity: internalTask?.taskSeverity,
 		},
-		editInternalTaskSchema
-	);
+		editInternalTaskSchema,
+	)
 
-	return { internalTask, editInternalTaskForm, employees };
-};
+	return { internalTask, editInternalTaskForm, employees }
+}
 export const actions = {
 	editInternalTask: async (event) => {
-		const editInternalTaskForm = await superValidate(event.request, editInternalTaskSchema);
+		const editInternalTaskForm = await superValidate(event.request, editInternalTaskSchema)
 		if (!editInternalTaskForm) {
-			return fail(400, { editInternalTaskForm });
+			return fail(400, { editInternalTaskForm })
 		}
 
 		const updatedInternalTask = await prisma.internalTask.update({
 			where: {
-				id: Number(event.params.taskId)
+				id: Number(event.params.taskId),
 			},
 			data: {
 				title: editInternalTaskForm.data.taskTitle,
@@ -76,10 +76,10 @@ export const actions = {
 				dueDate: editInternalTaskForm.data.taskDueDate,
 				taskStatus: editInternalTaskForm.data.taskStatus as TaskStatus,
 				assignedEmployeeId: editInternalTaskForm.data.assignedTo,
-				taskSeverity: editInternalTaskForm.data.taskSeverity as SeverityStatus
-			}
-		});
+				taskSeverity: editInternalTaskForm.data.taskSeverity as SeverityStatus,
+			},
+		})
 
-		return { editInternalTaskForm, updatedInternalTask };
-	}
-};
+		return { editInternalTaskForm, updatedInternalTask }
+	},
+}

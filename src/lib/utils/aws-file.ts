@@ -1,4 +1,4 @@
-import { S3_ACCESS_KEY, S3_BUCKET_NAME, S3_ENDPOINT, S3_SECRETE_KEY } from '$env/static/private';
+import { S3_ACCESS_KEY, S3_BUCKET_NAME, S3_ENDPOINT, S3_SECRETE_KEY } from '$env/static/private'
 import {
 	CreateMultipartUploadCommand,
 	UploadPartCommand,
@@ -6,26 +6,26 @@ import {
 	GetObjectCommand,
 	CompleteMultipartUploadCommand,
 	AbortMultipartUploadCommand,
-	S3Client
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+	S3Client,
+} from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
-const twentyFiveMB = 25 * 1024 * 1024;
+const twentyFiveMB = 25 * 1024 * 1024
 
 export const createString = (size = twentyFiveMB) => {
-	return 'x'.repeat(size);
-};
+	return 'x'.repeat(size)
+}
 
 const s3Client = new S3Client({
 	region: 'auto',
 	endpoint: S3_ENDPOINT,
 	credentials: {
 		accessKeyId: S3_ACCESS_KEY,
-		secretAccessKey: S3_SECRETE_KEY
+		secretAccessKey: S3_SECRETE_KEY,
 	},
-	forcePathStyle: true
+	forcePathStyle: true,
 	// signatureVersion: 'v4',
-});
+})
 
 export async function getFile(key: string) {
 	// const obj = await s3Client.send(
@@ -37,17 +37,17 @@ export async function getFile(key: string) {
 
 	const obj = new GetObjectCommand({
 		Bucket: S3_BUCKET_NAME,
-		Key: key
-	});
+		Key: key,
+	})
 
-	const url = await getSignedUrl(s3Client, obj, { expiresIn: 15 * 60 }); // expires in seconds
+	const url = await getSignedUrl(s3Client, obj, { expiresIn: 15 * 60 }) // expires in seconds
 
-	return url;
+	return url
 }
 
 export async function uploadFileToS3(fileKey: string, fileData: Buffer) {
-	let uploadId;
-	const numberOfParts = Math.floor(fileData.length / (5 * 1024 * 1024));
+	let uploadId
+	const numberOfParts = Math.floor(fileData.length / (5 * 1024 * 1024))
 
 	if (fileData.length < 5 * 1024 * 1024) {
 		try {
@@ -55,31 +55,31 @@ export async function uploadFileToS3(fileKey: string, fileData: Buffer) {
 				new PutObjectCommand({
 					Bucket: S3_BUCKET_NAME,
 					Key: fileKey,
-					Body: fileData
-				})
-			);
+					Body: fileData,
+				}),
+			)
 		} catch (error) {
-			console.log(error);
+			console.log(error)
 		}
 	} else {
 		try {
 			const multipartUpload = await s3Client.send(
 				new CreateMultipartUploadCommand({
 					Bucket: S3_BUCKET_NAME,
-					Key: fileKey
-				})
-			);
+					Key: fileKey,
+				}),
+			)
 
-			uploadId = multipartUpload.UploadId;
+			uploadId = multipartUpload.UploadId
 
-			const uploadPromises = [];
+			const uploadPromises = []
 			// Multipart uploads require a minimum size of 5 MB per part.
-			const partSize = Math.ceil(fileData.length / numberOfParts);
+			const partSize = Math.ceil(fileData.length / numberOfParts)
 
 			// Upload each part.
 			for (let i = 0; i < numberOfParts; i++) {
-				const start = i * partSize;
-				const end = start + partSize;
+				const start = i * partSize
+				const end = start + partSize
 				uploadPromises.push(
 					s3Client
 						.send(
@@ -88,16 +88,16 @@ export async function uploadFileToS3(fileKey: string, fileData: Buffer) {
 								Key: fileKey,
 								UploadId: uploadId,
 								Body: fileData.subarray(start, end),
-								PartNumber: i + 1
-							})
+								PartNumber: i + 1,
+							}),
 						)
 						.then((d) => {
-							return d;
-						})
-				);
+							return d
+						}),
+				)
 			}
 
-			const uploadResults = await Promise.all(uploadPromises);
+			const uploadResults = await Promise.all(uploadPromises)
 
 			return await s3Client.send(
 				new CompleteMultipartUploadCommand({
@@ -107,25 +107,25 @@ export async function uploadFileToS3(fileKey: string, fileData: Buffer) {
 					MultipartUpload: {
 						Parts: uploadResults.map(({ ETag }, i) => ({
 							ETag,
-							PartNumber: i + 1
-						}))
-					}
-				})
-			);
+							PartNumber: i + 1,
+						})),
+					},
+				}),
+			)
 
 			// Verify the output by downloading the file from the Amazon Simple Storage Service (Amazon S3) console.
 			// Because the output is a 25 MB string, text editors might struggle to open the file.
 		} catch (err) {
-			console.error(err);
+			console.error(err)
 
 			if (uploadId) {
 				const abortCommand = new AbortMultipartUploadCommand({
 					Bucket: S3_BUCKET_NAME,
 					Key: fileKey,
-					UploadId: uploadId
-				});
+					UploadId: uploadId,
+				})
 
-				await s3Client.send(abortCommand);
+				await s3Client.send(abortCommand)
 			}
 		}
 	}

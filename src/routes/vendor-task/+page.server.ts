@@ -1,7 +1,7 @@
-import { prisma } from '$lib/utils/prisma.js';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
+import { prisma } from '$lib/utils/prisma.js'
+import { fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
 
 const addVendorSchema = z.object({
 	name: z.string(),
@@ -11,8 +11,8 @@ const addVendorSchema = z.object({
 	serviceDescription: z.string(),
 	serviceType: z.enum(['CLEANING', 'ELECTRICITY', 'PLUMBING', 'PAINTING', 'SECURITY']),
 	score: z.string(),
-	tinNumber: z.string().optional()
-});
+	tinNumber: z.string().optional(),
+})
 
 const addTaskSchema = z.object({
 	taskDescription: z.string(),
@@ -20,74 +20,74 @@ const addTaskSchema = z.object({
 	regularJob: z.boolean().optional(),
 	estimatedTime: z.string(),
 	dueDate: z.date(),
-	vendorId: z.number().int()
-});
+	vendorId: z.number().int(),
+})
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'VIEW_VENDOR_PAGE';
-	});
+		return scope.name === 'VIEW_VENDOR_PAGE'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
-	const addVendorForm = await superValidate(addVendorSchema);
-	const addTaskForm = await superValidate(addTaskSchema);
-	const searchVendor = event.url.searchParams.get('searchVendor');
-	const searchTask = event.url.searchParams.get('searchTask');
+	const addVendorForm = await superValidate(addVendorSchema)
+	const addTaskForm = await superValidate(addTaskSchema)
+	const searchVendor = event.url.searchParams.get('searchVendor')
+	const searchTask = event.url.searchParams.get('searchTask')
 
 	const vendor = await prisma.vendor.findMany({
 		where: {
 			...(searchVendor && {
 				name: {
-					contains: searchVendor
-				}
+					contains: searchVendor,
+				},
 			}),
-			deletedAt: null
-		}
-	});
+			deletedAt: null,
+		},
+	})
 	const tasks = await prisma.vendorTask.findMany({
 		where: {
 			...(searchTask && {
 				taskDescription: {
-					contains: searchTask
-				}
+					contains: searchTask,
+				},
 			}),
 			deletedAt: null,
 			taskStatus: {
-				not: 'COMPLETED'
-			}
+				not: 'COMPLETED',
+			},
 		},
 		include: {
 			Vendor: true,
 			CreatedBy: {
 				include: {
 					User: true,
-					Role: true
-				}
-			}
-		}
-	});
+					Role: true,
+				},
+			},
+		},
+	})
 
-	return { vendor, addVendorForm, tasks, addTaskForm };
-};
+	return { vendor, addVendorForm, tasks, addTaskForm }
+}
 
 export const actions = {
 	addVendor: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_VENDOR';
-		});
+			return scope.name === 'ADD_VENDOR'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const addVendorForm = await superValidate(event.request, addVendorSchema);
+		const addVendorForm = await superValidate(event.request, addVendorSchema)
 		if (!addVendorForm) {
-			return fail(400, { addVendorForm });
+			return fail(400, { addVendorForm })
 		}
 
 		const vendor = await prisma.vendor.create({
@@ -99,28 +99,28 @@ export const actions = {
 				serviceDescription: addVendorForm.data.serviceDescription,
 				serviceType: addVendorForm.data.serviceType,
 				score: addVendorForm.data.score,
-				tinNumber: addVendorForm.data.tinNumber
-			}
-		});
+				tinNumber: addVendorForm.data.tinNumber,
+			},
+		})
 
 		return {
 			addVendorForm,
-			vendor
-		};
+			vendor,
+		}
 	},
 	addVendorTask: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_TASK';
-		});
+			return scope.name === 'ADD_TASK'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const addTaskForm = await superValidate(event.request, addTaskSchema);
+		const addTaskForm = await superValidate(event.request, addTaskSchema)
 		if (!addTaskForm) {
-			return fail(400, { addTaskForm });
+			return fail(400, { addTaskForm })
 		}
 
 		const vendorTask = await prisma.vendorTask.create({
@@ -132,13 +132,13 @@ export const actions = {
 				estimatedTimeToComplete: addTaskForm.data.estimatedTime,
 				dueDate: addTaskForm.data.dueDate,
 				vendorId: addTaskForm.data.vendorId,
-				creatorEmployeeId: session?.authUser.Employee.id
-			}
-		});
+				creatorEmployeeId: session?.authUser.Employee.id,
+			},
+		})
 
 		return {
 			addTaskForm,
-			vendorTask
-		};
-	}
-};
+			vendorTask,
+		}
+	},
+}

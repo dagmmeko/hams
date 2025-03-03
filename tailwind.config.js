@@ -10,10 +10,9 @@ export default {
 				danger: '#DC2626',
 				success: '#22BA62',
 				warning: '#FFCB3D',
-				info: '#4E4FEB'
-			}
+				info: '#4E4FEB',
+			},
 		},
-		
 	},
-	plugins: []
-};
+	plugins: [],
+}

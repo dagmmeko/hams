@@ -1,33 +1,32 @@
 <script lang="ts">
-	import Amenities from './amenities.svelte';
-	import Info from './info.svelte';
-	import Properties from './properties.svelte';
-	import Inspections from './inspections.svelte';
-	import { page } from '$app/stores';
+	import Amenities from './amenities.svelte'
+	import Info from './info.svelte'
+	import Properties from './properties.svelte'
+	import Inspections from './inspections.svelte'
+	import { page } from '$app/state'
 
-	export let data;
-	export let form;
+	let { data = $bindable(), form = $bindable() } = $props()
 
-	let displayedComponent: 'room' | 'properties' | 'amenities' | 'inspections' = 'room';
+	let displayedComponent: 'room' | 'properties' | 'amenities' | 'inspections' = $state('room')
 </script>
 
-<div class="mt-6 md:mx-10 mx-5">
-	<p class="text-xs text-black/50 mb-5">Rental Units / {data.unitDetails?.roomNumber}</p>
+<div class="mx-5 mt-6 md:mx-10">
+	<p class="mb-5 text-xs text-black/50">Rental Units / {data.unitDetails?.roomNumber}</p>
 	<!-- Navigation -->
-	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
-		<button on:click={() => (displayedComponent = 'room')}>
+	<div class="mb-6 flex w-fit rounded-md bg-ghost p-2 shadow-sm">
+		<button onclick={() => (displayedComponent = 'room')}>
 			<p
-				class="py-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'room'
+				class="rounded-md px-2 py-2 text-xs md:px-3 md:text-base {displayedComponent === 'room'
 					? 'bg-white'
 					: ''} "
 			>
 				Room
 			</p>
 		</button>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
-			<button on:click={() => (displayedComponent = 'properties')}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
+			<button onclick={() => (displayedComponent = 'properties')}>
 				<p
-					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+					class="rounded-md p-2 px-2 text-xs md:px-3 md:text-base {displayedComponent ===
 					'properties'
 						? 'bg-white'
 						: ''}"
@@ -36,10 +35,10 @@
 				</p>
 			</button>
 		{/if}
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
-			<button on:click={() => (displayedComponent = 'amenities')}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
+			<button onclick={() => (displayedComponent = 'amenities')}>
 				<p
-					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+					class="rounded-md p-2 px-2 text-xs md:px-3 md:text-base {displayedComponent ===
 					'amenities'
 						? 'bg-white'
 						: ''}"
@@ -48,9 +47,9 @@
 				</p>
 			</button>
 		{/if}
-		<button on:click={() => (displayedComponent = 'inspections')}>
+		<button onclick={() => (displayedComponent = 'inspections')}>
 			<p
-				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
+				class="rounded-md p-2 px-2 text-xs md:px-3 md:text-base {displayedComponent ===
 				'inspections'
 					? 'bg-white'
 					: ''}"
@@ -60,12 +59,12 @@
 		</button>
 	</div>
 
-	<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
+	<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
 		{#if displayedComponent === 'room'}
 			<Info bind:form bind:data />
-		{:else if displayedComponent === 'properties' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
+		{:else if displayedComponent === 'properties' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_PROPERTY')}
 			<Properties bind:data bind:form />
-		{:else if displayedComponent === 'amenities' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
+		{:else if displayedComponent === 'amenities' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_UNIT_AMENITIES')}
 			<Amenities bind:data bind:form />
 		{:else}
 			<Inspections bind:data />

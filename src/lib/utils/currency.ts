@@ -4,12 +4,12 @@ export function numberToCurrency(input: number, options?: Intl.NumberFormatOptio
 		// currency: 'USD',
 		minimumFractionDigits: 0,
 		maximumFractionDigits: 2,
-		...options
+		...options,
 	})
 		.format(input)
-		.replace(/$/, '');
+		.replace(/$/, '')
 }
 
 export function currencyToNumber(value: string, pattern: RegExp = /(\$|,)/gi) {
-	return parseFloat(value.replace(pattern, '')) || 0;
+	return parseFloat(value.replace(pattern, '')) || 0
 }

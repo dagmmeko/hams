@@ -1,42 +1,38 @@
 <script lang="ts">
-	import { toast } from '@zerodevx/svelte-toast';
-	import Vendors from './vendors.svelte';
-	import Task from './task.svelte';
-	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast'
+	import Vendors from './vendors.svelte'
+	import Task from './task.svelte'
+	import { page } from '$app/state'
 
-	export let data;
-	export let form;
+	let { data = $bindable(), form } = $props()
 
-	$: form?.addVendorForm ? toast.push('Vendor added successfully') : null;
+	$effect.pre(() => {
+		form?.addVendorForm ? toast.push('Vendor added successfully') : null
+	})
 
-	let displayedComponent: 'vendor' | 'task' | 'pending' = 'vendor';
+	let displayedComponent: 'vendor' | 'task' | 'pending' = $state('vendor')
 </script>
 
 <div class="mx-10 my-5">
-	<p class="text-xs text-black/50 mb-5">Vendor</p>
+	<p class="mb-5 text-xs text-black/50">Vendor</p>
 
-	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
-		<button on:click={() => (displayedComponent = 'vendor')}>
-			<p class="py-2 px-3 rounded-md {displayedComponent === 'vendor' ? 'bg-white' : ''} ">
+	<div class="mb-6 flex w-fit rounded-md bg-ghost p-2 shadow-sm">
+		<button onclick={() => (displayedComponent = 'vendor')}>
+			<p class="rounded-md px-3 py-2 {displayedComponent === 'vendor' ? 'bg-white' : ''} ">
 				Vendor
 			</p>
 		</button>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
-			<button on:click={() => (displayedComponent = 'task')}
-				><p class="p-2 px-3 rounded-md {displayedComponent === 'task' ? 'bg-white' : ''}">
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
+			<button onclick={() => (displayedComponent = 'task')}
+				><p class="rounded-md p-2 px-3 {displayedComponent === 'task' ? 'bg-white' : ''}">
 					Task
 				</p></button
 			>
 		{/if}
-		<!-- <button on:click={() => (displayedComponent = 'pending')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'pending' ? 'bg-white' : ''}">
-				Pending Tasks
-			</p>
-		</button> -->
 	</div>
 	{#if displayedComponent === 'vendor'}
 		<Vendors bind:data />
-	{:else if displayedComponent === 'task' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
+	{:else if displayedComponent === 'task' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_TASK_PAGE')}
 		<Task bind:data />
 	{:else if displayedComponent === 'pending'}
 		<!-- <Amenities bind:data /> --> Pending

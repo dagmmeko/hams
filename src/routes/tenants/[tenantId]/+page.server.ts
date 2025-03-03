@@ -1,8 +1,8 @@
-import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js';
-import { prisma } from '$lib/utils/prisma.js';
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
-import z from 'zod';
+import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js'
+import { prisma } from '$lib/utils/prisma.js'
+import { fail, redirect } from '@sveltejs/kit'
+import { superValidate } from 'sveltekit-superforms/server'
+import z from 'zod'
 
 const editTenantSchema = z.object({
 	fullName: z.string(),
@@ -11,8 +11,8 @@ const editTenantSchema = z.object({
 	emergencyContactName: z.string(),
 	emergencyContactPhoneNumber: z.string(),
 	emergencyContactEmail: z.string().email(),
-	passportNumber: z.string().optional()
-});
+	passportNumber: z.string().optional(),
+})
 
 const addReceiptsSchema = z.object({
 	payToUnit: z.number().int().positive(),
@@ -25,37 +25,37 @@ const addReceiptsSchema = z.object({
 	receiptIssueDate: z.date(),
 	receiptNumber: z.string(),
 	depositedBank: z.string(),
-	crvReceipt: z.boolean().optional()
-});
+	crvReceipt: z.boolean().optional(),
+})
 
 const extendRentSchema = z.object({
 	unitRenalId: z.number().int(),
-	contractEndDate: z.date()
-});
+	contractEndDate: z.date(),
+})
 
 const endRentSchema = z.object({
 	unitRenalId: z.number().int(),
-	terminationReason: z.string()
-});
+	terminationReason: z.string(),
+})
 
 export const load = async (event) => {
-	const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+	const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 	const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-		return scope.name === 'VIEW_TENANT_DETAIL_PAGE';
-	});
+		return scope.name === 'VIEW_TENANT_DETAIL_PAGE'
+	})
 
 	if (!hasRole) {
-		redirect(302, '/no-permission');
+		redirect(302, '/no-permission')
 	}
-	const addReceiptsForm = await superValidate(addReceiptsSchema);
-	const extendRentForm = await superValidate(extendRentSchema);
-	const endRentForm = await superValidate(endRentSchema);
+	const addReceiptsForm = await superValidate(addReceiptsSchema)
+	const extendRentForm = await superValidate(extendRentSchema)
+	const endRentForm = await superValidate(endRentSchema)
 
 	const tenant = await prisma.tenants.findFirst({
 		where: {
 			id: Number(event.params.tenantId),
-			deletedAt: null
+			deletedAt: null,
 		},
 		include: {
 			TenantRental: {
@@ -65,52 +65,52 @@ export const load = async (event) => {
 							Inspections: {
 								take: 1,
 								orderBy: {
-									inspectionDate: 'desc'
-								}
-							}
-						}
-					}
-				}
+									inspectionDate: 'desc',
+								},
+							},
+						},
+					},
+				},
 			},
 			PriceChange: {
 				include: {
-					RentalUnits: true
-				}
+					RentalUnits: true,
+				},
 			},
 			Receipts: {
 				include: {
-					PayToUnit: true
+					PayToUnit: true,
 				},
 				orderBy: {
-					endDate: 'desc'
-				}
+					endDate: 'desc',
+				},
 			},
 			TenantsFile: {
 				include: {
-					File: true
-				}
-			}
-		}
-	});
+					File: true,
+				},
+			},
+		},
+	})
 
 	const allReceipts = await prisma.receipts.groupBy({
 		by: ['receiptReferenceNumber', 'startDate'],
 		where: {
-			tenantsId: Number(event.params.tenantId)
+			tenantsId: Number(event.params.tenantId),
 		},
 		orderBy: {
-			startDate: 'desc'
-		}
-	});
+			startDate: 'desc',
+		},
+	})
 
 	let groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
 		return {
 			receiptReferenceNumber: receiptReferenceNumber.receiptReferenceNumber,
 			receipts: tenant?.Receipts.filter((receipt) => {
-				return receipt.receiptReferenceNumber === receiptReferenceNumber.receiptReferenceNumber;
-			})
-		};
-	});
+				return receipt.receiptReferenceNumber === receiptReferenceNumber.receiptReferenceNumber
+			}),
+		}
+	})
 
 	const editTenantForm = await superValidate(
 		{
@@ -120,33 +120,33 @@ export const load = async (event) => {
 			emergencyContactName: tenant?.emergencyContactName ?? undefined,
 			emergencyContactPhoneNumber: tenant?.emergencyContactPhoneNumber ?? undefined,
 			emergencyContactEmail: tenant?.emergencyContactEmail ?? undefined,
-			passportNumber: tenant?.passportNumber ?? undefined
+			passportNumber: tenant?.passportNumber ?? undefined,
 		},
-		editTenantSchema
-	);
+		editTenantSchema,
+	)
 
-	return { endRentForm, editTenantForm, addReceiptsForm, tenant, groupedReceipts, extendRentForm };
-};
+	return { endRentForm, editTenantForm, addReceiptsForm, tenant, groupedReceipts, extendRentForm }
+}
 
 export const actions = {
 	editTenant: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EDIT_TENANT';
-		});
+			return scope.name === 'EDIT_TENANT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const editTenantForm = await superValidate(event.request.clone(), editTenantSchema);
+		const editTenantForm = await superValidate(event.request.clone(), editTenantSchema)
 		if (!editTenantForm) {
-			return fail(400, { editTenantForm });
+			return fail(400, { editTenantForm })
 		}
 
 		const editTenant = await prisma.tenants.update({
 			where: {
-				id: Number(event.params.tenantId)
+				id: Number(event.params.tenantId),
 			},
 			data: {
 				fullName: editTenantForm.data.fullName,
@@ -155,28 +155,28 @@ export const actions = {
 				emergencyContactName: editTenantForm.data.emergencyContactName,
 				emergencyContactPhoneNumber: editTenantForm.data.emergencyContactPhoneNumber,
 				emergencyContactEmail: editTenantForm.data.emergencyContactEmail,
-				passportNumber: editTenantForm.data.passportNumber
-			}
-		});
-		return { editTenantForm, editTenant };
+				passportNumber: editTenantForm.data.passportNumber,
+			},
+		})
+		return { editTenantForm, editTenant }
 	},
 	addReceipts: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'ADD_RECEIPT';
-		});
+			return scope.name === 'ADD_RECEIPT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const addReceiptsForm = await superValidate(event.request.clone(), addReceiptsSchema);
+		const addReceiptsForm = await superValidate(event.request.clone(), addReceiptsSchema)
 
 		if (!addReceiptsForm) {
-			return fail(400, { addReceiptsForm });
+			return fail(400, { addReceiptsForm })
 		}
 
-		const usdRate = await prisma.currencyRate.findMany({});
+		const usdRate = await prisma.currencyRate.findMany({})
 
 		const newReceipts = await prisma.receipts.create({
 			data: {
@@ -190,12 +190,12 @@ export const actions = {
 				paymentReason: addReceiptsForm.data.crvReceipt
 					? 'CRV Receipt'
 					: addReceiptsForm.data.isRentPayment && !addReceiptsForm.data.isUtilityPayment
-					? 'Rent Payment'
-					: addReceiptsForm.data.isUtilityPayment && !addReceiptsForm.data.isRentPayment
-					? 'Utility Payment'
-					: addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment
-					? 'Rent & Utility Payment'
-					: 'Payment Issue!',
+						? 'Rent Payment'
+						: addReceiptsForm.data.isUtilityPayment && !addReceiptsForm.data.isRentPayment
+							? 'Utility Payment'
+							: addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment
+								? 'Rent & Utility Payment'
+								: 'Payment Issue!',
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
@@ -204,23 +204,23 @@ export const actions = {
 				usdRateAtPayment: usdRate[0].rate,
 				isUtilityAndRentPayment:
 					addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment,
-				crvReceipt: addReceiptsForm.data.crvReceipt
-			}
-		});
+				crvReceipt: addReceiptsForm.data.crvReceipt,
+			},
+		})
 
-		return { addReceiptsForm, newReceipts };
+		return { addReceiptsForm, newReceipts }
 	},
 	editReceipts: async (event) => {
-		const data = await event.request.formData();
-		const startDate = data.get('editPaymentStartDate');
-		const endDate = data.get('editPaymentEndDate');
-		const isRentPayment = data.get('editIsRentPayment');
-		const isUtilityPayment = data.get('editIsUtilityPayment');
-		const isCRVReceipt = data.get('editCRVReceipt');
-		const amount = data.get('editAmount');
-		const bankName = data.get('editBankName');
-		const refNumber = data.get('editRefNumber');
-		const receiptId = data.get('receiptId');
+		const data = await event.request.formData()
+		const startDate = data.get('editPaymentStartDate')
+		const endDate = data.get('editPaymentEndDate')
+		const isRentPayment = data.get('editIsRentPayment')
+		const isUtilityPayment = data.get('editIsUtilityPayment')
+		const isCRVReceipt = data.get('editCRVReceipt')
+		const amount = data.get('editAmount')
+		const bankName = data.get('editBankName')
+		const refNumber = data.get('editRefNumber')
+		const receiptId = data.get('receiptId')
 
 		if (
 			typeof startDate !== 'string' ||
@@ -230,12 +230,12 @@ export const actions = {
 			typeof refNumber !== 'string' ||
 			typeof receiptId !== 'string'
 		) {
-			return fail(500, { errorMessage: 'Query is not a string' });
+			return fail(500, { errorMessage: 'Query is not a string' })
 		}
 
 		const updatedReceipt = await prisma.receipts.update({
 			where: {
-				id: Number(receiptId)
+				id: Number(receiptId),
 			},
 			data: {
 				startDate: new Date(startDate),
@@ -245,163 +245,163 @@ export const actions = {
 				paymentReason: isCRVReceipt
 					? 'CRV Receipt'
 					: isRentPayment && !isUtilityPayment
-					? 'Rent Payment'
-					: isUtilityPayment && !isRentPayment
-					? 'Utility Payment'
-					: isRentPayment && isUtilityPayment
-					? 'Rent & Utility Payment'
-					: 'Payment Issue!',
+						? 'Rent Payment'
+						: isUtilityPayment && !isRentPayment
+							? 'Utility Payment'
+							: isRentPayment && isUtilityPayment
+								? 'Rent & Utility Payment'
+								: 'Payment Issue!',
 				isRentPayment: isRentPayment === 'on' ? true : false,
 				isUtilityPayment: isUtilityPayment === 'on' ? true : false,
 				isUtilityAndRentPayment: isRentPayment === 'on' && isUtilityPayment === 'on' ? true : false,
 				crvReceipt: isCRVReceipt === 'on' ? true : false,
-				receiptReferenceNumber: refNumber
-			}
-		});
+				receiptReferenceNumber: refNumber,
+			},
+		})
 
 		if (!updatedReceipt) {
-			return fail(500, { errorMessage: 'Could not update receipt' });
+			return fail(500, { errorMessage: 'Could not update receipt' })
 		}
-		return { updatedReceipt };
+		return { updatedReceipt }
 	},
 	extendRent: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EXTEND_RENT';
-		});
+			return scope.name === 'EXTEND_RENT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const extendRentForm = await superValidate(event.request, extendRentSchema);
+		const extendRentForm = await superValidate(event.request, extendRentSchema)
 		if (!extendRentForm) {
-			return fail(400, { extendRentForm });
+			return fail(400, { extendRentForm })
 		}
 
 		const updateEndDate = await prisma.tenantRental.update({
 			where: {
-				id: extendRentForm.data.unitRenalId
+				id: extendRentForm.data.unitRenalId,
 			},
 			data: {
-				contractEndDate: extendRentForm.data.contractEndDate
-			}
-		});
+				contractEndDate: extendRentForm.data.contractEndDate,
+			},
+		})
 
-		return { extendRentForm, updateEndDate };
+		return { extendRentForm, updateEndDate }
 	},
 	initialEndContract: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'START_END_RENT';
-		});
+			return scope.name === 'START_END_RENT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const endRentForm = await superValidate(event.request, endRentSchema);
+		const endRentForm = await superValidate(event.request, endRentSchema)
 		if (!endRentForm) {
-			return fail(400, { endRentForm });
+			return fail(400, { endRentForm })
 		}
 
 		const updateEndDate = await prisma.tenantRental.update({
 			where: {
-				id: endRentForm.data.unitRenalId
+				id: endRentForm.data.unitRenalId,
 			},
 			data: {
 				terminationReason: endRentForm.data.terminationReason,
-				exitingTenant: true
-			}
-		});
+				exitingTenant: true,
+			},
+		})
 
-		return { endRentForm, updateEndDate };
+		return { endRentForm, updateEndDate }
 	},
 	endContract: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'END_CONTRACT';
-		});
+			return scope.name === 'END_CONTRACT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const data = await event.request.formData();
-		const unitId = data.get('unitId');
+		const data = await event.request.formData()
+		const unitId = data.get('unitId')
 
 		if (typeof unitId !== 'string') {
-			return fail(500, { errorMessage: 'Issus with file download' });
+			return fail(500, { errorMessage: 'Issus with file download' })
 		}
 
 		const updateEnd = await prisma.tenantRental.update({
 			where: {
-				id: Number(unitId)
+				id: Number(unitId),
 			},
 			data: {
 				active: false,
 				RentalUnits: {
 					update: {
-						active: false
-					}
-				}
-			}
-		});
+						active: false,
+					},
+				},
+			},
+		})
 
-		return { updateEnd };
+		return { updateEnd }
 	},
 	downloadTenantFile: async (event) => {
-		const data = await event.request.formData();
-		const tenantKey = data.get('tenantKey');
+		const data = await event.request.formData()
+		const tenantKey = data.get('tenantKey')
 
 		if (typeof tenantKey !== 'string') {
-			return fail(500, { errorMessage: 'Issus with file download' });
+			return fail(500, { errorMessage: 'Issus with file download' })
 		}
 
-		const fileUrl = await getFile(tenantKey);
-		return { fileUrl };
+		const fileUrl = await getFile(tenantKey)
+		return { fileUrl }
 	},
 	deleteTenantFile: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EDIT_TENANT';
-		});
+			return scope.name === 'EDIT_TENANT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const data = await event.request.formData();
-		const tenantFileId = data.get('tenantFileId');
+		const data = await event.request.formData()
+		const tenantFileId = data.get('tenantFileId')
 
 		if (typeof tenantFileId !== 'string') {
-			return fail(500, { errorMessage: 'Issus with file deletion' });
+			return fail(500, { errorMessage: 'Issus with file deletion' })
 		}
 
 		const deleteFile = await prisma.file.delete({
 			where: {
-				id: Number(tenantFileId)
-			}
-		});
+				id: Number(tenantFileId),
+			},
+		})
 
-		return { deleteFile };
+		return { deleteFile }
 	},
 	editTenantFile: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EDIT_TENANT';
-		});
+			return scope.name === 'EDIT_TENANT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
-		const data = await event.request.formData();
-		const fileNames = data.get('fileNames');
+		const data = await event.request.formData()
+		const fileNames = data.get('fileNames')
 		if (typeof fileNames !== 'string') {
-			return fail(500, { errorMessage: 'Issus with file upload' });
+			return fail(500, { errorMessage: 'Issus with file upload' })
 		}
-		const names = fileNames.split(',');
+		const names = fileNames.split(',')
 
 		const allNewFiles = await Promise.all(
 			names.map(async (file) => {
@@ -411,76 +411,76 @@ export const actions = {
 						fileName: file,
 						TenantsFile: {
 							create: {
-								tenantsId: Number(event.params.tenantId)
-							}
-						}
-					}
-				});
-				return newFile;
-			})
-		);
+								tenantsId: Number(event.params.tenantId),
+							},
+						},
+					},
+				})
+				return newFile
+			}),
+		)
 
-		return { allNewFiles };
+		return { allNewFiles }
 	},
 	archiveTenant: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'DELETE_TENANT';
-		});
+			return scope.name === 'DELETE_TENANT'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
 
 		const archiveTenant = await prisma.tenants.update({
 			where: {
-				id: Number(event.params.tenantId)
+				id: Number(event.params.tenantId),
 			},
 			data: {
-				deletedAt: new Date()
-			}
-		});
+				deletedAt: new Date(),
+			},
+		})
 	},
 	updatePriceChange: async (event) => {
-		const session = (await event.locals.getSession()) as EnhancedSessionType | null;
+		const session = (await event.locals.getSession()) as EnhancedSessionType | null
 
 		const hasRole = session?.authUser.Employee.Role.Scopes.find((scope) => {
-			return scope.name === 'EDIT_PRICE_CHANGE';
-		});
+			return scope.name === 'EDIT_PRICE_CHANGE'
+		})
 
 		if (!hasRole) {
-			return fail(403, { errorMessage: 'You do not have permission to perform this action.' });
+			return fail(403, { errorMessage: 'You do not have permission to perform this action.' })
 		}
 
-		const data = await event.request.formData();
-		const priceChangeId = data.get('priceChangeId');
-		const priceChangeToggle = data.get('priceChangeToggle');
+		const data = await event.request.formData()
+		const priceChangeId = data.get('priceChangeId')
+		const priceChangeToggle = data.get('priceChangeToggle')
 
 		if (typeof priceChangeId !== 'string' || typeof priceChangeToggle !== 'string') {
-			return fail(500, { errorMessage: 'Issus with price change id or toggle' });
+			return fail(500, { errorMessage: 'Issus with price change id or toggle' })
 		}
 
 		const updatePriceChange = await prisma.priceChange.update({
 			where: {
-				id: Number(priceChangeId)
+				id: Number(priceChangeId),
 			},
 			data: {
-				active: priceChangeToggle === 'on' ? true : false
-			}
-		});
+				active: priceChangeToggle === 'on' ? true : false,
+			},
+		})
 
-		return { updatePriceChange };
+		return { updatePriceChange }
 	},
 	editRentedUnit: async (event) => {
-		const data = await event.request.formData();
-		const startDate = data.get('editStartDate');
-		const endDate = data.get('editEndDate');
-		const companyName = data.get('editCompanyName');
-		const securityDeposit = data.get('editSecurityDeposit');
-		const purposeOfRent = data.get('editPurposeOfRent');
-		const TIN = data.get('editTIN');
-		const rentedUnitId = data.get('rentedUnitId');
+		const data = await event.request.formData()
+		const startDate = data.get('editStartDate')
+		const endDate = data.get('editEndDate')
+		const companyName = data.get('editCompanyName')
+		const securityDeposit = data.get('editSecurityDeposit')
+		const purposeOfRent = data.get('editPurposeOfRent')
+		const TIN = data.get('editTIN')
+		const rentedUnitId = data.get('rentedUnitId')
 
 		if (
 			typeof startDate !== 'string' ||
@@ -490,12 +490,12 @@ export const actions = {
 			typeof purposeOfRent !== 'string' ||
 			typeof TIN !== 'string'
 		) {
-			return fail(500, { errorMessage: 'Query is not a string' });
+			return fail(500, { errorMessage: 'Query is not a string' })
 		}
 
 		const updateRentedUnit = await prisma.tenantRental.update({
 			where: {
-				id: Number(rentedUnitId)
+				id: Number(rentedUnitId),
 			},
 			data: {
 				contractStartDate: new Date(startDate),
@@ -503,10 +503,10 @@ export const actions = {
 				companyName,
 				securityDeposit: Number(securityDeposit),
 				purposeOfRent,
-				tinNumber: TIN
-			}
-		});
+				tinNumber: TIN,
+			},
+		})
 
-		return { updateRentedUnit };
-	}
-};
+		return { updateRentedUnit }
+	},
+}

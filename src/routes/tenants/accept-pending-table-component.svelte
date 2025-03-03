@@ -1,21 +1,25 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { enhance } from '$app/forms'
+	import { page } from '$app/state'
 
-	export let row: any;
+	interface Props {
+		row: any
+	}
+
+	let { row }: Props = $props()
 </script>
 
-{#if !row.approved && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}
+{#if !row.approved && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}
 	<div class="flex">
 		<form
 			class="w-full"
 			method="post"
 			action="?/acceptPending"
 			use:enhance={({ formData }) => {
-				formData.set('priceChangeId', row.id.toString());
+				formData.set('priceChangeId', row.id.toString())
 			}}
 		>
-			<button class="bg-primary p-[6px] rounded-md text-sm text-center text-white/90 w-full">
+			<button class="w-full rounded-md bg-primary p-[6px] text-center text-sm text-white/90">
 				Accept
 			</button>
 		</form>
@@ -23,18 +27,18 @@
 			method="post"
 			action="?/denyPending"
 			use:enhance={({ formData }) => {
-				formData.set('priceChangeId', row.id.toString());
+				formData.set('priceChangeId', row.id.toString())
 			}}
-			class="flex justify-center w-full"
+			class="flex w-full justify-center"
 		>
-			<button class="border-danger border-[1px] p-1 rounded-md mx-2 text-sm text-center w-full">
+			<button class="mx-2 w-full rounded-md border-[1px] border-danger p-1 text-center text-sm">
 				Deny
 			</button>
 		</form>
 	</div>
 {:else if !row.active}
 	<a href="/tenants/approve-tenant?priceChangeId={row.id}">
-		<div class="border-primary border-[1px] p-[6px] rounded-md text-sm text-primary text-center">
+		<div class="rounded-md border-[1px] border-primary p-[6px] text-center text-sm text-primary">
 			Open
 		</div>
 	</a>

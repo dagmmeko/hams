@@ -1,1 +1,1 @@
-@declare module 'svelte-multiselect'
+declare module 'svelte-multiselect'

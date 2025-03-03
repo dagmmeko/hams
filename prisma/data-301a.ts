@@ -1,13 +1,13 @@
-import type { ItemsCategory, PropertyStatus } from '@prisma/client';
+import type { ItemsCategory, PropertyStatus } from '@prisma/client'
 
 export const unitProperty: {
-	name: string;
-	description: string;
-	numberofUnits: number;
-	itemsPrice: number;
-	propertyStatus: PropertyStatus;
-	available: boolean;
-	itemCategory: ItemsCategory;
+	name: string
+	description: string
+	numberofUnits: number
+	itemsPrice: number
+	propertyStatus: PropertyStatus
+	available: boolean
+	itemCategory: ItemsCategory
 }[] = [
 	{
 		name: 'sofa  with chair ( Futon)',
@@ -16,7 +16,7 @@ export const unitProperty: {
 		itemsPrice: 130000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'sofa table',
@@ -25,7 +25,7 @@ export const unitProperty: {
 		itemsPrice: 46200,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Tv stand',
@@ -34,7 +34,7 @@ export const unitProperty: {
 		itemsPrice: 40700,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'TV with accessories',
@@ -43,7 +43,7 @@ export const unitProperty: {
 		itemsPrice: 38088,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'coffee table from wanza ',
@@ -52,7 +52,7 @@ export const unitProperty: {
 		itemsPrice: 12000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Stablizer',
@@ -61,7 +61,7 @@ export const unitProperty: {
 		itemsPrice: 5520,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'carpet for 3 bed room',
@@ -70,7 +70,7 @@ export const unitProperty: {
 		itemsPrice: 25127,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Curtain 2m X 3m',
@@ -79,7 +79,7 @@ export const unitProperty: {
 		itemsPrice: 15000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'dining table with chairs',
@@ -88,7 +88,7 @@ export const unitProperty: {
 		itemsPrice: 150000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'sofa chair pilow',
@@ -97,7 +97,7 @@ export const unitProperty: {
 		itemsPrice: 270,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'full length mirror 100cm x 100 cm',
@@ -106,7 +106,7 @@ export const unitProperty: {
 		itemsPrice: 9000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Flower pot wood made',
@@ -115,7 +115,7 @@ export const unitProperty: {
 		itemsPrice: 5060,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Picture With Wanza frame 88 X 44cm',
@@ -124,7 +124,7 @@ export const unitProperty: {
 		itemsPrice: 8500,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Picture With Wanza frame 42.5 X 43cm',
@@ -133,7 +133,7 @@ export const unitProperty: {
 		itemsPrice: 5800,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Picture With Wanza frame 94 X 183.5 cm',
@@ -142,7 +142,7 @@ export const unitProperty: {
 		itemsPrice: 29500,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Picture With Wanza frame 94 X 64cm',
@@ -151,7 +151,7 @@ export const unitProperty: {
 		itemsPrice: 9000,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 	{
 		name: 'Picture With Wanza frame 37 X 57 cm',
@@ -160,7 +160,7 @@ export const unitProperty: {
 		itemsPrice: 8800,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'SALON'
+		itemCategory: 'SALON',
 	},
 
 	//BEDROOM
@@ -171,7 +171,7 @@ export const unitProperty: {
 		itemsPrice: 60500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed frame double singel',
@@ -180,7 +180,7 @@ export const unitProperty: {
 		itemsPrice: 51000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed frame super singel',
@@ -189,7 +189,7 @@ export const unitProperty: {
 		itemsPrice: 47000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Mattress Pad bonded king size',
@@ -198,7 +198,7 @@ export const unitProperty: {
 		itemsPrice: 33409.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Mattress Pad bonded double singel',
@@ -207,7 +207,7 @@ export const unitProperty: {
 		itemsPrice: 31103.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Mattress Pad bonded supper singel',
@@ -216,7 +216,7 @@ export const unitProperty: {
 		itemsPrice: 26779.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Night stand (comodina)',
@@ -225,7 +225,7 @@ export const unitProperty: {
 		itemsPrice: 8250.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Table Lamp',
@@ -234,7 +234,7 @@ export const unitProperty: {
 		itemsPrice: 3500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Pillow',
@@ -243,7 +243,7 @@ export const unitProperty: {
 		itemsPrice: 270.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed spread sheet 1.40 ,with pillow and pillow case',
@@ -252,7 +252,7 @@ export const unitProperty: {
 		itemsPrice: 3450.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed spread sheet 1.60 with pillow and pillow case',
@@ -261,7 +261,7 @@ export const unitProperty: {
 		itemsPrice: 4600.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Bed spread sheet 1.10 with pillow and pillow case',
@@ -270,7 +270,7 @@ export const unitProperty: {
 		itemsPrice: 2249.4,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Blankets 2m',
@@ -279,7 +279,7 @@ export const unitProperty: {
 		itemsPrice: 5799.45,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'bed cover master bed room 1.60 m',
@@ -288,7 +288,7 @@ export const unitProperty: {
 		itemsPrice: 4000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'bed cover master bed room 1.40 m',
@@ -297,7 +297,7 @@ export const unitProperty: {
 		itemsPrice: 3000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'bed cover master bed room 1.10 m',
@@ -306,7 +306,7 @@ export const unitProperty: {
 		itemsPrice: 1956.52,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Hangers (Cloths)',
@@ -315,7 +315,7 @@ export const unitProperty: {
 		itemsPrice: 50.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'window coverings master bed 2.76m X 1.80m',
@@ -324,7 +324,7 @@ export const unitProperty: {
 		itemsPrice: 12500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'window coverings supper single room 2.76m X 1.80m',
@@ -333,7 +333,7 @@ export const unitProperty: {
 		itemsPrice: 12500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'full length mirror master bed room 1.40x0.60',
@@ -342,7 +342,7 @@ export const unitProperty: {
 		itemsPrice: 4500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'full length mirror supper single bed room 1.20x0.60',
@@ -351,7 +351,7 @@ export const unitProperty: {
 		itemsPrice: 3800.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'full length mirror  single bed room 1.20x.60',
@@ -360,7 +360,7 @@ export const unitProperty: {
 		itemsPrice: 3750.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'cloth organizar & shelfing master bed room',
@@ -369,7 +369,7 @@ export const unitProperty: {
 		itemsPrice: 110000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'cloth organizar & shelfing master bed room',
@@ -378,7 +378,7 @@ export const unitProperty: {
 		itemsPrice: 110000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'cloth organizar & shelfing super single bed room',
@@ -387,7 +387,7 @@ export const unitProperty: {
 		itemsPrice: 100000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'cloth organizar & shelfing single bed room',
@@ -396,7 +396,7 @@ export const unitProperty: {
 		itemsPrice: 80000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*42.5 master Bed',
@@ -405,7 +405,7 @@ export const unitProperty: {
 		itemsPrice: 5800.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*42.5 supper singe Bed',
@@ -414,7 +414,7 @@ export const unitProperty: {
 		itemsPrice: 5800.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*42.5 singe Bed',
@@ -423,7 +423,7 @@ export const unitProperty: {
 		itemsPrice: 5800.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*62.5 master Bed',
@@ -432,7 +432,7 @@ export const unitProperty: {
 		itemsPrice: 8450.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*62.5 supper singe Bed',
@@ -441,7 +441,7 @@ export const unitProperty: {
 		itemsPrice: 8450.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 	{
 		name: 'Picture With Wanza Frame 42.5*62.5 singe Bed',
@@ -450,7 +450,7 @@ export const unitProperty: {
 		itemsPrice: 8450.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BEDROOM'
+		itemCategory: 'BEDROOM',
 	},
 
 	//KITCHEN
@@ -462,7 +462,7 @@ export const unitProperty: {
 		itemsPrice: 64561.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Toaster',
@@ -471,7 +471,7 @@ export const unitProperty: {
 		itemsPrice: 4761.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'oven /stove electrical only',
@@ -480,7 +480,7 @@ export const unitProperty: {
 		itemsPrice: 38801.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Blender for ,coffee,juice and spice',
@@ -489,7 +489,7 @@ export const unitProperty: {
 		itemsPrice: 5221.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'micro wave oven',
@@ -498,7 +498,7 @@ export const unitProperty: {
 		itemsPrice: 14996.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'kettel',
@@ -507,7 +507,7 @@ export const unitProperty: {
 		itemsPrice: 5313.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'glass kettel electric',
@@ -516,7 +516,7 @@ export const unitProperty: {
 		itemsPrice: 1955.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'wooden spoon//Mamaseya',
@@ -525,7 +525,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'water glasses',
@@ -534,7 +534,7 @@ export const unitProperty: {
 		itemsPrice: 70.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Wine glasses',
@@ -543,7 +543,7 @@ export const unitProperty: {
 		itemsPrice: 184.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Bottle opener',
@@ -552,7 +552,7 @@ export const unitProperty: {
 		itemsPrice: 794.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'veggle peeler//Melacha',
@@ -561,7 +561,7 @@ export const unitProperty: {
 		itemsPrice: 299.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'tongs LONG',
@@ -570,7 +570,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'steak knifes ( YEGEBETA Bilawa',
@@ -579,7 +579,7 @@ export const unitProperty: {
 		itemsPrice: 80.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Cofee spoons',
@@ -588,7 +588,7 @@ export const unitProperty: {
 		itemsPrice: 40.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Tea Spoon',
@@ -597,7 +597,7 @@ export const unitProperty: {
 		itemsPrice: 35.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spatula //Mezakiya',
@@ -606,7 +606,7 @@ export const unitProperty: {
 		itemsPrice: 920.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'crok pots',
@@ -615,7 +615,7 @@ export const unitProperty: {
 		itemsPrice: 3680.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pans (big size)',
@@ -624,7 +624,7 @@ export const unitProperty: {
 		itemsPrice: 2500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pans (medium size)',
@@ -633,7 +633,7 @@ export const unitProperty: {
 		itemsPrice: 2000.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pans (small size)',
@@ -642,7 +642,7 @@ export const unitProperty: {
 		itemsPrice: 1480.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'bowels ceramic',
@@ -651,7 +651,7 @@ export const unitProperty: {
 		itemsPrice: 1610.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'saup bowels ceramic',
@@ -660,7 +660,7 @@ export const unitProperty: {
 		itemsPrice: 400.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Table plates',
@@ -669,7 +669,7 @@ export const unitProperty: {
 		itemsPrice: 400.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Pasta surving plates',
@@ -678,7 +678,7 @@ export const unitProperty: {
 		itemsPrice: 400.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Cake surving plates',
@@ -687,7 +687,7 @@ export const unitProperty: {
 		itemsPrice: 360.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'pasta strainer',
@@ -696,7 +696,7 @@ export const unitProperty: {
 		itemsPrice: 920.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'left over food storage containers',
@@ -705,7 +705,7 @@ export const unitProperty: {
 		itemsPrice: 690.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'knife block with holder',
@@ -714,7 +714,7 @@ export const unitProperty: {
 		itemsPrice: 3438.5,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'table spoon',
@@ -723,7 +723,7 @@ export const unitProperty: {
 		itemsPrice: 60.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spoon forks( shuka mankiya)',
@@ -732,7 +732,7 @@ export const unitProperty: {
 		itemsPrice: 60.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'drawer organizar',
@@ -741,7 +741,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'cutting board plastic//Mektefia',
@@ -750,7 +750,7 @@ export const unitProperty: {
 		itemsPrice: 1495.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'coffee maker//Buna Mafiya',
@@ -759,7 +759,7 @@ export const unitProperty: {
 		itemsPrice: 1610.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'milk cups',
@@ -768,7 +768,7 @@ export const unitProperty: {
 		itemsPrice: 299.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'coffee cup',
@@ -777,7 +777,7 @@ export const unitProperty: {
 		itemsPrice: 212.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'spice surving bottle //kememe maskemecha',
@@ -786,7 +786,7 @@ export const unitProperty: {
 		itemsPrice: 1840.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'juice glasses ( Ceramic Mug)',
@@ -795,7 +795,7 @@ export const unitProperty: {
 		itemsPrice: 460.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Shuger holder With spoon',
@@ -804,7 +804,7 @@ export const unitProperty: {
 		itemsPrice: 400.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Tea Maker (የሻይ ማፍያ ጀበና)',
@@ -813,7 +813,7 @@ export const unitProperty: {
 		itemsPrice: 1840.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Tea maker medium',
@@ -822,7 +822,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'ice maker plastic',
@@ -831,7 +831,7 @@ export const unitProperty: {
 		itemsPrice: 399.05,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Ice Bowl',
@@ -840,7 +840,7 @@ export const unitProperty: {
 		itemsPrice: 1610.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'metal sieve filter (matleya wenfit)',
@@ -849,7 +849,7 @@ export const unitProperty: {
 		itemsPrice: 112.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Vacume flask ( Permuz)',
@@ -858,7 +858,7 @@ export const unitProperty: {
 		itemsPrice: 1265.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Kitchen garbage collecter 30 litr',
@@ -867,7 +867,7 @@ export const unitProperty: {
 		itemsPrice: 5796.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'Vegetable Plastic shelf rack',
@@ -876,7 +876,7 @@ export const unitProperty: {
 		itemsPrice: 598,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'service tray',
@@ -885,7 +885,7 @@ export const unitProperty: {
 		itemsPrice: 690,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'service tray',
@@ -894,7 +894,7 @@ export const unitProperty: {
 		itemsPrice: 598,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'veggle peeler//Mefekfekiya Geater',
@@ -903,7 +903,7 @@ export const unitProperty: {
 		itemsPrice: 920,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 	{
 		name: 'fire extingusher',
@@ -912,7 +912,7 @@ export const unitProperty: {
 		itemsPrice: 5500,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'KITCHEN'
+		itemCategory: 'KITCHEN',
 	},
 
 	//LAUNDRY
@@ -924,7 +924,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'service tray',
@@ -933,7 +933,7 @@ export const unitProperty: {
 		itemsPrice: 690.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'service tray',
@@ -942,7 +942,7 @@ export const unitProperty: {
 		itemsPrice: 598.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'veggle peeler//Mefekfekiya Geater',
@@ -951,7 +951,7 @@ export const unitProperty: {
 		itemsPrice: 920.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 	{
 		name: 'fire extingusher',
@@ -960,7 +960,7 @@ export const unitProperty: {
 		itemsPrice: 5500.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'LAUNDRY'
+		itemCategory: 'LAUNDRY',
 	},
 
 	//BATHROOM
@@ -971,7 +971,7 @@ export const unitProperty: {
 		itemsPrice: 48100.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Shower Box 8mm Frosted glass common',
@@ -980,7 +980,7 @@ export const unitProperty: {
 		itemsPrice: 48100.0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Bath Towels',
@@ -989,7 +989,7 @@ export const unitProperty: {
 		itemsPrice: 699.99,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Hand Towels',
@@ -998,7 +998,7 @@ export const unitProperty: {
 		itemsPrice: 329.99,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Toilet Brush',
@@ -1007,7 +1007,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Plunger',
@@ -1016,7 +1016,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Shower Organizer Or Caddy',
@@ -1025,7 +1025,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Soap holder',
@@ -1034,7 +1034,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Towel holder',
@@ -1043,7 +1043,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Tissue Holder',
@@ -1052,7 +1052,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Shutuff (water spray)',
@@ -1061,7 +1061,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Waste Basket master',
@@ -1070,7 +1070,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Waste Basket common',
@@ -1079,7 +1079,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Toilet Mirror With organizer Common',
@@ -1088,7 +1088,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Toilet Mirror with Organizer (Master)',
@@ -1097,7 +1097,7 @@ export const unitProperty: {
 		itemsPrice: 0,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Mirror Light (Master)',
@@ -1106,7 +1106,7 @@ export const unitProperty: {
 		itemsPrice: 2500,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
+		itemCategory: 'BATHROOM',
 	},
 	{
 		name: 'Mirror Light (Common)',
@@ -1115,6 +1115,6 @@ export const unitProperty: {
 		itemsPrice: 3500,
 		propertyStatus: 'GOOD_CONDITION',
 		available: true,
-		itemCategory: 'BATHROOM'
-	}
-];
+		itemCategory: 'BATHROOM',
+	},
+]

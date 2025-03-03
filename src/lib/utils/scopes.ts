@@ -83,5 +83,5 @@ export const allScopes = [
 	'ADD_INTERNAL_TASK',
 	//can view everyone's task not just their own
 	'VIEW_ALL_INTERNAL_TASK_PAGE',
-	'DELETE_INTERNAL_TASK'
-];
+	'DELETE_INTERNAL_TASK',
+]

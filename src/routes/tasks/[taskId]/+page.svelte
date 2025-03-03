@@ -1,39 +1,44 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { superForm, dateProxy } from 'sveltekit-superforms/client';
+	import { page } from '$app/state'
+	import { superForm, dateProxy } from 'sveltekit-superforms/client'
 
-	export let data;
+	let { data } = $props()
 	const {
 		form: editInternalTaskForm,
 		enhance: editFormEnhance,
-		constraints
-	} = superForm(data.editInternalTaskForm);
+		constraints,
+	} = superForm(data.editInternalTaskForm)
 	const taskDueDate = dateProxy(editInternalTaskForm, 'taskDueDate', {
 		format: 'date',
-		empty: 'undefined'
-	});
+		empty: 'undefined',
+	})
 
-	let dateInput: any;
+	let dateInput: any = $state()
 </script>
 
 <div class="mx-10 my-12">
-	<p class="text-sm mb-5">Task / {data.internalTask?.title}</p>
+	<p class="mb-5 text-sm">Task / {data.internalTask?.title}</p>
 
-	<div class="p-6 bg-white rounded-sm shadow-sm border-[1px] border-black/20">
+	<div class="rounded-sm border-[1px] border-black/20 bg-white p-6 shadow-sm">
 		<form use:editFormEnhance method="post" action="?/editInternalTask">
 			<div class="flex justify-between">
 				<div class="grid">
 					<p class="text-2xl">Employee Info</p>
-					<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
+					<p class=" rounded-xl py-1 text-sm">Employee personal and performance details here.</p>
 				</div>
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button
+					onclick={(e) => {
+						e.stopPropagation()
+					}}
+					class="rounded-md bg-primary px-6 py-2 text-white"
+				>
 					Update Info</button
 				>
 			</div>
 			<hr class="my-6" />
-			<div class="grid gap-6 grid-cols-4">
+			<div class="grid grid-cols-4 gap-6">
 				<label class="grid flex-1">
-					<span class="text-primary font-semibold py-1"> Task Title</span>
+					<span class="py-1 font-semibold text-primary"> Task Title</span>
 					<input
 						name="taskTitle"
 						bind:value={$editInternalTaskForm.taskTitle}
@@ -41,7 +46,7 @@
 					/>
 				</label>
 				<label class="grid flex-1">
-					<span class="text-primary font-semibold py-1"> Task Description</span>
+					<span class="py-1 font-semibold text-primary"> Task Description</span>
 					<input
 						name="taskDescription"
 						bind:value={$editInternalTaskForm.taskDescription}
@@ -49,20 +54,20 @@
 					/>
 				</label>
 				<label class="grid flex-1">
-					<span class="text-primary font-semibold py-1"> Task Due Date </span>
+					<span class="py-1 font-semibold text-primary"> Task Due Date </span>
 					<input
 						type="date"
 						name="taskDueDate"
 						bind:value={$taskDueDate}
 						bind:this={dateInput}
-						on:click={() => {
-							dateInput && dateInput.showPicker();
+						onclick={() => {
+							dateInput && dateInput.showPicker()
 						}}
 					/>
 				</label>
 
 				<label class="grid flex-1">
-					<span class="text-primary font-semibold py-1"> Task Status </span>
+					<span class="py-1 font-semibold text-primary"> Task Status </span>
 					<select
 						name="taskStatus"
 						bind:value={$editInternalTaskForm.taskStatus}
@@ -74,14 +79,14 @@
 						<option value="CHECKING">Checking</option>
 						<option
 							value="COMPLETED"
-							disabled={$page.data.session?.authUser.Employee.id !==
+							disabled={page.data.session?.authUser.Employee.id !==
 								data.internalTask?.creatorEmployeeId}>Completed</option
 						>
 					</select>
 				</label>
 
-				<label class="w-full grid gap-2">
-					<span class="text-primary font-semibold py-1"> Task Severity </span>
+				<label class="grid w-full gap-2">
+					<span class="py-1 font-semibold text-primary"> Task Severity </span>
 					<select
 						name="taskSeverity"
 						bind:value={$editInternalTaskForm.taskSeverity}
@@ -96,7 +101,7 @@
 				</label>
 
 				<label class="grid flex-1">
-					<span class="text-primary font-semibold py-1"> Created By </span>
+					<span class="py-1 font-semibold text-primary"> Created By </span>
 					<input
 						type="text"
 						name="createdBy"
@@ -109,8 +114,8 @@
 						disabled
 					/>
 				</label>
-				<label class="grid w-full gap-2 h-fit">
-					<span class="text-primary font-semibold py-1"> Assign To </span>
+				<label class="grid h-fit w-full gap-2">
+					<span class="py-1 font-semibold text-primary"> Assign To </span>
 					<select
 						name="assignedTo"
 						bind:value={$editInternalTaskForm.assignedTo}

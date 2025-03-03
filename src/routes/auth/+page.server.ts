@@ -1,7 +1,7 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit'
 
 export const load = async (event) => {
-	const { session } = await event.parent();
+	const { session } = await event.parent()
 
-	if (session) redirect(303, '/');
-};
+	if (session) redirect(303, '/')
+}

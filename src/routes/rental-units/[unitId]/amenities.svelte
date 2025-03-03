@@ -1,55 +1,59 @@
 <script lang="ts">
-	import SvelteTable from 'svelte-table';
-	import type { PageData, ActionData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
-	import { toast } from '@zerodevx/svelte-toast';
-	import DeleteAmenitiesTable from './delete-amenities-table.svelte';
+	import SvelteTable from 'svelte-table'
+	import type { PageData, ActionData } from './$types'
+	import { superForm } from 'sveltekit-superforms/client'
+	import { clickOutside } from '$lib/utils/click-outside'
+	import { enhance } from '$app/forms'
+	import { page } from '$app/state'
+	import { toast } from '@zerodevx/svelte-toast'
+	import DeleteAmenitiesTable from './delete-amenities-table.svelte'
 
-	let addModal = false;
-	let editModal = false;
+	let addModal = $state(false)
+	let editModal = $state(false)
 
-	let selectedUnitId: number;
+	let selectedUnitId: number | undefined = $state()
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData
+		form: ActionData
+	}
+
+	let { data = $bindable(), form = $bindable() }: Props = $props()
 
 	const {
 		form: addAmenityForm,
 		enhance: addPropertyEnhance,
-		constraints
+		constraints,
 	} = superForm(data.addAmenityForm, {
 		onSubmit: ({ formData }) => {
-			addModal = false;
-		}
-	});
-	$: rows = data.unitDetails?.Amenities ?? [];
-	$: columns = [
+			addModal = false
+		},
+	})
+	let rows = $derived(data.unitDetails?.Amenities ?? [])
+	let columns = $derived([
 		{
 			key: 'name',
 			title: 'Amenity Name',
-			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'number',
 			title: 'Price',
-			value: (v: typeof rows[number]) => 'ETB ' + v.price ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => 'ETB ' + v.price,
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'paid',
 			title: 'Type',
-			value: (v: typeof rows[number]) => (v.paid ? 'Paid' : 'l' ?? 'NOT FOUND'),
+			value: (v: (typeof rows)[number]) => (v.paid ? 'Paid' : 'Free'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
+			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
 		},
 		{
 			key: 'deleteAmenities',
@@ -58,44 +62,44 @@
 				component: DeleteAmenitiesTable,
 				props: {
 					data: data,
-					form: form
-				}
+					form: form,
+				},
 			},
 			headerClass:
 				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
-			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
-		}
-	];
+			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]',
+		},
+	])
 </script>
 
 <div>
-	<div class="sm:flex justify-between">
+	<div class="justify-between sm:flex">
 		<div class="grid">
 			<p class="text-2xl">Room Amenities</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_AMENITIES')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_AMENITIES')}
 			<button
 				type="submit"
-				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-2"
-				on:click={() => (addModal = true)}
+				class="my-2 rounded-md bg-primary px-6 py-2 text-white md:my-0"
+				onclick={() => (addModal = true)}
 			>
 				New Amenity</button
 			>
 		{/if}
 	</div>
-	<div class="-mx-6 pt-5 overflow-y-auto">
+	<div class="-mx-6 overflow-y-auto pt-5">
 		<SvelteTable
 			classNameTable="unitAmenitiesTables"
 			on:clickCell={(event) => {
 				if (
-					$page.data.session?.authUser.Employee.Role.Scopes.find(
-						(s) => s.name === 'EDIT_UNIT_AMENITIES'
+					page.data.session?.authUser.Employee.Role.Scopes.find(
+						(s) => s.name === 'EDIT_UNIT_AMENITIES',
 					)
 				) {
-					selectedUnitId = event.detail.row.id;
-					editModal = true;
+					selectedUnitId = event.detail.row.id
+					editModal = true
 				} else {
-					toast.push('You do not have permission to edit amenities');
+					toast.push('You do not have permission to edit amenities')
 				}
 			}}
 			{columns}
@@ -107,37 +111,37 @@
 {#if addModal}
 	<form use:addPropertyEnhance method="post" action="?/addAmenity">
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (addModal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
 				<div>
 					<p class="text-xl font-semibold">New Property</p>
-					<p class="text-sm text-subtitle pt-2">
+					<p class="pt-2 text-sm text-subtitle">
 						Register new room property here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Amenity's Name </span>
+					<span class="font-medium text-primary"> Amenity's Name </span>
 					<input
 						name="name"
 						required
 						bind:value={$addAmenityForm.name}
 						{...$constraints.name}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Description </span>
+					<span class="font-medium text-primary"> Description </span>
 					<textarea
 						name="description"
 						required
 						bind:value={$addAmenityForm.description}
 						{...$constraints.description}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
+					></textarea>
 				</label>
 				<label class="flex items-center gap-3">
 					<input
@@ -145,21 +149,26 @@
 						name="paid"
 						bind:checked={$addAmenityForm.paid}
 						{...$constraints.paid}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Paid Service </span>
+					<span class="font-medium text-primary"> Paid Service </span>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Price </span>
+					<span class="font-medium text-primary"> Price </span>
 					<input
 						name="price"
 						required
 						bind:value={$addAmenityForm.price}
 						{...$constraints.price}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 
-					<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+					<button
+						onclick={(e) => {
+							e.stopPropagation()
+						}}
+						class="mt-6 rounded-md bg-primary py-2 text-white"
+					>
 						Save Item</button
 					>
 				</label>
@@ -171,66 +180,71 @@
 {#if editModal}
 	<form
 		use:enhance={({ formData }) => {
-			formData.set('amenityId', selectedUnitId.toString());
+			formData.set('amenityId', selectedUnitId?.toString() ?? '')
 			return async ({ update }) => {
-				await update();
-				editModal = false;
-			};
+				await update()
+				editModal = false
+			}
 		}}
 		method="post"
 		action="?/updateAmenity"
 	>
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (editModal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
 				<div>
 					<p class="text-xl font-semibold">New Property</p>
-					<p class="text-sm text-subtitle pt-2">
+					<p class="pt-2 text-sm text-subtitle">
 						Register new room property here. Click save when you're done.
 					</p>
 				</div>
 				<label class="grid">
-					<span class="text-primary font-medium"> Amenity's Name </span>
+					<span class="font-medium text-primary"> Amenity's Name </span>
 					<input
 						name="name"
 						required
 						value={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)?.name}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Description </span>
+					<span class="font-medium text-primary"> Description </span>
 					<textarea
 						name="description"
 						required
 						value={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)
 							?.description}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
+					></textarea>
 				</label>
 				<label class="flex items-center gap-3">
 					<input
 						type="checkbox"
 						name="paid"
 						checked={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)?.paid}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Paid Service </span>
+					<span class="font-medium text-primary"> Paid Service </span>
 				</label>
 				<label class="grid">
-					<span class="text-primary font-medium"> Price </span>
+					<span class="font-medium text-primary"> Price </span>
 					<input
 						name="price"
 						required
 						value={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)?.price}
-						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
+						class="mt-2 w-[420px] rounded-md border-[1px] border-black/60 p-2"
 					/>
 
-					<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+					<button
+						onclick={(e) => {
+							e.stopPropagation()
+						}}
+						class="mt-6 rounded-md bg-primary py-2 text-white"
+					>
 						Update Amenity</button
 					>
 				</label>

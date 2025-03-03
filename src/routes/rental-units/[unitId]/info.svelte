@@ -1,69 +1,80 @@
 <script lang="ts">
-	import { clickOutside } from '$lib/utils/click-outside';
-	import { superForm } from 'sveltekit-superforms/client';
-	import { page } from '$app/stores';
+	import { clickOutside } from '$lib/utils/click-outside'
+	import { superForm } from 'sveltekit-superforms/client'
+	import { page } from '$app/stores'
 
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import Delete from '$lib/assets/delete.svg.svelte';
-	import Eye from '$lib/assets/eye.svg.svelte';
-	import FileBg from '$lib/assets/file-bg.png';
-	import FileUp from '$lib/assets/file-up.svg.svelte';
-	import { toast } from '@zerodevx/svelte-toast';
-	import type { ActionData, PageData } from './$types';
-	import { numberToCurrency } from '$lib/utils/currency';
-	import { uploadFiles } from '$lib/utils/upload-files';
+	import { enhance } from '$app/forms'
+	import { goto } from '$app/navigation'
+	import Delete from '$lib/assets/delete.svg.svelte'
+	import Eye from '$lib/assets/eye.svg.svelte'
+	import FileBg from '$lib/assets/file-bg.png'
+	import FileUp from '$lib/assets/file-up.svg.svelte'
+	import { toast } from '@zerodevx/svelte-toast'
+	import type { ActionData, PageData } from './$types'
+	import { numberToCurrency } from '$lib/utils/currency'
+	import { uploadFiles } from '$lib/utils/upload-files'
 
-	export let data: PageData;
-	export let form: ActionData;
-	let dateInput: any;
-	let fileNames: string[] = [];
+	interface Props {
+		data: PageData
+		form: ActionData
+	}
 
-	$: form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
+	let { data = $bindable(), form = $bindable() }: Props = $props()
+	let dateInput: any = $state()
+	let fileNames: string[] = $state([])
+
+	$effect.pre(() => {
+		form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null
+	})
 	const {
 		form: editUnitForm,
 		enhance: editUnitFormEnhance,
-		constraints
+		constraints,
 	} = superForm(data.editUnitForm, {
 		onResult: ({ result }) => {
 			if (result.type === 'success') {
-				toast.push('Unit updated successfully');
+				toast.push('Unit updated successfully')
 			}
-		}
-	});
+		},
+	})
 
-	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
+	$effect.pre(() => {
+		form?.errorMessage ? toast.push(form.errorMessage) : null
+	})
 
-	let modal = false;
+	let modal = $state(false)
 </script>
 
 <div>
 	<form use:editUnitFormEnhance method="post" action="?/editUnitInfo">
-		<div class="md:grid grid-flow-col justify-items-stretch">
+		<div class="grid-flow-col justify-items-stretch md:grid">
 			<div class="grid">
 				<p class="text-2xl">Rental Unit Info</p>
-				<p class=" text-sm py-1 rounded-xl">Room details here.</p>
+				<p class=" rounded-xl py-1 text-sm">Room details here.</p>
 			</div>
 			<div class="justify-self-end">
 				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_NEW_INSPECTION')}
 					<button
-						on:click|preventDefault={() => (modal = true)}
-						class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4 md:mb-0 mb-3"
+						onclick={(e) => {
+							e.preventDefault()
+							modal = true
+						}}
+						class="mb-3 mr-4 rounded-md bg-warning px-6 py-2 text-black/70 md:mb-0"
 					>
 						New Inspection
 					</button>
 				{/if}
 				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_RENTAL_UNIT')}
-					<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
+					<button type="submit" class="rounded-md bg-primary px-6 py-2 text-white">
 						Update Info
 					</button>
 				{/if}
 			</div>
 		</div>
 		<hr class="my-6" />
-		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 			<label class="grid h-fit flex-1">
-				<span class="text-primary font-semibold py-1"> Room No.</span>
+				<span class="py-1 font-semibold text-primary"> Room No.</span>
 				<input
 					name="roomNumber"
 					bind:value={$editUnitForm.roomNumber}
@@ -72,17 +83,17 @@
 				/>
 			</label>
 			<label class="grid h-fit flex-1">
-				<span class="text-primary font-semibold py-1"> Floor</span>
+				<span class="py-1 font-semibold text-primary"> Floor</span>
 				<input name="floor" bind:value={$editUnitForm.floor} {...$constraints.floor} class="" />
 			</label>
 
 			<div class="grid flex-1">
-				<span class="text-primary font-semibold py-1"> Status</span>
+				<span class="py-1 font-semibold text-primary"> Status</span>
 				<div>{data.unitDetails?.active ? 'Occupied' : 'Vacant'}</div>
 			</div>
 
 			<label class="grid h-fit">
-				<span class="text-primary font-semibold py-1"> Condition </span>
+				<span class="py-1 font-semibold text-primary"> Condition </span>
 				<select
 					disabled
 					name="condition"
@@ -96,23 +107,23 @@
 					<option value="OUT_OF_SERVICE"> Out of service </option>
 				</select>
 			</label>
-			<label class="grid flex-1 h-fit">
-				<span class="text-primary font-semibold py-1"> Size</span>
+			<label class="grid h-fit flex-1">
+				<span class="py-1 font-semibold text-primary"> Size</span>
 				<input name="size" bind:value={$editUnitForm.size} {...$constraints.size} />
 			</label>
 			{#if data.unitDetails?.priceSetPerKare}
 				<label class="grid h-fit flex-1">
-					<span class="text-primary font-semibold py-1"> Price</span>
+					<span class="py-1 font-semibold text-primary"> Price</span>
 					<div>
 						<input
 							value={numberToCurrency(data.unitDetails?.price * data.unitDetails?.kareMeter, {
 								currency: data.unitDetails?.currency,
-								currencyDisplay: 'code'
+								currencyDisplay: 'code',
 							})}
 							disabled
 						/>
 					</div>
-					<div class="text-xs mt-1">
+					<div class="mt-1 text-xs">
 						<!-- <span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span> -->
 						{#if data.unitDetails?.priceSetPerKare}
 							<span>
@@ -122,35 +133,35 @@
 												data.usdRate[0].rate,
 											{
 												currency: 'USD',
-												currencyDisplay: 'code'
-											}
-									  )
+												currencyDisplay: 'code',
+											},
+										)
 									: numberToCurrency(
 											data.unitDetails?.price * data.unitDetails?.kareMeter * data.usdRate[0].rate,
 											{
 												currency: 'ETB',
-												currencyDisplay: 'code'
-											}
-									  )}
+												currencyDisplay: 'code',
+											},
+										)}
 							</span>
 						{:else}
 							<span>
 								{data.unitDetails?.currency === 'ETB'
 									? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 											currency: 'USD',
-											currencyDisplay: 'code'
-									  })
+											currencyDisplay: 'code',
+										})
 									: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 											currency: 'ETB',
-											currencyDisplay: 'code'
-									  })}
+											currencyDisplay: 'code',
+										})}
 							</span>
 						{/if}
 					</div>
 				</label>
 			{:else}
 				<label class="grid h-fit flex-1">
-					<span class="text-primary font-semibold py-1"> Price</span>
+					<span class="py-1 font-semibold text-primary"> Price</span>
 					<div>
 						<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
 						<input
@@ -161,25 +172,25 @@
 							{...$constraints.price}
 						/>
 					</div>
-					<div class="text-xs mt-1">
+					<div class="mt-1 text-xs">
 						<!-- <span> {data.unitDetails?.currency === 'ETB' ? 'USD' : 'ETB'} </span> -->
 						<span>
 							{data.unitDetails?.currency === 'ETB'
 								? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 										currency: 'USD',
-										currencyDisplay: 'code'
-								  })
+										currencyDisplay: 'code',
+									})
 								: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 										currency: 'ETB',
-										currencyDisplay: 'code'
-								  })}
+										currencyDisplay: 'code',
+									})}
 						</span>
 					</div>
 				</label>
 			{/if}
 
 			<label class="grid h-fit flex-1">
-				<span class="text-primary font-semibold py-1">Utility Price</span>
+				<span class="py-1 font-semibold text-primary">Utility Price</span>
 				<div>
 					<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
 					<input
@@ -188,24 +199,24 @@
 						{...$constraints.utilityPrice}
 					/>
 				</div>
-				<div class="text-xs mt-1">
+				<div class="mt-1 text-xs">
 					<!-- {data.unitDetails?.currency} -->
 					<span>
 						{data.unitDetails?.currency === 'ETB'
 							? numberToCurrency(($editUnitForm.utilityPrice || 0) / data.usdRate[0].rate, {
 									currency: 'USD',
-									currencyDisplay: 'code'
-							  })
+									currencyDisplay: 'code',
+								})
 							: numberToCurrency(($editUnitForm.utilityPrice || 0) * data.usdRate[0].rate, {
 									currency: 'ETB',
-									currencyDisplay: 'code'
-							  })}
+									currencyDisplay: 'code',
+								})}
 					</span>
 				</div>
 			</label>
 
 			<div class="gird h-fit">
-				<span class="text-primary font-semibold py-1"> Price Total </span>
+				<span class="py-1 font-semibold text-primary"> Price Total </span>
 				<div class="grid">
 					<!-- <span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span> -->
 					{#if data.unitDetails?.priceSetPerKare}
@@ -217,11 +228,11 @@
 										data.unitDetails.utilityPrice,
 									{
 										currency: data.unitDetails?.currency,
-										currencyDisplay: 'code'
-									}
+										currencyDisplay: 'code',
+									},
 								)}
 							</div>
-							<div class="text-xs mt-1">
+							<div class="mt-1 text-xs">
 								{#if data.unitDetails?.currency === 'ETB'}
 									{numberToCurrency(
 										((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
@@ -229,8 +240,8 @@
 											data.usdRate[0].rate,
 										{
 											currency: 'USD',
-											currencyDisplay: 'code'
-										}
+											currencyDisplay: 'code',
+										},
 									)}{:else}
 									{numberToCurrency(
 										((data.unitDetails.price || 0) * data.unitDetails.kareMeter +
@@ -238,8 +249,8 @@
 											data.usdRate[0].rate,
 										{
 											currency: 'ETB',
-											currencyDisplay: 'code'
-										}
+											currencyDisplay: 'code',
+										},
 									)}{/if}
 							</div>
 						</span>
@@ -248,18 +259,18 @@
 							<div>
 								{numberToCurrency(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0), {
 									currency: data.unitDetails?.currency,
-									currencyDisplay: 'code'
+									currencyDisplay: 'code',
 								})}
 							</div>
-							<div class="text-xs mt-1">
+							<div class="mt-1 text-xs">
 								{#if data.unitDetails?.currency === 'ETB'}
 									{numberToCurrency(
 										(($editUnitForm.price || 0) + ($editUnitForm.utilityPrice || 0)) /
 											data.usdRate[0].rate,
 										{
 											currency: 'USD',
-											currencyDisplay: 'code'
-										}
+											currencyDisplay: 'code',
+										},
 									)}
 								{:else}
 									{numberToCurrency(
@@ -267,8 +278,8 @@
 											data.usdRate[0].rate,
 										{
 											currency: 'ETB',
-											currencyDisplay: 'code'
-										}
+											currencyDisplay: 'code',
+										},
 									)}
 								{/if}
 							</div>
@@ -277,7 +288,7 @@
 				</div>
 			</div>
 			<label class="grid h-fit">
-				<span class="text-primary font-semibold py-1"> Unit Type </span>
+				<span class="py-1 font-semibold text-primary"> Unit Type </span>
 				<select
 					required
 					name="unitType"
@@ -290,7 +301,7 @@
 				</select>
 			</label>
 			<label class="grid h-fit flex-1">
-				<span class="text-primary font-semibold py-1"> No. of People Allowed</span>
+				<span class="py-1 font-semibold text-primary"> No. of People Allowed</span>
 				<input
 					name="maximumTenants"
 					bind:value={$editUnitForm.maximumTenants}
@@ -304,9 +315,9 @@
 						name="priceSetPerKare"
 						bind:checked={$editUnitForm.priceSetPerKare}
 						{...$constraints.priceSetPerKare}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> Per is set in m2 </span>
+					<span class="font-medium text-primary"> Per is set in m2 </span>
 				</label>
 
 				<label class="flex h-fit items-center gap-3">
@@ -315,13 +326,13 @@
 						name="inBirr"
 						bind:checked={$editUnitForm.inBirr}
 						{...$constraints.inBirr}
-						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
+						class=" h-5 w-5 rounded-md border-[1px] border-black/60 p-2"
 					/>
-					<span class="text-primary font-medium"> In Ethiopian Birr </span>
+					<span class="font-medium text-primary"> In Ethiopian Birr </span>
 				</label>
 			</div>
 			<label class="grid h-fit flex-1">
-				<span class="text-primary font-semibold py-1"> Price per m2</span>
+				<span class="py-1 font-semibold text-primary"> Price per m2</span>
 				{#if data.unitDetails?.priceSetPerKare}
 					<div>
 						<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
@@ -333,17 +344,17 @@
 							{...$constraints.price}
 						/>
 					</div>
-					<div class="text-xs mt-1">
+					<div class="mt-1 text-xs">
 						<span>
 							{data.unitDetails?.currency === 'ETB'
 								? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 										currency: 'USD',
-										currencyDisplay: 'code'
-								  })
+										currencyDisplay: 'code',
+									})
 								: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 										currency: 'ETB',
-										currencyDisplay: 'code'
-								  })}
+										currencyDisplay: 'code',
+									})}
 						</span>
 					</div>
 				{:else}
@@ -351,7 +362,7 @@
 						<span class="text-sm text-gray-600"> {data.unitDetails?.currency} </span>
 						<input
 							value={((data.unitDetails?.price || 0) / (data.unitDetails?.kareMeter || 1)).toFixed(
-								2
+								2,
 							) || 0}
 							disabled
 						/>
@@ -359,129 +370,137 @@
 				{/if}
 			</label>
 		</div>
+	</form>
 
-		<div class=" w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
-			{#each data.unitDetails?.UnitsFile ?? [] as file}
-				<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
-					<div class="relative">
-						<div class=" relative z-10 w-full h-36">
-							<img src={FileBg} alt="bg" class="w-full h-full" />
-						</div>
-
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<form
-								id="downloadUnitFile"
-								method="post"
-								action="?/downloadUnitFile"
-								use:enhance={({ formData }) => {
-									formData.set('unitKey', `${file.File.key}`);
-									return async ({ result, update }) => {
-										await update();
-
-										if (result.type === 'success') {
-										}
-									};
-								}}
-								class="flex flex-col gap-2 justify-center items-center h-full"
-							>
-								<button on:click|stopPropagation type="submit">
-									<div class="h-full w-full flex flex-col items-center justify-center">
-										<Eye class="text-primary w-7 h-7" />
-										<span class="text-sm mx-3 py-2 break-all">
-											{file.File.fileName}
-										</span>
-									</div>
-								</button>
-							</form>
-						</div>
+	<!-- File display section moved outside main form -->
+	<div class=" my-8 flex w-full flex-1 flex-shrink-0 flex-wrap items-start gap-2">
+		{#each data.unitDetails?.UnitsFile ?? [] as file}
+			<div class="w-[180px] rounded-lg border-[1px] border-dashed border-primary">
+				<div class="relative">
+					<div class=" relative z-10 h-36 w-full">
+						<img src={FileBg} alt="bg" class="h-full w-full" />
 					</div>
-					<form
-						id="deleteUnitFile"
-						method="post"
-						action="?/deleteUnitFile"
-						use:enhance={({ formData }) => {
-							formData.set('unitFileId', `${file.fileId}`);
-							return async ({ result }) => {
-								if (result.type === 'success') {
-									toast.push('File deleted successfully');
-								}
-							};
-						}}
-					>
-						<button
-							on:click|stopPropagation
-							class="flex gap-1 items-center justify-center w-full p-2"
-						>
-							<Delete class="h-5 w-5 text-danger" />
-							<span class="text-danger text-sm">Delete</span>
-						</button>
-					</form>
-				</div>
-			{/each}
-			<div
-				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
-			>
-				<form
-					id="editUnitFile"
-					method="post"
-					action="?/editUnitFile"
-					use:enhance={({ formData }) => {
-						formData.set('fileNames', fileNames.join(','));
-						formData.set('unitFile', 'Files');
-					}}
-				>
-					<label>
-						<input
-							class="hidden"
-							type="file"
-							name="unitFile"
-							multiple
-							on:change={async (e) => {
-								const uploadPromises = [];
-								const cal = e.currentTarget.form;
-								for (const file of e.currentTarget.files ?? []) {
-									uploadPromises.push(
-										(async function () {
-											if (data.unitDetails) {
-												fileNames = [...fileNames, file.name];
-												return await uploadFiles(
-													file,
-													`unitFile/${data.unitDetails.id}/${file.name}`
-												);
-											}
-										})()
-									);
-								}
-								const successes = await Promise.all(uploadPromises);
 
-								if (!successes.find((s) => s !== true)) {
-									// @ts-ignore
-									cal.requestSubmit();
+					<div class="absolute left-0 top-0 z-30 h-full w-full">
+						<form
+							id="downloadUnitFile"
+							method="post"
+							action="?/downloadUnitFile"
+							use:enhance={({ formData }) => {
+								formData.set('unitKey', `${file.File.key}`)
+								return async ({ result, update }) => {
+									await update()
+
+									if (result.type === 'success') {
+									}
 								}
 							}}
-						/>
-
-						<div class=" relative z-10 h-44" />
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<div class="flex flex-col gap-2 justify-center items-center h-full">
-								<FileUp class="text-primary w-7 h-7" />
-								<span class="text-xs">Upload File</span>
-								<p class="text-[10px] text-center px-3">
-									Contract, Agreement, pictures or any other document
-								</p>
-							</div>
-						</div>
-					</label>
+							class="flex h-full flex-col items-center justify-center gap-2"
+						>
+							<button
+								onclick={(e) => {
+									e.stopPropagation()
+								}}
+								type="submit"
+							>
+								<div class="flex h-full w-full flex-col items-center justify-center">
+									<Eye class="h-7 w-7 text-primary" />
+									<span class="mx-3 break-all py-2 text-sm">
+										{file.File.fileName}
+									</span>
+								</div>
+							</button>
+						</form>
+					</div>
+				</div>
+				<form
+					id="deleteUnitFile"
+					method="post"
+					action="?/deleteUnitFile"
+					use:enhance={({ formData }) => {
+						formData.set('unitFileId', `${file.fileId}`)
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								toast.push('File deleted successfully')
+							}
+						}
+					}}
+				>
+					<button
+						onclick={(e) => {
+							e.stopPropagation()
+						}}
+						class="flex w-full items-center justify-center gap-1 p-2"
+					>
+						<Delete class="h-5 w-5 text-danger" />
+						<span class="text-sm text-danger">Delete</span>
+					</button>
 				</form>
 			</div>
+		{/each}
+
+		<div
+			class="relative max-h-96 max-w-[180px] flex-1 flex-shrink-0 items-center justify-center gap-2 rounded-lg border-[1px] border-dashed border-primary"
+		>
+			<form
+				id="editUnitFile"
+				method="post"
+				action="?/editUnitFile"
+				use:enhance={({ formData }) => {
+					formData.set('fileNames', fileNames.join(','))
+					formData.set('unitFile', 'Files')
+				}}
+				enctype="multipart/form-data"
+			>
+				<label>
+					<input
+						class="hidden"
+						type="file"
+						name="unitFile"
+						multiple
+						onchange={async (e) => {
+							const uploadPromises = []
+							const cal = e.currentTarget.form
+							for (const file of e.currentTarget.files ?? []) {
+								uploadPromises.push(
+									(async function () {
+										if (data.unitDetails) {
+											fileNames = [...fileNames, file.name]
+											return await uploadFiles(file, `unitFile/${data.unitDetails.id}/${file.name}`)
+										}
+									})(),
+								)
+							}
+							const successes = await Promise.all(uploadPromises)
+
+							if (!successes.find((s) => s !== true)) {
+								// @ts-ignore
+								cal.requestSubmit()
+							}
+						}}
+					/>
+
+					<div class=" relative z-10 h-44"></div>
+					<div class="absolute left-0 top-0 z-30 h-full w-full">
+						<div class="flex h-full flex-col items-center justify-center gap-2">
+							<FileUp class="h-7 w-7 text-primary" />
+							<span class="text-xs">Upload File</span>
+							<p class="px-3 text-center text-[10px]">
+								Contract, Agreement, pictures or any other document
+							</p>
+						</div>
+					</div>
+				</label>
+			</form>
 		</div>
-	</form>
+	</div>
+
 	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ARCHIVE_RENTAL_UNIT')}
-		<p class="text-2xl mt-6">Danger</p>
+		<p class="mt-6 text-2xl">Danger</p>
 		<hr class="my-6" />
 
-		<div class="border-2 border-danger border-dashed rounded-md p-5">
-			<div class="md:flex justify-between">
+		<div class="rounded-md border-2 border-dashed border-danger p-5">
+			<div class="justify-between md:flex">
 				<div>
 					<p class="text-lg">Archive Rental Unit</p>
 					<p class="text-black/50">
@@ -495,19 +514,24 @@
 					use:enhance={() => {
 						return async ({ result }) => {
 							if (result.type === 'success') {
-								toast.push('Unit archived successfully');
-								goto('/rental-units');
+								toast.push('Unit archived successfully')
+								goto('/rental-units')
 							}
-						};
+						}
 					}}
 				>
 					{#if data.unitDetails?.active}
 						<button
-							on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
-							class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+							onclick={(e) => {
+								e.preventDefault()
+								toast.push('Can not delete a Unit with Tenant in it.')
+							}}
+							class="rounded-md bg-subtitle px-6 py-2 text-white"
 						>
+							Archive
+						</button>
 					{:else}
-						<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
+						<button class="rounded-md bg-danger px-6 py-2 text-white">Archive</button>
 					{/if}
 				</form>
 			</div>
@@ -521,45 +545,45 @@
 		action="?/addInspection"
 		use:enhance={() => {
 			return async ({ update, result }) => {
-				await update();
-				modal = false;
+				await update()
+				modal = false
 				if (result.type === 'success') {
-					toast.push('Inspection added successfully');
+					toast.push('Inspection added successfully')
 				}
-			};
+			}
 		}}
 	>
 		<div
-			class="bg-black/70 fixed top-0 left-0 z-50 w-full h-screen flex items-center justify-center"
+			class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/70"
 		>
 			<div
 				use:clickOutside={() => (modal = false)}
-				class="bg-white rounded-xl p-8 w-[480px] grid gap-4 justify-items-stretch"
+				class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 			>
-				<div class="text-2xl text-primary font-semibold mb-1 text-center">New Inspection</div>
+				<div class="mb-1 text-center text-2xl font-semibold text-primary">New Inspection</div>
 				<hr />
 				<label class="grid h-fit flex-1">
-					<span class="text-primary font-semibold py-1"> Inspection Date </span>
+					<span class="py-1 font-semibold text-primary"> Inspection Date </span>
 					<input
 						required
 						name="inspectionDate"
 						type="date"
 						bind:this={dateInput}
-						on:click={() => {
-							dateInput && dateInput.showPicker();
+						onclick={() => {
+							dateInput && dateInput.showPicker()
 						}}
-						class=" border-[1px] border-primary/50 rounded-md p-2"
+						class=" rounded-md border-[1px] border-primary/50 p-2"
 					/>
 				</label>
 
 				<label class="grid h-fit">
-					<span class="text-primary font-semibold py-1"> Condition </span>
+					<span class="py-1 font-semibold text-primary"> Condition </span>
 					<select
 						required
 						name="inspectionCondition"
 						bind:value={$editUnitForm.condition}
 						{...$constraints.condition}
-						class=" border-[1px] border-primary/50 rounded-md p-2"
+						class=" rounded-md border-[1px] border-primary/50 p-2"
 					>
 						<option selected disabled> Unit Condition </option>
 
@@ -569,13 +593,13 @@
 					</select>
 				</label>
 				<label class="grid h-fit flex-1">
-					<span class="text-primary font-semibold py-2"> Inspection Description </span>
+					<span class="py-2 font-semibold text-primary"> Inspection Description </span>
 					<textarea
 						name="inspectionDescription"
-						class=" border-[1px] h-24 border-primary/50 rounded-md p-2"
-					/>
+						class=" h-24 rounded-md border-[1px] border-primary/50 p-2"
+					></textarea>
 				</label>
-				<button type="submit" class="bg-primary text-white rounded-md py-2">
+				<button type="submit" class="rounded-md bg-primary py-2 text-white">
 					Save Inspection</button
 				>
 			</div>

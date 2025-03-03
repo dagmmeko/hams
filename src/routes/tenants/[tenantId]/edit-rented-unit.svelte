@@ -1,103 +1,107 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
-	import type { ActionData, PageData } from './$types';
-	import { enhance } from '$app/forms';
-	import { toast } from '@zerodevx/svelte-toast';
+	import dayjs from 'dayjs'
+	import type { ActionData, PageData } from './$types'
+	import { enhance } from '$app/forms'
+	import { toast } from '@zerodevx/svelte-toast'
 
-	export let data: PageData;
-	export let form: ActionData;
-	export let selectedRentedUnitId: number;
-	export let editRentedUnitModal: boolean;
+	interface Props {
+		data: PageData
+		form: ActionData
+		selectedRentedUnitId: number
+		editRentedUnitModal: boolean
+	}
 
-	let dateInput: any;
-	let dateInput2: any;
+	let { data, form, selectedRentedUnitId, editRentedUnitModal = $bindable() }: Props = $props()
+
+	let dateInput: any = $state()
+	let dateInput2: any = $state()
 
 	const rentedUnit = data.tenant?.TenantRental.find((rental) => {
-		return rental.id === selectedRentedUnitId;
-	});
+		return rental.id === selectedRentedUnitId
+	})
 </script>
 
 <form
 	use:enhance={({ formData }) => {
 		if (!selectedRentedUnitId) {
-			toast.push('No rented unit found');
+			toast.push('No rented unit found')
 		}
-		formData.set('rentedUnitId', selectedRentedUnitId.toString());
+		formData.set('rentedUnitId', selectedRentedUnitId.toString())
 		return async ({ update }) => {
-			await update();
-			toast.push('Rented unit updated successfully');
-			editRentedUnitModal = false;
-		};
+			await update()
+			toast.push('Rented unit updated successfully')
+			editRentedUnitModal = false
+		}
 	}}
 	class="grid gap-4"
 	method="post"
 	action="?/editRentedUnit"
 >
 	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> Start Date</span>
+		<span class="py-1 font-semibold text-primary"> Start Date</span>
 		<input
 			type="date"
 			name="editStartDate"
 			value={dayjs(rentedUnit?.contractStartDate).format('YYYY-MM-DD')}
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
+			class=" mt-1 rounded-md border-[1px] border-black/60 p-2"
 			bind:this={dateInput}
-			on:click={() => {
-				dateInput && dateInput.showPicker();
+			onclick={() => {
+				dateInput && dateInput.showPicker()
 			}}
 		/>
 	</label>
 	<label class="grid flex-1">
-		<span class="text-primary font-semibold py-1"> End Date</span>
+		<span class="py-1 font-semibold text-primary"> End Date</span>
 		<input
 			type="date"
 			name="editEndDate"
 			value={dayjs(rentedUnit?.contractEndDate).format('YYYY-MM-DD')}
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
+			class=" mt-1 rounded-md border-[1px] border-black/60 p-2"
 			bind:this={dateInput2}
-			on:click={() => {
-				dateInput2 && dateInput2.showPicker();
+			onclick={() => {
+				dateInput2 && dateInput2.showPicker()
 			}}
 		/>
 	</label>
 	<label class="grid">
-		<span class="text-primary font-medium"> Company Name </span>
+		<span class="font-medium text-primary"> Company Name </span>
 
 		<input
 			value={rentedUnit?.companyName}
 			name="editCompanyName"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
 
 	<label class="grid">
-		<span class="text-primary font-medium"> Security Deposit </span>
+		<span class="font-medium text-primary"> Security Deposit </span>
 
 		<input
 			value={rentedUnit?.securityDeposit}
 			name="editSecurityDeposit"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 			type="number"
 			step="0.01"
 		/>
 	</label>
 	<label class="grid">
-		<span class="text-primary font-medium"> Purpose Of Rent </span>
+		<span class="font-medium text-primary"> Purpose Of Rent </span>
 
 		<input
 			value={rentedUnit?.purposeOfRent}
 			name="editPurposeOfRent"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
 
 	<label class="grid">
-		<span class="text-primary font-medium"> TIN </span>
+		<span class="font-medium text-primary"> TIN </span>
 
 		<input
 			value={rentedUnit?.tinNumber}
 			name="editTIN"
-			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
+			class=" mt-2 rounded-md border-[1px] border-black/60 p-2"
 		/>
 	</label>
-	<button class="bg-primary text-white rounded-md py-2 w-full mt-4"> Edit </button>
+	<button class="mt-4 w-full rounded-md bg-primary py-2 text-white"> Edit </button>
 </form>

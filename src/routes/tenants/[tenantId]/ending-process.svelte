@@ -1,17 +1,23 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
-	import type { ActionData, PageData } from './$types';
-	import PdfPrint from '$lib/components/pdf-print.svelte';
-	import { enhance } from '$app/forms';
-	import { toast } from '@zerodevx/svelte-toast';
+	import dayjs from 'dayjs'
+	import type { ActionData, PageData } from './$types'
+	import PdfPrint from '$lib/components/pdf-print.svelte'
+	import { enhance } from '$app/forms'
+	import { toast } from '@zerodevx/svelte-toast'
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData
+		form: ActionData
+	}
 
-	$: form?.updateEnd ? toast.push('Rent ended successfully') : null;
+	let { data = $bindable(), form = $bindable() }: Props = $props()
+
+	$effect.pre(() => {
+		form?.updateEnd ? toast.push('Rent ended successfully') : null
+	})
 </script>
 
-<div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
+<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
 	{#each data.tenant?.TenantRental ?? [] as tenantUnit}
 		{#if tenantUnit.exitingTenant}
 			<PdfPrint>
@@ -45,16 +51,16 @@
 						<div>
 							<span class="font-medium">Inspection Status:</span>
 							<p
-								class="text-[10px] text-center min-w-max max-w-[120px] p-1 rounded-full {tenantUnit
+								class="min-w-max max-w-[120px] rounded-full p-1 text-center text-[10px] {tenantUnit
 									.RentalUnits.Inspections[0].InspectionStatus === 'GOOD_CONDITION'
 									? 'bg-success text-white'
 									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
-									? 'bg-warning text-black/70'
-									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
-									? 'bg-danger text-white'
-									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
-									? 'bg-info text-white'
-									: ''}"
+										? 'bg-warning text-black/70'
+										: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
+											? 'bg-danger text-white'
+											: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
+												? 'bg-info text-white'
+												: ''}"
 							>
 								{tenantUnit.RentalUnits.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
 							</p>
@@ -71,12 +77,12 @@
 			<hr class="my-4" />
 			<form
 				use:enhance={({ formData }) => {
-					formData.set('unitId', tenantUnit.id.toString());
+					formData.set('unitId', tenantUnit.id.toString())
 				}}
 				method="post"
 				action="?/endContract"
 			>
-				<button class="bg-danger rounded-md p-2 text-sm text-white"> End Contract </button>
+				<button class="rounded-md bg-danger p-2 text-sm text-white"> End Contract </button>
 			</form>
 		{/if}
 	{/each}

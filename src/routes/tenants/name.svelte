@@ -1,8 +1,12 @@
 <script lang="ts">
-	export let row: any;
+	interface Props {
+		row: any
+	}
+
+	let { row }: Props = $props()
 </script>
 
-<div class="grid grid-flow-col w-fit gap-6 items-center">
+<div class="grid w-fit grid-flow-col items-center gap-6">
 	<!-- <img src={QR} alt="img" class="w-10 h-10 rounded-full" /> -->
 	<div class="grid">
 		<span class="text-sm font-medium"> {row.tenant.fullName}</span>
