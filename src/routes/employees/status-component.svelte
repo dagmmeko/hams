@@ -20,10 +20,10 @@
 				: row.isAbsent
 					? 'h-fit w-24 rounded-full bg-danger/20 px-2 py-1 text-xs font-semibold text-danger'
 					: row.EmploymentType === 'FULL_TIME'
-						? 'h-fit w-24 rounded-full bg-success/20 px-2 py-1 text-xs font-semibold text-success'
+						? 'h-fit w-24 rounded-full bg-success/20  px-2 py-1 text-xs font-semibold text-success'
 						: row.EmploymentType === 'PART_TIME'
 							? 'h-fit w-24 rounded-full bg-info/20 px-2 py-1 text-xs font-semibold text-info'
-							: 'h-fit w-24 rounded-full bg-blue-300/50 px-2 py-1 text-xs font-semibold text-blue-600'}}"
+							: 'h-fit w-24 rounded-full bg-blue-300/50 px-2 py-1 text-xs font-semibold text-blue-600'}"
 >
 	<Dot />
 	{row.isFired
