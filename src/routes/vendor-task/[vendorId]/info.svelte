@@ -40,7 +40,7 @@
 				<p class=" text-sm py-1 rounded-xl">Vendor details here.</p>
 			</div>
 			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_VENDOR')}
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button type="submit" on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
 					Update Info</button
 				>
 			{/if}
@@ -96,117 +96,120 @@
 					name="serviceDescription"
 					bind:value={$editVendorForm.serviceDescription}
 					{...$constraints.serviceDescription}
-				/>
+				></textarea>
 			</label>
 		</div>
-		<div class=" w-full p-4 mb-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
-			{#each data.vendor.VendorFile ?? [] as file}
-				<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
-					<div class="relative">
-						<div class=" relative z-10 w-full h-36">
-							<img src={FileBg} alt="bg" class="w-full h-full" />
-						</div>
+	</form>
+	
+	<!-- File display section moved outside main form -->
+	<div class=" w-full p-4 mb-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
+		{#each data.vendor.VendorFile ?? [] as file}
+			<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
+				<div class="relative">
+					<div class=" relative z-10 w-full h-36">
+						<img src={FileBg} alt="bg" class="w-full h-full" />
+					</div>
 
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<div class="flex flex-col gap-2 justify-center items-center h-full">
-								<form
-									id="downloadVendorFile"
-									method="post"
-									action="?/downloadVendorFile"
-									use:enhance={({ formData }) => {
-										formData.set('vendorFileKey', `${file.File.key}`);
-									}}
-								>
-									<button on:click|stopPropagation type="submit">
-										<div class="h-full flex flex-col items-center justify-center">
-											<Eye class="text-primary w-7 h-7" />
-											<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
-										</div>
-									</button>
-								</form>
-							</div>
+					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<div class="flex flex-col gap-2 justify-center items-center h-full">
+							<form
+								id="downloadVendorFile"
+								method="post"
+								action="?/downloadVendorFile"
+								use:enhance={({ formData }) => {
+									formData.set('vendorFileKey', `${file.File.key}`);
+								}}
+							>
+								<button on:click|stopPropagation type="submit">
+									<div class="h-full flex flex-col items-center justify-center">
+										<Eye class="text-primary w-7 h-7" />
+										<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
+									</div>
+								</button>
+							</form>
 						</div>
 					</div>
-					<form
-						id="deleteUnitFile"
-						method="post"
-						action="?/deleteVendorFile"
-						use:enhance={({ formData }) => {
-							formData.set('deleteVendorFileId', `${file.fileId}`);
-							return async ({ result, update }) => {
-								if (result.type === 'success') {
-									// @ts-ignore
-									window.open(result.data.fileUrl, '_blank');
-								}
-							};
-						}}
-					>
-						<button
-							on:click|stopPropagation
-							class="flex gap-1 items-center justify-center w-full p-2"
-						>
-							<Delete class="h-5 w-5 text-danger" />
-							<span class="text-danger text-sm">Delete</span>
-						</button>
-					</form>
 				</div>
-			{/each}
-			<div
-				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
-			>
 				<form
-					id="editVendorFile"
+					id="deleteUnitFile"
 					method="post"
-					action="?/editVendorFile"
+					action="?/deleteVendorFile"
 					use:enhance={({ formData }) => {
-						formData.set('fileNames', fileNames.join(','));
-						formData.set('vendorFile', 'Files');
+						formData.set('deleteVendorFileId', `${file.fileId}`);
+						return async ({ result, update }) => {
+							if (result.type === 'success') {
+								// @ts-ignore
+								window.open(result.data.fileUrl, '_blank');
+							}
+						};
 					}}
 				>
-					<label>
-						<input
-							class="hidden"
-							type="file"
-							name="vendorFile"
-							multiple
-							on:change={async (e) => {
-								const uploadPromises = [];
-								const cal = e.currentTarget.form;
-								for (const file of e.currentTarget.files ?? []) {
-									uploadPromises.push(
-										(async function () {
-											if (data.vendor) {
-												fileNames = [...fileNames, file.name];
-
-												return await uploadFiles(file, `vendorFile/${data.vendor.id}/${file.name}`);
-											}
-										})()
-									);
-								}
-								const successes = await Promise.all(uploadPromises);
-
-								if (!successes.find((s) => s !== true)) {
-									// @ts-ignore
-									cal.requestSubmit();
-								}
-							}}
-						/>
-
-						<div class=" relative z-10 h-44" />
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<div class="flex flex-col gap-2 justify-center items-center h-full">
-								<FileUp class="text-primary w-7 h-7" />
-								<span class="text-xs">Upload File</span>
-								<p class="text-[10px] text-center px-3">
-									Contract, Agreement, pictures or any other document
-								</p>
-							</div>
-						</div>
-					</label>
+					<button
+						on:click|stopPropagation
+						class="flex gap-1 items-center justify-center w-full p-2"
+					>
+						<Delete class="h-5 w-5 text-danger" />
+						<span class="text-danger text-sm">Delete</span>
+					</button>
 				</form>
 			</div>
+		{/each}
+		<div
+			class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
+		>
+			<form
+				id="editVendorFile"
+				method="post"
+				action="?/editVendorFile"
+				use:enhance={({ formData }) => {
+					formData.set('fileNames', fileNames.join(','));
+					formData.set('vendorFile', 'Files');
+				}}
+			>
+				<label>
+					<input
+						class="hidden"
+						type="file"
+						name="vendorFile"
+						multiple
+						on:change={async (e) => {
+							const uploadPromises = [];
+							const cal = e.currentTarget.form;
+							for (const file of e.currentTarget.files ?? []) {
+								uploadPromises.push(
+									(async function () {
+										if (data.vendor) {
+											fileNames = [...fileNames, file.name];
+
+											return await uploadFiles(file, `vendorFile/${data.vendor.id}/${file.name}`);
+										}
+									})()
+								);
+							}
+							const successes = await Promise.all(uploadPromises);
+
+							if (!successes.find((s) => s !== true)) {
+								// @ts-ignore
+								cal.requestSubmit();
+							}
+						}}
+					/>
+
+					<div class=" relative z-10 h-44" />
+					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<div class="flex flex-col gap-2 justify-center items-center h-full">
+							<FileUp class="text-primary w-7 h-7" />
+							<span class="text-xs">Upload File</span>
+							<p class="text-[10px] text-center px-3">
+								Contract, Agreement, pictures or any other document
+							</p>
+						</div>
+					</div>
+				</label>
+			</form>
 		</div>
-	</form>
+	</div>
+
 	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_VENDOR')}
 		<p class="text-2xl mt-10">Danger</p>
 		<hr class="my-6" />

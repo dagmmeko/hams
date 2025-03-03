@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
@@ -8,10 +11,14 @@
 	import type { ActionData, PageData } from './$types';
 	import PropertiesTable from './properties-table.svelte';
 
-	let addModal = false;
+	let addModal = $state(false);
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { data, form }: Props = $props();
 
 	const {
 		form: addPropertyForm,
@@ -22,8 +29,8 @@
 			addModal = false;
 		}
 	});
-	let filterModal = false;
-	$: urlSearchParams = new URLSearchParams($page.url.search);
+	let filterModal = $state(false);
+	let urlSearchParams = $derived(new URLSearchParams(page.url.search));
 </script>
 
 <div>
@@ -31,11 +38,11 @@
 		<div class="grid">
 			<p class="text-2xl">Room Properties</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_PROPERTY')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_PROPERTY')}
 			<button
 				type="submit"
 				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-3"
-				on:click={() => (addModal = true)}
+				onclick={() => (addModal = true)}
 			>
 				New Property</button
 			>
@@ -45,7 +52,7 @@
 		<div class="flex gap-3">
 			<button
 				class="grid border-[1px] border-black/20 grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
-				on:click={() => (filterModal = !filterModal)}
+				onclick={() => (filterModal = !filterModal)}
 			>
 				<FiltersLines class="h-4 w-4" /> Add filters
 			</button>
@@ -70,7 +77,7 @@
 					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
 				>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							await goto(`?`);
 						}}
 						class="hover:underline hover:text-primary"
@@ -79,8 +86,8 @@
 					</button>
 
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyCondition', 'DAMAGED');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -89,8 +96,8 @@
 						Damaged
 					</button>
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyCondition', 'NEEDS_REPAIR');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -99,8 +106,8 @@
 						Needs Repair
 					</button>
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyCondition', 'MISSING_ITEMS');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -109,8 +116,8 @@
 						Missing Items
 					</button>
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyCondition', 'GOOD_CONDITION');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -119,8 +126,8 @@
 						Good Condition
 					</button>
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyAvailability', 'true');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -129,8 +136,8 @@
 						Available
 					</button>
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('propertyAvailability', 'false');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -224,7 +231,7 @@
 						bind:value={$addPropertyForm.description}
 						{...$constraints.description}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Category </span>
@@ -291,7 +298,7 @@
 					</select>
 				</label>
 
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
 					Save Item</button
 				>
 			</div>

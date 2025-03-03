@@ -1,8 +1,11 @@
+<!-- @migration task: review uses of `navigating` -->
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import 'nprogress/nprogress.css';
 
 	import { browser } from '$app/environment';
-	import { navigating } from '$app/stores';
+	import { navigating } from '$app/state';
 	import NProgress from 'nprogress';
 
 	const delay = 250;
@@ -19,7 +22,9 @@
 		state = 'loading';
 
 		timer = setTimeout(function () {
-			NProgress.start();
+			if (browser) {
+				NProgress.start();
+			}
 		}, delay) as unknown as number;
 	}
 
@@ -33,16 +38,18 @@
 		if (timer) {
 			clearTimeout(timer);
 		}
-		NProgress.done();
+		if (browser) {
+			NProgress.done();
+		}
 	}
 
-	$: {
-		if ($navigating) {
+	run(() => {
+		if (navigating) {
 			load();
 		} else {
 			stop();
 		}
-	}
+	});
 
 	if (browser) {
 		NProgress.configure({ showSpinner: false });

@@ -1,20 +1,25 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { signOut } from '@auth/sveltekit/client';
 	import { superForm } from 'sveltekit-superforms/client';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let editable = false;
-	let frontFileData: string;
+	let editable = $state(false);
+	let frontFileData: string = $state();
 
-	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
-	$: form?.passwordChanged ? toast.push('Password changed') : null;
+	run(() => {
+		form?.errorMessage ? toast.push(form.errorMessage) : null;
+	});
+	run(() => {
+		form?.passwordChanged ? toast.push('Password changed') : null;
+	});
 	const {
 		form: editUserForm,
 		enhance: editUserEnhance,
@@ -37,7 +42,7 @@
 					type="file"
 					name="profilePicture"
 					accept="image/*"
-					on:change={(e) => {
+					onchange={(e) => {
 						const data = e.currentTarget.files;
 						if (data) {
 							frontFileData = data[0].name;
@@ -61,7 +66,7 @@
 					type="file"
 					name="profilePicture"
 					accept="image/*"
-					on:change={(e) => {
+					onchange={(e) => {
 						const data = e.currentTarget.files;
 						if (data) {
 							frontFileData = data[0].name;
@@ -74,7 +79,7 @@
 						<div
 							class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
 						>
-							<div class=" relative z-10 w-32 h-36" />
+							<div class=" relative z-10 w-32 h-36"></div>
 
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
@@ -87,7 +92,7 @@
 						<div
 							class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 						>
-							<div class=" relative z-10 w-44 h-36" />
+							<div class=" relative z-10 w-44 h-36"></div>
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUp class="text-primary w-7 h-7" />
@@ -101,7 +106,7 @@
 		</form>
 	{/if}
 	<button
-		on:click={() => signOut()}
+		onclick={() => signOut()}
 		class="text-white bg-danger/90 rounded-lg px-10 py-2 text-xs border-dashed justify-self-center mt-4 w-fit"
 	>
 		Sign Out</button
@@ -121,7 +126,7 @@
 					name="userName"
 					bind:value={$editUserForm.userName}
 					{...$constraints.userName}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
@@ -131,7 +136,7 @@
 					name="phoneNumber"
 					bind:value={$editUserForm.phoneNumber}
 					{...$constraints.phoneNumber}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
@@ -140,7 +145,7 @@
 					disabled
 					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="email"
-					value={$page.data.session?.authUser.email}
+					value={page.data.session?.authUser.email}
 				/>
 			</label>
 
@@ -151,7 +156,7 @@
 					name="address"
 					bind:value={$editUserForm.address}
 					{...$constraints.address}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
@@ -162,7 +167,7 @@
 					name="dateOfBirth"
 					bind:value={$editUserForm.dateOfBirth}
 					{...$constraints.dateOfBirth}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
@@ -172,7 +177,7 @@
 					name="bloodType"
 					bind:value={$editUserForm.bloodType}
 					{...$constraints.bloodType}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 			<label class="grid gap-2">
@@ -183,7 +188,7 @@
 					name="height"
 					bind:value={$editUserForm.height}
 					{...$constraints.height}
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 				/>
 			</label>
 		</div>
@@ -212,7 +217,7 @@
 					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="oldPassword"
 					placeholder="Previous Password"
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 					minlength="8"
 					type="password"
 				/>
@@ -222,7 +227,7 @@
 					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="newPassword"
 					placeholder="New Password"
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 					minlength="8"
 					type="password"
 				/>
@@ -232,7 +237,7 @@
 					class=" border-[1px] border-primary/60 rounded-md p-2"
 					name="confirmPassword"
 					placeholder="Confirm Password"
-					on:change={() => (editable = true)}
+					onchange={() => (editable = true)}
 					minlength="8"
 					type="password"
 				/>

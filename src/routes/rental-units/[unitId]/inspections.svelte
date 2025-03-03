@@ -2,7 +2,11 @@
 	import type { PageData } from './$types';
 	import dayjs from 'dayjs';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div class="mb-6 font-semibold text-xl">Inspections list</div>

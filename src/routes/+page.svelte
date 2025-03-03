@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { run, stopPropagation } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
-	import { Bar, Pie } from 'svelte-chartjs';
+	// import { Bar, Pie } from 'svelte-chartjs';
 	import { superForm } from 'sveltekit-superforms/client';
+	import ChartComponent from '$lib/components/ChartComponent.svelte';
+	import dayjs from 'dayjs';
 
 	import {
 		ArcElement,
@@ -15,7 +19,6 @@
 		Title,
 		Tooltip
 	} from 'chart.js';
-	import dayjs from 'dayjs';
 
 	Chart.register(
 		Title,
@@ -29,16 +32,101 @@
 		LinearScale
 	);
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
 	const { form: usdRateForm, enhance: usdRateEnhance, constraints } = superForm(data.usdRateForm);
-	$: form?.updatedRate ? toast.push('Rate updated successfully') : null;
-	let filterStartDate: any;
-	let filterEndDate: any;
-	let dateInput: any;
-	let dateInput2: any;
-	let disableChangeDollar: boolean = true;
+	run(() => {
+		form?.updatedRate ? toast.push('Rate updated successfully') : null;
+	});
+	let filterStartDate: any = $state();
+	let filterEndDate: any = $state();
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
+	let disableChangeDollar: boolean = $state(true);
+
+	// Chart data configurations
+	const bookingsData = {
+		labels: ['Website', 'Referral', 'Walk-in', 'Phone', 'Email', 'Social Media', 'Broker', 'Other'],
+		datasets: [{
+			data: [
+				data.tenantFromWebsite,
+				data.tenantFromReferral,
+				data.tenantFromWalkIn,
+				data.tenantFromPhone,
+				data.tenantFromEmail,
+				data.tenantFromSocial,
+				data.tenantFromBroker,
+				data.tenantFromOther
+			],
+			backgroundColor: [
+				'#F7464A', '#46BFBD', '#FDB45C', '#949FB1',
+				'#4D5360', '#AC64AD', '#123456', '#654321'
+			],
+			hoverBackgroundColor: [
+				'#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5',
+				'#616774', '#DA92DB', '#789ABC', '#CBA987'
+			]
+		}]
+	};
+
+	const unitStatusData = {
+		labels: ['Out of Service', 'Good Condition', 'Needs Repair'],
+		datasets: [{
+			data: [data.badUnits, data.goodUnits, data.repairUnits],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+		}]
+	};
+
+	const employeeTypeData = {
+		labels: ['Temporary', 'Part Time', 'Full Time'],
+		datasets: [{
+			label: 'Types',
+			data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+		}]
+	};
+
+	const taskStatusData = {
+		labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
+		datasets: [{
+			data: [
+				data.pendingTasks,
+				data.inProgressTasks,
+				data.checkingTasks,
+				data.completedTasks
+			],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+		}]
+	};
+	const vendorTaskData = {
+		labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
+		datasets: [{
+			data: [
+				data.pendingVendorTasks,
+				data.inProgressVendorTasks,
+				data.checkingVendorTasks,
+				data.completedVendorTasks
+			],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+		}]
+	};
+
+	const attendanceData = {
+		labels: ['On Leave', 'Absent', 'Present', 'Is Fired'],
+		datasets: [{
+			label: 'Attendance',
+			data: [
+				data.onLeaveEmployees,
+				data.absentEmployees,
+				data.activeEmployees,
+				data.firedEmployees
+			],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+		}]
+	};
 </script>
 
 <div class="mx-10 my-12">
@@ -54,7 +142,7 @@
 				name="usdRate"
 				bind:value={$usdRateForm.usdRate}
 				{...$constraints.usdRate}
-				on:input={() => {
+				oninput={() => {
 					disableChangeDollar = false;
 				}}
 			/>
@@ -62,7 +150,7 @@
 		<label class="hidden">
 			<input name="id" bind:value={$usdRateForm.id} {...$constraints.id} />
 		</label>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_DOLLAR_VALUE')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_DOLLAR_VALUE')}
 			<button
 				disabled={disableChangeDollar}
 				type="submit"
@@ -74,7 +162,7 @@
 			</button>
 		{/if}
 	</form>
-	<div class="w-fit" />
+	<div class="w-fit"></div>
 	<div class="my-6">
 		<p class="text-2xl font-medium text-primary">General Statistics</p>
 	</div>
@@ -130,84 +218,41 @@
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Bookings by source </span>
 
-			<Pie
-				data={{
-					datasets: [
-						{
-							data: [
-								data.tenantFromWebsite,
-								data.tenantFromReferral,
-								data.tenantFromWalkIn,
-								data.tenantFromPhone,
-								data.tenantFromEmail,
-								data.tenantFromSocial,
-								data.tenantFromBroker,
-								data.tenantFromOther
-							],
-							backgroundColor: [
-								'#F7464A',
-								'#46BFBD',
-								'#FDB45C',
-								'#949FB1',
-								'#4D5360',
-								'#AC64AD',
-								'#123456',
-								'#654321'
-							],
-							hoverBackgroundColor: [
-								'#FF5A5E',
-								'#5AD3D1',
-								'#FFC870',
-								'#A8B3C5',
-								'#616774',
-								'#DA92DB',
-								'#789ABC',
-								'#CBA987'
-							]
-						}
-					],
-					labels: [
-						'Website',
-						'Referral',
-						'Walk-in',
-						'Phone',
-						'Email',
-						'Social Media',
-						'Broker',
-						'Other'
+			<ChartComponent 
+				type="pie" 
+				rawData={{
+					type: 'bookings',
+					values: [
+						data.tenantFromWebsite,
+						data.tenantFromReferral,
+						data.tenantFromWalkIn,
+						data.tenantFromPhone,
+						data.tenantFromEmail,
+						data.tenantFromSocial,
+						data.tenantFromBroker,
+						data.tenantFromOther
 					]
 				}}
-				options={{ responsive: true }}
 			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Unit Status </span>
-
-			<Pie
-				data={{
-					labels: ['Out of Service', 'Good Condition', 'Needs Repair'],
-					datasets: [
-						{
-							data: [data.badUnits, data.goodUnits, data.repairUnits],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-						}
-					]
+			<ChartComponent 
+				type="pie" 
+				rawData={{
+					type: 'unitStatus',
+					values: [data.badUnits, data.goodUnits, data.repairUnits]
 				}}
 			/>
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
 			<span class="text-xl my-2"> Employee Type </span>
-			<Bar
-				data={{
-					labels: ['Temporary', 'Part Time', 'Full Time'],
-					datasets: [
-						{
-							label: 'Types',
-							data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-						}
-					]
+			<ChartComponent 
+				type="bar" 
+				rawData={{
+					type: 'employeeType',
+					label: 'Types',
+					values: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees]
 				}}
 			/>
 		</div>
@@ -223,7 +268,7 @@
 				name="filterStartDate"
 				bind:value={filterStartDate}
 				bind:this={dateInput}
-				on:click={() => {
+				onclick={() => {
 					dateInput && dateInput.showPicker();
 				}}
 			/>
@@ -237,15 +282,15 @@
 				name="filterEndDate"
 				bind:value={filterEndDate}
 				bind:this={dateInput2}
-				on:click={() => {
+				onclick={() => {
 					dateInput2 && dateInput2.showPicker();
 				}}
 			/>
 		</label>
 		<button
-			on:click|stopPropagation={async () => {
+			onclick={stopPropagation(async () => {
 				if (filterStartDate && filterEndDate) {
-					const newFilterParams = new URLSearchParams($page.url.search);
+					const newFilterParams = new URLSearchParams(page.url.search);
 
 					newFilterParams.set('filterStartDate', filterStartDate);
 					newFilterParams.set('filterEndDate', filterEndDate);
@@ -253,7 +298,7 @@
 				} else {
 					await goto(`?`);
 				}
-			}}
+			})}
 			class="bg-primary text-gray-200 rounded-md py-2 px-6 mr-4 h-fit"
 		>
 			Filter result
@@ -262,20 +307,15 @@
 	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Internal Task Status </span>
-			<Pie
-				data={{
-					labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
-					datasets: [
-						{
-							data: [
-								data.pendingTasks,
-								data.inProgressTasks,
-								data.checkingTasks,
-								data.completedTasks
-							],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-						}
+			<ChartComponent 
+				type="pie" 
+				rawData={{
+					type: 'taskStatus',
+					values: [
+						data.pendingTasks,
+						data.inProgressTasks,
+						data.checkingTasks,
+						data.completedTasks
 					]
 				}}
 			/>
@@ -285,20 +325,15 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Vendor Task Status </span>
-			<Pie
-				data={{
-					labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
-					datasets: [
-						{
-							data: [
-								data.pendingVendorTasks,
-								data.inProgressVendorTasks,
-								data.checkingVendorTasks,
-								data.completedVendorTasks
-							],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-							hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-						}
+			<ChartComponent 
+				type="pie" 
+				rawData={{
+					type: 'taskStatus',
+					values: [
+						data.pendingVendorTasks,
+						data.inProgressVendorTasks,
+						data.checkingVendorTasks,
+						data.completedVendorTasks
 					]
 				}}
 			/>
@@ -308,20 +343,16 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
 			<span class="text-xl my-2"> Attendance </span>
-			<Bar
-				data={{
-					labels: ['On Leave', 'Absent', 'Present', 'Is Fired'],
-					datasets: [
-						{
-							label: 'Attendance',
-							data: [
-								data.onLeaveEmployees,
-								data.absentEmployees,
-								data.activeEmployees,
-								data.firedEmployees
-							],
-							backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-						}
+			<ChartComponent 
+				type="bar" 
+				rawData={{
+					type: 'attendance',
+					label: 'Attendance',
+					values: [
+						data.onLeaveEmployees,
+						data.absentEmployees,
+						data.activeEmployees,
+						data.firedEmployees
 					]
 				}}
 			/>

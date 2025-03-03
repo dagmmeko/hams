@@ -4,13 +4,22 @@
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data: PageData;
-	export let form: ActionData;
-	export let selectedRentedUnitId: number;
-	export let editRentedUnitModal: boolean;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+		selectedRentedUnitId: number;
+		editRentedUnitModal: boolean;
+	}
 
-	let dateInput: any;
-	let dateInput2: any;
+	let {
+		data,
+		form,
+		selectedRentedUnitId,
+		editRentedUnitModal = $bindable()
+	}: Props = $props();
+
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
 
 	const rentedUnit = data.tenant?.TenantRental.find((rental) => {
 		return rental.id === selectedRentedUnitId;
@@ -41,7 +50,7 @@
 			value={dayjs(rentedUnit?.contractStartDate).format('YYYY-MM-DD')}
 			class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
 			bind:this={dateInput}
-			on:click={() => {
+			onclick={() => {
 				dateInput && dateInput.showPicker();
 			}}
 		/>
@@ -54,7 +63,7 @@
 			value={dayjs(rentedUnit?.contractEndDate).format('YYYY-MM-DD')}
 			class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
 			bind:this={dateInput2}
-			on:click={() => {
+			onclick={() => {
 				dateInput2 && dateInput2.showPicker();
 			}}
 		/>

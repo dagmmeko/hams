@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
 	import type { PageData } from './$types';
@@ -9,13 +12,17 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
 
-	let modal = false;
-	let dateInput: any;
+	let modal = $state(false);
+	let dateInput: any = $state();
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	$: rows = data.tasks ?? [];
-	$: columns = [
+	let { data }: Props = $props();
+
+	let rows = $derived(data.tasks ?? []);
+	let columns = $derived([
 		{
 			key: 'task',
 			title: 'Task Description',
@@ -65,7 +72,7 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 	const {
 		form: addVendorTaskForm,
 		enhance: addVendorTaskFormEnhance,
@@ -83,8 +90,8 @@
 			<p class="text-lg">Tasks</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.tasks.length} Task</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_TASK')}
-			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_TASK')}
+			<button class="bg-primary text-white rounded-md py-2 px-6" onclick={() => (modal = true)}>
 				New Task</button
 			>
 		{/if}
@@ -103,8 +110,8 @@
 				id="search"
 				name="search"
 				placeholder="Search"
-				on:change={async (e) => {
-					const newSearchParams = new URLSearchParams($page.url.search);
+				onchange={async (e) => {
+					const newSearchParams = new URLSearchParams(page.url.search);
 					newSearchParams.set('searchTask', e.currentTarget.value);
 					await goto(`?${newSearchParams.toString()}`);
 				}}
@@ -185,7 +192,7 @@
 					type="date"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput}
-					on:click={() => {
+					onclick={() => {
 						dateInput && dateInput.showPicker();
 					}}
 					required
@@ -211,7 +218,7 @@
 				</select>
 			</label>
 
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 				Save Task
 			</button>
 		</div>

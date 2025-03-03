@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Line, Bar } from 'svelte-chartjs';
+	import { stopPropagation } from 'svelte/legacy';
+	import ChartComponent from '$lib/components/ChartComponent.svelte';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
 	import dayjs from 'dayjs';
 
@@ -33,12 +34,12 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { map } from 'zod';
 
-	export let data;
+	let { data } = $props();
 
-	let filterStartDate: any;
-	let filterEndDate: any;
-	let dateInput: any;
-	let dateInput2: any;
+	let filterStartDate: any = $state();
+	let filterEndDate: any = $state();
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
 
 	let crvSum = data.crvReceipts.reduce((acc, receipt) => {
 		if (receipt.crvReceipt) {
@@ -69,7 +70,7 @@
 				name="filterStartDate"
 				bind:value={filterStartDate}
 				bind:this={dateInput}
-				on:click={() => {
+				onclick={() => {
 					dateInput && dateInput.showPicker();
 				}}
 			/>
@@ -83,15 +84,15 @@
 				name="filterEndDate"
 				bind:value={filterEndDate}
 				bind:this={dateInput2}
-				on:click={() => {
+				onclick={() => {
 					dateInput2 && dateInput2.showPicker();
 				}}
 			/>
 		</label>
 		<button
-			on:click|stopPropagation={async () => {
+			onclick={stopPropagation(async () => {
 				if (filterStartDate && filterEndDate) {
-					const newFilterParams = new URLSearchParams($page.url.search);
+					const newFilterParams = new URLSearchParams(page.url.search);
 
 					newFilterParams.set('filterStartDate', filterStartDate);
 					newFilterParams.set('filterEndDate', filterEndDate);
@@ -100,7 +101,7 @@
 					toast.push('Please select both start and end date');
 					await goto(`?/accounting`);
 				}
-			}}
+			})}
 			class="bg-primary text-gray-200 rounded-md py-2 px-6 mr-4 h-fit"
 		>
 			Filter result
@@ -117,32 +118,13 @@
 					currencyDisplay: 'code'
 				})}
 			</p>
-			<Line
-				data={{
-					labels: data.receipts.map((receipt) => {
-						return dayjs(receipt.receiptReceivedOn).format('DD/MM/YYYY');
-					}),
-					datasets: [
-						{
-							label: 'Total revenue',
-							data: data.receipts.map((receipt) => {
-								return receipt.amount;
-							}),
-							backgroundColor: 'rgba(255, 99, 132, 0.2)',
-							borderColor: 'rgba(255, 99, 132, 1)',
-							borderWidth: 1,
-							pointBackgroundColor: 'rgb(255, 255, 255)',
-							pointBorderWidth: 10,
-							pointHoverRadius: 5,
-							pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-							pointHoverBorderColor: 'rgba(220, 220, 220,1)',
-							pointHoverBorderWidth: 2,
-							pointRadius: 1,
-							pointHitRadius: 10
-						}
-					]
+			<ChartComponent 
+				type="line" 
+				rawData={{
+					type: 'revenue',
+					label: 'Total revenue',
+					values: data.receipts.map((receipt) => receipt.amount)
 				}}
-				options={{ responsive: true }}
 			/>
 		</div>
 
@@ -224,39 +206,18 @@
 					currencyDisplay: 'code'
 				}
 			)}
-			<Line
-				data={{
-					labels: data.receipts.map((receipt) => {
-						return dayjs(receipt.receiptReceivedOn).format('DD/MM/YYYY');
-					}),
-					datasets: [
-						{
-							label: '',
-							data: data.receipts.map((receipt) => {
-								if (
-									!receipt.crvReceipt &&
-									!receipt.isRentPayment &&
-									!receipt.isUtilityAndRentPayment
-								) {
-									return receipt.amount;
-								}
-								return 0;
-							}),
-							backgroundColor: 'rgba(255, 99, 132, 0.2)',
-							borderColor: 'rgba(255, 99, 132, 1)',
-							borderWidth: 1,
-							pointBackgroundColor: 'rgb(255, 255, 255)',
-							pointBorderWidth: 10,
-							pointHoverRadius: 5,
-							pointHoverBackgroundColor: 'rgb(0, 0, 0)',
-							pointHoverBorderColor: 'rgba(220, 220, 220,1)',
-							pointHoverBorderWidth: 2,
-							pointRadius: 1,
-							pointHitRadius: 10
+			<ChartComponent 
+				type="line" 
+				rawData={{
+					type: 'utility',
+					label: 'Utility Bills',
+					values: data.receipts.map((receipt) => {
+						if (!receipt.crvReceipt && !receipt.isRentPayment && !receipt.isUtilityAndRentPayment) {
+							return receipt.amount;
 						}
-					]
+						return 0;
+					})
 				}}
-				options={{ responsive: true }}
 			/>
 		</div>
 
@@ -275,21 +236,17 @@
 					}
 				)}
 			</p>
-			<Bar
-				data={{
-					labels: ['Cleaning', 'Electricity', 'Pluming', 'Painting', 'Security'],
-					datasets: [
-						{
-							label: '',
-							data: [
-								data.totalCleaningFee,
-								data.totalElectricityFee,
-								data.totalPlumbingFee,
-								data.totalPaintingFee,
-								data.totalSecurityFee
-							],
-							backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360']
-						}
+			<ChartComponent 
+				type="bar" 
+				rawData={{
+					type: 'maintenance',
+					label: 'Maintenance Costs',
+					values: [
+						data.totalCleaningFee,
+						data.totalElectricityFee,
+						data.totalPlumbingFee,
+						data.totalPaintingFee,
+						data.totalSecurityFee
 					]
 				}}
 			/>

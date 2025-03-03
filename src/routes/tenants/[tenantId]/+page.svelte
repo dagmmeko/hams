@@ -3,11 +3,10 @@
 	import Tenant from './tenant.svelte';
 	import TenantPriceChange from './tenant-price-change.svelte';
 	import EndingProcess from './ending-process.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let data;
-	export let form;
-	const paramsDisplay = $page.url.searchParams.get('display') as
+	let { data = $bindable(), form = $bindable() } = $props();
+	const paramsDisplay = page.url.searchParams.get('display') as
 		| 'tenant'
 		| 'receipts'
 		| 'priceChange'
@@ -15,14 +14,14 @@
 		| null;
 
 	let displayedComponent: 'tenant' | 'receipts' | 'priceChange' | 'ending' =
-		paramsDisplay || 'tenant';
+		$state(paramsDisplay || 'tenant');
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">
 	<p class="text-xs text-black/50 mb-5">Tenant Detail / {data.tenant?.fullName}</p>
 
 	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
-		<button on:click={() => (displayedComponent = 'tenant')}>
+		<button onclick={() => (displayedComponent = 'tenant')}>
 			<p
 				class="py-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'tenant'
 					? 'bg-white'
@@ -31,7 +30,7 @@
 				Tenant
 			</p>
 		</button>
-		<button on:click={() => (displayedComponent = 'receipts')}
+		<button onclick={() => (displayedComponent = 'receipts')}
 			><p
 				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'receipts'
 					? 'bg-white'
@@ -40,7 +39,7 @@
 				Receipts
 			</p></button
 		>
-		<button on:click={() => (displayedComponent = 'priceChange')}>
+		<button onclick={() => (displayedComponent = 'priceChange')}>
 			<p
 				class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent ===
 				'priceChange'
@@ -50,8 +49,8 @@
 				Price Change
 			</p>
 		</button>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
-			<button on:click={() => (displayedComponent = 'ending')}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
+			<button onclick={() => (displayedComponent = 'ending')}>
 				<p
 					class="p-2 md:px-3 px-2 text-xs md:text-base rounded-md {displayedComponent === 'ending'
 						? 'bg-white'
@@ -69,7 +68,7 @@
 		<Receipts bind:data bind:form />
 	{:else if displayedComponent === 'priceChange'}
 		<TenantPriceChange bind:data bind:form />
-	{:else if displayedComponent === 'ending' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
+	{:else if displayedComponent === 'ending' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'END_CONTRACT')}
 		<EndingProcess bind:data bind:form />
 	{:else}
 		<p>Something went wrong</p>

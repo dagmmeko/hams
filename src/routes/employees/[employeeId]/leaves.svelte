@@ -1,20 +1,27 @@
 <script lang="ts">
+	import { handlers, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { page, updated } from '$app/stores';
+	import { page, updated } from '$app/state';
 	import type { PageData } from './$types';
 	import DeleteLeavesTableComponent from './delete-leaves-table-component.svelte';
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data: PageData;
-	let dateInput: any;
-	let dateInput2: any;
+	interface Props {
+		data: PageData;
+	}
 
-	let modal = false;
-	let editModal = false;
+	let { data }: Props = $props();
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
+
+	let modal = $state(false);
+	let editModal = $state(false);
 
 	let hasDeleteLeavesScope = true;
 	const {
@@ -29,8 +36,8 @@
 
 	// const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 
-	$: rows = data.employee.EmployeesLeaves;
-	$: columns = [
+	let rows = $derived(data.employee.EmployeesLeaves);
+	let columns = $derived([
 		{
 			key: 'title',
 			title: 'Reason',
@@ -81,9 +88,9 @@
 					class: 'border-b-[1px] border-[#B3B4B8]'
 			  }
 			: (null as unknown as TableColumn<typeof rows[number]>)
-	];
+	]);
 
-	let selectedLeave: any;
+	let selectedLeave: any = $state();
 </script>
 
 <div class="">
@@ -91,11 +98,10 @@
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Leave</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_LEAVES')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_LEAVES')}
 			<button
-				on:click={() => (modal = true)}
+				onclick={handlers(() => (modal = true), () => (modal = true))}
 				class="bg-primary text-white rounded-md py-2 px-6"
-				on:click={() => (modal = true)}
 			>
 				New Leave Permission</button
 			>
@@ -106,7 +112,7 @@
 			classNameTable="rolesTable"
 			on:clickCell={(event) => {
 				if (
-					$page.data.session?.authUser.Employee.Role.Scopes.find(
+					page.data.session?.authUser.Employee.Role.Scopes.find(
 						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE'
 					)
 				) {
@@ -145,7 +151,7 @@
 						{...$constraints.description}
 						name="description"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 
 				<label class="grid">
@@ -154,7 +160,7 @@
 						type="date"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						required
@@ -169,7 +175,7 @@
 						type="date"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput2}
-						on:click={() => {
+						onclick={() => {
 							dateInput2 && dateInput2.showPicker();
 						}}
 						required
@@ -178,7 +184,7 @@
 						name="endDate"
 					/>
 				</label>
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 					Save Leave
 				</button>
 			</div>
@@ -222,7 +228,7 @@
 						value={selectedLeave.description}
 						name="editedDescription"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 
 				<label class="grid">
@@ -231,7 +237,7 @@
 						type="date"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						required
@@ -245,7 +251,7 @@
 						type="date"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput2}
-						on:click={() => {
+						onclick={() => {
 							dateInput2 && dateInput2.showPicker();
 						}}
 						required
@@ -253,7 +259,7 @@
 						name="editedEndDate"
 					/>
 				</label>
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 					Edit Leave
 				</button>
 			</div>

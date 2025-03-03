@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let dateInput: any;
-	let dateInput2: any;
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
 
 	const {
 		form: approveRentForm,
@@ -15,12 +16,16 @@
 		constraints: approveRentConstraints
 	} = superForm(data.approveRentForm, {
 		onSubmit: ({ formData }) => {
-			formData.set('priceChangeId', $page.url.searchParams.get('priceChangeId') ?? '');
+			formData.set('priceChangeId', page.url.searchParams.get('priceChangeId') ?? '');
 		}
 	});
 	data.approveRentForm;
-	$: form?.tenant ? goto(`/tenants/${form.tenant.id}?display=receipts`) : null;
-	$: form?.tenant ? toast.push('Tenant Rented') : null;
+	run(() => {
+		form?.tenant ? goto(`/tenants/${form.tenant.id}?display=receipts`) : null;
+	});
+	run(() => {
+		form?.tenant ? toast.push('Tenant Rented') : null;
+	});
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">
@@ -71,7 +76,7 @@
 						name="startDate"
 						class=" border-[1px] border-black/60 rounded-md p-2"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						bind:value={$approveRentForm.startDate}
@@ -87,7 +92,7 @@
 						name="endDate"
 						class="border-[1px] border-black/60 rounded-md p-2"
 						bind:this={dateInput2}
-						on:click={() => {
+						onclick={() => {
 							dateInput2 && dateInput2.showPicker();
 						}}
 						bind:value={$approveRentForm.endDate}

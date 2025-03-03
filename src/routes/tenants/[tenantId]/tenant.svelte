@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { run, preventDefault, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import Eye from '$lib/assets/eye.svg.svelte';
 	import FileBg from '$lib/assets/file-bg.png';
@@ -16,27 +19,43 @@
 	import { uploadFiles } from '$lib/utils/upload-files';
 	import EditRentedUnit from './edit-rented-unit.svelte';
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { data, form }: Props = $props();
 	const {
 		form: editTenantForm,
 		enhance: editTenantFormEnhance,
 		constraints
 	} = superForm(data.editTenantForm);
-	$: form?.editTenant ? toast.push('Tenant updated successfully') : null;
-	$: form?.deleteFile ? toast.push('File deleted successfully') : null;
-	$: form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
-	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
-	$: form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
-	$: console.log(form?.fileUrl);
+	run(() => {
+		form?.editTenant ? toast.push('Tenant updated successfully') : null;
+	});
+	run(() => {
+		form?.deleteFile ? toast.push('File deleted successfully') : null;
+	});
+	run(() => {
+		form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
+	});
+	run(() => {
+		form?.errorMessage ? toast.push(form.errorMessage) : null;
+	});
+	run(() => {
+		form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
+	});
+	run(() => {
+		console.log(form?.fileUrl);
+	});
 
-	let extendContractModal = false;
-	let unitToExtend: any;
-	let endContractModal = false;
-	let unitToEnd: any;
-	let fileNames: string[] = [];
-	let editRentedUnitModal = false;
-	let selectedRentedUnitId: any;
+	let extendContractModal = $state(false);
+	let unitToExtend: any = $state();
+	let endContractModal = $state(false);
+	let unitToEnd: any = $state();
+	let fileNames: string[] = $state([]);
+	let editRentedUnitModal = $state(false);
+	let selectedRentedUnitId: any = $state();
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -46,7 +65,7 @@
 				<p class="text-2xl">Tenant Info</p>
 				<p class=" text-sm py-1 rounded-xl">Tenant details here.</p>
 			</div>
-			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_TENANT')}
+			{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_TENANT')}
 				<div class="justify-self-end">
 					<button type="submit" class="bg-primary text-white rounded-md py-2 px-6">
 						Update Info
@@ -125,7 +144,7 @@
 					{#if tenantUnit.active && tenantUnit.exitingTenant === false}
 						<div class="bg-primary/10 w-full shadow-md p-2 mb-3 rounded-md">
 							<button
-								on:click={() => {
+								onclick={() => {
 									editRentedUnitModal = true;
 									selectedRentedUnitId = tenantUnit.id;
 								}}
@@ -157,24 +176,24 @@
 							</button>
 
 							<div class="flex gap-2 mt-1">
-								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
+								{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
 									<button
 										class="bg-orange-600 rounded-md p-2 text-xs text-white"
-										on:click|preventDefault={() => {
+										onclick={preventDefault(() => {
 											endContractModal = true;
 											unitToExtend = tenantUnit.id;
-										}}
+										})}
 									>
 										Start End Process
 									</button>
 								{/if}
-								{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
+								{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
 									<button
 										class="bg-info rounded-md p-2 text-xs text-white"
-										on:click|preventDefault={() => {
+										onclick={preventDefault(() => {
 											extendContractModal = true;
 											unitToEnd = tenantUnit.id;
-										}}
+										})}
 									>
 										Extend Contract
 									</button>
@@ -211,7 +230,7 @@
 									}}
 									class="flex flex-col gap-2 justify-center items-center h-full"
 								>
-									<button on:click|stopPropagation type="submit">
+									<button onclick={stopPropagation(bubble('click'))} type="submit">
 										<div class="h-full w-full flex flex-col items-center justify-center">
 											<Eye class="text-primary w-7 h-7" />
 											<span class="text-sm mx-3 py-2 break-all">
@@ -230,7 +249,7 @@
 							}}
 						>
 							<button
-								on:click|stopPropagation
+								onclick={stopPropagation(bubble('click'))}
 								class="flex gap-1 items-center justify-center w-full p-2"
 							>
 								<Delete class="h-5 w-5 text-danger" />
@@ -256,7 +275,7 @@
 								type="file"
 								name="tenantFile"
 								multiple
-								on:change={async (e) => {
+								onchange={async (e) => {
 									const uploadPromises = [];
 									const cal = e.currentTarget.form;
 									for (const file of e.currentTarget.files ?? []) {
@@ -281,7 +300,7 @@
 								}}
 							/>
 
-							<div class=" relative z-10 h-44" />
+							<div class=" relative z-10 h-44"></div>
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUp class="text-primary w-7 h-7" />
@@ -297,7 +316,7 @@
 			</div>
 		</div>
 	</div>
-	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_TENANT')}
+	{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_TENANT')}
 		<p class="text-2xl mt-6">Danger</p>
 		<hr class="my-6" />
 
@@ -314,7 +333,7 @@
 					{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
 						<button
 							type="button"
-							on:click|stopPropagation={() => toast.push('Can not delete an active Tenant.')}
+							onclick={stopPropagation(() => toast.push('Can not delete an active Tenant.'))}
 							class="bg-subtitle text-white/50 hover:cursor-default rounded-md py-2 px-6"
 							>Archive</button
 						>

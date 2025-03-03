@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import Logo from '$lib/assets/Logo.svg.svelte';
 	import { signIn } from '@auth/sveltekit/client';
 
-	let email: string;
-	let password: string;
+	let email: string = $state();
+	let password: string = $state();
 	const login = async () => {
 		const auth = await signIn('credentials', {
 			callbackUrl: '/',
@@ -20,7 +22,7 @@
 			<p class="text-xl font-semibold">Login</p>
 			<p class="text-sm text-subtitle pt-2">Login to you company account</p>
 		</div>
-		<form class="grid gap-6 mt-6" method="post" action="#" on:submit|preventDefault={() => login()}>
+		<form class="grid gap-6 mt-6" method="post" action="#" onsubmit={preventDefault(() => login())}>
 			<label class="grid">
 				<span> Email </span>
 				<input

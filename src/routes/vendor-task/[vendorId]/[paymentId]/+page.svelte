@@ -3,7 +3,7 @@
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import dayjs from 'dayjs';
 
-	export let data;
+	let { data } = $props();
 
 	let modal = false;
 

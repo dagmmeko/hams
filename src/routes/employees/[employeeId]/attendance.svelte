@@ -1,16 +1,23 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { enhance } from '$app/forms';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
 	import type { PageData } from './$types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	let modal = false;
+	let { data }: Props = $props();
 
-	let selectedAttendance: any;
+	let modal = $state(false);
+
+	let selectedAttendance: any = $state();
 
 	// const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 </script>
@@ -20,9 +27,9 @@
 		<div class="flex space-x-4">
 			<p class="text-lg">Employee Attendance</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ABSENT')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ABSENT')}
 			<form method="post" use:enhance action="?/markAbsent">
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 px-6">
 					Mark Today absent</button
 				>
 			</form>
@@ -31,9 +38,9 @@
 	<div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 my-6">
 		{#each data.employee.Attendance as attendance}
 			<button
-				on:click={() => {
+				onclick={() => {
 					if (
-						$page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ABSENT')
+						page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ABSENT')
 					) {
 						modal = true;
 						selectedAttendance = attendance;
@@ -104,10 +111,10 @@
 						value={selectedAttendance.description}
 						name="description"
 						class="w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 					Save Attendance
 				</button>
 			</div>

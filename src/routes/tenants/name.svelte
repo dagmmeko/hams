@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let row: any;
+	interface Props {
+		row: any;
+	}
+
+	let { row }: Props = $props();
 </script>
 
 <div class="grid grid-flow-col w-fit gap-6 items-center">

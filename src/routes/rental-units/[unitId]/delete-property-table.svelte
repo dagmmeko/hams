@@ -1,13 +1,19 @@
 <script lang="ts">
+	import { stopPropagation } from 'svelte/legacy';
+
 	import type { PageData, ActionData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let row: any;
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		row: any;
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { row, data, form }: Props = $props();
 
 	const { enhance } = superForm(data.deletePropertyForm, {
 		id: row.id,
@@ -22,8 +28,8 @@
 	// $: form?.deleteProperty ? toast.push('Property deleted successfully') : null;
 </script>
 
-{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_UNIT_PROPERTY')}
+{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_UNIT_PROPERTY')}
 	<form use:enhance method="post" action="?/deleteProperty">
-		<button on:click|stopPropagation={() => {}}> <Delete class="text-danger" /> </button>
+		<button onclick={stopPropagation(() => {})}> <Delete class="text-danger" /> </button>
 	</form>
 {/if}

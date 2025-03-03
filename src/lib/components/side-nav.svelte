@@ -7,7 +7,7 @@
 	import Store from '$lib/assets/store.svg.svelte';
 	import Webhook from '$lib/assets/webhook.svg.svelte';
 
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Home from '$lib/assets/home.svg.svelte';
 	import Task from '$lib/assets/task.svg.svelte';
 </script>
@@ -17,7 +17,7 @@
 	<div class="grid gap-3">
 		<a href="/">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -26,7 +26,7 @@
 		</a>
 		<a href="/rental-units">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/rental-units'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/rental-units'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -35,7 +35,7 @@
 		</a>
 		<a href="/tenants">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/tenants'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/tenants'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -44,7 +44,7 @@
 		</a>
 		<a href="/employees">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/employees'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/employees'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -53,7 +53,7 @@
 		</a>
 		<a href="/accounting">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/accounting'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/accounting'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -62,7 +62,7 @@
 		</a>
 		<a href="/vendor-task">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/vendor-task'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/vendor-task'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -71,7 +71,7 @@
 		</a>
 		<a href="/roles">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/roles'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/roles'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -80,7 +80,7 @@
 		</a>
 		<a href="/tasks">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/tasks'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/tasks'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>
@@ -89,7 +89,7 @@
 		</a>
 		<!-- <a href="/cms">
 			<div
-				class="text-white flex md:gap-2 gap-0 m-2 {$page.url.pathname === '/cms'
+				class="text-white flex md:gap-2 gap-0 m-2 {page.url.pathname === '/cms'
 					? 'bg-primary rounded-md p-1'
 					: ''}"
 			>

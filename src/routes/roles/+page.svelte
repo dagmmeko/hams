@@ -1,20 +1,21 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
 	import dayjs from 'dayjs';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import DeleteRoleTableComponent from './delete-role-table-component.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let form;
 
 	let dateInput: any;
 	let hasDeleteRoleScope = true;
 
-	export let data;
-	$: rows = data.roles;
-	$: columns = [
+	let { form, data } = $props();
+	let rows = $derived(data.roles);
+	let columns = $derived([
 		{
 			key: 'title',
 			title: 'Role',
@@ -54,8 +55,10 @@
 					class: 'border-b-[1px] border-[#B3B4B8]'
 			  }
 			: (null as unknown as TableColumn<typeof rows[number]>)
-	];
-	$: form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
+	]);
+	run(() => {
+		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
+	});
 </script>
 
 <div>
@@ -67,7 +70,7 @@
 					{data.roles.length} Roles
 				</p>
 			</div>
-			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ROLE')}
+			{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ROLE')}
 				<a href="/roles/add-role" class="bg-primary text-white text-sm rounded-md py-2 px-6">
 					New Role</a
 				>
@@ -87,8 +90,8 @@
 					id="search"
 					name="search"
 					placeholder="Search"
-					on:change={async (e) => {
-						const newSearchParams = new URLSearchParams($page.url.search);
+					onchange={async (e) => {
+						const newSearchParams = new URLSearchParams(page.url.search);
 						newSearchParams.set('search', e.currentTarget.value);
 						await goto(`?${newSearchParams.toString()}`);
 					}}
@@ -100,7 +103,7 @@
 			on:clickCell={(event) => {
 				const roleId = event.detail.row.id;
 				if (
-					$page.data.session?.authUser.Employee.Role.Scopes.find(
+					page.data.session?.authUser.Employee.Role.Scopes.find(
 						(s) => s.name === 'VIEW_ROLE_DETAIL_PAGE'
 					)
 				) {

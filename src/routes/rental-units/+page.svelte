@@ -10,12 +10,12 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { clickOutside } from '$lib/utils/click-outside';
 
-	export let data;
+	let { data } = $props();
 
-	let filterModal = false;
+	let filterModal = $state(false);
 
-	$: rows = data.units;
-	$: columns = [
+	let rows = $derived(data.units);
+	let columns = $derived([
 		{
 			key: 'roomNo',
 			title: 'Room Number',
@@ -92,9 +92,9 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 
-	$: urlSearchParams = new URLSearchParams($page.url.search);
+	let urlSearchParams = $derived(new URLSearchParams($page.url.search));
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
@@ -113,7 +113,7 @@
 		<div class="flex gap-3">
 			<button
 				class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-2 text-sm shadow-md bg-white"
-				on:click={() => (filterModal = !filterModal)}
+				onclick={() => (filterModal = !filterModal)}
 			>
 				<FiltersLines class="h-4 w-4" /> Add filters
 			</button>
@@ -141,7 +141,7 @@
 				type="search"
 				id="search"
 				name="search"
-				on:change={async (e) => {
+				onchange={async (e) => {
 					const newSearchParams = new URLSearchParams($page.url.search);
 					newSearchParams.set('search', e.currentTarget.value);
 					await goto(`?${newSearchParams.toString()}`);
@@ -155,7 +155,7 @@
 					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
 				>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							await goto(`?`);
 						}}
 						class="hover:underline hover:text-primary"
@@ -163,7 +163,7 @@
 						All
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('condition', 'GOOD_CONDITION');
 							await goto(`?${newSearchParams.toString()}`);
@@ -173,7 +173,7 @@
 						Good Condition
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('condition', 'NEEDS_REPAIR');
 							await goto(`?${newSearchParams.toString()}`);
@@ -183,7 +183,7 @@
 						Needs Repair
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('condition', 'OUT_OF_SERVICE');
 							await goto(`?${newSearchParams.toString()}`);
@@ -193,7 +193,7 @@
 						Out of Service
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('status', 'vacant');
 							await goto(`?${newSearchParams.toString()}`);
@@ -203,7 +203,7 @@
 						Vacant
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('status', 'occupied');
 							await goto(`?${newSearchParams.toString()}`);
@@ -213,7 +213,7 @@
 						Occupied
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('unitType', 'COMMERCIAL');
 							await goto(`?${newSearchParams.toString()}`);
@@ -223,7 +223,7 @@
 						Commercial
 					</button>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							const newSearchParams = new URLSearchParams($page.url.search);
 							newSearchParams.set('unitType', 'RESIDENTIAL');
 							await goto(`?${newSearchParams.toString()}`);

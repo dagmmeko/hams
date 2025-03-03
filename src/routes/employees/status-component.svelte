@@ -2,8 +2,12 @@
 	import type { PageData } from './$types';
 	import Dot from '$lib/assets/dot.svg.svelte';
 
-	export let row: any;
-	export let data: PageData;
+	interface Props {
+		row: any;
+		data: PageData;
+	}
+
+	let { row, data }: Props = $props();
 </script>
 
 <div

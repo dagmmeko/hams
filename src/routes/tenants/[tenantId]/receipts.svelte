@@ -1,24 +1,30 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { numberToCurrency } from '$lib/utils/currency';
 	import dayjs from 'dayjs';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import EditReceipt from './edit-receipt.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	let modal = false;
+	let modal = $state(false);
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
 
-	let dateInput: any;
-	let dateInput2: any;
-	let dateInput3: any;
-	let editReceiptModal = false;
-	let selectedReceiptId: number;
+	let { data, form }: Props = $props();
+
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
+	let dateInput3: any = $state();
+	let editReceiptModal = $state(false);
+	let selectedReceiptId: number = $state();
 
 	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
 
@@ -31,7 +37,9 @@
 			modal = false;
 		}
 	});
-	$: form?.newReceipts ? toast.push('Receipt added successfully') : null;
+	run(() => {
+		form?.newReceipts ? toast.push('Receipt added successfully') : null;
+	});
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -40,10 +48,10 @@
 			<p class="text-2xl">Tenant Receipts</p>
 			<p class=" text-sm py-1 rounded-xl">Tenant Receipt here.</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_RECEIPT')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_RECEIPT')}
 			<div class="justify-self-end">
 				<button
-					on:click={() => (modal = true)}
+					onclick={() => (modal = true)}
 					class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4"
 				>
 					Add Receipt
@@ -84,7 +92,7 @@
 					<div class="grid grid-cols-1 gap-3">
 						{#each receipts.receipts ?? [] as rec}
 							<button
-								on:click={() => {
+								onclick={() => {
 									selectedReceiptId = rec.id;
 									editReceiptModal = true;
 								}}
@@ -349,7 +357,7 @@
 					name="paymentStartDate"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput}
-					on:click={() => {
+					onclick={() => {
 						dateInput && dateInput.showPicker();
 					}}
 				/>
@@ -363,7 +371,7 @@
 					name="paymentEndDate"
 					class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput2}
-					on:click={() => {
+					onclick={() => {
 						dateInput2 && dateInput2.showPicker();
 					}}
 				/>

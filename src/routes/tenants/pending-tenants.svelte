@@ -3,9 +3,13 @@
 	import type { PageData } from './$types';
 	import AcceptPendingTableComponent from './accept-pending-table-component.svelte';
 
-	export let data: PageData;
-	$: rows = data.priceChangeRequest || [];
-	$: columns = [
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let rows = $derived(data.priceChangeRequest || []);
+	let columns = $derived([
 		{
 			key: 'tenantName',
 			title: 'Tenant Name',
@@ -57,7 +61,7 @@
 				'text-left px-1 w-64  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left px-1  w-32 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 </script>
 
 <div class=" bg-white rounded-md shadow-md border-[1px] border-black/20 mt-3">

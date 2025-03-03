@@ -1,14 +1,22 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import dayjs from 'dayjs';
 	import type { ActionData, PageData } from './$types';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
 
-	$: form?.updateEnd ? toast.push('Rent ended successfully') : null;
+	let { data, form }: Props = $props();
+
+	run(() => {
+		form?.updateEnd ? toast.push('Rent ended successfully') : null;
+	});
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">

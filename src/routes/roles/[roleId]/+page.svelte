@@ -1,15 +1,17 @@
 <script lang="ts">
+	import { run, preventDefault, createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { allScopes } from '$lib/utils/scopes.js';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let noChange = true;
+	let noChange = $state(true);
 
 	const {
 		form: editRoleForm,
@@ -26,9 +28,15 @@
 		}
 	});
 
-	$: form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
-	$: form?.deleteRoleForm ? goto('/roles') : null;
-	$: form?.editRoleForm ? toast.push('Role edited successfully') : null;
+	run(() => {
+		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
+	});
+	run(() => {
+		form?.deleteRoleForm ? goto('/roles') : null;
+	});
+	run(() => {
+		form?.editRoleForm ? toast.push('Role edited successfully') : null;
+	});
 </script>
 
 <form method="post" action="?/editRole" use:editFormEnhance>
@@ -53,7 +61,7 @@
 						name="name"
 						bind:value={$editRoleForm.name}
 						{...$constraints.name}
-						on:input={() => (noChange = false)}
+						oninput={() => (noChange = false)}
 					/>
 				</label>
 				<label class="flex items-center gap-3">
@@ -63,7 +71,7 @@
 						bind:checked={$editRoleForm.sendEmailTo}
 						{...$constraints.sendEmailTo}
 						class=" h-5 w-5 border-[1px] border-black/60 rounded-md p-2"
-						on:input={() => (noChange = false)}
+						oninput={() => (noChange = false)}
 					/>
 					<span class="text-primary font-medium"> Send Email </span>
 				</label>
@@ -74,12 +82,12 @@
 						name="description"
 						bind:value={$editRoleForm.description}
 						{...$constraints.description}
-						on:input={() => (noChange = false)}
-					/>
+						oninput={() => (noChange = false)}
+					></textarea>
 				</label>
 
 				<div class="sm:flex gap-3">
-					{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ROLE')}
+					{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_ROLE')}
 						<button
 							type="submit"
 							disabled={noChange}
@@ -88,23 +96,23 @@
 							Edit Role</button
 						>
 					{/if}
-					{#if data.role.Employees.length && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
+					{#if data.role.Employees.length && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
 						<button
-							on:click|preventDefault={() =>
-								toast.push('Can not delete a role with Employees in it.')}
+							onclick={preventDefault(() =>
+								toast.push('Can not delete a role with Employees in it.'))}
 							type="submit"
 							class="bg-subtitle sm:mt-0 mt-3 text-white rounded-md py-2 w-full"
 						>
 							Archive Role</button
 						>
-					{:else if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
+					{:else if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
 						<form
 							use:deleteFormEnhance
 							method="post"
 							action="?/archiveRole"
 							class="w-full bg-danger text-white flex justify-center rounded-md py-2"
 						>
-							<button on:click|stopPropagation type="submit" class="w-full h-full">
+							<button onclick={stopPropagation(bubble('click'))} type="submit" class="w-full h-full">
 								Archive Role</button
 							>
 						</form>
@@ -118,7 +126,7 @@
 							<input
 								type="checkbox"
 								value={scope}
-								on:input={() => (noChange = false)}
+								oninput={() => (noChange = false)}
 								name="scopes"
 								bind:group={$editRoleForm.scopes}
 							/>

@@ -1,7 +1,11 @@
 <script lang="ts">
 	let alt = '';
 	let image = '';
-	export let row: any;
+	interface Props {
+		row: any;
+	}
+
+	let { row }: Props = $props();
 </script>
 
 <div class="grid grid-flow-col items-center">

@@ -3,10 +3,14 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { ActionData, PageData } from './$types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { data, form }: Props = $props();
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">
@@ -18,7 +22,7 @@
 					<form
 						use:enhance={({ formData, cancel }) => {
 							if (
-								$page.data.session?.authUser.Employee.Role.Scopes.find(
+								page.data.session?.authUser.Employee.Role.Scopes.find(
 									(s) => s.name === 'EDIT_PRICE_CHANGE'
 								)
 							) {
@@ -37,7 +41,7 @@
 					>
 						<label class="flex items-center gap-2">
 							<input
-								on:change={(e) => e.currentTarget.form?.requestSubmit()}
+								onchange={(e) => e.currentTarget.form?.requestSubmit()}
 								type="checkbox"
 								name="priceChangeToggle"
 								checked={priceChange.active}

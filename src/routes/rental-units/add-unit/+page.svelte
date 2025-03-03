@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
@@ -7,11 +9,12 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import { uploadFiles } from '$lib/utils/upload-files';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 	let filesSelected: File[] = [];
 
-	$: form?.addUnitForm && goto('/rental-units');
+	run(() => {
+		form?.addUnitForm && goto('/rental-units');
+	});
 
 	const {
 		form: addUnitForm,
@@ -70,7 +73,7 @@
 		}
 	});
 
-	let frontFileData: string[] = [];
+	let frontFileData: string[] = $state([]);
 </script>
 
 <div class="mt-6 mx-10">
@@ -240,7 +243,7 @@
 							type="file"
 							name="unitFile"
 							multiple
-							on:change={(e) => {
+							onchange={(e) => {
 								const data = e.currentTarget.files;
 								if (data) {
 									for (let i = 0; i <= data?.length; i++) {
@@ -254,7 +257,7 @@
 						<div
 							class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 						>
-							<div class=" relative z-10 w-32 h-36" />
+							<div class=" relative z-10 w-32 h-36"></div>
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUp class="text-primary w-7 h-7" />
@@ -270,7 +273,7 @@
 						<div
 							class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
 						>
-							<div class=" relative z-10 w-32 h-36" />
+							<div class=" relative z-10 w-32 h-36"></div>
 
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
 	import SvelteTable from 'svelte-table';
@@ -9,9 +9,9 @@
 	import StatusComponent from './status-component.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data;
+	let { data } = $props();
 
-	let modal = false;
+	let modal = $state(false);
 
 	const {
 		form: addEmployeeForm,
@@ -23,9 +23,9 @@
 		}
 	});
 
-	let dateInput: any;
-	$: rows = data.employees;
-	$: columns = [
+	let dateInput: any = $state();
+	let rows = $derived(data.employees);
+	let columns = $derived([
 		{
 			key: 'name',
 			title: 'Name',
@@ -84,7 +84,7 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 </script>
 
 <div class="mx-10 my-12 bg-white rounded-sm shadow-md border-[1px] border-black/20">
@@ -93,10 +93,10 @@
 			<p class="text-lg">Employees</p>
 			<p class="bg-[#F9F5FF] text-xs py-1 px-2 rounded-xl">{data.employees.length} Employees</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_EMPLOYEE')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_EMPLOYEE')}
 			<button
 				class="bg-primary text-white rounded-md py-2 px-6 md:mt-0 mt-3"
-				on:click={() => (modal = true)}
+				onclick={() => (modal = true)}
 			>
 				Add Employee
 			</button>
@@ -115,8 +115,8 @@
 				id="search"
 				name="search"
 				placeholder="Search"
-				on:change={async (e) => {
-					const newSearchParams = new URLSearchParams($page.url.search);
+				onchange={async (e) => {
+					const newSearchParams = new URLSearchParams(page.url.search);
 					newSearchParams.set('search', e.currentTarget.value);
 					await goto(`?${newSearchParams.toString()}`);
 				}}
@@ -128,7 +128,7 @@
 			classNameTable="rolesTable"
 			on:clickCell={(event) => {
 				if (
-					$page.data.session?.authUser.Employee.Role.Scopes.find(
+					page.data.session?.authUser.Employee.Role.Scopes.find(
 						(s) => s.name === 'VIEW_EMPLOYEE_DETAIL_PAGE'
 					)
 				) {
@@ -242,7 +242,7 @@
 						name="hiredDate"
 						class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						bind:value={$addEmployeeForm.hiredDate}

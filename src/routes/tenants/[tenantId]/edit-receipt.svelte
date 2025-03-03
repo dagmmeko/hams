@@ -5,18 +5,27 @@
 	import dayjs from 'dayjs';
 	import type { ActionData, PageData } from './$types';
 
-	export let data: PageData;
-	export let receiptId: number;
-	export let form: ActionData;
 
-	let receipt: Receipts | undefined;
-	let dateInput: any;
-	let dateInput2: any;
-	export let editModal;
-
-	$: receipt = data.tenant?.Receipts.find((receipt) => {
+	let receipt: Receipts | undefined = $derived(data.tenant?.Receipts.find((receipt) => {
 		return receipt.id === receiptId;
-	});
+	}));
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
+	interface Props {
+		data: PageData;
+		receiptId: number;
+		form: ActionData;
+		editModal: any;
+	}
+
+	let {
+		data,
+		receiptId,
+		form,
+		editModal = $bindable()
+	}: Props = $props();
+
+	
 </script>
 
 <form
@@ -44,7 +53,7 @@
 			name="editPaymentStartDate"
 			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 			bind:this={dateInput}
-			on:click={() => {
+			onclick={() => {
 				dateInput && dateInput.showPicker();
 			}}
 		/>
@@ -57,7 +66,7 @@
 			name="editPaymentEndDate"
 			class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 			bind:this={dateInput2}
-			on:click={() => {
+			onclick={() => {
 				dateInput2 && dateInput2.showPicker();
 			}}
 		/>

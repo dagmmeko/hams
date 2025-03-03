@@ -1,14 +1,19 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
 	import { allScopes } from '$lib/utils/scopes';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	$: form?.addRole ? goto('/roles') : null;
-	$: form?.addRole ? toast.push('Role created successfully') : null;
+	run(() => {
+		form?.addRole ? goto('/roles') : null;
+	});
+	run(() => {
+		form?.addRole ? toast.push('Role created successfully') : null;
+	});
 
 	const { form: addRoleForm, enhance: addFormEnhance, constraints } = superForm(data.addRoleForm);
 </script>
@@ -41,7 +46,7 @@
 					name="description"
 					bind:value={$addRoleForm.description}
 					{...$constraints.description}
-				/>
+				></textarea>
 			</label>
 
 			<button type="submit" class="bg-primary text-white rounded-md py-2"> Create Role</button>

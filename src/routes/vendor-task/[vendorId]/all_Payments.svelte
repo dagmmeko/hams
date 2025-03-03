@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
 
@@ -9,13 +12,17 @@
 	import type { PageData } from './$types';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
-	let dateInput: any;
+	let dateInput: any = $state();
 
-	let modal = false;
-	export let data: PageData;
+	let modal = $state(false);
+	interface Props {
+		data: PageData;
+	}
 
-	$: rows = data.payments ?? [];
-	$: columns = [
+	let { data }: Props = $props();
+
+	let rows = $derived(data.payments ?? []);
+	let columns = $derived([
 		{
 			key: 'Lable',
 			title: 'Label',
@@ -56,7 +63,7 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 
 	const {
 		form: addPaymentForm,
@@ -80,8 +87,8 @@
 			<p class="text-lg">Payments</p>
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.payments.length} transactions</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_PAYMENT')}
-			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_PAYMENT')}
+			<button class="bg-primary text-white rounded-md py-2 px-6" onclick={() => (modal = true)}>
 				New Payment</button
 			>
 		{/if}
@@ -99,11 +106,11 @@
 				on:clickCell={(event) => {
 					const PaymentId = event.detail.row.id;
 					if (
-						$page.data.session?.authUser.Employee.Role.Scopes.find(
+						page.data.session?.authUser.Employee.Role.Scopes.find(
 							(s) => s.name === 'VIEW_PAYMENT_DETAIL'
 						)
 					) {
-						goto(`/vendor-task/${$page.params.vendorId}/${PaymentId}`);
+						goto(`/vendor-task/${page.params.vendorId}/${PaymentId}`);
 					} else {
 						toast.push('You do not have permission to view payment details');
 					}
@@ -189,7 +196,7 @@
 					name="paidOn"
 					class="w-[420px] border-[1px] border-black/60 rounded-md p-2 mt-2"
 					bind:this={dateInput}
-					on:click={() => {
+					onclick={() => {
 						dateInput && dateInput.showPicker();
 					}}
 					bind:value={$addPaymentForm.paidOn}
@@ -197,7 +204,7 @@
 				/>
 			</label>
 
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 				Save Payment
 			</button>
 		</div>

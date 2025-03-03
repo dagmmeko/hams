@@ -2,12 +2,11 @@
 	import Attendance from './attendance.svelte';
 	import Info from './info.svelte';
 	import Leaves from './leaves.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let data;
-	export let form;
+	let { data = $bindable(), form = $bindable() } = $props();
 
-	let displayedComponent: 'info' | 'attendance' | 'leaves' = 'info';
+	let displayedComponent: 'info' | 'attendance' | 'leaves' = $state('info');
 </script>
 
 <div class="md:mx-10 mx-5 my-12">
@@ -15,18 +14,18 @@
 
 	<!-- Navigation -->
 	<div class="flex rounded-md shadow-sm bg-ghost w-fit p-2 mb-6">
-		<button on:click={() => (displayedComponent = 'info')}>
+		<button onclick={() => (displayedComponent = 'info')}>
 			<p class="py-2 px-3 rounded-md {displayedComponent === 'info' ? 'bg-white' : ''} ">Info</p>
 		</button>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
-			<button on:click={() => (displayedComponent = 'attendance')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
+			<button onclick={() => (displayedComponent = 'attendance')}
 				><p class="p-2 px-3 rounded-md {displayedComponent === 'attendance' ? 'bg-white' : ''}">
 					Attendance
 				</p></button
 			>
 		{/if}
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
-			<button on:click={() => (displayedComponent = 'leaves')}>
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
+			<button onclick={() => (displayedComponent = 'leaves')}>
 				<p class="p-2 px-3 rounded-md {displayedComponent === 'leaves' ? 'bg-white' : ''}">
 					Leaves
 				</p>
@@ -38,9 +37,9 @@
 	<div class=" bg-white rounded-sm shadow-sm border-[1px] border-black/20">
 		{#if displayedComponent === 'info'}
 			<Info bind:data bind:form />
-		{:else if displayedComponent === 'attendance' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
+		{:else if displayedComponent === 'attendance' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_ABSENT')}
 			<Attendance bind:data />
-		{:else if displayedComponent === 'leaves' && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
+		{:else if displayedComponent === 'leaves' && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'VIEW_LEAVES')}
 			<Leaves bind:data />
 		{:else}
 			<p>Something went wrong</p>

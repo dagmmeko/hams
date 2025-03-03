@@ -359,123 +359,125 @@
 				{/if}
 			</label>
 		</div>
+	</form>
 
-		<div class=" w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
-			{#each data.unitDetails?.UnitsFile ?? [] as file}
-				<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
-					<div class="relative">
-						<div class=" relative z-10 w-full h-36">
-							<img src={FileBg} alt="bg" class="w-full h-full" />
-						</div>
-
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<form
-								id="downloadUnitFile"
-								method="post"
-								action="?/downloadUnitFile"
-								use:enhance={({ formData }) => {
-									formData.set('unitKey', `${file.File.key}`);
-									return async ({ result, update }) => {
-										await update();
-
-										if (result.type === 'success') {
-										}
-									};
-								}}
-								class="flex flex-col gap-2 justify-center items-center h-full"
-							>
-								<button on:click|stopPropagation type="submit">
-									<div class="h-full w-full flex flex-col items-center justify-center">
-										<Eye class="text-primary w-7 h-7" />
-										<span class="text-sm mx-3 py-2 break-all">
-											{file.File.fileName}
-										</span>
-									</div>
-								</button>
-							</form>
-						</div>
+	<!-- File display section moved outside main form -->
+	<div class=" w-full my-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
+		{#each data.unitDetails?.UnitsFile ?? [] as file}
+			<div class="border-[1px] w-[180px] border-primary border-dashed rounded-lg">
+				<div class="relative">
+					<div class=" relative z-10 w-full h-36">
+						<img src={FileBg} alt="bg" class="w-full h-full" />
 					</div>
-					<form
-						id="deleteUnitFile"
-						method="post"
-						action="?/deleteUnitFile"
-						use:enhance={({ formData }) => {
-							formData.set('unitFileId', `${file.fileId}`);
-							return async ({ result }) => {
-								if (result.type === 'success') {
-									toast.push('File deleted successfully');
-								}
-							};
-						}}
-					>
-						<button
-							on:click|stopPropagation
-							class="flex gap-1 items-center justify-center w-full p-2"
+
+					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<form
+							id="downloadUnitFile"
+							method="post"
+							action="?/downloadUnitFile"
+							use:enhance={({ formData }) => {
+								formData.set('unitKey', `${file.File.key}`);
+								return async ({ result, update }) => {
+									await update();
+
+									if (result.type === 'success') {
+									}
+								};
+							}}
+							class="flex flex-col gap-2 justify-center items-center h-full"
 						>
-							<Delete class="h-5 w-5 text-danger" />
-							<span class="text-danger text-sm">Delete</span>
-						</button>
-					</form>
+							<button on:click|stopPropagation type="submit">
+								<div class="h-full w-full flex flex-col items-center justify-center">
+									<Eye class="text-primary w-7 h-7" />
+									<span class="text-sm mx-3 py-2 break-all">
+										{file.File.fileName}
+									</span>
+								</div>
+							</button>
+						</form>
+					</div>
 				</div>
-			{/each}
-			<div
-				class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
-			>
 				<form
-					id="editUnitFile"
+					id="deleteUnitFile"
 					method="post"
-					action="?/editUnitFile"
+					action="?/deleteUnitFile"
 					use:enhance={({ formData }) => {
-						formData.set('fileNames', fileNames.join(','));
-						formData.set('unitFile', 'Files');
+						formData.set('unitFileId', `${file.fileId}`);
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								toast.push('File deleted successfully');
+							}
+						};
 					}}
 				>
-					<label>
-						<input
-							class="hidden"
-							type="file"
-							name="unitFile"
-							multiple
-							on:change={async (e) => {
-								const uploadPromises = [];
-								const cal = e.currentTarget.form;
-								for (const file of e.currentTarget.files ?? []) {
-									uploadPromises.push(
-										(async function () {
-											if (data.unitDetails) {
-												fileNames = [...fileNames, file.name];
-												return await uploadFiles(
-													file,
-													`unitFile/${data.unitDetails.id}/${file.name}`
-												);
-											}
-										})()
-									);
-								}
-								const successes = await Promise.all(uploadPromises);
-
-								if (!successes.find((s) => s !== true)) {
-									// @ts-ignore
-									cal.requestSubmit();
-								}
-							}}
-						/>
-
-						<div class=" relative z-10 h-44" />
-						<div class="absolute top-0 w-full h-full left-0 z-30">
-							<div class="flex flex-col gap-2 justify-center items-center h-full">
-								<FileUp class="text-primary w-7 h-7" />
-								<span class="text-xs">Upload File</span>
-								<p class="text-[10px] text-center px-3">
-									Contract, Agreement, pictures or any other document
-								</p>
-							</div>
-						</div>
-					</label>
+					<button
+						on:click|stopPropagation
+						class="flex gap-1 items-center justify-center w-full p-2"
+					>
+						<Delete class="h-5 w-5 text-danger" />
+						<span class="text-danger text-sm">Delete</span>
+					</button>
 				</form>
 			</div>
+		{/each}
+		
+		<div class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center">
+			<form
+				id="editUnitFile"
+				method="post"
+				action="?/editUnitFile"
+				use:enhance={({ formData }) => {
+					formData.set('fileNames', fileNames.join(','));
+					formData.set('unitFile', 'Files');
+				}}
+				enctype="multipart/form-data"
+			>
+				<label>
+					<input
+						class="hidden"
+						type="file"
+						name="unitFile"
+						multiple
+						on:change={async (e) => {
+							const uploadPromises = [];
+							const cal = e.currentTarget.form;
+							for (const file of e.currentTarget.files ?? []) {
+								uploadPromises.push(
+									(async function () {
+										if (data.unitDetails) {
+											fileNames = [...fileNames, file.name];
+											return await uploadFiles(
+												file,
+												`unitFile/${data.unitDetails.id}/${file.name}`
+											);
+										}
+									})()
+								);
+							}
+							const successes = await Promise.all(uploadPromises);
+
+							if (!successes.find((s) => s !== true)) {
+								// @ts-ignore
+								cal.requestSubmit();
+							}
+						}}
+					/>
+
+					<div class=" relative z-10 h-44" />
+					<div class="absolute top-0 w-full h-full left-0 z-30">
+						<div class="flex flex-col gap-2 justify-center items-center h-full">
+							<FileUp class="text-primary w-7 h-7" />
+							<span class="text-xs">Upload File</span>
+							<p class="text-[10px] text-center px-3">
+								Contract, Agreement, pictures or any other document
+							</p>
+						</div>
+					</div>
+				</label>
+			</form>
 		</div>
-	</form>
+	</div>
+
 	{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ARCHIVE_RENTAL_UNIT')}
 		<p class="text-2xl mt-6">Danger</p>
 		<hr class="my-6" />

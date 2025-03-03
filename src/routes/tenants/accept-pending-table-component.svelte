@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let row: any;
+	interface Props {
+		row: any;
+	}
+
+	let { row }: Props = $props();
 </script>
 
-{#if !row.approved && $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}
+{#if !row.approved && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'APPROVE_PENDING')}
 	<div class="flex">
 		<form
 			class="w-full"

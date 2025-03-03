@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	import { page } from '$app/state';
 	import { superForm, dateProxy } from 'sveltekit-superforms/client';
 
-	export let data;
+	let { data } = $props();
 	const {
 		form: editInternalTaskForm,
 		enhance: editFormEnhance,
@@ -13,7 +16,7 @@
 		empty: 'undefined'
 	});
 
-	let dateInput: any;
+	let dateInput: any = $state();
 </script>
 
 <div class="mx-10 my-12">
@@ -26,7 +29,7 @@
 					<p class="text-2xl">Employee Info</p>
 					<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
 				</div>
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 px-6">
 					Update Info</button
 				>
 			</div>
@@ -55,7 +58,7 @@
 						name="taskDueDate"
 						bind:value={$taskDueDate}
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 					/>
@@ -74,7 +77,7 @@
 						<option value="CHECKING">Checking</option>
 						<option
 							value="COMPLETED"
-							disabled={$page.data.session?.authUser.Employee.id !==
+							disabled={page.data.session?.authUser.Employee.id !==
 								data.internalTask?.creatorEmployeeId}>Completed</option
 						>
 					</select>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { superForm } from 'sveltekit-superforms/client';
 	import { goto } from '$app/navigation';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -7,8 +9,7 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { uploadFiles } from '$lib/utils/upload-files';
 
-	export let form;
-	export let data;
+	let { form, data } = $props();
 
 	let filesSelected: File[] = [];
 	let fileUploading = false;
@@ -75,11 +76,11 @@
 		}
 	});
 
-	let dateInput: any;
-	let dateInput2: any;
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
 
-	let selectedUnit: any;
-	let frontFileData: string[] = [];
+	let selectedUnit: any = $state();
+	let frontFileData: string[] = $state([]);
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">
@@ -94,7 +95,7 @@
 				<label class="grid w-full gap-2 h-fit">
 					<span class="text-primary font-medium"> Unit Type </span>
 					<select
-						on:change={(e) => {
+						onchange={(e) => {
 							selectedUnit = e.currentTarget.value;
 						}}
 						name="rentalUnitsId"
@@ -268,7 +269,7 @@
 							name="contractStartDate"
 							class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 							bind:this={dateInput}
-							on:click={() => {
+							onclick={() => {
 								dateInput && dateInput.showPicker();
 							}}
 							bind:value={$addTenantForm.contractStartDate}
@@ -283,7 +284,7 @@
 							name="contractEndDate"
 							class=" border-[1px] border-black/60 rounded-md p-2 mt-2"
 							bind:this={dateInput2}
-							on:click={() => {
+							onclick={() => {
 								dateInput2 && dateInput2.showPicker();
 							}}
 							bind:value={$addTenantForm.contractEndDate}
@@ -372,7 +373,7 @@
 					type="file"
 					name="tenantFile"
 					multiple
-					on:change={(e) => {
+					onchange={(e) => {
 						const data = e.currentTarget.files;
 						if (data) {
 							for (let i = 0; i <= data?.length; i++) {
@@ -388,17 +389,17 @@
 						<div
 							class="relative border-[1px] max-w-[180px] border-primary border-dashed rounded-lg gap-2 items-center justify-center"
 						>
-							<div class=" relative z-10 w-32 h-36" />
+							<div class=" relative z-10 w-32 h-36"></div>
 
 							<div class="absolute top-0 w-full h-full left-0 z-30">
 								<div class="flex flex-col gap-2 justify-center items-center h-full">
 									<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
 									<p class="text-sm ml-2 py-2">{file}</p>
 									<button
-										on:click|preventDefault={() => {
+										onclick={preventDefault(() => {
 											// remove the file.id from the frontFileData array
 											frontFileData = frontFileData.filter((res) => res !== file);
-										}}>x</button
+										})}>x</button
 									>
 								</div>
 							</div>
@@ -407,7 +408,7 @@
 					<div
 						class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
 					>
-						<div class=" relative z-10 w-32 h-36" />
+						<div class=" relative z-10 w-32 h-36"></div>
 						<div class="absolute top-0 w-full h-full left-0 z-30">
 							<div class="flex flex-col gap-2 justify-center items-center h-full">
 								<FileUp class="text-primary w-7 h-7" />

@@ -1,8 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-	// export let data: PageData
-	export let row: Exclude<PageData['fullDataTenant'], undefined>[number];
+	
+	interface Props {
+		// export let data: PageData
+		row: Exclude<PageData['fullDataTenant'], undefined>[number];
+	}
+
+	let { row }: Props = $props();
 </script>
 
 <div

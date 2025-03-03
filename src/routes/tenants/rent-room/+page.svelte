@@ -1,15 +1,16 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { numberToCurrency } from '$lib/utils/currency.js';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
-	let selectedUnit: any;
-	let selectedTenant: any;
-	let id: number;
+	let selectedUnit: any = $state();
+	let selectedTenant: any = $state();
+	let id: number = $state();
 
 	const {
 		form: rentRoomForm,
@@ -22,17 +23,19 @@
 		}
 	});
 
-	let dateInput: any;
-	let dateInput2: any;
-	let unitData: any;
-	$: {
-		unitData = data.rentalUnits.find((unit) => unit.id === Number(selectedUnit));
-	}
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
+	let unitData: any = $derived(data.rentalUnits.find((unit) => unit.id === Number(selectedUnit)));
+	
 
-	$: form?.rentTenant ? goto(`/tenants/${form.rentTenant.id}?display=receipts`) : null;
-	$: form?.rentTenant ? toast.push('Tenant Rented') : null;
-	let urlParam: any;
-	$: urlParam = $page.url.searchParams.get('searchTenant');
+	run(() => {
+		form?.rentTenant ? goto(`/tenants/${form.rentTenant.id}?display=receipts`) : null;
+	});
+	run(() => {
+		form?.rentTenant ? toast.push('Tenant Rented') : null;
+	});
+	let urlParam: any = $derived(page.url.searchParams.get('searchTenant'));
+	
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">
@@ -54,8 +57,8 @@
 					type="search"
 					id="search"
 					name="search"
-					on:change={async (e) => {
-						const newSearchParams = new URLSearchParams($page.url.search);
+					onchange={async (e) => {
+						const newSearchParams = new URLSearchParams(page.url.search);
 						newSearchParams.set('searchTenant', e.currentTarget.value);
 						await goto(`?${newSearchParams.toString()}`);
 					}}
@@ -66,7 +69,7 @@
 				<span class="text-primary font-medium"> Available Units </span>
 				<select
 					required
-					on:change={(e) => {
+					onchange={(e) => {
 						selectedUnit = e.currentTarget.value;
 					}}
 					name="rentalUnitsId"
@@ -90,7 +93,7 @@
 							class="h-44 overflow-hidden overflow-y-scroll mt-2 border-[1px] border-black/20 p-4 rounded-md"
 						>
 							{#each data.tenants as tenant}
-								<button class="w-full" on:click={() => (selectedTenant = tenant.id)}>
+								<button class="w-full" onclick={() => (selectedTenant = tenant.id)}>
 									<div
 										class=" {selectedTenant === tenant.id
 											? 'bg-primary/20 '
@@ -100,7 +103,7 @@
 											{tenant.fullName}
 											<!-- <span class="font-light"> {tenant.companyName} </span> -->
 										</div>
-										<div />
+										<div></div>
 										<div>{tenant.phoneNumber}</div>
 									</div>
 								</button>
@@ -195,7 +198,7 @@
 						name="startDate"
 						class="border-[1px] border-black/60 rounded-md p-2"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						bind:value={$rentRoomForm.startDate}
@@ -212,7 +215,7 @@
 						name="endDate"
 						class="border-[1px] border-black/60 rounded-md p-2"
 						bind:this={dateInput2}
-						on:click={() => {
+						onclick={() => {
 							dateInput2 && dateInput2.showPicker();
 						}}
 						bind:value={$rentRoomForm.endDate}
@@ -251,7 +254,7 @@
 						{...$constraints.securityDeposit}
 					/>
 				</label>
-				<div />
+				<div></div>
 				<button class="bg-primary text-white rounded-md py-2 px-6 h-fit mt-6"> Rent Room</button>
 			</div>
 		</form>

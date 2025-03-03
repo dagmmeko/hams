@@ -1,20 +1,27 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import SvelteTable from 'svelte-table';
 	import type { PageData, ActionData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
 	import DeleteAmenitiesTable from './delete-amenities-table.svelte';
 
-	let addModal = false;
-	let editModal = false;
+	let addModal = $state(false);
+	let editModal = $state(false);
 
-	let selectedUnitId: number;
+	let selectedUnitId: number = $state();
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { data, form }: Props = $props();
 
 	const {
 		form: addAmenityForm,
@@ -25,8 +32,8 @@
 			addModal = false;
 		}
 	});
-	$: rows = data.unitDetails?.Amenities ?? [];
-	$: columns = [
+	let rows = $derived(data.unitDetails?.Amenities ?? []);
+	let columns = $derived([
 		{
 			key: 'name',
 			title: 'Amenity Name',
@@ -65,7 +72,7 @@
 				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'print:hidden text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 </script>
 
 <div>
@@ -73,11 +80,11 @@
 		<div class="grid">
 			<p class="text-2xl">Room Amenities</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_AMENITIES')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_UNIT_AMENITIES')}
 			<button
 				type="submit"
 				class="bg-primary text-white rounded-md py-2 px-6 md:my-0 my-2"
-				on:click={() => (addModal = true)}
+				onclick={() => (addModal = true)}
 			>
 				New Amenity</button
 			>
@@ -88,7 +95,7 @@
 			classNameTable="unitAmenitiesTables"
 			on:clickCell={(event) => {
 				if (
-					$page.data.session?.authUser.Employee.Role.Scopes.find(
+					page.data.session?.authUser.Employee.Role.Scopes.find(
 						(s) => s.name === 'EDIT_UNIT_AMENITIES'
 					)
 				) {
@@ -137,7 +144,7 @@
 						bind:value={$addAmenityForm.description}
 						{...$constraints.description}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<label class="flex items-center gap-3">
 					<input
@@ -159,7 +166,7 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 
-					<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+					<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
 						Save Item</button
 					>
 				</label>
@@ -210,7 +217,7 @@
 						value={data.unitDetails?.Amenities.find((item) => item.id === selectedUnitId)
 							?.description}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<label class="flex items-center gap-3">
 					<input
@@ -230,7 +237,7 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 
-					<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+					<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
 						Update Amenity</button
 					>
 				</label>

@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import SvelteTable from 'svelte-table';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { numberToCurrency } from '$lib/utils/currency';
 	import PropertyConditionTable from './property-condition-table.svelte';
 	import DeletePropertyTable from './delete-property-table.svelte';
@@ -9,16 +12,20 @@
 	import { enhance } from '$app/forms';
 	import { clickOutside } from '$lib/utils/click-outside';
 
-	export let data: PageData;
-	export let form: ActionData;
-	export let itemCategory: string;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+		itemCategory: string;
+	}
 
-	let selectedUnitId: number;
+	let { data, form, itemCategory }: Props = $props();
 
-	let editModal = false;
+	let selectedUnitId: number = $state();
 
-	$: rows = data.unitDetails?.Property.filter((prop) => prop.itemCategory === itemCategory) || [];
-	$: columns = [
+	let editModal = $state(false);
+
+	let rows = $derived(data.unitDetails?.Property.filter((prop) => prop.itemCategory === itemCategory) || []);
+	let columns = $derived([
 		{
 			key: 'name',
 			title: 'Item Name',
@@ -119,7 +126,7 @@
 				'print:hidden text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'print:hidden text-left pl-2  border-b-[1px] border-[#B3B4B8] '
 		}
-	];
+	]);
 </script>
 
 <div class="my-4">
@@ -129,7 +136,7 @@
 		classNameRow={(row) => (row.available ? 'bg-white' : 'print:hidden')}
 		on:clickCell={(event) => {
 			if (
-				$page.data.session?.authUser.Employee.Role.Scopes.find(
+				page.data.session?.authUser.Employee.Role.Scopes.find(
 					(s) => s.name === 'EDIT_UNIT_PROPERTY'
 				)
 			) {
@@ -196,7 +203,7 @@
 						value={data.unitDetails?.Property.find((item) => item.id === selectedUnitId)
 							?.description}
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<label class="w-full grid gap-2">
 					<span class="text-primary font-medium"> Category </span>
@@ -261,7 +268,7 @@
 					</select>
 				</label>
 
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 mt-6">
+				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
 					Update Item</button
 				>
 			</div>

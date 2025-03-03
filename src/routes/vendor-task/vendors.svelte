@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createBubbler, stopPropagation } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -10,11 +13,15 @@
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { toast } from '@zerodevx/svelte-toast';
 
-	let modal = false;
-	export let data: PageData;
+	let modal = $state(false);
+	interface Props {
+		data: PageData;
+	}
 
-	$: rows = data.vendor ?? [];
-	$: columns = [
+	let { data }: Props = $props();
+
+	let rows = $derived(data.vendor ?? []);
+	let columns = $derived([
 		// {
 		// 	key: 'Name',
 		// 	title: '',
@@ -73,7 +80,7 @@
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 	const {
 		form: addVendorForm,
 		enhance: addVendorFormEnhance,
@@ -92,7 +99,7 @@
 			<p class="bg-[#F9F5FF] text-xs rounded-xl p-2 h-fit">{data.vendor.length} Vendors</p>
 		</div>
 		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_VENDOR')}
-			<button class="bg-primary text-white rounded-md py-2 px-6" on:click={() => (modal = true)}>
+			<button class="bg-primary text-white rounded-md py-2 px-6" onclick={() => (modal = true)}>
 				New Vendor</button
 			>
 		{/if}
@@ -111,7 +118,7 @@
 				id="search"
 				name="search"
 				placeholder="Search"
-				on:change={async (e) => {
+				onchange={async (e) => {
 					const newSearchParams = new URLSearchParams($page.url.search);
 					newSearchParams.set('searchVendor', e.currentTarget.value);
 					await goto(`?${newSearchParams.toString()}`);
@@ -262,7 +269,7 @@
 				/>
 			</label>
 
-			<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2">
+			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
 				Save Vendor
 			</button>
 		</div>
