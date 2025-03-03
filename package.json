@@ -9,7 +9,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"sync": "svelte-kit sync"
 	},
 	"prisma": {
 		"seed": "node --loader ts-node/esm --experimental-specifier-resolution=node prisma/seed.ts"
@@ -19,7 +20,6 @@
 		"@auth/sveltekit": "0.3.9",
 		"@aws-sdk/client-s3": "3.525.0",
 		"@prisma/client": "5.6.0",
-		"@sveltejs/adapter-auto": "^3.3.1",
 		"@sveltejs/adapter-vercel": "^4.0.5",
 		"@sveltejs/kit": "^2.17.3",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
@@ -38,12 +38,11 @@
 		"eslint-plugin-svelte": "^2.46.1",
 		"nock": "13.5.3",
 		"nprogress": "0.2.0",
-		"postcss": "8.4.31",
+		"postcss": "8.5.3",
 		"prettier": "^3.5.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prisma": "5.6.0",
 		"svelte": "^5.20.5",
-		"svelte-chartjs": "3.1.5",
 		"svelte-check": "^4.1.4",
 		"svelte-multiselect": "10.2.0",
 		"svelte-printpdf": "1.0.2-metadata",

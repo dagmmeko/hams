@@ -5,27 +5,22 @@
 	import dayjs from 'dayjs';
 	import type { ActionData, PageData } from './$types';
 
-
-	let receipt: Receipts | undefined = $derived(data.tenant?.Receipts.find((receipt) => {
-		return receipt.id === receiptId;
-	}));
-	let dateInput: any = $state();
-	let dateInput2: any = $state();
 	interface Props {
 		data: PageData;
-		receiptId: number;
+		receiptId: number | undefined;
 		form: ActionData;
 		editModal: any;
 	}
 
-	let {
-		data,
-		receiptId,
-		form,
-		editModal = $bindable()
-	}: Props = $props();
+	let { data, receiptId, form, editModal = $bindable() }: Props = $props();
 
-	
+	let receipt: Receipts | undefined = $derived(
+		data.tenant?.Receipts.find((receipt) => {
+			return receipt.id === receiptId;
+		})
+	);
+	let dateInput: any = $state();
+	let dateInput2: any = $state();
 </script>
 
 <form
@@ -33,7 +28,7 @@
 		if (!receiptId) {
 			toast.push('No receipt found');
 		}
-		formData.set('receiptId', receiptId.toString());
+		formData.set('receiptId', receiptId?.toString() ?? '');
 		return async ({ update }) => {
 			await update();
 			toast.push('Receipt updated successfully');

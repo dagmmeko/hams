@@ -92,12 +92,12 @@ export const load = async (event) => {
 					...(propertyAvailability === 'true'
 						? {
 								available: true
-						  }
+							}
 						: propertyAvailability === 'false'
-						? {
-								available: false
-						  }
-						: {}),
+							? {
+									available: false
+								}
+							: {}),
 					deletedAt: null
 				}
 			},

@@ -11,12 +11,7 @@
 		editRentedUnitModal: boolean;
 	}
 
-	let {
-		data,
-		form,
-		selectedRentedUnitId,
-		editRentedUnitModal = $bindable()
-	}: Props = $props();
+	let { data, form, selectedRentedUnitId, editRentedUnitModal = $bindable() }: Props = $props();
 
 	let dateInput: any = $state();
 	let dateInput2: any = $state();

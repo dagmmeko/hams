@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import dayjs from 'dayjs';
 	import type { ActionData, PageData } from './$types';
 	import PdfPrint from '$lib/components/pdf-print.svelte';
@@ -12,9 +10,9 @@
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 
-	run(() => {
+	$effect.pre(() => {
 		form?.updateEnd ? toast.push('Rent ended successfully') : null;
 	});
 </script>
@@ -57,12 +55,12 @@
 									.RentalUnits.Inspections[0].InspectionStatus === 'GOOD_CONDITION'
 									? 'bg-success text-white'
 									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
-									? 'bg-warning text-black/70'
-									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
-									? 'bg-danger text-white'
-									: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
-									? 'bg-info text-white'
-									: ''}"
+										? 'bg-warning text-black/70'
+										: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
+											? 'bg-danger text-white'
+											: tenantUnit.RentalUnits.Inspections[0].InspectionStatus === 'MISSING_ITEMS'
+												? 'bg-info text-white'
+												: ''}"
 							>
 								{tenantUnit.RentalUnits.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
 							</p>

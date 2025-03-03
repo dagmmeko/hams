@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { stopPropagation } from 'svelte/legacy';
-
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import type { PageData } from './$types';
@@ -25,12 +23,21 @@
 <div>
 	{#if row.Employees.length}
 		<button
-			onclick={stopPropagation(() => toast.push('Can not delete a role with Employees in it.'))}
+			onclick={(e) => {
+				e.stopPropagation();
+				toast.push('Can not delete a role with Employees in it.');
+			}}
 			><Delete class="text-subtitle" />
 		</button>
 	{:else}
 		<form use:enhance method="post" action="?/archiveRole">
-			<button onclick={stopPropagation(() => {})}> <Delete class="text-danger" /> </button>
+			<button
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+			>
+				<Delete class="text-danger" />
+			</button>
 		</form>
 	{/if}
 </div>

@@ -190,12 +190,12 @@ export const actions = {
 				paymentReason: addReceiptsForm.data.crvReceipt
 					? 'CRV Receipt'
 					: addReceiptsForm.data.isRentPayment && !addReceiptsForm.data.isUtilityPayment
-					? 'Rent Payment'
-					: addReceiptsForm.data.isUtilityPayment && !addReceiptsForm.data.isRentPayment
-					? 'Utility Payment'
-					: addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment
-					? 'Rent & Utility Payment'
-					: 'Payment Issue!',
+						? 'Rent Payment'
+						: addReceiptsForm.data.isUtilityPayment && !addReceiptsForm.data.isRentPayment
+							? 'Utility Payment'
+							: addReceiptsForm.data.isRentPayment && addReceiptsForm.data.isUtilityPayment
+								? 'Rent & Utility Payment'
+								: 'Payment Issue!',
 				receiptReferenceNumber: addReceiptsForm.data.receiptNumber,
 				tenantsId: Number(event.params.tenantId),
 				payToUnitId: addReceiptsForm.data.payToUnit,
@@ -245,12 +245,12 @@ export const actions = {
 				paymentReason: isCRVReceipt
 					? 'CRV Receipt'
 					: isRentPayment && !isUtilityPayment
-					? 'Rent Payment'
-					: isUtilityPayment && !isRentPayment
-					? 'Utility Payment'
-					: isRentPayment && isUtilityPayment
-					? 'Rent & Utility Payment'
-					: 'Payment Issue!',
+						? 'Rent Payment'
+						: isUtilityPayment && !isRentPayment
+							? 'Utility Payment'
+							: isRentPayment && isUtilityPayment
+								? 'Rent & Utility Payment'
+								: 'Payment Issue!',
 				isRentPayment: isRentPayment === 'on' ? true : false,
 				isUtilityPayment: isUtilityPayment === 'on' ? true : false,
 				isUtilityAndRentPayment: isRentPayment === 'on' && isUtilityPayment === 'on' ? true : false,

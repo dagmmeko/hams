@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
@@ -12,12 +10,12 @@
 	let { data, form } = $props();
 
 	let editable = $state(false);
-	let frontFileData: string = $state();
+	let frontFileData: string | undefined = $state();
 
-	run(() => {
+	$effect.pre(() => {
 		form?.errorMessage ? toast.push(form.errorMessage) : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.passwordChanged ? toast.push('Password changed') : null;
 	});
 	const {

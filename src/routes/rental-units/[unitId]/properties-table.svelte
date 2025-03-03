@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import SvelteTable from 'svelte-table';
 	import { page } from '$app/state';
 	import { numberToCurrency } from '$lib/utils/currency';
@@ -20,16 +17,18 @@
 
 	let { data, form, itemCategory }: Props = $props();
 
-	let selectedUnitId: number = $state();
+	let selectedUnitId: number | undefined = $state();
 
 	let editModal = $state(false);
 
-	let rows = $derived(data.unitDetails?.Property.filter((prop) => prop.itemCategory === itemCategory) || []);
+	let rows = $derived(
+		data.unitDetails?.Property.filter((prop) => prop.itemCategory === itemCategory) || []
+	);
 	let columns = $derived([
 		{
 			key: 'name',
 			title: 'Item Name',
-			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
 				'text-left w-44 pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left w-44 pl-2 font-bold  border-b-[1px] border-[#B3B4B8] text-xs'
@@ -37,7 +36,7 @@
 		{
 			key: 'description',
 			title: 'Description',
-			value: (v: typeof rows[number]) => v.description ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.description ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
@@ -45,7 +44,7 @@
 		{
 			key: 'number',
 			title: 'No. of Units',
-			value: (v: typeof rows[number]) => v.numberofUnits ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.numberofUnits ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
@@ -53,7 +52,7 @@
 		{
 			key: 'price',
 			title: 'Full Price',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				numberToCurrency(v.itemsPrice, {
 					currency: v.itemsCurrency,
 					currencyDisplay: 'code'
@@ -65,7 +64,7 @@
 		{
 			key: 'price',
 			title: '',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				numberToCurrency(
 					v.itemsCurrency === 'ETB'
 						? v.itemsPrice / data.usdRate[0].rate
@@ -91,7 +90,7 @@
 		{
 			key: 'available',
 			title: 'Available',
-			value: (v: typeof rows[number]) => (v.available ? 'Yes' : 'No' ?? 'NOT FOUND'),
+			value: (v: (typeof rows)[number]) => (v.available ? 'Yes' : 'No'),
 			headerClass:
 				'text-left print:hidden pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left print:hidden pl-2  border-b-[1px] border-[#B3B4B8] text-xs'
@@ -99,7 +98,7 @@
 		{
 			key: 'available',
 			title: 'Available',
-			value: (v: typeof rows[number]) => '_',
+			value: (v: (typeof rows)[number]) => '_',
 			headerClass:
 				'text-left  pl-2 hidden print:table-cell  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left  mx-12 hidden print:table-cell  border-[1px] border-[#B3B4B8] text-xs'
@@ -107,7 +106,7 @@
 		{
 			key: 'available',
 			title: 'N/A',
-			value: (v: typeof rows[number]) => '_',
+			value: (v: (typeof rows)[number]) => '_',
 			headerClass:
 				'text-left  pl-2 hidden print:table-cell  bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-xs ',
 			class: 'text-left hidden print:table-cell mx-12   border-[1px] border-[#B3B4B8] text-xs'
@@ -154,7 +153,7 @@
 {#if editModal}
 	<form
 		use:enhance={({ formData }) => {
-			formData.set('propertyId', selectedUnitId.toString());
+			formData.set('propertyId', selectedUnitId?.toString() ?? '');
 			return async ({ update }) => {
 				await update();
 				editModal = false;
@@ -268,7 +267,12 @@
 					</select>
 				</label>
 
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 mt-6"
+				>
 					Update Item</button
 				>
 			</div>

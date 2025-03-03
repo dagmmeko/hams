@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
@@ -8,7 +6,6 @@
 	import { page } from '$app/state';
 	import DeleteRoleTableComponent from './delete-role-table-component.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
-
 
 	let dateInput: any;
 	let hasDeleteRoleScope = true;
@@ -19,7 +16,7 @@
 		{
 			key: 'title',
 			title: 'Role',
-			value: (v: typeof rows[number]) => v?.name ?? '',
+			value: (v: (typeof rows)[number]) => v?.name ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 w-1/3 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -27,7 +24,7 @@
 		{
 			key: 'noOfEmployees',
 			title: 'No. of Employees',
-			value: (v: typeof rows[number]) => v?.Employees.length ?? '',
+			value: (v: (typeof rows)[number]) => v?.Employees.length ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -35,7 +32,7 @@
 		{
 			key: 'createdAt',
 			title: 'Created At',
-			value: (v: typeof rows[number]) => dayjs(v?.createdAt).format('MMM DD, YYYY') ?? '',
+			value: (v: (typeof rows)[number]) => dayjs(v?.createdAt).format('MMM DD, YYYY') ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -53,10 +50,10 @@
 					headerClass:
 						'bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 					class: 'border-b-[1px] border-[#B3B4B8]'
-			  }
-			: (null as unknown as TableColumn<typeof rows[number]>)
+				}
+			: (null as unknown as TableColumn<(typeof rows)[number]>)
 	]);
-	run(() => {
+	$effect.pre(() => {
 		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
 	});
 </script>

@@ -2,20 +2,20 @@
 	import dayjs from 'dayjs';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SvelteTable from 'svelte-table';
 
-	export let data;
+	let { data } = $props();
 
-	$: rows = data.internalTask || [];
+	let rows = $derived(data.internalTask || []);
 
-	$: columns = [
+	let columns = $derived([
 		{
 			key: 'title',
 			title: 'Title',
-			value: (v: typeof rows[number]) => v.title ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.title ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -23,7 +23,7 @@
 		{
 			key: 'taskStatus',
 			title: 'Task Status',
-			value: (v: typeof rows[number]) => v.taskStatus ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.taskStatus ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -31,7 +31,8 @@
 		{
 			key: 'dueDate',
 			title: 'Due Date',
-			value: (v: typeof rows[number]) => (v.dueDate ? dayjs(v.dueDate).format('MMM DD, YYYY') : ''),
+			value: (v: (typeof rows)[number]) =>
+				v.dueDate ? dayjs(v.dueDate).format('MMM DD, YYYY') : '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -39,7 +40,7 @@
 		{
 			key: 'taskSeverity',
 			title: 'Task Severity',
-			value: (v: typeof rows[number]) => v.taskSeverity ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.taskSeverity ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -47,7 +48,7 @@
 		{
 			key: 'assignedTo',
 			title: 'Assigned To',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				v.AssignedTo.User.userName + ` (${v.AssignedTo.Role.name})`,
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
@@ -56,17 +57,17 @@
 		{
 			key: 'createdBy',
 			title: 'Created By',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				v.CreatedBy.User.userName + ` (${v.CreatedBy.Role.name})`,
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
 		}
-	];
+	]);
 
-	let filterModal = false;
-	let addTaskModal = false;
-	let dateInput: any;
+	let filterModal = $state(false);
+	let addTaskModal = $state(false);
+	let dateInput: any = $state();
 
 	const {
 		form: addInternalTaskForm,
@@ -85,10 +86,10 @@
 			<p class="text-lg">Tasks</p>
 			<p class="bg-[#F9F5FF] h-fit text-xs rounded-xl p-2">{data.internalTask?.length} Tasks</p>
 		</div>
-		{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_INTERNAL_TASK')}
+		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_INTERNAL_TASK')}
 			<button
 				class="bg-primary text-white rounded-md py-2 px-6"
-				on:click={() => (addTaskModal = true)}
+				onclick={() => (addTaskModal = true)}
 			>
 				Add Task
 			</button>
@@ -97,7 +98,7 @@
 	<div class="bg-ghost/60 p-6 flex justify-between">
 		<button
 			class="grid grid-flow-col items-center py-2 px-4 rounded-md gap-1 text-sm shadow-md bg-white"
-			on:click={() => (filterModal = !filterModal)}
+			onclick={() => (filterModal = !filterModal)}
 		>
 			<FiltersLines class="h-4 w-4" /> Add filters
 		</button>
@@ -109,7 +110,7 @@
 					class="bg-white p-6 rounded-xl grid gap-4 justify-items-start shadow-md border-[1px] border-black/20"
 				>
 					<button
-						on:click={async () => {
+						onclick={async () => {
 							await goto(`?`);
 						}}
 						class="hover:underline hover:text-primary"
@@ -118,8 +119,8 @@
 					</button>
 
 					<button
-						on:click={async () => {
-							const newSearchParams = new URLSearchParams($page.url.search);
+						onclick={async () => {
+							const newSearchParams = new URLSearchParams(page.url.search);
 							newSearchParams.set('unitType', 'COMMERCIAL');
 							await goto(`?${newSearchParams.toString()}`);
 						}}
@@ -174,7 +175,7 @@
 						bind:value={$addInternalTaskForm.taskDescription}
 						{...$constraints.taskDescription}
 						class=" border-[1px] border-black/60 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<label class="grid gap-1">
 					<span class="text-primary w-full font-medium"> Task Due Date </span>
@@ -184,7 +185,7 @@
 						class=" border-[1px] border-black/60 rounded-md p-2 mt-1"
 						bind:this={dateInput}
 						required
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						bind:value={$addInternalTaskForm.taskDueDate}

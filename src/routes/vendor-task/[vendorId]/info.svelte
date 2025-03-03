@@ -10,9 +10,12 @@
 	import { page } from '$app/stores';
 	import { uploadFiles } from '$lib/utils/upload-files';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
 
-	export let form: ActionData;
+	let { data, form }: Props = $props();
 
 	const {
 		form: editVendorForm,
@@ -20,16 +23,26 @@
 		constraints
 	} = superForm(data.editVendorForm);
 
-	$: form?.vendor ? toast.push('Vendor info updated') : '';
+	$effect.pre(() => {
+		form?.vendor ? toast.push('Vendor info updated') : '';
+	});
 
 	let frontFileData: string[] = [];
 
-	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
+	$effect.pre(() => {
+		form?.errorMessage ? toast.push(form.errorMessage) : null;
+	});
 
-	$: form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
-	let fileNames: string[] = [];
-	$: form?.vendorArchived ? toast.push('Vendor deleted successfully') : null;
-	$: form?.vendorArchived ? (window.location.href = '/vendor-task') : null;
+	$effect.pre(() => {
+		form?.deletedVendorFile ? toast.push('File deleted successfully') : null;
+	});
+	let fileNames: string[] = $state([]);
+	$effect.pre(() => {
+		form?.vendorArchived ? toast.push('Vendor deleted successfully') : null;
+	});
+	$effect.pre(() => {
+		form?.vendorArchived ? (window.location.href = '/vendor-task') : null;
+	});
 </script>
 
 <div class="p-6">
@@ -40,7 +53,13 @@
 				<p class=" text-sm py-1 rounded-xl">Vendor details here.</p>
 			</div>
 			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_VENDOR')}
-				<button type="submit" on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button
+					type="submit"
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 px-6"
+				>
 					Update Info</button
 				>
 			{/if}
@@ -100,7 +119,7 @@
 			</label>
 		</div>
 	</form>
-	
+
 	<!-- File display section moved outside main form -->
 	<div class=" w-full p-4 mb-8 flex-1 flex-shrink-0 flex flex-wrap items-start gap-2">
 		{#each data.vendor.VendorFile ?? [] as file}
@@ -120,7 +139,12 @@
 									formData.set('vendorFileKey', `${file.File.key}`);
 								}}
 							>
-								<button on:click|stopPropagation type="submit">
+								<button
+									onclick={(e) => {
+										e.stopPropagation();
+									}}
+									type="submit"
+								>
 									<div class="h-full flex flex-col items-center justify-center">
 										<Eye class="text-primary w-7 h-7" />
 										<p class="text-sm ml-2 flex-1 line-clamp-1 py-2">{file.File.fileName}</p>
@@ -145,7 +169,9 @@
 					}}
 				>
 					<button
-						on:click|stopPropagation
+						onclick={(e) => {
+							e.stopPropagation();
+						}}
 						class="flex gap-1 items-center justify-center w-full p-2"
 					>
 						<Delete class="h-5 w-5 text-danger" />
@@ -172,7 +198,7 @@
 						type="file"
 						name="vendorFile"
 						multiple
-						on:change={async (e) => {
+						onchange={async (e) => {
 							const uploadPromises = [];
 							const cal = e.currentTarget.form;
 							for (const file of e.currentTarget.files ?? []) {
@@ -195,7 +221,7 @@
 						}}
 					/>
 
-					<div class=" relative z-10 h-44" />
+					<div class=" relative z-10 h-44"></div>
 					<div class="absolute top-0 w-full h-full left-0 z-30">
 						<div class="flex flex-col gap-2 justify-center items-center h-full">
 							<FileUp class="text-primary w-7 h-7" />

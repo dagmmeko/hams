@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import FileUp from '$lib/assets/file-up.svg.svelte';
 	import FileUpload from '$lib/assets/file-upload.svg.svelte';
@@ -12,7 +10,7 @@
 	let { data, form } = $props();
 	let filesSelected: File[] = [];
 
-	run(() => {
+	$effect.pre(() => {
 		form?.addUnitForm && goto('/rental-units');
 	});
 

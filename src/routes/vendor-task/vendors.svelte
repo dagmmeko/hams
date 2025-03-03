@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -18,7 +15,7 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 
 	let rows = $derived(data.vendor ?? []);
 	let columns = $derived([
@@ -35,7 +32,7 @@
 		{
 			key: 'name',
 			title: 'Name',
-			value: (v: typeof rows[number]) => v.name || '',
+			value: (v: (typeof rows)[number]) => v.name || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -43,7 +40,7 @@
 		{
 			key: 'service',
 			title: 'Service',
-			value: (v: typeof rows[number]) => v.serviceType || '',
+			value: (v: (typeof rows)[number]) => v.serviceType || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -51,7 +48,7 @@
 		{
 			key: 'phone',
 			title: 'Phone number',
-			value: (v: typeof rows[number]) => v.phoneNumber || '',
+			value: (v: (typeof rows)[number]) => v.phoneNumber || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -59,7 +56,7 @@
 		{
 			key: 'email',
 			title: 'Email address',
-			value: (v: typeof rows[number]) => v.email || '',
+			value: (v: (typeof rows)[number]) => v.email || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -67,7 +64,7 @@
 		{
 			key: 'Score',
 			title: 'Score',
-			value: (v: typeof rows[number]) => v.score || '',
+			value: (v: (typeof rows)[number]) => v.score || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -75,7 +72,7 @@
 		{
 			key: 'Start_date',
 			title: 'Contact start Date',
-			value: (v: typeof rows[number]) => dayjs(v.createdAt).format('MMM DD, YYYY'),
+			value: (v: (typeof rows)[number]) => dayjs(v.createdAt).format('MMM DD, YYYY'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -269,7 +266,12 @@
 				/>
 			</label>
 
-			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+			<button
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+				class="bg-primary text-white rounded-md py-2"
+			>
 				Save Vendor
 			</button>
 		</div>

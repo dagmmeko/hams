@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { handlers, createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
 	import SvelteTable, { type TableColumn } from 'svelte-table';
@@ -16,7 +13,7 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 	let dateInput: any = $state();
 	let dateInput2: any = $state();
 
@@ -41,7 +38,7 @@
 		{
 			key: 'title',
 			title: 'Reason',
-			value: (v: typeof rows[number]) => v?.description ?? '',
+			value: (v: (typeof rows)[number]) => v?.description ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -49,7 +46,7 @@
 		{
 			key: 'from',
 			title: 'Start Date',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				dayjs(v?.startingDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
@@ -58,7 +55,8 @@
 		{
 			key: 'to',
 			title: 'End Date',
-			value: (v: typeof rows[number]) => dayjs(v?.endDate).format('MMM DD, YYYY').toString() ?? '',
+			value: (v: (typeof rows)[number]) =>
+				dayjs(v?.endDate).format('MMM DD, YYYY').toString() ?? '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -66,8 +64,8 @@
 		{
 			key: 'by',
 			title: 'Approved By',
-			value: (v: typeof rows[number]) =>
-				v.ApprovedBy.User.userName + ` (${v.ApprovedBy.Role.name})` ?? '',
+			value: (v: (typeof rows)[number]) =>
+				v.ApprovedBy.User.userName + ` (${v.ApprovedBy.Role.name})`,
 			headerClass:
 				'text-left pl-2 bg-ghost/60  border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -86,8 +84,8 @@
 					headerClass:
 						'bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 					class: 'border-b-[1px] border-[#B3B4B8]'
-			  }
-			: (null as unknown as TableColumn<typeof rows[number]>)
+				}
+			: (null as unknown as TableColumn<(typeof rows)[number]>)
 	]);
 
 	let selectedLeave: any = $state();
@@ -99,10 +97,7 @@
 			<p class="text-lg">Employee Leave</p>
 		</div>
 		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_LEAVES')}
-			<button
-				onclick={handlers(() => (modal = true), () => (modal = true))}
-				class="bg-primary text-white rounded-md py-2 px-6"
-			>
+			<button onclick={() => (modal = true)} class="bg-primary text-white rounded-md py-2 px-6">
 				New Leave Permission</button
 			>
 		{/if}
@@ -184,7 +179,12 @@
 						name="endDate"
 					/>
 				</label>
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2"
+				>
 					Save Leave
 				</button>
 			</div>
@@ -259,7 +259,12 @@
 						name="editedEndDate"
 					/>
 				</label>
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2"
+				>
 					Edit Leave
 				</button>
 			</div>

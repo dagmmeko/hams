@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -28,7 +26,7 @@
 		}
 	});
 
-	run(() => {
+	$effect.pre(() => {
 		form?.updateEndDate ? toast.push('Rent extended successfully') : null;
 	});
 </script>

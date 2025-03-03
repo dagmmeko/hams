@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { run, preventDefault, createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { allScopes } from '$lib/utils/scopes.js';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -28,13 +25,13 @@
 		}
 	});
 
-	run(() => {
+	$effect.pre(() => {
 		form?.deleteRoleForm ? toast.push('Role deleted successfully') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.deleteRoleForm ? goto('/roles') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.editRoleForm ? toast.push('Role edited successfully') : null;
 	});
 </script>
@@ -98,8 +95,10 @@
 					{/if}
 					{#if data.role.Employees.length && page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_ROLE')}
 						<button
-							onclick={preventDefault(() =>
-								toast.push('Can not delete a role with Employees in it.'))}
+							onclick={(e) => {
+								e.preventDefault();
+								toast.push('Can not delete a role with Employees in it.');
+							}}
 							type="submit"
 							class="bg-subtitle sm:mt-0 mt-3 text-white rounded-md py-2 w-full"
 						>
@@ -112,7 +111,13 @@
 							action="?/archiveRole"
 							class="w-full bg-danger text-white flex justify-center rounded-md py-2"
 						>
-							<button onclick={stopPropagation(bubble('click'))} type="submit" class="w-full h-full">
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+								}}
+								type="submit"
+								class="w-full h-full"
+							>
 								Archive Role</button
 							>
 						</form>

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault, stopPropagation } from 'svelte/legacy';
-
 	import Printer from '$lib/assets/printer.svg.svelte';
 
 	import PrintPdf, { Page } from 'svelte-printpdf';
@@ -15,7 +13,6 @@
 
 	let { class: className = '', children }: Props = $props();
 
-	
 	// export let info: any;
 	// export let tenant: Tenants | null;
 </script>
@@ -23,9 +20,11 @@
 <div>
 	<button
 		class="border-primary border-[1px] text-primary rounded-md h-fit px-8 py-2 flex items-center text-sm gap-2 {className} mb-2"
-		onclick={stopPropagation(preventDefault(() => {
+		onclick={(e) => {
+			e.stopPropagation();
+			e.preventDefault();
 			print = true;
-		}))}
+		}}
 	>
 		<Printer class="h-4 w-4" /> Print
 	</button>

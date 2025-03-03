@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { stopPropagation } from 'svelte/legacy';
-
 	import type { PageData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { page } from '$app/state';
-
 
 	interface Props {
 		row: any;
@@ -32,13 +29,20 @@
 	<div class="">
 		{#if unitRow && unitRow.active}
 			<button
-				onclick={stopPropagation(() => toast.push('Can not delete a Unit with Tenant in it.'))}
+				onclick={(e) => {
+					e.stopPropagation();
+					toast.push('Can not delete a Unit with Tenant in it.');
+				}}
 			>
 				<Delete class="text-subtitle" />
 			</button>
 		{:else}
 			<form use:enhance method="post" action="?/archiveUnit">
-				<button onclick={stopPropagation(() => {})}>
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+				>
 					<Delete class="text-danger" />
 				</button>
 			</form>

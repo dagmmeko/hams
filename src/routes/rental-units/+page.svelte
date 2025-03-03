@@ -19,7 +19,7 @@
 		{
 			key: 'roomNo',
 			title: 'Room Number',
-			value: (v: typeof rows[number]) => v.roomNumber ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.roomNumber ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -27,7 +27,7 @@
 		{
 			key: 'floor',
 			title: 'Floor',
-			value: (v: typeof rows[number]) => v.floor ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.floor ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -35,7 +35,7 @@
 		{
 			key: 'status',
 			title: 'Status',
-			value: (v: typeof rows[number]) => (v.active ? 'Occupied' : 'Vacant'),
+			value: (v: (typeof rows)[number]) => (v.active ? 'Occupied' : 'Vacant'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -53,7 +53,7 @@
 		{
 			key: 'unitType',
 			title: 'Unit Type',
-			value: (v: typeof rows[number]) => v.unitType ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.unitType ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -61,7 +61,7 @@
 		{
 			key: 'size',
 			title: 'Size',
-			value: (v: typeof rows[number]) => v.kareMeter ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.kareMeter ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-sm text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -70,7 +70,7 @@
 		{
 			key: 'price',
 			title: 'Price per Month',
-			value: (v: typeof rows[number]) =>
+			value: (v: (typeof rows)[number]) =>
 				numberToCurrency(v.priceSetPerKare ? v.price * v.kareMeter : v.price, {
 					currency: v.currency,
 					currencyDisplay: 'code'
@@ -126,8 +126,8 @@
 				{urlSearchParams.get('status') === 'vacant'
 					? 'VACANT'
 					: urlSearchParams.get('status') === 'occupied'
-					? 'OCCUPIED'
-					: ''}
+						? 'OCCUPIED'
+						: ''}
 			</span>
 			<span class=" items-center flex">
 				{urlSearchParams.get('unitType') ? urlSearchParams.get('unitType') : ''}

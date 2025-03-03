@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import SvelteTable from 'svelte-table';
 	import type { PageData, ActionData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -14,14 +11,14 @@
 	let addModal = $state(false);
 	let editModal = $state(false);
 
-	let selectedUnitId: number = $state();
+	let selectedUnitId: number | undefined = $state();
 
 	interface Props {
 		data: PageData;
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 
 	const {
 		form: addAmenityForm,
@@ -37,7 +34,7 @@
 		{
 			key: 'name',
 			title: 'Amenity Name',
-			value: (v: typeof rows[number]) => v.name ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => v.name ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -45,7 +42,7 @@
 		{
 			key: 'number',
 			title: 'Price',
-			value: (v: typeof rows[number]) => 'ETB ' + v.price ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => 'ETB ' + v.price,
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -53,7 +50,7 @@
 		{
 			key: 'paid',
 			title: 'Type',
-			value: (v: typeof rows[number]) => (v.paid ? 'Paid' : 'l' ?? 'NOT FOUND'),
+			value: (v: (typeof rows)[number]) => (v.paid ? 'Paid' : 'Free'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -166,7 +163,12 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 
-					<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
+					<button
+						onclick={(e) => {
+							e.stopPropagation();
+						}}
+						class="bg-primary text-white rounded-md py-2 mt-6"
+					>
 						Save Item</button
 					>
 				</label>
@@ -178,7 +180,7 @@
 {#if editModal}
 	<form
 		use:enhance={({ formData }) => {
-			formData.set('amenityId', selectedUnitId.toString());
+			formData.set('amenityId', selectedUnitId?.toString() ?? '');
 			return async ({ update }) => {
 				await update();
 				editModal = false;
@@ -237,7 +239,12 @@
 						class="mt-2 w-[420px] border-[1px] border-black/60 rounded-md p-2"
 					/>
 
-					<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
+					<button
+						onclick={(e) => {
+							e.stopPropagation();
+						}}
+						class="bg-primary text-white rounded-md py-2 mt-6"
+					>
 						Update Amenity</button
 					>
 				</label>

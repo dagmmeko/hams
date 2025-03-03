@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { run, stopPropagation } from 'svelte/legacy';
-
 	import type { PageData, ActionData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
 	import { toast } from '@zerodevx/svelte-toast';
-
 
 	interface Props {
 		row: any;
@@ -17,7 +14,7 @@
 
 	let { row, data, form }: Props = $props();
 
-	run(() => {
+	$effect.pre(() => {
 		form?.deleteAmenity ? toast.push('Amenity deleted successfully') : null;
 	});
 
@@ -45,6 +42,12 @@
 		method="post"
 		action="?/deleteAmenity"
 	>
-		<button onclick={stopPropagation(() => {})}> <Delete class="text-danger" /> </button>
+		<button
+			onclick={(e) => {
+				e.stopPropagation();
+			}}
+		>
+			<Delete class="text-danger" />
+		</button>
 	</form>
 {/if}

@@ -40,12 +40,12 @@ export const load = async (event) => {
 			...(status === 'vacant'
 				? {
 						active: false
-				  }
+					}
 				: status === 'occupied'
-				? {
-						active: true
-				  }
-				: null),
+					? {
+							active: true
+						}
+					: null),
 			...(unitType && {
 				unitType: unitType
 			}),

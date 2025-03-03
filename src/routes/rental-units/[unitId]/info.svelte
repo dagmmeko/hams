@@ -14,12 +14,18 @@
 	import { numberToCurrency } from '$lib/utils/currency';
 	import { uploadFiles } from '$lib/utils/upload-files';
 
-	export let data: PageData;
-	export let form: ActionData;
-	let dateInput: any;
-	let fileNames: string[] = [];
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
 
-	$: form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
+	let { data, form }: Props = $props();
+	let dateInput: any = $state();
+	let fileNames: string[] = $state([]);
+
+	$effect.pre(() => {
+		form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
+	});
 	const {
 		form: editUnitForm,
 		enhance: editUnitFormEnhance,
@@ -32,9 +38,11 @@
 		}
 	});
 
-	$: form?.errorMessage ? toast.push(form.errorMessage) : null;
+	$effect.pre(() => {
+		form?.errorMessage ? toast.push(form.errorMessage) : null;
+	});
 
-	let modal = false;
+	let modal = $state(false);
 </script>
 
 <div>
@@ -47,7 +55,10 @@
 			<div class="justify-self-end">
 				{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_NEW_INSPECTION')}
 					<button
-						on:click|preventDefault={() => (modal = true)}
+						onclick={(e) => {
+							e.preventDefault();
+							modal = true;
+						}}
 						class="bg-warning text-black/70 rounded-md py-2 px-6 mr-4 md:mb-0 mb-3"
 					>
 						New Inspection
@@ -124,14 +135,14 @@
 												currency: 'USD',
 												currencyDisplay: 'code'
 											}
-									  )
+										)
 									: numberToCurrency(
 											data.unitDetails?.price * data.unitDetails?.kareMeter * data.usdRate[0].rate,
 											{
 												currency: 'ETB',
 												currencyDisplay: 'code'
 											}
-									  )}
+										)}
 							</span>
 						{:else}
 							<span>
@@ -139,11 +150,11 @@
 									? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 											currency: 'USD',
 											currencyDisplay: 'code'
-									  })
+										})
 									: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 											currency: 'ETB',
 											currencyDisplay: 'code'
-									  })}
+										})}
 							</span>
 						{/if}
 					</div>
@@ -168,11 +179,11 @@
 								? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 										currency: 'USD',
 										currencyDisplay: 'code'
-								  })
+									})
 								: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 										currency: 'ETB',
 										currencyDisplay: 'code'
-								  })}
+									})}
 						</span>
 					</div>
 				</label>
@@ -195,11 +206,11 @@
 							? numberToCurrency(($editUnitForm.utilityPrice || 0) / data.usdRate[0].rate, {
 									currency: 'USD',
 									currencyDisplay: 'code'
-							  })
+								})
 							: numberToCurrency(($editUnitForm.utilityPrice || 0) * data.usdRate[0].rate, {
 									currency: 'ETB',
 									currencyDisplay: 'code'
-							  })}
+								})}
 					</span>
 				</div>
 			</label>
@@ -339,11 +350,11 @@
 								? numberToCurrency($editUnitForm.price / data.usdRate[0].rate, {
 										currency: 'USD',
 										currencyDisplay: 'code'
-								  })
+									})
 								: numberToCurrency($editUnitForm.price * data.usdRate[0].rate, {
 										currency: 'ETB',
 										currencyDisplay: 'code'
-								  })}
+									})}
 						</span>
 					</div>
 				{:else}
@@ -386,7 +397,12 @@
 							}}
 							class="flex flex-col gap-2 justify-center items-center h-full"
 						>
-							<button on:click|stopPropagation type="submit">
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+								}}
+								type="submit"
+							>
 								<div class="h-full w-full flex flex-col items-center justify-center">
 									<Eye class="text-primary w-7 h-7" />
 									<span class="text-sm mx-3 py-2 break-all">
@@ -411,7 +427,9 @@
 					}}
 				>
 					<button
-						on:click|stopPropagation
+						onclick={(e) => {
+							e.stopPropagation();
+						}}
 						class="flex gap-1 items-center justify-center w-full p-2"
 					>
 						<Delete class="h-5 w-5 text-danger" />
@@ -420,8 +438,10 @@
 				</form>
 			</div>
 		{/each}
-		
-		<div class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center">
+
+		<div
+			class="relative border-[1px] border-primary border-dashed rounded-lg flex-1 flex-shrink-0 max-w-[180px] max-h-96 gap-2 items-center justify-center"
+		>
 			<form
 				id="editUnitFile"
 				method="post"
@@ -438,7 +458,7 @@
 						type="file"
 						name="unitFile"
 						multiple
-						on:change={async (e) => {
+						onchange={async (e) => {
 							const uploadPromises = [];
 							const cal = e.currentTarget.form;
 							for (const file of e.currentTarget.files ?? []) {
@@ -463,7 +483,7 @@
 						}}
 					/>
 
-					<div class=" relative z-10 h-44" />
+					<div class=" relative z-10 h-44"></div>
 					<div class="absolute top-0 w-full h-full left-0 z-30">
 						<div class="flex flex-col gap-2 justify-center items-center h-full">
 							<FileUp class="text-primary w-7 h-7" />
@@ -505,9 +525,14 @@
 				>
 					{#if data.unitDetails?.active}
 						<button
-							on:click|preventDefault={() => toast.push('Can not delete a Unit with Tenant in it.')}
-							class="bg-subtitle text-white rounded-md py-2 px-6">Archive</button
+							onclick={(e) => {
+								e.preventDefault();
+								toast.push('Can not delete a Unit with Tenant in it.');
+							}}
+							class="bg-subtitle text-white rounded-md py-2 px-6"
 						>
+							Archive
+						</button>
 					{:else}
 						<button class="bg-danger text-white rounded-md py-2 px-6">Archive</button>
 					{/if}
@@ -547,7 +572,7 @@
 						name="inspectionDate"
 						type="date"
 						bind:this={dateInput}
-						on:click={() => {
+						onclick={() => {
 							dateInput && dateInput.showPicker();
 						}}
 						class=" border-[1px] border-primary/50 rounded-md p-2"
@@ -575,7 +600,7 @@
 					<textarea
 						name="inspectionDescription"
 						class=" border-[1px] h-24 border-primary/50 rounded-md p-2"
-					/>
+					></textarea>
 				</label>
 				<button type="submit" class="bg-primary text-white rounded-md py-2">
 					Save Inspection</button

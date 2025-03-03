@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import PdfPrint from '$lib/components/pdf-print.svelte';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import { numberToCurrency } from '$lib/utils/currency';
@@ -18,13 +16,13 @@
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 
 	let dateInput: any = $state();
 	let dateInput2: any = $state();
 	let dateInput3: any = $state();
 	let editReceiptModal = $state(false);
-	let selectedReceiptId: number = $state();
+	let selectedReceiptId: number | undefined = $state();
 
 	const tenantRentalActiveUnits = data.tenant?.TenantRental.filter((unit) => unit.active) ?? [];
 
@@ -37,7 +35,7 @@
 			modal = false;
 		}
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.newReceipts ? toast.push('Receipt added successfully') : null;
 	});
 </script>
@@ -295,7 +293,7 @@
 													)?.RentalUnits.currency,
 													currencyDisplay: 'code'
 												}
-										  )
+											)
 										: numberToCurrency(
 												data.tenant?.TenantRental.find(
 													(unit) => unit.RentalUnits.id === $addReceiptForm.payToUnit
@@ -306,7 +304,7 @@
 													)?.RentalUnits.currency,
 													currencyDisplay: 'code'
 												}
-										  )}
+											)}
 								</span>
 							</div>
 							<p>
@@ -323,7 +321,7 @@
 												)?.RentalUnits.currency,
 												currencyDisplay: 'code'
 											}
-									  )
+										)
 									: 'No Negotiation'}
 							</p>
 						</div>

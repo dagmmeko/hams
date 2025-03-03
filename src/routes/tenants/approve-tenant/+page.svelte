@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -20,10 +18,10 @@
 		}
 	});
 	data.approveRentForm;
-	run(() => {
+	$effect.pre(() => {
 		form?.tenant ? goto(`/tenants/${form.tenant.id}?display=receipts`) : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.tenant ? toast.push('Tenant Rented') : null;
 	});
 </script>

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { numberToCurrency } from '$lib/utils/currency.js';
@@ -10,7 +8,7 @@
 
 	let selectedUnit: any = $state();
 	let selectedTenant: any = $state();
-	let id: number = $state();
+	let id: number | undefined = $state();
 
 	const {
 		form: rentRoomForm,
@@ -26,16 +24,14 @@
 	let dateInput: any = $state();
 	let dateInput2: any = $state();
 	let unitData: any = $derived(data.rentalUnits.find((unit) => unit.id === Number(selectedUnit)));
-	
 
-	run(() => {
+	$effect.pre(() => {
 		form?.rentTenant ? goto(`/tenants/${form.rentTenant.id}?display=receipts`) : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.rentTenant ? toast.push('Tenant Rented') : null;
 	});
 	let urlParam: any = $derived(page.url.searchParams.get('searchTenant'));
-	
 </script>
 
 <div class="mt-6 md:mx-10 mx-5">

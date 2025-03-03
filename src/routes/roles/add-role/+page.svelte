@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import { allScopes } from '$lib/utils/scopes';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -8,10 +6,10 @@
 
 	let { data, form } = $props();
 
-	run(() => {
+	$effect.pre(() => {
 		form?.addRole ? goto('/roles') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.addRole ? toast.push('Role created successfully') : null;
 	});
 

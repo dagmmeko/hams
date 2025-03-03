@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { page } from '$app/state';
 	import { superForm, dateProxy } from 'sveltekit-superforms/client';
 
@@ -29,7 +26,12 @@
 					<p class="text-2xl">Employee Info</p>
 					<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
 				</div>
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 px-6">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 px-6"
+				>
 					Update Info</button
 				>
 			</div>

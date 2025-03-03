@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { stopPropagation } from 'svelte/legacy';
 	import ChartComponent from '$lib/components/ChartComponent.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -90,7 +89,8 @@
 			/>
 		</label>
 		<button
-			onclick={stopPropagation(async () => {
+			onclick={async (e) => {
+				e.stopPropagation();
 				if (filterStartDate && filterEndDate) {
 					const newFilterParams = new URLSearchParams(page.url.search);
 
@@ -101,7 +101,7 @@
 					toast.push('Please select both start and end date');
 					await goto(`?/accounting`);
 				}
-			})}
+			}}
 			class="bg-primary text-gray-200 rounded-md py-2 px-6 mr-4 h-fit"
 		>
 			Filter result
@@ -118,8 +118,8 @@
 					currencyDisplay: 'code'
 				})}
 			</p>
-			<ChartComponent 
-				type="line" 
+			<ChartComponent
+				type="line"
 				rawData={{
 					type: 'revenue',
 					label: 'Total revenue',
@@ -206,8 +206,8 @@
 					currencyDisplay: 'code'
 				}
 			)}
-			<ChartComponent 
-				type="line" 
+			<ChartComponent
+				type="line"
 				rawData={{
 					type: 'utility',
 					label: 'Utility Bills',
@@ -236,8 +236,8 @@
 					}
 				)}
 			</p>
-			<ChartComponent 
-				type="bar" 
+			<ChartComponent
+				type="bar"
 				rawData={{
 					type: 'maintenance',
 					label: 'Maintenance Costs',

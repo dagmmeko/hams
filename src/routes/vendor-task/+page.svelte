@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { toast } from '@zerodevx/svelte-toast';
 	import Vendors from './vendors.svelte';
 	import Task from './task.svelte';
@@ -8,7 +6,7 @@
 
 	let { data = $bindable(), form } = $props();
 
-	run(() => {
+	$effect.pre(() => {
 		form?.addVendorForm ? toast.push('Vendor added successfully') : null;
 	});
 
@@ -31,11 +29,6 @@
 				</p></button
 			>
 		{/if}
-		<!-- <button on:click={() => (displayedComponent = 'pending')}>
-			<p class="p-2 px-3 rounded-md {displayedComponent === 'pending' ? 'bg-white' : ''}">
-				Pending Tasks
-			</p>
-		</button> -->
 	</div>
 	{#if displayedComponent === 'vendor'}
 		<Vendors bind:data />

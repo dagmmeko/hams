@@ -10,7 +10,7 @@
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 </script>
 
 <div class=" bg-white p-6 mt-6 rounded-md shadow-sm border-[1px] border-black/20">

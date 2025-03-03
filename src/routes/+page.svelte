@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run, stopPropagation } from 'svelte/legacy';
-
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -35,7 +33,7 @@
 	let { data, form } = $props();
 
 	const { form: usdRateForm, enhance: usdRateEnhance, constraints } = superForm(data.usdRateForm);
-	run(() => {
+	$effect.pre(() => {
 		form?.updatedRate ? toast.push('Rate updated successfully') : null;
 	});
 	let filterStartDate: any = $state();
@@ -47,85 +45,104 @@
 	// Chart data configurations
 	const bookingsData = {
 		labels: ['Website', 'Referral', 'Walk-in', 'Phone', 'Email', 'Social Media', 'Broker', 'Other'],
-		datasets: [{
-			data: [
-				data.tenantFromWebsite,
-				data.tenantFromReferral,
-				data.tenantFromWalkIn,
-				data.tenantFromPhone,
-				data.tenantFromEmail,
-				data.tenantFromSocial,
-				data.tenantFromBroker,
-				data.tenantFromOther
-			],
-			backgroundColor: [
-				'#F7464A', '#46BFBD', '#FDB45C', '#949FB1',
-				'#4D5360', '#AC64AD', '#123456', '#654321'
-			],
-			hoverBackgroundColor: [
-				'#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5',
-				'#616774', '#DA92DB', '#789ABC', '#CBA987'
-			]
-		}]
+		datasets: [
+			{
+				data: [
+					data.tenantFromWebsite,
+					data.tenantFromReferral,
+					data.tenantFromWalkIn,
+					data.tenantFromPhone,
+					data.tenantFromEmail,
+					data.tenantFromSocial,
+					data.tenantFromBroker,
+					data.tenantFromOther
+				],
+				backgroundColor: [
+					'#F7464A',
+					'#46BFBD',
+					'#FDB45C',
+					'#949FB1',
+					'#4D5360',
+					'#AC64AD',
+					'#123456',
+					'#654321'
+				],
+				hoverBackgroundColor: [
+					'#FF5A5E',
+					'#5AD3D1',
+					'#FFC870',
+					'#A8B3C5',
+					'#616774',
+					'#DA92DB',
+					'#789ABC',
+					'#CBA987'
+				]
+			}
+		]
 	};
 
 	const unitStatusData = {
 		labels: ['Out of Service', 'Good Condition', 'Needs Repair'],
-		datasets: [{
-			data: [data.badUnits, data.goodUnits, data.repairUnits],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-		}]
+		datasets: [
+			{
+				data: [data.badUnits, data.goodUnits, data.repairUnits],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+			}
+		]
 	};
 
 	const employeeTypeData = {
 		labels: ['Temporary', 'Part Time', 'Full Time'],
-		datasets: [{
-			label: 'Types',
-			data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-		}]
+		datasets: [
+			{
+				label: 'Types',
+				data: [data.temporaryEmployees, data.partTimeEmployees, data.fullTimeEmployees],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+			}
+		]
 	};
 
 	const taskStatusData = {
 		labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
-		datasets: [{
-			data: [
-				data.pendingTasks,
-				data.inProgressTasks,
-				data.checkingTasks,
-				data.completedTasks
-			],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-		}]
+		datasets: [
+			{
+				data: [data.pendingTasks, data.inProgressTasks, data.checkingTasks, data.completedTasks],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+			}
+		]
 	};
 	const vendorTaskData = {
 		labels: ['Pending', 'In Progress', 'Checking', 'Completed'],
-		datasets: [{
-			data: [
-				data.pendingVendorTasks,
-				data.inProgressVendorTasks,
-				data.checkingVendorTasks,
-				data.completedVendorTasks
-			],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
-			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
-		}]
+		datasets: [
+			{
+				data: [
+					data.pendingVendorTasks,
+					data.inProgressVendorTasks,
+					data.checkingVendorTasks,
+					data.completedVendorTasks
+				],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733'],
+				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF5733']
+			}
+		]
 	};
 
 	const attendanceData = {
 		labels: ['On Leave', 'Absent', 'Present', 'Is Fired'],
-		datasets: [{
-			label: 'Attendance',
-			data: [
-				data.onLeaveEmployees,
-				data.absentEmployees,
-				data.activeEmployees,
-				data.firedEmployees
-			],
-			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-		}]
+		datasets: [
+			{
+				label: 'Attendance',
+				data: [
+					data.onLeaveEmployees,
+					data.absentEmployees,
+					data.activeEmployees,
+					data.firedEmployees
+				],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+			}
+		]
 	};
 </script>
 
@@ -218,8 +235,8 @@
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Bookings by source </span>
 
-			<ChartComponent 
-				type="pie" 
+			<ChartComponent
+				type="pie"
 				rawData={{
 					type: 'bookings',
 					values: [
@@ -237,8 +254,8 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Unit Status </span>
-			<ChartComponent 
-				type="pie" 
+			<ChartComponent
+				type="pie"
 				rawData={{
 					type: 'unitStatus',
 					values: [data.badUnits, data.goodUnits, data.repairUnits]
@@ -247,8 +264,8 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
 			<span class="text-xl my-2"> Employee Type </span>
-			<ChartComponent 
-				type="bar" 
+			<ChartComponent
+				type="bar"
 				rawData={{
 					type: 'employeeType',
 					label: 'Types',
@@ -288,7 +305,8 @@
 			/>
 		</label>
 		<button
-			onclick={stopPropagation(async () => {
+			onclick={async (e) => {
+				e.stopPropagation();
 				if (filterStartDate && filterEndDate) {
 					const newFilterParams = new URLSearchParams(page.url.search);
 
@@ -298,7 +316,7 @@
 				} else {
 					await goto(`?`);
 				}
-			})}
+			}}
 			class="bg-primary text-gray-200 rounded-md py-2 px-6 mr-4 h-fit"
 		>
 			Filter result
@@ -307,16 +325,11 @@
 	<div class=" grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 mt-6">
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Internal Task Status </span>
-			<ChartComponent 
-				type="pie" 
+			<ChartComponent
+				type="pie"
 				rawData={{
 					type: 'taskStatus',
-					values: [
-						data.pendingTasks,
-						data.inProgressTasks,
-						data.checkingTasks,
-						data.completedTasks
-					]
+					values: [data.pendingTasks, data.inProgressTasks, data.checkingTasks, data.completedTasks]
 				}}
 			/>
 			<div class="flex w-full bg-[#F7464A] mt-6 p-1 justify-center text-gray-200 italic">
@@ -325,8 +338,8 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 rounded-sm text-center">
 			<span class="text-xl my-2"> Vendor Task Status </span>
-			<ChartComponent 
-				type="pie" 
+			<ChartComponent
+				type="pie"
 				rawData={{
 					type: 'taskStatus',
 					values: [
@@ -343,8 +356,8 @@
 		</div>
 		<div class="bg-white border-[1px] border-subtitle p-3 sm:col-span-2 rounded-sm text-center">
 			<span class="text-xl my-2"> Attendance </span>
-			<ChartComponent 
-				type="bar" 
+			<ChartComponent
+				type="bar"
 				rawData={{
 					type: 'attendance',
 					label: 'Attendance',

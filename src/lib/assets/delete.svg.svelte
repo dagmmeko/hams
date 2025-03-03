@@ -4,7 +4,6 @@
 	}
 
 	let { class: className = '' }: Props = $props();
-	
 </script>
 
 <svg

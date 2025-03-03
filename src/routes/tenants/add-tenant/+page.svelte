@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
 	import { superForm } from 'sveltekit-superforms/client';
 	import { goto } from '$app/navigation';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -396,10 +394,14 @@
 									<FileUpload class="h-6 w-6 flex-shrink-0 ml-2 text-black" />
 									<p class="text-sm ml-2 py-2">{file}</p>
 									<button
-										onclick={preventDefault(() => {
+										onclick={(e) => {
+											e.preventDefault();
 											// remove the file.id from the frontFileData array
 											frontFileData = frontFileData.filter((res) => res !== file);
-										})}>x</button
+										}}
+									>
+										x
+									</button>
 									>
 								</div>
 							</div>

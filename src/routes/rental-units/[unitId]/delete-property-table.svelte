@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { stopPropagation } from 'svelte/legacy';
-
 	import type { PageData, ActionData } from './$types';
 	import Delete from '$lib/assets/delete.svg.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { page } from '$app/state';
-
 
 	interface Props {
 		row: any;
@@ -30,6 +27,12 @@
 
 {#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'DELETE_UNIT_PROPERTY')}
 	<form use:enhance method="post" action="?/deleteProperty">
-		<button onclick={stopPropagation(() => {})}> <Delete class="text-danger" /> </button>
+		<button
+			onclick={(e) => {
+				e.stopPropagation();
+			}}
+		>
+			<Delete class="text-danger" />
+		</button>
 	</form>
 {/if}

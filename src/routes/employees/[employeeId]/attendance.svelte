@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { enhance } from '$app/forms';
 	import { clickOutside } from '$lib/utils/click-outside';
 	import dayjs from 'dayjs';
@@ -13,7 +10,7 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 
 	let modal = $state(false);
 
@@ -29,7 +26,12 @@
 		</div>
 		{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'ADD_ABSENT')}
 			<form method="post" use:enhance action="?/markAbsent">
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 px-6">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 px-6"
+				>
 					Mark Today absent</button
 				>
 			</form>
@@ -114,7 +116,12 @@
 					></textarea>
 				</label>
 
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2"
+				>
 					Save Attendance
 				</button>
 			</div>

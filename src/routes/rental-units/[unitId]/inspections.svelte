@@ -6,7 +6,7 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 </script>
 
 <div class="mb-6 font-semibold text-xl">Inspections list</div>
@@ -29,12 +29,12 @@
 					'GOOD_CONDITION'
 						? 'bg-success text-white'
 						: inspection.InspectionStatus === 'NEEDS_REPAIR'
-						? 'bg-warning text-black/70'
-						: inspection.InspectionStatus === 'OUT_OF_SERVICE'
-						? 'bg-danger text-white'
-						: inspection.InspectionStatus === 'MISSING_ITEMS'
-						? 'bg-info text-white'
-						: ''}"
+							? 'bg-warning text-black/70'
+							: inspection.InspectionStatus === 'OUT_OF_SERVICE'
+								? 'bg-danger text-white'
+								: inspection.InspectionStatus === 'MISSING_ITEMS'
+									? 'bg-info text-white'
+									: ''}"
 				>
 					{inspection.InspectionStatus.replace(/_/g, ' ')}
 				</p>

@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
@@ -19,14 +16,14 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 
 	let rows = $derived(data.tasks ?? []);
 	let columns = $derived([
 		{
 			key: 'task',
 			title: 'Task Description',
-			value: (v: typeof rows[number]) => v.taskDescription || '',
+			value: (v: (typeof rows)[number]) => v.taskDescription || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -34,7 +31,7 @@
 		{
 			key: 'vendor',
 			title: 'Vendor',
-			value: (v: typeof rows[number]) => v.Vendor?.name || '',
+			value: (v: (typeof rows)[number]) => v.Vendor?.name || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -42,7 +39,7 @@
 		{
 			key: 'status',
 			title: 'Status',
-			value: (v: typeof rows[number]) => v.taskStatus || '',
+			value: (v: (typeof rows)[number]) => v.taskStatus || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -50,7 +47,7 @@
 		{
 			key: 'service',
 			title: 'Service',
-			value: (v: typeof rows[number]) => v.Vendor?.serviceType || '',
+			value: (v: (typeof rows)[number]) => v.Vendor?.serviceType || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -58,7 +55,7 @@
 		{
 			key: 'dueDate',
 			title: 'Due Date',
-			value: (v: typeof rows[number]) => dayjs(v.dueDate).format('MMM DD, YYYY'),
+			value: (v: (typeof rows)[number]) => dayjs(v.dueDate).format('MMM DD, YYYY'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -66,8 +63,8 @@
 		{
 			key: 'createdBy',
 			title: 'Created By',
-			value: (v: typeof rows[number]) =>
-				v.CreatedBy?.User.userName + ` (${v.CreatedBy?.Role.name})` ?? 'NOT FOUND',
+			value: (v: (typeof rows)[number]) => 'John Doe',
+			// v.CreatedBy?.User.userName + ` (${v.CreatedBy?.Role.name})` ?? 'NOT FOUND',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -218,7 +215,12 @@
 				</select>
 			</label>
 
-			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+			<button
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+				class="bg-primary text-white rounded-md py-2"
+			>
 				Save Task
 			</button>
 		</div>

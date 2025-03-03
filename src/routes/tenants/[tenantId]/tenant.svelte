@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { run, preventDefault, createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import Delete from '$lib/assets/delete.svg.svelte';
@@ -24,28 +21,28 @@
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 	const {
 		form: editTenantForm,
 		enhance: editTenantFormEnhance,
 		constraints
 	} = superForm(data.editTenantForm);
-	run(() => {
+	$effect.pre(() => {
 		form?.editTenant ? toast.push('Tenant updated successfully') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.deleteFile ? toast.push('File deleted successfully') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.allNewFiles ? toast.push('Files uploaded successfully') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.errorMessage ? toast.push(form.errorMessage) : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null;
 	});
-	run(() => {
+	$effect.pre(() => {
 		console.log(form?.fileUrl);
 	});
 
@@ -179,10 +176,11 @@
 								{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'START_END_RENT')}
 									<button
 										class="bg-orange-600 rounded-md p-2 text-xs text-white"
-										onclick={preventDefault(() => {
+										onclick={(e) => {
+											e.preventDefault();
 											endContractModal = true;
 											unitToExtend = tenantUnit.id;
-										})}
+										}}
 									>
 										Start End Process
 									</button>
@@ -190,10 +188,11 @@
 								{#if page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EXTEND_RENT')}
 									<button
 										class="bg-info rounded-md p-2 text-xs text-white"
-										onclick={preventDefault(() => {
+										onclick={(e) => {
+											e.preventDefault();
 											extendContractModal = true;
 											unitToEnd = tenantUnit.id;
-										})}
+										}}
 									>
 										Extend Contract
 									</button>
@@ -230,7 +229,12 @@
 									}}
 									class="flex flex-col gap-2 justify-center items-center h-full"
 								>
-									<button onclick={stopPropagation(bubble('click'))} type="submit">
+									<button
+										onclick={(e) => {
+											e.stopPropagation();
+										}}
+										type="submit"
+									>
 										<div class="h-full w-full flex flex-col items-center justify-center">
 											<Eye class="text-primary w-7 h-7" />
 											<span class="text-sm mx-3 py-2 break-all">
@@ -249,7 +253,9 @@
 							}}
 						>
 							<button
-								onclick={stopPropagation(bubble('click'))}
+								onclick={(e) => {
+									e.stopPropagation();
+								}}
 								class="flex gap-1 items-center justify-center w-full p-2"
 							>
 								<Delete class="h-5 w-5 text-danger" />
@@ -333,7 +339,10 @@
 					{#if data.tenant?.TenantRental.find((unit) => unit.active)?.active}
 						<button
 							type="button"
-							onclick={stopPropagation(() => toast.push('Can not delete an active Tenant.'))}
+							onclick={(e) => {
+								e.stopPropagation();
+								toast.push('Can not delete an active Tenant.');
+							}}
 							class="bg-subtitle text-white/50 hover:cursor-default rounded-md py-2 px-6"
 							>Archive</button
 						>

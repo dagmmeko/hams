@@ -30,7 +30,7 @@ export const load = async (event) => {
 		}
 	});
 
-	const editUserForm = superValidate(
+	const editUserForm = await superValidate(
 		{
 			userName: user?.userName ?? '',
 			phoneNumber: user?.phoneNumber ?? '',

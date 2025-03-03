@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import dayjs from 'dayjs';
@@ -19,14 +16,14 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 
 	let rows = $derived(data.payments ?? []);
 	let columns = $derived([
 		{
 			key: 'Lable',
 			title: 'Label',
-			value: (v: typeof rows[number]) => v.VendorTask?.taskDescription || '',
+			value: (v: (typeof rows)[number]) => v.VendorTask?.taskDescription || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -34,7 +31,7 @@
 		{
 			key: 'Amount',
 			title: 'Amount',
-			value: (v: typeof rows[number]) => v.amount || '',
+			value: (v: (typeof rows)[number]) => v.amount || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -42,7 +39,7 @@
 		{
 			key: 'via Bank',
 			title: 'Via Bank',
-			value: (v: typeof rows[number]) => v.depositedToBank || '',
+			value: (v: (typeof rows)[number]) => v.depositedToBank || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -50,7 +47,7 @@
 		{
 			key: 'Ref ID',
 			title: 'Ref ID',
-			value: (v: typeof rows[number]) => v.vendorTaskId || '',
+			value: (v: (typeof rows)[number]) => v.vendorTaskId || '',
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -58,7 +55,7 @@
 		{
 			key: 'Pay Date',
 			title: 'Pay Date',
-			value: (v: typeof rows[number]) => dayjs(v.paidOn).format('MMM DD, YYYY'),
+			value: (v: (typeof rows)[number]) => dayjs(v.paidOn).format('MMM DD, YYYY'),
 			headerClass:
 				'text-left pl-2 bg-ghost/60 border-b-[1px] border-[#B3B4B8] text-[#141B29] font-medium text-sm h-12',
 			class: 'text-left pl-2 h-12 border-b-[1px] border-[#B3B4B8]'
@@ -204,7 +201,12 @@
 				/>
 			</label>
 
-			<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2">
+			<button
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+				class="bg-primary text-white rounded-md py-2"
+			>
 				Save Payment
 			</button>
 		</div>

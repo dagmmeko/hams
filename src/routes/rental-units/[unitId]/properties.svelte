@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import FiltersLines from '$lib/assets/filters-lines.svg.svelte';
@@ -18,7 +15,7 @@
 		form: ActionData;
 	}
 
-	let { data, form }: Props = $props();
+	let { data = $bindable(), form = $bindable() }: Props = $props();
 
 	const {
 		form: addPropertyForm,
@@ -65,8 +62,8 @@
 				{urlSearchParams.get('propertyAvailability') === 'true'
 					? 'AVAILABLE'
 					: urlSearchParams.get('propertyAvailability') === 'false'
-					? 'NOT AVAILABLE'
-					: ''}
+						? 'NOT AVAILABLE'
+						: ''}
 			</span>
 		</div>
 
@@ -298,7 +295,12 @@
 					</select>
 				</label>
 
-				<button onclick={stopPropagation(bubble('click'))} class="bg-primary text-white rounded-md py-2 mt-6">
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 mt-6"
+				>
 					Save Item</button
 				>
 			</div>

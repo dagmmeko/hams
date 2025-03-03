@@ -12,8 +12,12 @@
 	import Eye from '$lib/assets/eye.svg.svelte';
 	import Delete from '$lib/assets/delete.svg.svelte';
 
-	export let data: PageData;
-	export let form: ActionData;
+	interface Props {
+		data: PageData;
+		form: ActionData;
+	}
+
+	let { data, form }: Props = $props();
 	const {
 		form: editEmployeeForm,
 		enhance: editFormEnhance,
@@ -23,10 +27,14 @@
 	const hireDate = dateProxy(editEmployeeForm, 'hiredDate', { format: 'date', empty: 'undefined' });
 	const birthDate = dateProxy(editEmployeeForm, 'dob', { format: 'date', empty: 'undefined' });
 	let frontFileData: string[] = [];
-	let fileNames: string[] = [];
+	let fileNames: string[] = $state([]);
 
-	$: form?.employeeArchived ? toast.push('Employee archived successfully') : null;
-	$: form?.employeeArchived ? goto('/employees') : null;
+	$effect.pre(() => {
+		form?.employeeArchived ? toast.push('Employee archived successfully') : null;
+	});
+	$effect.pre(() => {
+		form?.employeeArchived ? goto('/employees') : null;
+	});
 </script>
 
 <div class="p-6">
@@ -37,7 +45,13 @@
 				<p class=" text-sm py-1 rounded-xl">Employee personal and performance details here.</p>
 			</div>
 			{#if $page.data.session?.authUser.Employee.Role.Scopes.find((s) => s.name === 'EDIT_EMPLOYEE')}
-				<button on:click|stopPropagation class="bg-primary text-white rounded-md py-2 px-6">
+				<button
+					type="submit"
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="bg-primary text-white rounded-md py-2 px-6"
+				>
 					Update Info</button
 				>
 			{/if}
@@ -75,12 +89,12 @@
 					{data.employee.isAbsent
 						? 'Absent'
 						: data.employee.isSuspended
-						? 'Suspended'
-						: data.employee.isFired
-						? 'Fired'
-						: data.employee.onLeave
-						? 'On Leave'
-						: 'Present'}
+							? 'Suspended'
+							: data.employee.isFired
+								? 'Fired'
+								: data.employee.onLeave
+									? 'On Leave'
+									: 'Present'}
 				</div>
 			</div>
 			<label class="grid flex-1">
@@ -209,7 +223,12 @@
 							}}
 							class="flex flex-col gap-2 justify-center items-center h-full"
 						>
-							<button on:click|stopPropagation type="submit">
+							<button
+								onclick={(e) => {
+									e.stopPropagation();
+								}}
+								type="submit"
+							>
 								<div class="h-full w-full flex flex-col items-center justify-center">
 									<Eye class="text-primary w-7 h-7" />
 									<span class="text-sm mx-3 py-2 break-all">
@@ -232,7 +251,9 @@
 					}}
 				>
 					<button
-						on:click|stopPropagation
+						onclick={(e) => {
+							e.stopPropagation();
+						}}
 						class="flex gap-1 items-center justify-center w-full p-2"
 					>
 						<Delete class="h-5 w-5 text-danger" />
@@ -258,7 +279,7 @@
 						type="file"
 						name="employeeFiles"
 						multiple
-						on:change={async (e) => {
+						onchange={async (e) => {
 							const uploadPromises = [];
 							const cal = e.currentTarget.form;
 							for (const file of e.currentTarget.files ?? []) {
@@ -283,7 +304,7 @@
 						}}
 					/>
 
-					<div class=" relative z-10 w-32 h-44" />
+					<div class=" relative z-10 w-32 h-44"></div>
 					<div class="absolute top-0 w-full h-full left-0 z-30">
 						<div class="flex flex-col gap-2 justify-center items-center h-full">
 							<FileUp class="text-primary w-7 h-7" />

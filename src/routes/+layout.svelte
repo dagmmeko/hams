@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/header.svelte';
 	import SideNav from '$lib/components/side-nav.svelte';
-	// import Nprogress from '$lib/components/nprogress.svelte';
+	import Nprogress from '$lib/components/nprogress.svelte';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 
 	import '../app.css';
@@ -27,4 +27,4 @@
 </div>
 
 <SvelteToast />
-<!-- <Nprogress /> -->
+<Nprogress />

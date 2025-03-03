@@ -11,10 +11,10 @@
 		.InspectionStatus === 'GOOD_CONDITION'
 		? 'bg-success text-white'
 		: row.Inspections[0].InspectionStatus === 'NEEDS_REPAIR'
-		? 'bg-warning text-black/70'
-		: row.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
-		? 'bg-danger text-white'
-		: ''}"
+			? 'bg-warning text-black/70'
+			: row.Inspections[0].InspectionStatus === 'OUT_OF_SERVICE'
+				? 'bg-danger text-white'
+				: ''}"
 >
 	{row.Inspections[0].InspectionStatus.replace(/_/g, ' ')}
 </div>

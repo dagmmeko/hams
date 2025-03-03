@@ -1,7 +1,4 @@
-<!-- @migration task: review uses of `navigating` -->
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import 'nprogress/nprogress.css';
 
 	import { browser } from '$app/environment';
@@ -18,13 +15,9 @@
 		if (state === 'loading') {
 			return;
 		}
-
 		state = 'loading';
-
 		timer = setTimeout(function () {
-			if (browser) {
-				NProgress.start();
-			}
+			NProgress.start();
 		}, delay) as unknown as number;
 	}
 
@@ -32,41 +25,36 @@
 		if (activeRequests > 0) {
 			return;
 		}
-
 		state = 'stop';
-
 		if (timer) {
 			clearTimeout(timer);
 		}
-		if (browser) {
-			NProgress.done();
-		}
+		NProgress.done();
 	}
 
-	run(() => {
-		if (navigating) {
+	if (browser) {
+		NProgress.configure({
+			showSpinner: false
+		});
+	}
+
+	$effect.pre(() => {
+		if (navigating.to) {
 			load();
 		} else {
 			stop();
 		}
 	});
 
-	if (browser) {
-		NProgress.configure({ showSpinner: false });
-
-		load();
-
+	$effect.pre(() => {
 		const originalFetch = window.fetch;
 		window.fetch = async function (...args) {
 			if (activeRequests === 0) {
 				load();
 			}
-
 			activeRequests++;
-
 			try {
-				// @ts-ignore
-				const response = await originalFetch(...args);
+				const response = await (originalFetch as any)(...args);
 				return response;
 			} catch (error) {
 				return Promise.reject(error);
@@ -77,8 +65,13 @@
 				}
 			}
 		};
-	}
+		return () => {
+			window.fetch = originalFetch;
+		};
+	});
 </script>
+
+<div></div>
 
 <style lang="postcss">
 	:global(#nprogress .bar) {
