@@ -88,7 +88,8 @@
 			<p class="text-2xl font-medium">New Tenant</p>
 			<p class="text-sm py-2">Register new Tenant here. Click save when you're done.</p>
 		</div>
-		<form method="post" action="?/addTenant" use:addTenantEnhance class="mt-6">
+		<form method="post" action="?/addTenant" use:addTenantEnhance class="mt-6" 			enctype="multipart/form-data"
+		>
 			<div class="grid md:grid-cols-2 gap-x-10 my-6">
 				<label class="grid w-full gap-2 h-fit">
 					<span class="text-primary font-medium"> Unit Type </span>

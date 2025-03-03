@@ -1,74 +1,74 @@
 <script lang="ts">
-	import 'nprogress/nprogress.css';
+	import 'nprogress/nprogress.css'
 
-	import { browser } from '$app/environment';
-	import { navigating } from '$app/state';
-	import NProgress from 'nprogress';
+	import { browser } from '$app/environment'
+	import { navigating } from '$app/state'
+	import NProgress from 'nprogress'
 
-	const delay = 250;
+	const delay = 250
 
-	let timer: number | null = null;
-	let state: 'loading' | 'stop' | null = null;
-	let activeRequests = 0;
+	let timer: number | null = null
+	let state: 'loading' | 'stop' | null = null
+	let activeRequests = 0
 
 	function load() {
 		if (state === 'loading') {
-			return;
+			return
 		}
-		state = 'loading';
+		state = 'loading'
 		timer = setTimeout(function () {
-			NProgress.start();
-		}, delay) as unknown as number;
+			NProgress.start()
+		}, delay) as unknown as number
 	}
 
 	function stop() {
 		if (activeRequests > 0) {
-			return;
+			return
 		}
-		state = 'stop';
+		state = 'stop'
 		if (timer) {
-			clearTimeout(timer);
+			clearTimeout(timer)
 		}
-		NProgress.done();
+		NProgress.done()
 	}
 
 	if (browser) {
 		NProgress.configure({
-			showSpinner: false
-		});
+			showSpinner: false,
+		})
 	}
 
 	$effect.pre(() => {
 		if (navigating.to) {
-			load();
+			load()
 		} else {
-			stop();
+			stop()
 		}
-	});
+	})
 
 	$effect.pre(() => {
-		const originalFetch = window.fetch;
+		const originalFetch = window.fetch
 		window.fetch = async function (...args) {
 			if (activeRequests === 0) {
-				load();
+				load()
 			}
-			activeRequests++;
+			activeRequests++
 			try {
-				const response = await (originalFetch as any)(...args);
-				return response;
+				const response = await originalFetch(...args)
+				return response
 			} catch (error) {
-				return Promise.reject(error);
+				return Promise.reject(error)
 			} finally {
-				activeRequests -= 1;
+				activeRequests -= 1
 				if (activeRequests === 0) {
-					stop();
+					stop()
 				}
 			}
-		};
+		}
 		return () => {
-			window.fetch = originalFetch;
-		};
-	});
+			window.fetch = originalFetch
+		}
+	})
 </script>
 
 <div></div>

@@ -272,6 +272,8 @@
 					formData.set('fileNames', fileNames.join(','));
 					formData.set('employeeFiles', 'Files');
 				}}
+							enctype="multipart/form-data"
+
 			>
 				<label>
 					<input

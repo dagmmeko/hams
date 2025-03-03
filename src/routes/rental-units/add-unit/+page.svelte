@@ -81,7 +81,8 @@
 			<p class="text-2xl font-medium">New Rental Unit</p>
 			<p class="text-sm py-2">Register new rental unit here. Click save when you're done.</p>
 		</div>
-		<form method="post" action="?/addUnit" use:addFormEnhance>
+		<form method="post" action="?/addUnit" use:addFormEnhance 			enctype="multipart/form-data"
+		>
 			<div class="grid md:grid-cols-2 gap-x-10 my-6">
 				<div class="flex flex-col gap-4">
 					<label class="w-full grid gap-2">
