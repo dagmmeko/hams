@@ -15,10 +15,16 @@
 	$effect.pre(() => {
 		form?.updateEnd ? toast.push('Rent ended successfully') : null
 	})
+
+	//console log the data
+	$effect(() => {
+		console.log(data)
+	})
 </script>
 
-<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
-	{#each data.tenant?.TenantRental ?? [] as tenantUnit}
+{#each data.tenant?.TenantRental ?? [] as tenantUnit}
+	<div class=" mt-6 rounded-md border-[1px] border-black/20 bg-white p-6 shadow-sm">
+		<h1 class="text-xl font-semibold">End Contract Request</h1>
 		{#if tenantUnit.exitingTenant}
 			<PdfPrint>
 				<div class="">
@@ -85,5 +91,5 @@
 				<button class="rounded-md bg-danger p-2 text-sm text-white"> End Contract </button>
 			</form>
 		{/if}
-	{/each}
-</div>
+	</div>
+{/each}

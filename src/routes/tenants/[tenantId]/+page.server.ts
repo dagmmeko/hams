@@ -1,4 +1,4 @@
-import { uploadFileToS3, getFile } from '$lib/utils/aws-file.js'
+import { getFile } from '$lib/utils/aws-file.js'
 import { prisma } from '$lib/utils/prisma.js'
 import { fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
@@ -103,7 +103,7 @@ export const load = async (event) => {
 		},
 	})
 
-	let groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
+	const groupedReceipts = allReceipts.map((receiptReferenceNumber) => {
 		return {
 			receiptReferenceNumber: receiptReferenceNumber.receiptReferenceNumber,
 			receipts: tenant?.Receipts.filter((receipt) => {
@@ -340,6 +340,7 @@ export const actions = {
 			},
 			data: {
 				active: false,
+				exitingTenant: false,
 				RentalUnits: {
 					update: {
 						active: false,
@@ -441,6 +442,8 @@ export const actions = {
 				deletedAt: new Date(),
 			},
 		})
+
+		return { archiveTenant }
 	},
 	updatePriceChange: async (event) => {
 		const session = (await event.locals.getSession()) as EnhancedSessionType | null

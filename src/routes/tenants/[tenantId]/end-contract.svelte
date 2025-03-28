@@ -11,6 +11,9 @@
 	let { data, form, unitId }: Props = $props()
 	let dateInput: any
 
+	$effect(() => {
+		console.log(unitId)
+	})
 	const {
 		form: endContractForm,
 		enhance,

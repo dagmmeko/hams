@@ -42,9 +42,6 @@
 	$effect.pre(() => {
 		form?.fileUrl ? window.open(form?.fileUrl, '_blank') : null
 	})
-	$effect.pre(() => {
-		console.log(form?.fileUrl)
-	})
 
 	let extendContractModal = $state(false)
 	let unitToExtend: any = $state()
@@ -179,7 +176,7 @@
 										onclick={(e) => {
 											e.preventDefault()
 											endContractModal = true
-											unitToExtend = tenantUnit.id
+											unitToEnd = tenantUnit.id
 										}}
 									>
 										Start End Process
@@ -191,7 +188,7 @@
 										onclick={(e) => {
 											e.preventDefault()
 											extendContractModal = true
-											unitToEnd = tenantUnit.id
+											unitToExtend = tenantUnit.id
 										}}
 									>
 										Extend Contract
@@ -373,6 +370,7 @@
 			use:clickOutside={() => (endContractModal = false)}
 			class="grid w-[480px] justify-items-stretch gap-4 rounded-xl bg-white p-8"
 		>
+			{unitToEnd}
 			<EndContract {form} {data} unitId={unitToEnd} />
 		</div>
 	</div>
